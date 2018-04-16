@@ -1,0 +1,742 @@
+\chapter{Layout of the Program}\label{layout-of-theprogram}
+
+\section{Chapter Objectives}\label{chapterobjectives}
+In this chapter, you are going to learn how to lay out your program
+following a pattern that will make your code easier to understand, to
+maintain and to share. Normally, you should have defined the structure
+of the program before you start writing code. However, development is
+not always linear and projects that begin small end up controlling very
+complex experiments. Sometimes you can already know how the future
+looks, what experiments you may want to perform in a year from now or
+even more. In any case, building on top of a solid foundation allows you
+to be future proof.
+
+In this chapter, You will learn about some common design patterns and
+general ideas that are used in the long run. What you are going to learn
+in this chapter is a collection of best practices, which doesn't mean
+you have to follow them to the letter, but they are a very good starting
+point. You will learn about the {MVC} design pattern, that will allow
+you to separate different elements of your code into reusable
+containers. Moreover, you will create a specific folder structure that
+will enable to use code shared by others. The {MVC} design pattern forms
+a layered structure, exactly in sync with the ideas that we have exposed
+when discussing the \emph{onion principle} for development.
+
+\section{Introduction}\label{introduction}
+
+Computer programs are meant to be a solution to a more or less complex
+problem. It seems unlikely today that anybody would invert a matrix by
+hand or with a calculator. Nor to imagine that somebody would plot a
+complicated function with pen and paper. Several packages exist to solve
+those needs, from Python to Matlab to Origin. In the same fashion, the
+complexity of experiments is such that it is impossible to control all
+the needed variables by hand. Even in simpler experiments, there will
+always be a computer responsible for acquiring data, saving it, and many
+other functions.
+
+Developing a computer program for controlling an experiment is not a
+trivial task. One has to consider the limits of the devices, acquisition
+rates, conditions for closing a shutter or switching off the power. On
+top of all that, one has to write programs that most likely are going to
+be used by others, and that can be developed further on by another
+person. It doesn't make sense to write software today that will be
+obsolete next week just because few parameters of the
+experiment changed.
+
+To address these concerns, there are few techniques that a developer can
+follow in order to achieve a high degree of productivity and, at the
+same time, producing software that can be enhanced later on. The idea of
+establishing best practices is not increasing the burden of developing
+software, but to streamline the process. The cornerstone of every great
+program is to have a design pattern that can be followed by all the
+developers. Therefore, when developing software for controlling a setup
+we have to keep an eye on different considerations:
+
+\begin{itemize}
+\item
+  What you develop should be readable by current and future colleagues
+\item
+  It should be easy to add solutions developed by others
+\item
+  The program should allow exchanging devices that achieve the same goal
+  (i.e. oscilloscopes of different brands, etc.)
+\item
+  The code developed in one context has to be available in other
+  contexts (i.e. in other experiments)
+\end{itemize}
+
+As you can see from the list above, it is very desirable to be able to
+reuse code, not only within the same lab with the same colleagues but
+also to use code that was developed in other institutions and that your
+code can be reused. Reusing code not only saves a very long time, it
+also empowers collaboration between different labs, possibly enabling
+researchers to gain weight when asking for specific features from
+manufacturers. Reusing code needs that some standards are specified, in
+such a way that another person can easily include the code into their
+projects. This is exactly what you did in the previous chapter when
+defined a class for controlling the device and not a plain script.
+
+For a set of rules, it is crucial that they don't hinder the developer's
+capabilities to reach solutions in a short time. For example, if because
+of following common standards, the time it takes to find a solution is
+multiplied by a factor of two or more, developers will end up bypassing
+those rules. The design principles that we are going to expose in this
+chapter are broad enough as to do not impose a lot of work to the
+developer but useful enough that the code structure will be clear even
+for someone not familiarized with the specifics of the program.
+
+\section{\texorpdfstring{The {MVC}
+design pattern}{The MVC design pattern}}\label{the-mvc-designpattern}
+
+A design pattern is nothing more than a set of rules that determine
+where different parts of the code are going to be placed and how are
+they going to interact with each other. Different design patterns can be
+used in different contexts and with different goals. If you have ever
+encountered a manual on how to develop web applications, you probably
+also found entire chapters related to the design patterns that
+developers follow. The same principles can be applied to any software
+development, and particularly for software to control lab equipment.
+
+Generally speaking, the Model-View-Controller pattern (or {MVC}) is a
+set of rules on how to structure your code in order to make it reusable
+and easy to maintain. The {MVC} framework, although originally developed
+for desktop computing, has become popular in other fields, for example
+for designing web applications. Web and desktop applications have
+specific definitions for the model, the view, and the controller. Lab
+applications, therefore, have to update those definitions in order to
+consider the different elements that make up an experiment.
+
+An experiment will have devices generating data on one side and the user
+supervising the experiment on the other. The software sits in between
+the two ends, it will communicate to the devices the user commands, and
+it will output back data for the user to interpret. When we have to
+develop software for an experiment, we are going to start by building
+drivers for the devices. We are going to define the steps that make up
+an experiment, we are going to allow the user to change some parameters,
+and we will show the data back to the user. If we lay out our code in a
+smart way, we will be able to utilize the same code in different
+projects and, more importantly, exchanging devices or changing the steps
+of an experiment will be simple. Let's see what is the role of each of
+the elements in the {MVC} pattern for the lab.
+
+A \emph{Controller} is the real driver, responsible for communicating
+with the devices. It can be a Python class you developed yourself or a
+Python package that you have installed in a virtual environment (such
+would be the case of PyDAQmx, Lantz, etc.) The driver has to be general
+and has to reflect the capabilities of the device, nothing more. For
+example, if a device is able to acquire just a data point at a time, the
+driver shouldn't include a function for acquiring an array of data using
+a loop. This should be very similar to the discussion we gave in the
+previous chapter regarding the class that was developed for controlling
+the device.
+
+The \emph{Model} is where all the logic is defined. In the models, you
+are going to define how you are going to use a device for your own
+experiment. Generally speaking, models define how the user interacts
+with the available data. In an experiment, this can be translated to how
+the user interacts with a device. For example, if you want to acquire a
+time trace and you have a device that can acquire only one point at a
+time, you should make a loop in which several points are acquired. If,
+on the other hand, the device is able to acquire time traces and you are
+interested in the Fourier transform of the data, you can gather the
+information from the device and transform it as you desire. The main
+advantage of splitting \emph{Controllers} and \emph{Models} is that it
+becomes simple to upgrade or replace a device. You will need to update
+the \emph{Model} in order to reflect the new options of the device, but
+the logic of the experiment is left intact.
+
+The \emph{View} is, technically, the place where you can locate
+everything related to how you show data to the user, and how the user
+can change the parameters of the experiment. In practice, it is the
+collection of files that build up a Graphical User Interface ({GUI}).
+Within the {GUI} you will set, for example, the length and delay of the
+time trace you want to acquire and in turn, you will use the model to
+acquire the data. You can plot the results back to the user and save
+them to disk, etc. It is important to note that, in this case, the user
+interacts through the view with the model and never directly with the
+controller of a device.
+
+\warning{If you are new to developing code for the lab, it may seem that
+splitting \emph{Controller} and \emph{Model} is a waste of time. When
+you have only one device that you use for only one goal, it may very
+well be the case. However, when you wish to include code developed by
+others or when you want to share your code, it is crucial that you split
+the capabilities of your device from the logic of your experiment. If
+you don't do so, all your code is going to work only when repeating the
+same experiment.}
+
+You have to remember that the meaning of \emph{Model}, \emph{View} and
+\emph{Controller} changes depending on each developer or community. It
+is important to note that people developing a web application are not
+dealing with devices in the real world as developers in the lab do.
+Therefore, how the {MVC} pattern is used can change from one field to
+another. What is important is that if you stick to some decisions while
+you are developing, you will find that your code is much clearer and
+easier to maintain, especially when someone asks for help on a program
+you have developed months or years before.
+
+You also have to remember that it may happen that you find a design
+pattern or strategy that better suits your needs. That is perfect, the
+only thing you have to remember is that you have to make it clear to
+others, and you have to stick to it when coding. If you switch halfway,
+bugs are going to be very hard to solve, and sharing code would become
+virtually impossible. The extra time it takes to write few more lines
+and keep everything tidy is completely worth the effort in the
+short-term (around 3 months), and is going to be crucial in the mid
+to long-term.
+
+Using the {MVC} pattern with a fixed structure, i.e., with three folders
+called Model, View, and Controller is a very good starting point. It
+gives the user a clear idea of where it may be the file that they need
+to change, or how the bug was generated. Remember, if you add a
+\textbf{{README}.md} file to every folder, it will be nicely rendered
+when exploring the code in Github. You can use that file to give a hint
+to the users on what is going on and where to edit the things that may
+be important.
+
+\section{Structure of The Program}\label{structure-of-theprogram}
+So far the discussion has been general and is applicable to any project
+in any language. Nut now it is time to specify how to implement the
+{MVC} pattern into a Python project. Remember that the layout we are
+proposing here is based on our own experience when developing larger
+projects. It is a good starting point, even if it looks more complicated
+than what it could be if you put everything into the same folder or into
+the same file. Moreover, everything you learn in this chapter will help
+you understand how other packages are structured.
+
+In the program you are developing in this book, you will follow the
+{MVC} design pattern quite literally. This means that you have to create
+three folders called \emph{Model}, \emph{View} and
+\emph{Controller}. As explained before, controllers are going to host
+the drivers for your devices. You already developed the driver for your
+device in the previous chapter, so it is appropriate to place it there.
+Models are going to be responsible to make explicit how to use those
+devices. At the end of the last chapter, you already saw that you were
+including some logic into the device, when you started to develop the
+methods to linearly vary the output voltage, for example.
+
+\exercise{Create a file in the Models folder called \textbf{analog\_daq.py}.
+Inside, start a class called \mintinline{python}{AnalogDaq} and move the methods
+that you think appropriate from the Controller into the Model.}
+
+You can also define another, very important model, called
+\emph{Experiment}. The Experiment model will have all the logic to
+perform a measurement. You have to notice the difference between the
+logic when using a device and the logic when performing an experiment.
+For example, the model for the experiment can include steps such as open
+a shutter before starting a measurement or can deal with how do you save
+the data. It is also responsible for keeping track of the parameters you
+need to perform an experiment.
+
+\exercise{Create a file in the Models folder, called \textbf{experiment.py}.
+Define a class called Experiment() and some methods that you think are
+going to be useful. You can, for example, add a method for switching on
+or off the {LED}. You can also add a method for doing a scan. The
+methods can be empty. What you have to start thinking about are the
+parameters that you need and the order in which every method can be
+called.}
+
+The View folder is going to require a bit more of work than the other
+two. However, you can already start thinking about how the user is going
+to interact with your program. Most likely, you have already thought
+that sometimes the {LED} will be plugged into the output port number 1,
+sometimes to port number 0. You don't really want to alter the code
+every time. The same happens, for example, with the port you want to
+monitor, the time delay between steps, etc. It is convenient, therefore,
+to define these parameters in a text file that is easy to read and
+to modify.
+
+The files that the user is going to supply need to be read and
+transformed into parameters that can be used by the experiment model.
+This behavior is exactly what you could expect from a View. It is the
+nex between the user and the rest of the program. We are going to use
+text files in a format called {YAML}, which is very easy to generate and
+to read. For the time being, don't worry about it, we will cover
+it later.
+
+\exercise{Create a file in the View folder, called \textbf{load\_files.py}. Create
+a function that takes as an argument the path to a file. Think about all
+the parameters that a user needs to supply in order to perform an
+experiment and write them down within the file itself.}
+
+Remember that a program interacts with a user in different ways. By the
+end of the book, you will have developed some nice graphical user
+interfaces, but you can also live without them. A program can output
+information to the command line, and the user can take actions based on
+what is being displayed. Building a {GUI} is a complex topic, and we
+don't want to deviate the attention from what is really important here.
+
+Once you have the three folders (Model, View, and Controller) created,
+and you have created some files in each one of them, it is time to take
+a look at how the importing process works with Python.
+
+\hypertarget{how-importing-in-python-works}{}
+\section{How importing in
+Python works}\label{how-importing-in-pythonworks}
+
+Probably you have already seen some lines that look like this:
+
+\begin{minted}{pycon}
+>>> import numpy as np
+>>> from time import sleep
+\end{minted}
+
+The first one is importing the numpy package, but changing its name to
+\mintinline{python}{np}. Changing the name makes it easier to work with because you
+need to type only two letters, \mintinline{python}{np} instead of \mintinline{python}{numpy}.
+The second line is importing one specific function from a package called
+\mintinline{python}{time}. It doesn't really matter what do they do, but to realize
+that the import process was different in both cases. \emph{Numpy} is a
+complex package, with a lot of modules that can be used. The same goes
+for \emph{time}. However, in the lines above you have imported only one
+the module \emph{sleep} from package \emph{time}. If you want to use it,
+you can simply do:
+
+\begin{minted}{pycon}
+>>> sleep(1)
+\end{minted}
+
+While for using \emph{Numpy}, you will need to specify which module
+you want:
+
+\begin{minted}{pycon}
+>>> np.random.random(1)
+\end{minted}
+
+When working with your own code, you can import different modules in the
+same way. Open a terminal and navigate to the root folder of the
+project, where you have the Model, View, and Controller. If you start
+Python, you can type into the interpreter:
+
+\begin{minted}{pycon}
+>>> import Controller
+\end{minted}
+
+Now you have the controller available to use. For example, you can do
+the following:
+
+\begin{minted}{pycon}
+>>> dev = Controller.simple_daq.SimpleDaq('COM1')
+\end{minted}
+
+And you can use the device as you have been using it in the previous
+chapter. Importing the \emph{Controller} may not be exactly what you
+want, because sometimes there are many devices and you need only one.
+You can specify which module to import, exactly as you have done with
+\mintinline{python}{sleep}. To import only the SimpleDaq class, you can do:
+
+\begin{minted}{pycon}
+>>> from Controller import simple_daq
+>>> dev = simple_daq.SimpleDaq('COM1')
+\end{minted}
+
+There are two things important to notice. First, if you change the code
+of the \emph{SimpleDaq} class and import it again, you won't see those
+changes reflected. You should exit from Python and start again. The
+second thing is that, when you import the controller, you may also start
+communicating with the device. This is happening because at the end of
+the \textbf{simple\_daq.py} file, you have added some lines for using
+the class. Those lines also get imported and executed. When you import
+modules, and when you design modules, it is very important being in
+control of what is going to be executed.
+
+To avoid starting the communication with the device when you do
+\mintinline{python}{import simple daq}, you have to add one extra line of code at
+the end of the file. It will look like this:
+
+\begin{minted}{python}
+if __name__ == "__main__":
+    d = SimpleDaq('/dev/ttyACM0')
+    print(d.query('IDN'))
+    d.write('OUT:CH0:4000')
+    input('Press to read value')
+    print(d.query('IN:CH0'))
+    d.finalize()
+\end{minted}
+
+Next time you \mintinline{python}{import simple_daq}, the code that follows the if statement
+will not be executed. However, if you run the file by itself by typing
+\mintinline{bash}{python simple_daq.py}, it will. This is very useful because it
+allows you to distinguish the two cases, when the file is directly
+executed and when the file is imported. In many cases, you can use the
+bottom of the file to show how the class is used or to perform some
+quick tests. In the code above you can quickly see how to start the
+communication, query for the serial number, change the analog
+output, etc.
+
+To understand a bit more about how the \mintinline{python}{if __name__} works
+and have a clearer picture of the importing procedure in Python, create
+a new file called \textbf{dummy\_controller.py} in the \emph{Controller}
+folder, and paste the following lines of code:
+
+\begin{minted}{python}
+print('This is the dummy Controller')
+
+def dummy_example():
+    print('This is a function in the dummy Controller')
+
+if __name__ == '__main__':
+    print('This is printed only from __main__')
+\end{minted}
+
+From the terminal, enter into the Controller folder and type
+\mint{bash}|python dummy_controller.py| The output that you see
+should be:
+
+\begin{minted}{python}
+'This is the dummy Controller'
+'This is printed only from __main__'
+\end{minted}
+
+What you see is that the entire code got executed but not the function.
+\mintinline{python}{dummy_example} is only defined, but never executed.
+
+\exercise{What do you expect it to happen if you import
+\mintinline{python}{dummy_controller}?}
+
+Things are going to be different when you import the file. Open the
+Python interpreter and type the following:
+
+\begin{minted}{pycon}
+>>> import dummy_controller
+"This is the dummy Controller"
+>>> dummy_controller.dummy_example()
+"This is a function in the dummy Controller"
+>>> from dummy_controller import dummy_example
+>>> dummy_example()
+"This is a function in the dummy Controller"
+\end{minted}
+
+The first thing you should notice is that what is written at the end
+never gets executed, meaning that the \mintinline{python}{if} statement is not
+\mintinline{python}{True}. This is very useful when we want to have code that works
+standalone (when we execute it directly, for example) but we don't want
+to execute if we import it. In the case of the real controller, we
+wanted to leave some examples at the end to show how it can be used, but
+when you are importing a class, you don't really want it to start
+communicating, you just want to have the class available.
+
+The other thing that you should have noticed is that depending on how
+you import from a file, the first print statement is executed or not. If
+you type \mintinline{python}{import dummy_controller}, you will see that the first
+print statement is there, while if you type
+\mint{python}|from dummy_controller import dummy_example| nothing
+happens. This is very useful because it means that in the first case you
+are really executing everything within the file, up to the \mintinline{python}{if}
+statement. In the latter case, however, you are only getting the
+specific function you want.
+
+Finally, it doesn't really matter how you imported the
+dummy controller, the \mintinline{python}{dummy_example} function will
+always be available. It can happen that you either have to type
+\mint{python}|dummy_controller.dummy_example()| or simply
+\mint{python}|dummy_example()| but you will always see the same output. If
+you were sitting in an outer directory, you would have to do
+\mint{python}|Controller.dummy_controller.dummy_example()| and it would
+still work. When working with modules, there is plenty of flexibility on
+what to do. Bear in mind, however, that the same flexibility comes
+accompanied by some usage patterns that may not be clear.
+
+Imagine you add a second function to your \mintinline{python}{dummy_controller.py}
+file, you can import both at the same time by typing
+\mint{python}|from dummy_controller import dummy_example, second_function|
+You could also do \mint{python}|from dummy_controller import *| The
+second option, however, is highly discouraged. There are several
+disadvantages of doing so. First, if you are reading the code and you
+see something called \mintinline{python}{second_function} you have no idea where it
+came from. Also, if the \mintinline{python}{dummy_controller} creates variables,
+they will appear in your own program, perhaps overriding something you
+wanted to preserve.
+
+\note{We should establish some naming conventions in order to avoid confusion
+later on. In Python, any file that defines variables, functions,
+classes, etc. is called a \mintinline{python}{Module}. The folder that contains
+modules is called a \mintinline{python}{Package}.}
+
+Working with the imports in Python is sometimes easier than
+understanding them, especially when trying to pay attention to all the
+different definitions. The
+\href{https://docs.python.org/3.6/tutorial/modules.html}{Python
+Documentation} has a great chapter covering a lot of the ideas here
+discussed. Many of the properties and behaviors can be learned by trial
+and error, though it can be very time consuming and it may lead to
+unexpected errors.
+
+Perhaps you noticed by now that the way your package is imported and the
+way \emph{Numpy} is imported is very different. \emph{Numpy} can be
+imported regardless of where you are, but your package can only be
+imported if you are in its own directory. When you perform an
+\emph{import}, Python searches for modules in specific locations, and
+once it finds one, it stops searching. \emph{Numpy} is located in one of
+such folders, but your package is not. One of the ways in which you can
+let Python know where your package is located is by adding the folder of
+your package to a system variable called \emph{PYTHONPATH}.
+
+If you are on Windows, you can follow the steps of Chapter 02, when you
+were dealing with the details of adding environment variables when
+installing Python. If you are on Linux, it is enough to run the
+following command:
+
+\begin{minted}{bash}
+export PYTHONPATH=$PYTHONPATH":/path/to/PFTL"
+\end{minted}
+
+After doing that, you will be able to type
+\mint{python}|from Controller import *| wherever you are in your computer
+and Python will find the appropriate folder. In Linux, the change is not
+permanent, you will need to run the line again next time you start the
+Terminal. There are ways of modifying the environment variables in a
+permanent way, but I leave it to you to find out. There is plenty of
+information online.
+
+There is something very important to add to our packages, the
+\textbf{\_\_init\_\_.py} file. Sometimes it is important to let Python
+know that a specific folder is a package to prevent directories with a
+common name, such as \mintinline{python}{string}, from unintentionally hiding valid
+modules that occur later, on the module search path. The
+\textbf{\_\_init\_\_.py} file can be an empty file, but it can also be
+used in smart ways. Normally the \textbf{\_\_init\_\_.py} file can be
+used for some initialization. You can create therefore an
+\textbf{\_\_init\_\_.py} file within the \emph{Controller} directory and
+place the following:
+
+\begin{minted}{python}
+from .simple_daq import SimpleDaq
+
+Controller_variable = "var"
+
+print("This is the init of the controller")
+\end{minted}
+
+Go back to the root folder, one level up from the Controller folder and
+start Python.
+
+\begin{minted}{pycon}
+>>> import Controller
+"This is the init of the controller"
+\end{minted}
+
+It is super simple and clean. If you want to use the \emph{SimpleDaq}
+class, you can just type \mintinline{python}{Controller.SimpleDaq}. Moreover, you
+should have seen the print statement appearing on your screen. This
+means that the \mintinline{python}{Controller_variable} is also available, you can
+see it by typing:
+
+\begin{minted}{pycon}
+>>> print(Controller.Controller_variable)
+"var"
+\end{minted}
+
+You could also import only the Controller class or the variable. You
+should just do:
+
+\begin{minted}{pycon}
+>>> from Controller import Controller_variable
+>>> from Controller import SimpleDaq
+\end{minted}
+
+How many times do you see the print happening? Interesting, isn't it?
+Python takes care of executing the code only once, the first time it
+encounters an import statement. We will look again at the
+\textbf{\_\_init\_\_.py} file later on. For the time being it is
+important that you realize that sometimes things happen within that
+file. A lot of code can be executed within the \textbf{\_\_init\_\_.py}
+file and therefore you should also look into them when there is
+something mysterious that you cannot understand or when you don't find
+the file from which an import is happening.
+
+\exercise{Read the Documentation and find a way in which the code
+\mintinline{python}{from Controller import *} imports only the \mintinline{python}{SimpleDaq}
+class and not the variable we introduced in the \mintinline{python}{__init__.py}
+file.}
+
+\section{The Final Layout}\label{the-finallayout}
+Now you have a clear separation of your code into Model, Controller, and
+View. However, these are not the only folders that you are going to use.
+Most likely you will want to provide some examples of how to use your
+code, or the documentation for your package. We have also discussed
+using text files for the input data, and those files should be located
+somewhere, for example within a \emph{Config} folder.
+
+If you create extra folders next to the three main ones, the structure
+of the program will start to be polluted. It won't be clear what is part
+of the package, what is a user-specific setting, etc. Therefore you need
+to create a folder for the main part of the code and next to it the
+extra folders that you need. Your folder structure will look like this:
+
+\begin{minted}{text}
+├── Docs/
+├── Examples/
+│   └── Config/
+└── PythonForTheLab/
+    ├── Controller/
+    ├── Model/
+    │   ├── daq/
+    │   └── experiment/
+    └── View/
+        └── GUI/
+\end{minted}
+
+You can see that there are three folders at the top level, \emph{Docs},
+\emph{Examples} and \emph{PythonForTheLab}. The last one is holding the
+\emph{Model}, \emph{View} and \emph{Controller}. You can also see that
+in the \emph{Model} we have created two separate folders, one for
+dealing with the daq and one for dealing with the experiment. If you
+followed the steps to add the folder to your Python path variable, it
+means that now you can do the following, for example:
+
+\begin{minted}{pycon}
+>>> from PythonForTheLab import Controller
+\end{minted}
+
+The only missing folder is the one in which we are going to store the
+data that we want to pass to the experiment. In this case, you should
+consider different scenarios. At this stage, you are the only one
+working and using the code, but later on, maybe there are more users.
+Or, you are the only developer, but there is more than one user of the
+same setup. In any case, when you configure your experiment, you don't
+want people to change it, but they should be able to do it
+for themselves.
+
+In order to be flexible, the best idea is to provide a folder with
+Examples on how to configure your program, or how to generate the
+configuration files. These are just examples, aimed at exposing all the
+configuration options. However, when you want to run the experiment, you
+will do it starting with a different set of files, stored in a
+different location.
+
+Let's start simple. In the \emph{Config} folder that lays within the
+\emph{Examples} folder, you have to create a file called
+\textbf{experiment.yml} to hold all the parameters of the experiment.
+Earlier we have decided that the format of the file was {YAML}. If you
+are not familiar with the format, it looks like this:
+
+\begin{minted}{yaml}
+Experiment:
+  name: This is a test Experiment
+  range: [1, 10, 0.1]
+  list:
+   - first Element
+   - second Element
+\end{minted}
+
+This file is plain text but with a very special structure. {YAML} is
+very simple to read and has just a few rules, the most important one is
+that the indentation is done with 2 spaces. The choice for {YAML}
+instead of {XML} or {JSON} is that it requires much fewer typing and is
+easier to write, while still keeps all the functionality you need. Of
+course, this choice is personal, and people more inclined to other types
+of files can adapt the code to their own needs. Once the file is
+created, you need to read it with python. You can either type the
+following commands or write them to a file.
+
+\begin{minted}{python}
+import yaml
+
+with open('Config/experiment.yml', 'r') as f:
+    e = yaml.load(f)
+
+print(e['Experiment'])
+for k in e['Experiment']:
+    print(k)
+    print(e['Experiment'][k])
+    print(10*'-')
+\end{minted}
+
+We will talk a lot more about yaml files later on. But for the time
+being it is important that you know how to start working with them. The
+first thing is to import the module that allows reading the files,
+called PyYAML, but that is imported with the line \mintinline{python}{import yaml}.
+You first open the file that is going to be interpreted by
+\mintinline{python}{yaml}. The \mintinline{python}{with} statement is very handy when working
+with files. It basically allows you to forget about closing the file,
+even if something goes wrong while reading. The only thing to remember
+is that you call the file \mintinline{python}{f} only within the \mintinline{python}{with}
+statement. Transform a file into a Python variable, you can use
+\mintinline{python}{yaml.load()}, which will interpret the file as a dictionary.
+
+As you may remember, the elements of dictionaries are addressed with
+keys. In this case, there is a main key called
+\mintinline{python}{'Experiment'}, and the
+sub-keys \mintinline{python}{'name'},
+\mintinline{python}{'range'} and
+\mintinline{python}{'list'}. If you want to use
+one of those elements, you can type
+\mintinline{python}{e['Experiment']['name']},
+for example. The code above just prints out what each of the elements,
+separated by a horizontal line. Note that yaml imported the file
+directly as a dictionary, but some of the elements are particular, they
+are not all strings such as the
+\mintinline{python}{'name'} is.
+
+\exercise{What is the type of variables that yaml generated for the range and the
+list?}
+
+In the same way that you can read a {YAML} file, you can also write it.
+For this, you use the \mintinline{python}{dump} method. If you define a dictionary,
+you can write to a file very easily:
+
+\begin{minted}{python}
+d = {'Experiment': {
+    'name': 'Name of experiment',
+    'range': [1, 10],
+    'list': (1, 2, 3),}
+}
+
+with open('Config/new_experiment.yml', 'w') as f:
+    f.write(yaml.dump(d, default_flow_style=False))
+\end{minted}
+
+The code above follows the same logic than for reading, but keep in mind
+that you are opening the file with the
+\mintinline{python}{'w'} option. This means that
+every time you run the code, you will overwrite the file and lose the
+previous contents. Open the file that you have just created with a text
+editor and you will see that it is very similar to the one you created
+yourself. There may be some small differences, but you can still
+understand what is written and you can modify it if you want to.
+
+\exercise{Create a numpy array and store it using yaml. How does it look like in
+the file? What happens if you read it back?}
+
+Earlier you were asked to type down all the parameters that you needed
+for performing an experiment. You can transform that information into a
+{YAML} file within the \emph{Config} folder.
+
+\exercise{Create an experiment.yml file in the \emph{Config} folder hosting all
+the information that you need to perform an experiment.}
+
+And of course, since you have learned how to read and write the files,
+you can update your \emph{View}.
+
+\exercise{Update the function that you created in the \emph{View} folder. Read the
+yaml file and check that all the parameters are there. Raise an
+exception if a parameter is missing or is of the wrong type. Return a
+dictionary.}
+
+\section{Conclusions}\label{conclusions}
+
+In this chapter, you haven't done much coding but we have discussed some
+general ideas that should accompany you through every software
+development that you undertake. How to lay out the code is very
+important, because it is going to give you the structure you need to
+maintain your program without too much effort. Moreover, since the
+paradigm that you are using is common to developers in other fields, you
+can benefit from tools that were not designed specifically for
+experimental work.
+
+When developing instrumentation software, you will always have to answer
+the question of who is going to be the user of your program and who is
+going to build on your development. Most likely the first user and
+developer are going to be yourself, but this can quickly change. Being
+able to answer questions from a user with a different perspective and
+with a different level of programming skills is fundamental for your
+program to succeed in the mid-term.
+
+The strategies proposed in this chapter do not come naturally to every
+developer, and even if you know them, you will try to find a shortcut to
+developing only scripts, to put everything in the same file and forget
+about it. The truth is that there is no experiment that is performed
+once. Key to better science is reproducibility, and the clearer the code
+that allowed you to perform an experiment, the easier it is going to be
+to perform it again, even by someone else.
