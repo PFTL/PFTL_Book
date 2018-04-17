@@ -1,0 +1,8 @@
+*.aux
+*.backup
+*.log
+_minted-index/
+*.pdf
+*.zip
+*.toc
+*.out
