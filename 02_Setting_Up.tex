@@ -100,7 +100,8 @@ To follow the book, you will need to install the packages listed below:
 All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mint{bash}|pip search [package_name]|. For the listed packages, it is not important the order in which you install them.
 
 To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements into a window.
-Installing Qt Designer on Windows
+
+\subsection{Installing Qt Designer on Windows}
 
 To install Qt Designer, you will need to install the Qt5 libraries. Go to the Qt Website and select the Open Source version. You can follow the steps listed on the website in order to download and install Qt5. Alternatively, you can download the offline installers that will make it easier to install the library on computers without internet access. Together with the library, Qt Designer should have also been installed. You can try searching for it within the list of programs, or check the following directory to see if it is available:
 
@@ -109,7 +110,8 @@ C:\Qt\5.10\mingw53_64\bin\designer.exe
 \end{minted}
 
 As a complement to Qt Designer, you also have Qt Creator, which can be downloaded from the same page. It is a very complex program that can handle not only the creation of windows but also the coding. It is a bit of an overkill for the purposes of this book, but you should be aware of its existence. Qt Designer is built into Qt Creator, therefore if you install it, you will be able to follow this book without problems.
-Installing Qt Designer on Linux
+
+\subsection{Installing Qt Designer on Linux}
 
 Linux users can install Qt Designer directly from within the terminal by running:
 
@@ -129,7 +131,8 @@ Unintentional upgrades of libraries can set you back several days. Sometimes it 
 Fortunately, Python provides a great tool called Virtual Environment that overcomes all the mentioned difficulties. A Virtual Environment is nothing more than a folder where you find copies of the Python executable and of all the packages that you are going to use. Once you activate the virtual environment, every time you trigger pip for installing a package it will be done within that directory; the python interpreter is going to be the one inside the virtual environment and not any other. It may sound complicated, but in practice is incredibly simple.
 
 You can create isolated working environments for developing software, for running specific programs or to perform tests. If you need to update or downgrade a library, you are going to do it within that specific Virtual Environment and you are not going to alter the functioning of anything else on your computer. Acknowledging the advantages of a Virtual Environment comes with time; once you lose days or even weeks reinstalling packages because something went wrong and your experiment doesn’t run anymore, you will understand it.
-Virtual Environment on Windows
+
+\subsection{Virtual Environment on Windows}
 
 Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configure. If there is something failing, try to find help or examples online. There are a lot of great examples at StackOverflow.
 
@@ -204,7 +207,7 @@ Which will create your virtual environment within the Testing folder. Go to the 
 
 Now you are running within a Virtual Environment in the Power Shell.
 
-\section{Virtual Environment on Linux}
+\subsection{Virtual Environment on Linux}
 
 On Linux, it is very easy to install the Virtual Environment package. Depending on where you installed Python in your system you may need root access to follow the installation. If you are unsure, first try to run the commands without sudo, and if they fail, run them with sudo as shown below:
 
