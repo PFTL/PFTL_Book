@@ -14,7 +14,7 @@ need to adapt the concepts explained in the book to the devices and
 settings that you have, but the foundations are strong enough to build
 reliable and expandable software.
 
-\subsection{Introduction}\label{introduction}
+\section{Introduction}\label{introduction}
 The contents of this chapter are going to become ubiquitous in almost
 all your lab experiments. Most likely a big part of your job is to
 either repeat measurements in order to improve your statistics or to
@@ -39,7 +39,7 @@ experiment, together with the data and use it to repeat a measurement.
 Moreover, you will learn how you can extend the Experiment model without
 writing new methods.
 
-\subsection{The Layout of the Project}\label{the-layout-of-theproject}
+\section{The Layout of the Project}\label{the-layout-of-theproject}
 In the previous chapters, you have developed a lot of code, and it may
 have ended up in the wrong location. That is why it is important to
 recap on how the structure of the package looks like.
@@ -88,7 +88,7 @@ to create from now on in this chapter are not going to be part of the
 main package, so you don't mix them, just create a separate folder
 wherever you like.
 
-\subsection{{YAML} file for configuring}\label{yaml-file-forconfiguring}
+\section{{YAML} file for configuring}\label{yaml-file-forconfiguring}
 In our experiment, we are going to perform a 1D scan of the voltage
 generated at an analog output, while recording the voltage at an analog
 input. The first step is to create a file \textbf{experiment.yml} with
@@ -111,7 +111,7 @@ Experiment:
     delay: 200ms
 \end{minted}
 
-\subsection{Running an Experiment}\label{running-anexperiment}
+\section{Running an Experiment}\label{running-anexperiment}
 Once the configuration file is defined, you have to start using the
 experiment model. Since the program will run from the command line,
 create a file called \textbf{start\_cli.py}, which you will trigger to
@@ -189,7 +189,7 @@ parameters not defined in the {YAML} file. In order to maintain the idea
 of doing reproducible research, you should always save the parameters
 you used as part of the results.
 
-\subsubsection{Plot results and save data}\label{plot-results-and-savedata}
+\section{Plot results and save data}\label{plot-results-and-savedata}
 You know how to perform one or several measurements, but now you need to
 do something with the data you have just acquired. First, you are going
 to plot it and then you are going to save it to a text file.
@@ -308,7 +308,7 @@ to update the file in the \emph{Examples} folder to reflect it. If you
 fail to do so, you will be solving a lot of issues every time someone
 wants to start a new experiment.
 
-\subsection{Running the scan in a nonblocking way}\label{running-the-scan-in-a-nonblockingway}
+\section{Running the scan in a nonblocking way}\label{running-the-scan-in-a-nonblockingway}
 
 When a function takes long to execute, such as the case fo the
 \mintinline{python}{do_scan}, it is said that the function is blocking the rest of
@@ -328,7 +328,7 @@ without killing the program. Python offers a very interesting package
 called \mintinline{python}{threading}, which will allow you to do exactly what you
 are looking for.
 
-\subsubsection{Threads in Python}\label{threads-inpython}
+\section{Threads in Python}\label{threads-inpython}
 You can think about threads as different lines of execution. A Thread
 would be similar to opening different terminals and running Python in
 each one of them. The advantage is that since you are running all your
@@ -416,7 +416,7 @@ print('There')
 
 Go ahead and run the script to see what happens.
 
-\subsubsection{Threads for the experiment model}\label{threads-for-the-experimentmodel}
+\section{Threads for the experiment model}\label{threads-for-the-experimentmodel}
 
 Going back to the experiment model, you can already test what you have
 learned by executing the \mintinline{python}{do_scan} method in its own thread.
@@ -542,7 +542,7 @@ to a different thread and keep working, updating a plot, etc. Whenever
 you want to stop the scan, you can do it as before, changing the value
 of the \mintinline{python}{stop_scan} property.
 
-\subsubsection{Word of Caution with Threads}\label{word-of-caution-withthreads}
+\section{Word of Caution with Threads}\label{word-of-caution-withthreads}
 
 Threads are a very complex topic in any programming language, and even
 if the examples that you have seen up to now seem straightforward, you
@@ -578,7 +578,7 @@ applicability that they have. If you want to develop code that runs in
 parallel, you can look at libraries such as \emph{mpi} or
 \emph{multiprocessing}.
 
-\subsection{Conclusions}\label{conclusions}
+\section{Conclusions}\label{conclusions}
 This is a chapter where you can see how all your previous work plays out
 nicely together. Developing drivers and models may seem a lot of
 unnecessary work, but when you see everything coming together you start
