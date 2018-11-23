@@ -1,6 +1,6 @@
 \chapter{Run an experiment}\label{run-anexperiment}
 
-\section{Chapter objectives}\label{chapterobjectives}
+\section{Objectives}
 In this chapter, you are going to learn how to run a proper experiment.
 You have developed all the code you need to acquire data, but you need
 to put everything together and make it work. This chapter is also the
@@ -14,7 +14,7 @@ need to adapt the concepts explained in the book to the devices and
 settings that you have, but the foundations are strong enough to build
 reliable and expandable software.
 
-\section{Introduction}\label{introduction}
+\section{Introduction}
 The contents of this chapter are going to become ubiquitous in almost
 all your lab experiments. Most likely a big part of your job is to
 either repeat measurements in order to improve your statistics or to
@@ -84,8 +84,7 @@ when you learned how to import different modules to Python.
 
 After you have added the folder the {PATH} in your computer, you can
 start working in any folder that you wish. The files that we are going
-to create from now on in this chapter are not going to be part of the
-main package, so you don't mix them, just create a separate folder
+to create from now on in this chapter are not going to be part of the main package, so you don't mix them, just create a separate folder
 wherever you like.
 
 \section{{YAML} file for configuring}\label{yaml-file-forconfiguring}
@@ -301,7 +300,7 @@ Documentation}. Go ahead and open the file to see how does the final
 version looks like.
 
 If you are confident with the results, you can add this procedure as a
-method in the experiment model. You can also add a parameter into the
+method in the experiment model. You can also add a parameter to the
 yaml file for specifying the name of the files that you are producing.
 Remember, if you change the code and a new parameter is needed, you have
 to update the file in the \emph{Examples} folder to reflect it. If you
@@ -333,8 +332,7 @@ You can think about threads as different lines of execution. A Thread
 would be similar to opening different terminals and running Python in
 each one of them. The advantage is that since you are running all your
 threads in the same Python interpreter, you can easily exchange
-information within them. Let's see first a simple example with a
-function that takes long to execute:
+information within them. Let's see first a simple example of a function that takes long to execute:
 
 \begin{minted}{python}
 import threading
@@ -546,7 +544,7 @@ of the \mintinline{python}{stop_scan} property.
 
 Threads are a very complex topic in any programming language, and even
 if the examples that you have seen up to now seem straightforward, you
-need to be cautious on how you implement threads in larger programs.
+need to be cautious about how you implement threads in larger programs.
 Today computers with multi-core processors are ubiquitous. However, when
 you run a Python program it is going to run only within one of the cores
 of the computer. Moreover, each core can run only one thread at a time.
@@ -583,14 +581,14 @@ This is a chapter where you can see how all your previous work plays out
 nicely together. Developing drivers and models may seem a lot of
 unnecessary work, but when you see everything coming together you start
 to realize that it really pays off being organized and systematic with
-the code. If you stop reading the book at this chapter, you would have
+the code. If you stop reading the book in this chapter, you would have
 already acquired a lot of knowledge that can improve your work in the
 lab. You have learned the {MVC} pattern, you have developed models, and
 worked with threads. You have also seen how to store metadata and use it
 to run an experiment again.
 
 The most important message that you should take with you after these few
-chapters, is that the code you write today should be useful tomorrow.
+chapters is that the code you write today should be useful tomorrow.
 You have started with simple tasks, such as communicating with a serial
 device, and some chapters later, the same code is being used for
 performing experiments. If you think about it, the base driver was never

@@ -1,6 +1,6 @@
 \chapter{Writing The Experiment Model}\label{writing-our-experimentmodel}
 
-\section{Chapter Objectives}\label{chapterobjectives}
+\section{Chapter}
 In the previous chapter, you have already seen how to define a model for
 a device and for a dummy device. Models specify the specific ways in
 which a user can interact with a device and how data is presented back.
@@ -10,13 +10,13 @@ information in volts instead of plain integers.
 However, with the model of the devices alone you cannot perform a
 measurement. In this chapter, you are going to see how to define a model
 for the entire experiment and not only for a device. In this model, you
-will include all the steps that conform a measurement, including checks
+will include all the steps that build a measurement, including checks
 and saving data. The experiment model is going to be your go-to place to
 understand why a measurement doesn't make sense, and also the place
 where all the information is stored in order for you to reproduce
 a measurement.
 
-\section{Introduction}\label{introduction}
+\section{Introduction}
 In the \textbf{MVC} design pattern for the lab, the \emph{Model} is
 where all the logical steps and design decisions should be placed. In
 the previous chapter, for example, you have decided that you wanted to
@@ -24,8 +24,7 @@ use volts as the default units. However, this is not always the case.
 Imagine you use the same {DAQ} device to drive a piezo stage, volts are
 going to be translated into nanometers or microns and you have to
 account for that. In the experiment you are going to perform, you want
-to determine the current passing through a diode, but the physical
-quantity that you are actually measuring is a voltage.
+to determine the current passing through a diode, but the physical quantity that you are actually measuring is a voltage.
 
 Following the \emph{onion principle}, it makes sense to define volts as
 the default units for the device, because it is what it outputs and what
@@ -277,7 +276,7 @@ It is not a particularly elegant solution, but it works in most cases.
 Remember that with this approach you should be consistent in the naming
 conventions. If different models end up being called DAQModel, the check
 may give you unexpected warnings. The same works for the
-\mintinline{python}{__str__} method, since you are using it to identify the
+\mintinline{python}{__str__} method since you are using it to identify the
 model you used, if two different models end up calling themselves in the
 same way, you won't be able to tell which one you used.
 
@@ -334,8 +333,7 @@ manually add it to the experiment model.
 different from `DummyDaq' or `RealDaq'. What happens to the code after
 the exception? Does it get executed?}
 
-The way in which you are handling the import of different classes in the
-code above is not a particularly elegant solution, but it works.
+The way in which you are handling the import of different classes in the code above is not a particularly elegant solution, but it works.
 Switching between DAQs is something that can happen, but it won't happen
 often enough to justify more complexity at this time. It is worth
 noting, however, that if you plan to make your code available to users
@@ -421,7 +419,7 @@ Store the information into an array. The array should be a property of
 the class, i.e. it should be defined in the \mintinline{python}{__init__} method
 and you can refer to it as \mintinline{python}{self.NAME_OF_VARIABLE}.}
 
-The advantage of having the data stored into a property is that it
+The advantage of having the data stored in a property is that it
 becomes available to other methods of the class and that it is
 accessible from outside of it, for example for plotting. However,
 storing the data is only one of the concerns that need to be addressed.
@@ -504,7 +502,7 @@ sleep(delay.m_as('s'))
 \end{minted}
 
 Which ensures that you use the delay magnitude expressed in seconds. If
-you use milliseconds, or hours for that matter, it will be translated
+you use milliseconds or hours for that matter, it will be translated
 into the proper number before the \mintinline{python}{sleep} function uses it. With
 this changes, your code is ready for performing a scan. There are some
 concerns, such as how do you stop a scan while it is running. But the

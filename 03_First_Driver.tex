@@ -1,5 +1,5 @@
 \chapter{Writing the First Driver}
-\section{Chapter Objectives}
+\section{Objectives}
 Communicating with real-world devices is the cornerstone of every
 experiment. However, devices are very different from each other; not
 only they behave differently, they communicate differently with the
@@ -37,8 +37,7 @@ However, keep in mind the onion principle which tells you that you
 should always be prepared to expand your code later on if the
 need arises.
 
-\section{Message Based Devices}\label{message-baseddevices}
-
+\section{Message Based Devices}\label{message-basedevices}
 There are two basic operations that can be done with a message based
 device: \texttt{write} and \texttt{read}. Write means sending a command,
 typically a string, from the computer to the device, while reading means
@@ -145,7 +144,7 @@ number from the device. Please note that in the examples, it always
 appears an example port. You should change it for what you have found in
 the previous step.
 
-\note{For the examples with few lines of code you can either write everything
+\note{For the examples with few lines of code, you can either write everything
 to a file and execute it by writing in the Terminal
 \texttt{python\ file.py}, or you start an interactive section by just
 typing \texttt{python} and then the rest of the commands directly into
@@ -305,7 +304,7 @@ explained earlier. Notice that even if \texttt{\_\_init\_\_} takes two
 arguments, you only have to explicitly pass one; the other argument,
 \texttt{self} is implicitly added. In this case, the communication with
 the device is established as soon as the object is created. You can use
-the method defined, in this case \texttt{idn()} to recover the serial
+the method defined, in this case, \texttt{idn()} to recover the serial
 number and print it to the screen. Again, \texttt{idn()} takes only one
 argument, \texttt{self}, that is implicitly passed to the function when
 you do \texttt{dev.idn()}. To run the file, just type
@@ -401,7 +400,7 @@ rest of the class. You already know that normally there are two
 operations: read and write. However, you will only read after a write
 (remember, you should ask something from the device first.) It is
 possible to update the methods of the class to reflect this behavior.
-First the \texttt{write} method should take into account the line ending
+First, the \texttt{write} method should take into account the line ending
 and the encoding.
 
 \begin{minted}{python}
@@ -429,7 +428,7 @@ obvious now that you will initialize the communication before attempting
 anything with the device, but in a month, or a year, when you dig up the
 code and try to do something new, you are going to be another person,
 and you won't have the same ideas in your mind as right now. Adding
-safeguards is, on one hand, a great way of preserving the integrity of
+safeguards are, on one hand, a great way of preserving the integrity of
 your equipment, on the other, it cuts down the time it takes to find out
 what the error was.
 
@@ -442,7 +441,7 @@ AttributeError: 'NoneType' object has no attribute 'write'
 \end{minted}
 
 Which doesn't mean anything at all. While if you do things properly, the
-error that will appear on screen could be:
+the error that will appear on screen could be:
 
 \begin{minted}{bash}
 Exception: Forgot to initialize the Device driver at port COM1
@@ -599,7 +598,7 @@ It is very easy to share with a colleague that has the same device, and
 it can be adapted and expanded. You also should keep in mind that when
 working with devices, it may very well be that someone else has already
 developed a Python driver for it, and you can just use it. One of the
-keys for developing sustainable code is to compartmentalize different
+keys to developing sustainable code is to compartmentalize different
 aspects of it. Don't mix the log of a special experiment with the
 capabilities of a device, for example.
 
@@ -745,7 +744,7 @@ properties in order not to go beyond what is established by the
 manufacturer. If you followed the exercises of the previous section, you
 could have seen that careless users set the device to a value higher
 than the specified working range. Imagine that it is stated that the
-{LED} you work with, can handle up to 2.5V, setting the analog output to
+{LED} you work with can handle up to 2.5V, setting the analog output to
 3V would burn it. Fortunately, there are packages that were written with
 this approach in mind. We are going to mention only one because it is
 the project to which we collaborate:
@@ -811,7 +810,7 @@ construct the object in a different way. The first thing we do is to
 define the \texttt{DEFAULTS} of our class. At first sight, you probably
 see that they really look the same to the ones we have established in
 our driver. The \texttt{ASRL} option is for serial devices, this allows
-you to specify different defaults for the same device, but depending on
+you to specify different defaults for the same device but depending on
 the connection type. If you were using a {USB} connection, you would
 have used \texttt{USB}, or \texttt{GPIB} instead of, or in
 addition to, \texttt{ASRL}.
@@ -961,7 +960,7 @@ following exercise:
 \exercise{Write a \texttt{@DictFeat} that reads a value of any given analog input
 channel.}
 
-\note{Lantz does a great work working with units as well. If you read their
+\note{Lantz does a great work working with units as well. If you read the 
 documentation, you will see that you can specify the units directly in
 the \texttt{@Feat} and Lantz will take care of the conversions to the
 natural units of your device. It will also check that the input is

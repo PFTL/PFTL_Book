@@ -1,18 +1,18 @@
 \chapter[A GUI for the Experiment]{Building a Graphical User Interface for the Experiment}\label{building-a-graphical-user-interface-for-theexperiment}
 
-\section{Chapter Objectives}\label{chapterobjectives}
+\section{Objectives}
 Building {GUI}'s is a very rewarding experience because you will really
 see the outcome of your program. It is much more impressive to show to
 someone a beautiful window with a couple of buttons than hundreds of
 lines of code. When you develop a working User Interface, you will
 really have the feeling of delivering an end-product. A window pops up,
 an error message appears, an experiment is performed. In this chapter,
-you will learn the steps needed from designing a window to plotting the
+you will learn the steps needed for designing a window and plotting the
 data acquired by a device. The chapter involves some design, some coding
 and a lot of thinking. It is strongly advised to drive inspiration from
 the examples in case you get stuck for too long in one of the exercises.
 
-\section{Introduction}\label{introduction}
+\section{Introduction}
 Building GUIs may seem more complicated than what it really is. It is,
 of course, not an easy task but once you get the fundamentals you will
 see that, as with any other skill, it is possible to learn. Most
@@ -56,7 +56,7 @@ therefore the examples in this and the next chapter are based on
 was \textbf{Qt4}. There is no backward compatibility between them,
 meaning that code that worked with \textbf{PyQt4} not necessarily will
 work with \textbf{PyQt5}. It is very important that you don't mix both
-libraries. If there are applications in the computer where you are
+libraries. If there are applications on the computer where you are
 developing the code that depends on \emph{PyQt4}, it is very important
 to isolate your development with a Virtual Environment, as explained in
 Chapter 02.
@@ -145,7 +145,7 @@ important that the naming conventions are consistent. If you are in
 doubt, or you see some bugs that you find to resolve, you can always
 download the files from the
 \href{https://github.com/PFTL/SimpleDaq/tree/master/PythonForTheLab/View/GUI}{Github
-repository} .
+repository}.
 
 \note{If you look for documentation online on how to use PyQt in your
 applications, you most likely will find that you should compile the
@@ -183,7 +183,7 @@ all the design elements needed for an application.
 
 Every PyQt program will start in the same way. First, you define the
 \mintinline{python}{app} using the module \mintinline{python}{QApplication}. Pay attention to
-the fact that it takes one argument, in this case \mintinline{python}{sys.argv},
+the fact that it takes one argument, in this case, \mintinline{python}{sys.argv},
 which is a list of the commands passed when executing the script from
 the command line. For example, if you run the script as
 \mintinline{bash}{python script.py -option test}, you will have a list in
@@ -247,7 +247,7 @@ yourself and running on your own computer.
 \section{Adding buttons and interaction}\label{adding-buttons-andinteraction}
 Now you have a window that may look great but it is not doing anything.
 You need to start building your code in order to allow actions to be
-triggered after pressing a button, for example. But for having code that
+triggered by pressing a button, for example. But for having code that
 is reusable and expandable, you have to rewrite your previous example.
 You will need to define a new class that inherits from
 \mintinline{python}{QMainWindow} and that allows you to personalize it as much as
@@ -298,8 +298,7 @@ use absolute paths for imports and not just relative ones.
 
 Once you have a subclass of \mintinline{python}{QMainWindow}, you will have complete
 control over what happens in the window, where the user is clicking, you
-will also be able to add new elements, to update them, etc. The
-advantage of defining a new class is that you can reuse it in different
+will also be able to add new elements, to update them, etc. The advantage of defining a new class is that you can reuse it in different
 projects and that it can be easily embedded into larger programs. For
 the time being, you only want to do a scan, but it can be that tomorrow
 the scan is only a part in a larger series of experiments and the main
@@ -327,7 +326,7 @@ self.buttonBox.addButton(self.stopButton,
 
 The string specified when declaring the buttons is the text that will
 appear in them. Adding an \mintinline{python}{\&} before a letter is just for
-enabling to user to quickly reach the button by pressing Alt+S or Alt+T.
+enabling the user to quickly reach the button by pressing Alt+S or Alt+T.
 The next couple of lines are for adding the buttons to the
 \mintinline{python}{buttonBox}. You can add the buttons to any layout that you have
 specified within the designer. The main difference is that the method
@@ -422,7 +421,7 @@ ap.exit(ap.exec_())
 \end{minted}
 
 This example is exactly a merge of both previous examples, the
-\emph{CLI} and the \emph{GUI}. Pay special attention to the
+\emph{CLI}, and the \emph{GUI}. Pay special attention to the
 highlighted line. You are passing the experiment class to the
 \mintinline{python}{ScanWindow}, but \mintinline{python}{ScanWinow} class does not take
 arguments other than its parent. If you run that file now it will give
@@ -526,11 +525,11 @@ class WorkThread(QtCore.QThread):
 \end{minted}
 
 When working with Qt threads, you need to reimplement some important
-methods, and that is why this class may look particularly complicated.
+methods and that is why this class may look particularly complicated.
 You start by creating a new class called \mintinline{python}{WorkerThread} that
 inherits the QThread class. The \mintinline{python}{__init__} method takes one
 required argument, called \mintinline{python}{function}, which is the function that
-the thread is going to execute. \mintinline{python}{*args} and \mintinline{python}{**kwargs} are
+the thread is going to execute. \mintinline{python}{*args} and \mintinline{python}{**kwargs} is
 just a way of accepting any number of variables. You don't know exactly
 how many arguments the function is going to take since it can
 \emph{a-priori} be any function. You store all the information as
@@ -580,7 +579,7 @@ the \mintinline{python}{worker\_thread}. Then you connect the signal
 methods. It can be slightly convoluted, but this will ensure that when
 the thread finishes it is going to be cleared. If you run the same
 program for months you really don't want to start accumulating in memory
-millions of garbage threads. Finally you \mintinline{python}{start} the thread. Pay
+millions of garbage threads. Finally, you \mintinline{python}{start} the thread. Pay
 special attention to the fact that you don't use the \mintinline{python}{run} method
 explicitly. You can go ahead and run the program again. Is it still
 freezing when you perform a scan?
@@ -612,7 +611,7 @@ hooked an experiment to it. The {GUI} is far from complete, but
 nevertheless, it is a great achievement what you have developed so far.
 With what you have done here you can already do plenty of things if you
 are creative enough. You can have a user interface for triggering
-actions in your computer, in your experiment, etc. The options are
+actions on your computer, in your experiment, etc. The options are
 endless and you are only halfway through, so imagine what is going to
 happen next.
 
@@ -622,8 +621,7 @@ This means that a lot of the documentation and examples that you can
 find around are for another language and thus you will need to translate
 it into Python. If there is something you can't understand and there are
 no obvious answers online, ask in
-\href{https://stackoverflow.com/}{Stack Overflow}, the community over
-there is very helpful and knowledgeable.
+\href{https://forum.pythonforthelab.com}{Python For The Lab}, the community over there is very helpful and knowledgeable.
 
 When developing programs, normally you read code from top to bottom, one
 line at a time. This is also what computers do when interpreting or
@@ -645,9 +643,9 @@ you and the users of your program a lot of time later on.
 
 Getting to understand how Qt works and how you can do different things
 with it is a lengthy process. Every app that you see, not only on your
-computer, but also on your mobile phone or embedded platform such as
+computer but also on your mobile phone or embedded platform such as
 smart watches or thermostats can be built using Qt. It is completely up
-to you to put a limit to what you need to learn in order to perform an
+to you to put a limit on what you need to learn in order to perform an
 experiment. Do you want to make the interface prettier with icons? Do
 you want to verify the user input and display warning messages? Do you
 want to stream a camera signal? All those are possibilities few keyboard
@@ -666,8 +664,7 @@ IDEs available for Python won't be able to track what is really
 happening in your code.
 
 If you are developing code that you expect others to understand, you
-should either provide all the documentation they need or limit the
-number of nonordinary packages that you are employing. For example, if
+should either provide all the documentation they need or limit the number of nonordinary packages that you are employing. For example, if
 the users of your code are used to analyzing data, you can count on them
 knowing \emph{numpy} and \emph{matplotlib}, but most certainly they are
 not aware of \emph{PyQt} and its special models such as \emph{signals}

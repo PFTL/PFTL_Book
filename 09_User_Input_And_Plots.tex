@@ -1,6 +1,6 @@
 \chapter{User Input and Making Plots}\label{user-input-and-makingplots}
 
-\section{Chapter Objectives}\label{chapterobjectives}
+\section{Objectives}
 In this chapter you are going to see how you can process user input for
 changing the parameters of your scan and how to plot the results while
 they are being generated. Dealing with user input can lead to unexpected
@@ -8,7 +8,7 @@ errors that are sometimes hard to anticipate. Plotting the data while it
 is being acquired is a great feature, especially when you want to make
 quick decisions before an entire scan is done.
 
-\section{Introduction}\label{introduction}
+\section{Introduction}
 In the previous chapter you have already seen how to handle some user
 input: you have a start and a stop button able to trigger the scan. It
 is useful, but it doesn't really allow you to change the parameters of
@@ -40,7 +40,7 @@ professional plots. Even if it is a great tool for making
 figures, it is not the proper tool for real-time visualization. Updating
 Matplotlib plots is an intensive task for the computer and therefore it
 is not going to allow you to update the plots as often as you would
-like. That is why, for data visualization you are going to use another,
+like. That is why, for data visualization, you are going to use another,
 perhaps a lesser-known library, called
 \href{http://www.pyqtgraph.org/}{PyQtGraph} which integrates everything
 that you need for plotting within user interfaces.
@@ -86,7 +86,7 @@ update the experiment class. By now you should have a broad idea on how
 to achieve this, but it is important to point out that the experiment
 class relies on receiving values with units, not just numbers in the
 appropriate parameters. In the chapter when you defined the experiment
-class you also impose some restrictions to how the parameters should be
+class you also impose some restrictions on how the parameters should be
 defined. If you go back to the class, you will see that the
 \mintinline{python}{do_scan} method transforms strings into quantities. Therefore,
 the parameters for the scan should be strings with the appropriate
@@ -183,7 +183,7 @@ the building blocks of Qt are called Widgets, and in the snippet above
 you see that everything is coming in place together. The first step is
 to create the widget you want to use, in this case, it is called
 \mintinline{python}{self.main_plot}. Once you have the widget, you need to add it
-to the window. In the previous chapter you have added buttons to a
+to the window. In the previous chapter, you have added buttons to a
 \mintinline{python}{ButtonBox}, but the plot should be added to the layout of the
 window. At this point is where some explanations regarding Qt are
 in order.
@@ -213,7 +213,7 @@ later changed programmatically. Normally, it is better to have a good
 starting point and change the look of your window as little as possible.
 After you have added the plot to the layout, you can initialize it with
 empty data. In this case, you use two zeros and plot them. If you
-remember from a couple of chapter earlier, the output of the
+remember from a couple of chapters earlier, the output of the
 \mintinline{python}{plot} method will allow you to personalize the plot, adding
 labels, units or new data. That is why you store it as \mintinline{python}{self.p}.
 You can go ahead now and run the program, you should see a black plot
@@ -240,8 +240,7 @@ The previous exercise is a just a trick for you to think ahead. With
 what you have done so far, you cannot set the axis, because you don't
 know which port you are going to scan and which one you are going to
 read. You need to wait until the user decides to trigger a scan to
-update the labels of the plot. So, let's first solve this problem. The
-method you would like to update is \mintinline{python}{start_scan}. To add the
+update the labels of the plot. So, let's first solve this problem. The method you would like to update is \mintinline{python}{start_scan}. To add the
 proper labels to the plot, you can do the following:
 
 \begin{minted}{python}
@@ -323,8 +322,7 @@ self.update_timer = QtCore.QTimer()
 self.update_timer.timeout.connect(self.update_scan)
 \end{minted}
 
-In the code above, you can see that the time was not set yet and the
-timer was not started. You have just created the timer and hooked its
+In the code above, you can see that the time was not set yet and the timer was not started. You have just created the timer and hooked its
 signal \mintinline{python}{timeout} to a method called \mintinline{python}{update_scan} that
 still has to be defined. Before going to that method, you also have to
 update the \mintinline{python}{start_scan} method to trigger the update\_timer with
@@ -346,7 +344,7 @@ Sometimes you can pass a Quantity to a method, but it is not safe to
 assume that the method will know how to handle them. Every time you can,
 you should explicitly do it as above. The missing piece of code is the
 method to update the plot while the experiment is running. Remember that
-the scan has its own thread, but the values are stored within the
+the scan has its own thread, but the values are stored in the
 experiment class, which is accessible from the main thread. The
 \mintinline{python}{update_scan} method will look like this:
 
@@ -502,7 +500,7 @@ self.start_scan_action.triggered.connect(self.start_scan)
 In the first line, you create the action and you set its name to \mintinline{python}{'Start
 Scan'}. The \mintinline{python}{self} is to explicitly set the parent for the
 action, in your case it is the \mintinline{python}{ScanWindow}. Then you set the
-shortcut for the action, in this case Ctrl+Shift+S. The status tip is
+shortcut for the action, in this case, Ctrl+Shift+S. The status tip is
 something you haven't use so far, but it will help the user to
 understand what will happen if the action is triggered. If you look in
 your program, you will see that the message is being displayed at the
@@ -535,7 +533,7 @@ attention to the shortcut that you specify.}
 
 For simple programs, you can still work with buttons on the screen. For
 more complex programs, you may need to have a clear interface, perhaps
-just plotting data and extra options in the menu, that don't get in
+just plotting data and extra options in the menu, that doesn't get in
 the way.
 
 \section{Quitting the program}\label{quitting-theprogram}
@@ -627,7 +625,7 @@ At this point, you have acquired a lot of knowledge that you can put
 into action. The first logical step is to test what you have learned
 from your own experiment. You can go through the steps of the book,
 adapting each piece of code to your needs. Don't be afraid of reusing
-the pieces of code such as windows and models that can be useful in
+the pieces of code such as windows and models that can be useful for
 your project.
 
 If you are willing to continue expanding the options of the {GUI} that

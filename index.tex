@@ -1,5 +1,6 @@
 \documentclass[a4paper,12pt]{book}
 \usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,letterpaper]{geometry} 
+\usepackage{graphicx}   
 \usepackage{xcolor} % Required for specifying colors by name
 \definecolor{ocre}{RGB}{52,177,201} % Define the orange color used for highlighting throughout the book
 \definecolor{exer}{HTML}{A5C5F5}
@@ -51,7 +52,9 @@
 \input{structure}
 
 \begin{document}
-\maketitle
+
+\include{00_title}
+
 \newpage
 
 \tableofcontents

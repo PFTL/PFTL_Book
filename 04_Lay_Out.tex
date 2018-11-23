@@ -1,6 +1,6 @@
 \chapter{Layout of the Program}\label{layout-of-theprogram}
 
-\section{Chapter Objectives}\label{chapterobjectives}
+\section{Objectives}
 In this chapter, you are going to learn how to lay out your program
 following a pattern that will make your code easier to understand, to
 maintain and to share. Normally, you should have defined the structure
@@ -22,8 +22,7 @@ will enable to use code shared by others. The {MVC} design pattern forms
 a layered structure, exactly in sync with the ideas that we have exposed
 when discussing the \emph{onion principle} for development.
 
-\section{Introduction}\label{introduction}
-
+\section{Introduction}
 Computer programs are meant to be a solution to a more or less complex
 problem. It seems unlikely today that anybody would invert a matrix by
 hand or with a calculator. Nor to imagine that somebody would plot a
@@ -72,7 +71,7 @@ code can be reused. Reusing code not only saves a very long time, it
 also empowers collaboration between different labs, possibly enabling
 researchers to gain weight when asking for specific features from
 manufacturers. Reusing code needs that some standards are specified, in
-such a way that another person can easily include the code into their
+such a way that another person can easily include the code in their
 projects. This is exactly what you did in the previous chapter when
 defined a class for controlling the device and not a plain script.
 
@@ -190,7 +189,7 @@ called Model, View, and Controller is a very good starting point. It
 gives the user a clear idea of where it may be the file that they need
 to change, or how the bug was generated. Remember, if you add a
 \textbf{{README}.md} file to every folder, it will be nicely rendered
-when exploring the code in Github. You can use that file to give a hint
+when exploring the code on Github. You can use that file to give a hint
 to the users on what is going on and where to edit the things that may
 be important.
 
@@ -270,10 +269,7 @@ Once you have the three folders (Model, View, and Controller) created,
 and you have created some files in each one of them, it is time to take
 a look at how the importing process works with Python.
 
-\hypertarget{how-importing-in-python-works}{}
-\section{How importing in
-Python works}\label{how-importing-in-pythonworks}
-
+\section{Importing modules in Python}
 Probably you have already seen some lines that look like this:
 
 \begin{minted}{pycon}
@@ -304,8 +300,7 @@ you want:
 \end{minted}
 
 When working with your own code, you can import different modules in the
-same way. Open a terminal and navigate to the root folder of the
-project, where you have the Model, View, and Controller. If you start
+same way. Open a terminal and navigate to the root folder of the project, where you have the Model, View, and Controller. If you start
 Python, you can type into the interpreter:
 
 \begin{minted}{pycon}
@@ -442,7 +437,7 @@ file, you can import both at the same time by typing
 \mint{python}|from dummy_controller import dummy_example, second_function|
 You could also do \mint{python}|from dummy_controller import *| The
 second option, however, is highly discouraged. There are several
-disadvantages of doing so. First, if you are reading the code and you
+disadvantages to doing so. First, if you are reading the code and you
 see something called \mintinline{python}{second_function} you have no idea where it
 came from. Also, if the \mintinline{python}{dummy_controller} creates variables,
 they will appear in your own program, perhaps overriding something you
@@ -599,7 +594,7 @@ want people to change it, but they should be able to do it
 for themselves.
 
 In order to be flexible, the best idea is to provide a folder with
-Examples on how to configure your program, or how to generate the
+Examples of how to configure your program, or how to generate the
 configuration files. These are just examples, aimed at exposing all the
 configuration options. However, when you want to run the experiment, you
 will do it starting with a different set of files, stored in a
@@ -720,8 +715,7 @@ In this chapter, you haven't done much coding but we have discussed some
 general ideas that should accompany you through every software
 development that you undertake. How to lay out the code is very
 important, because it is going to give you the structure you need to
-maintain your program without too much effort. Moreover, since the
-paradigm that you are using is common to developers in other fields, you
+maintain your program without too much effort. Moreover, since the paradigm that you are using is common to developers in other fields, you
 can benefit from tools that were not designed specifically for
 experimental work.
 

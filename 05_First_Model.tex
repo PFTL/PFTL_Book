@@ -1,7 +1,6 @@
 \chapter{Writing the first Model for a Device}\label{writing-the-first-model-for-adevice}
 
-\section{Chapter Objectives}\label{chapterobjectives}
-
+\section{Objectives}
 In this chapter, you are going to develop a model for a real device. You
 are going to start seeing why the Model-View-Controller pattern is so
 useful. Models are specific ways in which the user can interact with the
@@ -18,11 +17,10 @@ and decide in which order the steps are taken and what things can be
 given for granted or not.
 
 In this chapter you are going to develop the core of the program, and
-hopefully the basis for your future program when you are working in your
+hopefully, the basis for your future program when you are working in your
 own lab.
 
-\section{Introduction}\label{introduction}
-
+\section{Introduction}
 When developing models, you have to keep in mind that you will start
 specifying how the devices are going to behave. This means that models
 are somewhat specific to your experiment and sometimes the names you
@@ -33,8 +31,7 @@ and at least one input to record a signal. The analog outputs can be
 plugged into a piezo device that moves either the sample or the beam. If
 you do this systematically, you can construct an image pixel by pixel.
 You move to a location, record the input, move to a new location, etc.
-If you want to study the current that flows through a diode as a
-function of the voltage applied, you could use the same code developed
+If you want to study the current that flows through a diode as a function of the voltage applied, you could use the same code developed
 for the confocal microscope without changing a single line. However,
 using a function called \mintinline{python}{do_confocal_scan} to measure a current
 through a diode may be misleading.
@@ -75,8 +72,7 @@ add an empty \mintinline{python}{__init__.py} file in each new folder you make.
 Perhaps you already did this in the previous chapter.
 
 Instead of starting with the model for our {DAQ}, you can instead create
-a base class, in which you will keep track of all the functions that a
-proper model should have. You can create a file called \textbf{base.py}
+a base class, in which you will keep track of all the functions that a proper model should have. You can create a file called \textbf{base.py}
 and define a class called \mintinline{python}{DAQBase}:
 
 \begin{minted}{python}
@@ -104,8 +100,7 @@ This class doesn't do anything, it only defines the methods that you
 need to develop for each device. The \mintinline{python}{pass} takes care of
 functions in which nothing happens and nothing is returned either.
 Having the base class defined allows you to do several things. One is to
-keep track of all the methods that you need to define when you develop a
-new model, as we are going to do later. The other is that you can
+keep track of all the methods that you need to define when you develop a new model, as we are going to do later. The other is that you can
 inherit this class, and be sure that all the functions are already
 present, even if they don't do anything.
 
@@ -152,8 +147,7 @@ Going back to the code, the \mintinline{python}{AnalogDaq} class inherits the
 defined in it are going to be available also in the new class. When you
 inherit a class, you need to be sure that the \mintinline{python}{__init__}
 method of the parent is executed. This is what the line
-\mintinline{python}{super().__init__()} is doing. We request a port from the
-user, that for the time being is just stored in a property called
+\mintinline{python}{super().__init__()} is doing. We request a port from the user, that for the time being is just stored in a property called
 \mintinline{python}{port}. You can use the class, and you will see that the methods
 defined in \mintinline{python}{DAQBase} are available also in \mintinline{python}{AnalogDaq},
 even if they don't do anything:

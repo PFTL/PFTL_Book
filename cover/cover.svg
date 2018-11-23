@@ -1,0 +1,2737 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="cover.svg"
+   inkscape:export-filename="/home/aquiles/Documents/PythonForTheLab/PythonForTheLab/cover/cover.png"
+   inkscape:export-xdpi="299.96188"
+   inkscape:export-ydpi="299.96188">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient2795">
+      <stop
+         id="stop2797"
+         offset="0"
+         style="stop-color:#b8b8b8;stop-opacity:0.49803922;" />
+      <stop
+         id="stop2799"
+         offset="1"
+         style="stop-color:#7f7f7f;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2787">
+      <stop
+         id="stop2789"
+         offset="0"
+         style="stop-color:#7f7f7f;stop-opacity:0.5;" />
+      <stop
+         id="stop2791"
+         offset="1"
+         style="stop-color:#7f7f7f;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3676">
+      <stop
+         id="stop3678"
+         offset="0"
+         style="stop-color:#b2b2b2;stop-opacity:0.5;" />
+      <stop
+         id="stop3680"
+         offset="1"
+         style="stop-color:#b3b3b3;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3236">
+      <stop
+         id="stop3244"
+         offset="0"
+         style="stop-color:#f4f4f4;stop-opacity:1" />
+      <stop
+         id="stop3240"
+         offset="1"
+         style="stop-color:white;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4671">
+      <stop
+         id="stop4673"
+         offset="0"
+         style="stop-color:#ffd43b;stop-opacity:1;" />
+      <stop
+         id="stop4675"
+         offset="1"
+         style="stop-color:#ffe873;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4689">
+      <stop
+         id="stop4691"
+         offset="0"
+         style="stop-color:#5a9fd4;stop-opacity:1;" />
+      <stop
+         id="stop4693"
+         offset="1"
+         style="stop-color:#306998;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="translate(100.2702,99.61116)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient4671"
+       id="linearGradient2987"
+       y2="144.75717"
+       x2="-65.308502"
+       y1="144.75717"
+       x1="224.23996" />
+    <linearGradient
+       gradientTransform="translate(100.2702,99.61116)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient4689"
+       id="linearGradient2990"
+       y2="76.313133"
+       x2="26.670298"
+       y1="77.475983"
+       x1="172.94208" />
+    <linearGradient
+       y2="144.75717"
+       x2="-65.308502"
+       y1="144.75717"
+       x1="224.23996"
+       gradientTransform="matrix(0.562541,0,0,0.567972,-11.5974,-7.60954)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2255"
+       xlink:href="#linearGradient4671"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="76.313133"
+       x2="26.670298"
+       y1="76.176224"
+       x1="172.94208"
+       gradientTransform="matrix(0.562541,0,0,0.567972,-11.5974,-7.60954)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2258"
+       xlink:href="#linearGradient4689"
+       inkscape:collect="always" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.177966,0,108.7434)"
+       r="29.036913"
+       fy="132.28575"
+       fx="61.518883"
+       cy="132.28575"
+       cx="61.518883"
+       id="radialGradient2801"
+       xlink:href="#linearGradient2795"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="137.27299"
+       x2="112.03144"
+       y1="192.35176"
+       x1="150.96111"
+       gradientTransform="matrix(0.562541,0,0,0.567972,-9.399749,-5.305317)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient1475"
+       xlink:href="#linearGradient4671"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="114.39767"
+       x2="135.66525"
+       y1="20.603781"
+       x1="26.648937"
+       gradientTransform="matrix(0.562541,0,0,0.567972,-9.399749,-5.305317)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient1478"
+       xlink:href="#linearGradient4689"
+       inkscape:collect="always" />
+    <radialGradient
+       r="29.036913"
+       fy="132.28575"
+       fx="61.518883"
+       cy="132.28575"
+       cx="61.518883"
+       gradientTransform="matrix(2.382716e-8,-0.296405,1.43676,4.683673e-7,-128.544,150.5202)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient1480"
+       xlink:href="#linearGradient2795"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="163.19225"
+     inkscape:cy="691.16003"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:window-width="3106"
+     inkscape:window-height="1689"
+     inkscape:window-x="94"
+     inkscape:window-y="55"
+     inkscape:window-maximized="1"
+     showborder="true"
+     borderlayer="true" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       inkscape:groupmode="layer"
+       id="layer2"
+       inkscape:label="Base">
+      <g
+         id="g3557"
+         transform="matrix(0.87421609,0,0,0.88553387,18.885447,23.189172)">
+        <path
+           id="path2082"
+           d="m 111,141 -14,-2 -1,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7dccc4;stroke:#7dccc4;stroke-width:1.50999999" />
+        <path
+           id="path2084"
+           d="m 96,162 22,-6 -7,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#77c9c6;stroke:#77c9c6;stroke-width:1.50999999" />
+        <path
+           id="path2086"
+           d="m 96,162 14,12 8,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#72c6c8;stroke:#72c6c8;stroke-width:1.50999999" />
+        <path
+           id="path2088"
+           d="m 69,157 19,13 8,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#83ccc3;stroke:#83ccc3;stroke-width:1.50999999" />
+        <path
+           id="path2090"
+           d="m 88,170 22,4 -14,-12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#77c7c7;stroke:#77c7c7;stroke-width:1.50999999" />
+        <path
+           id="path2092"
+           d="m 97,139 -18,-3 17,26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#85cfc1;stroke:#85cfc1;stroke-width:1.50999999" />
+        <path
+           id="path2094"
+           d="m 95,114 -16,22 18,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8ed2bf;stroke:#8ed2bf;stroke-width:1.50999999" />
+        <path
+           id="path2096"
+           d="m 79,136 -10,21 27,5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#89d0c0;stroke:#89d0c0;stroke-width:1.50999999" />
+        <path
+           id="path2098"
+           d="m 118,156 21,-7 -28,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#70c4c9;stroke:#70c4c9;stroke-width:1.50999999" />
+        <path
+           id="path2100"
+           d="m 132,177 7,-28 -21,7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#66bfcc;stroke:#66bfcc;stroke-width:1.50999999" />
+        <path
+           id="path2102"
+           d="m 109,113 -14,1 2,25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8bd1bf;stroke:#8bd1bf;stroke-width:1.50999999" />
+        <path
+           id="path2104"
+           d="m 109,113 -12,26 14,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#83cec2;stroke:#83cec2;stroke-width:1.50999999" />
+        <path
+           id="path2106"
+           d="m 141,134 -32,-21 2,28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7cc9c5;stroke:#7cc9c5;stroke-width:1.50999999" />
+        <path
+           id="path2108"
+           d="m 110,174 22,3 -14,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#69c0cb;stroke:#69c0cb;stroke-width:1.50999999" />
+        <path
+           id="path2110"
+           d="m 110,174 v 17 l 22,-14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#65becd;stroke:#65becd;stroke-width:1.50999999" />
+        <path
+           id="path2112"
+           d="m 95,193 15,-2 v -17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6ac1cb;stroke:#6ac1cb;stroke-width:1.50999999" />
+        <path
+           id="path2114"
+           d="m 95,193 15,-19 -22,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#73c4c8;stroke:#73c4c8;stroke-width:1.50999999" />
+        <path
+           id="path2116"
+           d="m 95,114 -19,5 3,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#96d5bc;stroke:#96d5bc;stroke-width:1.50999999" />
+        <path
+           id="path2118"
+           d="m 51,130 -2,22 20,5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#99d7c0;stroke:#99d7c0;stroke-width:1.50999999" />
+        <path
+           id="path2120"
+           d="m 139,149 2,-15 -30,7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#70c4c9;stroke:#70c4c9;stroke-width:1.50999999" />
+        <path
+           id="path2122"
+           d="m 69,182 26,11 -7,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7cc7c6;stroke:#7cc7c6;stroke-width:1.50999999" />
+        <path
+           id="path2124"
+           d="m 69,157 v 25 l 19,-12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#87ccc2;stroke:#87ccc2;stroke-width:1.50999999" />
+        <path
+           id="path2126"
+           d="m 110,191 23,-1 -1,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5dbacf;stroke:#5dbacf;stroke-width:1.50999999" />
+        <path
+           id="path2128"
+           d="m 153,182 7,-30 -21,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5cb5cb;stroke:#5cb5cb;stroke-width:1.50999999" />
+        <path
+           id="path2130"
+           d="m 116,222 17,-32 -23,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5bb6cd;stroke:#5bb6cd;stroke-width:1.50999999" />
+        <path
+           id="path2132"
+           d="m 141,134 -4,-22 -28,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7dc8c5;stroke:#7dc8c5;stroke-width:1.50999999" />
+        <path
+           id="path2134"
+           d="m 69,157 -21,24 21,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8dcec3;stroke:#8dcec3;stroke-width:1.50999999" />
+        <path
+           id="path2136"
+           d="m 51,130 18,27 10,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97d6bd;stroke:#97d6bd;stroke-width:1.50999999" />
+        <path
+           id="path2138"
+           d="M 95,114 75,97 76,119 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#9cd8b9;stroke:#9cd8b9;stroke-width:1.50999999" />
+        <path
+           id="path2140"
+           d="m 109,113 -9,-17 -5,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#91d4be;stroke:#91d4be;stroke-width:1.50999999" />
+        <path
+           id="path2142"
+           d="m 109,94 -9,2 9,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#92d4bd;stroke:#92d4bd;stroke-width:1.50999999" />
+        <path
+           id="path2144"
+           d="m 76,119 -25,11 28,6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bd7ba;stroke:#9bd7ba;stroke-width:1.50999999" />
+        <path
+           id="path2146"
+           d="m 49,116 2,14 25,-11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a4dbbb;stroke:#a4dbbb;stroke-width:1.50999999" />
+        <path
+           id="path2148"
+           d="M 137,112 109,94 v 19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8acfc1;stroke:#8acfc1;stroke-width:1.50999999" />
+        <path
+           id="path2150"
+           d="m 153,182 -14,-33 -7,28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5ab8d0;stroke:#5ab8d0;stroke-width:1.50999999" />
+        <path
+           id="path2152"
+           d="m 139,149 21,3 -19,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#66bcca;stroke:#66bcca;stroke-width:1.50999999" />
+        <path
+           id="path2154"
+           d="m 141,134 20,-21 -24,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#76c1c6;stroke:#76c1c6;stroke-width:1.50999999" />
+        <path
+           id="path2156"
+           d="m 69,182 2,17 24,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7dc6c6;stroke:#7dc6c6;stroke-width:1.50999999" />
+        <path
+           id="path2158"
+           d="m 95,193 -4,17 19,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6bbec9;stroke:#6bbec9;stroke-width:1.50999999" />
+        <path
+           id="path2160"
+           d="m 56,201 15,-2 -2,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#84c8c5;stroke:#84c8c5;stroke-width:1.50999999" />
+        <path
+           id="path2162"
+           d="m 133,190 20,-8 -21,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#54b5d1;stroke:#54b5d1;stroke-width:1.50999999" />
+        <path
+           id="path2164"
+           d="m 71,199 20,11 4,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#75c0c6;stroke:#75c0c6;stroke-width:1.50999999" />
+        <path
+           id="path2166"
+           d="m 133,190 23,2 -3,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4db0d1;stroke:#4db0d1;stroke-width:1.50999999" />
+        <path
+           id="path2168"
+           d="m 100,96 -25,1 20,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bd7ba;stroke:#9bd7ba;stroke-width:1.50999999" />
+        <path
+           id="path2170"
+           d="m 60,94 15,3 2,-29 z"
+           inkscape:connector-curvature="0"
+           style="fill:#addfb8;stroke:#addfb8;stroke-width:1.50999999" />
+        <path
+           id="path2172"
+           d="m 160,152 1,-21 -20,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#67b9c7;stroke:#67b9c7;stroke-width:1.50999999" />
+        <path
+           id="path2174"
+           d="m 49,152 -1,29 21,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#94d2c3;stroke:#94d2c3;stroke-width:1.50999999" />
+        <path
+           id="path2176"
+           d="m 51,130 -15,5 13,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a3dac1;stroke:#a3dac1;stroke-width:1.50999999" />
+        <path
+           id="path2178"
+           d="m 49,152 -13,20 12,9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#98d3c6;stroke:#98d3c6;stroke-width:1.50999999" />
+        <path
+           id="path2180"
+           d="m 60,94 -11,22 27,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dcb8;stroke:#a8dcb8;stroke-width:1.50999999" />
+        <path
+           id="path2182"
+           d="m 137,112 5,-14 -33,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#87cbc2;stroke:#87cbc2;stroke-width:1.50999999" />
+        <path
+           id="path2184"
+           d="m 161,113 -19,-15 -5,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7cc3c4;stroke:#7cc3c4;stroke-width:1.50999999" />
+        <path
+           id="path2186"
+           d="m 153,182 19,-22 -12,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#56aec9;stroke:#56aec9;stroke-width:1.50999999" />
+        <path
+           id="path2188"
+           d="m 137,216 19,-24 -23,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4baed0;stroke:#4baed0;stroke-width:1.50999999" />
+        <path
+           id="path2190"
+           d="m 49,116 -13,19 15,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dcbf;stroke:#a8dcbf;stroke-width:1.50999999" />
+        <path
+           id="path2192"
+           d="m 71,199 7,19 13,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#77bdc3;stroke:#77bdc3;stroke-width:1.50999999" />
+        <path
+           id="path2194"
+           d="m 48,181 8,20 13,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8acbc7;stroke:#8acbc7;stroke-width:1.50999999" />
+        <path
+           id="path2196"
+           d="m 161,131 v -18 l -20,21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6fbbc5;stroke:#6fbbc5;stroke-width:1.50999999" />
+        <path
+           id="path2198"
+           d="m 32,153 4,19 13,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9fd7c6;stroke:#9fd7c6;stroke-width:1.50999999" />
+        <path
+           id="path2200"
+           d="m 48,181 -19,14 27,6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#90ccca;stroke:#90ccca;stroke-width:1.50999999" />
+        <path
+           id="path2202"
+           d="m 160,152 18,-17 -17,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#62b2c3;stroke:#62b2c3;stroke-width:1.50999999" />
+        <path
+           id="path2204"
+           d="m 161,131 12,-11 -12,-7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6eb6c1;stroke:#6eb6c1;stroke-width:1.50999999" />
+        <path
+           id="path2206"
+           d="m 173,176 -1,-16 -19,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4faac9;stroke:#4faac9;stroke-width:1.50999999" />
+        <path
+           id="path2208"
+           d="m 36,135 -4,18 17,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a3dac4;stroke:#a3dac4;stroke-width:1.50999999" />
+        <path
+           id="path2210"
+           d="M 75,97 60,94 76,119 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a6dcb6;stroke:#a6dcb6;stroke-width:1.50999999" />
+        <path
+           id="path2212"
+           d="m 49,116 -10,-4 -3,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#addfbf;stroke:#addfbf;stroke-width:1.50999999" />
+        <path
+           id="path2214"
+           d="M 98,77 75,97 100,96 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a0d9bb;stroke:#a0d9bb;stroke-width:1.50999999" />
+        <path
+           id="path2216"
+           d="m 58,222 20,-4 -7,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7dbec0;stroke:#7dbec0;stroke-width:1.50999999" />
+        <path
+           id="path2218"
+           d="m 91,210 25,12 -6,-31 z"
+           inkscape:connector-curvature="0"
+           style="fill:#62b8c8;stroke:#62b8c8;stroke-width:1.50999999" />
+        <path
+           id="path2220"
+           d="M 88,242 116,222 91,210 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#63b2c3;stroke:#63b2c3;stroke-width:1.50999999" />
+        <path
+           id="path2222"
+           d="m 116,222 21,-6 -4,-26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#52afcd;stroke:#52afcd;stroke-width:1.50999999" />
+        <path
+           id="path2224"
+           d="M 109,94 98,77 100,96 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#99d6be;stroke:#99d6be;stroke-width:1.50999999" />
+        <path
+           id="path2226"
+           d="m 118,71 -20,6 11,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9ad6c1;stroke:#9ad6c1;stroke-width:1.50999999" />
+        <path
+           id="path2228"
+           d="m 60,94 -21,18 10,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#afe0bb;stroke:#afe0bb;stroke-width:1.50999999" />
+        <path
+           id="path2230"
+           d="m 13,139 5,16 14,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dcc9;stroke:#a8dcc9;stroke-width:1.50999999" />
+        <path
+           id="path2232"
+           d="m 173,190 v -14 l -20,6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#49a7ca;stroke:#49a7ca;stroke-width:1.50999999" />
+        <path
+           id="path2234"
+           d="m 173,190 -20,-8 3,10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#48a9cd;stroke:#48a9cd;stroke-width:1.50999999" />
+        <path
+           id="path2236"
+           d="m 178,135 -5,-15 -12,11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#68b1c1;stroke:#68b1c1;stroke-width:1.50999999" />
+        <path
+           id="path2238"
+           d="m 160,79 -26,-3 8,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#88c8c6;stroke:#88c8c6;stroke-width:1.50999999" />
+        <path
+           id="path2240"
+           d="m 178,135 -18,17 12,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5baec4;stroke:#5baec4;stroke-width:1.50999999" />
+        <path
+           id="path2242"
+           d="m 194,130 -16,5 22,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5ca5bd;stroke:#5ca5bd;stroke-width:1.50999999" />
+        <path
+           id="path2244"
+           d="m 200,149 -22,-14 -6,25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#57a7c0;stroke:#57a7c0;stroke-width:1.50999999" />
+        <path
+           id="path2246"
+           d="m 160,216 13,-26 -17,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#42a3cb;stroke:#42a3cb;stroke-width:1.50999999" />
+        <path
+           id="path2248"
+           d="M 142,98 134,76 109,94 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8dcec4;stroke:#8dcec4;stroke-width:1.50999999" />
+        <path
+           id="path2250"
+           d="m 161,92 -19,6 19,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7dbfc1;stroke:#7dbfc1;stroke-width:1.50999999" />
+        <path
+           id="path2252"
+           d="m 134,76 -16,-5 -9,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#94d2c4;stroke:#94d2c4;stroke-width:1.50999999" />
+        <path
+           id="path2254"
+           d="m 177,95 -16,-3 v 21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7ab9bd;stroke:#7ab9bd;stroke-width:1.50999999" />
+        <path
+           id="path2256"
+           d="m 88,242 31,-1 -3,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#59abc2;stroke:#59abc2;stroke-width:1.50999999" />
+        <path
+           id="path2258"
+           d="m 56,201 2,21 13,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#83c2c3;stroke:#83c2c3;stroke-width:1.50999999" />
+        <path
+           id="path2260"
+           d="m 38,211 20,11 -2,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#88c2c4;stroke:#88c2c4;stroke-width:1.50999999" />
+        <path
+           id="path2262"
+           d="m 36,172 -7,23 19,-14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97d0ca;stroke:#97d0ca;stroke-width:1.50999999" />
+        <path
+           id="path2264"
+           d="m 32,153 -14,2 18,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a3d8c9;stroke:#a3d8c9;stroke-width:1.50999999" />
+        <path
+           id="path2266"
+           d="m 13,139 19,14 4,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#aaddc6;stroke:#aaddc6;stroke-width:1.50999999" />
+        <path
+           id="path2268"
+           d="m 58,222 12,8 8,-12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7bbabd;stroke:#7bbabd;stroke-width:1.50999999" />
+        <path
+           id="path2270"
+           d="M 18,200 29,195 8,176 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bd1d1;stroke:#9bd1d1;stroke-width:1.50999999" />
+        <path
+           id="path2272"
+           d="M 98,77 77,68 75,97 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dcbc;stroke:#a8dcbc;stroke-width:1.50999999" />
+        <path
+           id="path2274"
+           d="m 60,94 -27,3 6,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e2ba;stroke:#b5e2ba;stroke-width:1.50999999" />
+        <path
+           id="path2276"
+           d="M 77,54 V 68 L 93,48 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b2e1c0;stroke:#b2e1c0;stroke-width:1.50999999" />
+        <path
+           id="path2278"
+           d="m 137,216 h 23 l -4,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#44a6cc;stroke:#44a6cc;stroke-width:1.50999999" />
+        <path
+           id="path2280"
+           d="m 151,240 9,-24 h -23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3ea0c9;stroke:#3ea0c9;stroke-width:1.50999999" />
+        <path
+           id="path2282"
+           d="m 132,237 5,-21 -21,6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4da9c9;stroke:#4da9c9;stroke-width:1.50999999" />
+        <path
+           id="path2284"
+           d="m 11,112 2,27 23,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b2e0c6;stroke:#b2e0c6;stroke-width:1.50999999" />
+        <path
+           id="path2286"
+           d="M 39,71 33,97 60,94 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#bae4bc;stroke:#bae4bc;stroke-width:1.50999999" />
+        <path
+           id="path2288"
+           d="m 29,195 9,16 18,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#90c8c9;stroke:#90c8c9;stroke-width:1.50999999" />
+        <path
+           id="path2290"
+           d="m 58,222 -4,13 16,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7eb8be;stroke:#7eb8be;stroke-width:1.50999999" />
+        <path
+           id="path2292"
+           d="m 11,112 25,23 3,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b3e1c2;stroke:#b3e1c2;stroke-width:1.50999999" />
+        <path
+           id="path2294"
+           d="m 8,176 21,19 7,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9cd3ce;stroke:#9cd3ce;stroke-width:1.50999999" />
+        <path
+           id="path2296"
+           d="m 119,241 13,-4 -16,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4fa7c6;stroke:#4fa7c6;stroke-width:1.50999999" />
+        <path
+           id="path2298"
+           d="m 88,242 3,-32 -13,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6eb6c1;stroke:#6eb6c1;stroke-width:1.50999999" />
+        <path
+           id="path2300"
+           d="M 161,92 160,79 142,98 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#82c1c2;stroke:#82c1c2;stroke-width:1.50999999" />
+        <path
+           id="path2302"
+           d="m 136,53 -27,-5 9,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9dd5c8;stroke:#9dd5c8;stroke-width:1.50999999" />
+        <path
+           id="path2304"
+           d="m 170,76 -10,3 1,13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#82bdc1;stroke:#82bdc1;stroke-width:1.50999999" />
+        <path
+           id="path2306"
+           d="m 177,95 -16,18 12,7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#73b5be;stroke:#73b5be;stroke-width:1.50999999" />
+        <path
+           id="path2308"
+           d="M 70,230 88,242 78,218 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#71b5be;stroke:#71b5be;stroke-width:1.50999999" />
+        <path
+           id="path2310"
+           d="M 80,252 88,242 70,230 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#6eafbb;stroke:#6eafbb;stroke-width:1.50999999" />
+        <path
+           id="path2312"
+           d="m 190,109 -13,-14 -4,25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#71b0bb;stroke:#71b0bb;stroke-width:1.50999999" />
+        <path
+           id="path2314"
+           d="m 77,68 -24,3 7,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b4e2ba;stroke:#b4e2ba;stroke-width:1.50999999" />
+        <path
+           id="path2316"
+           d="m 178,135 16,-5 -21,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#65abbd;stroke:#65abbd;stroke-width:1.50999999" />
+        <path
+           id="path2318"
+           d="m 200,149 -28,11 29,11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4fa0c0;stroke:#4fa0c0;stroke-width:1.50999999" />
+        <path
+           id="path2320"
+           d="m 194,130 -4,-21 -17,11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#69abbb;stroke:#69abbb;stroke-width:1.50999999" />
+        <path
+           id="path2322"
+           d="m 38,211 16,24 4,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#85bdc2;stroke:#85bdc2;stroke-width:1.50999999" />
+        <path
+           id="path2324"
+           d="m 211,117 -17,-26 -4,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6fa7b6;stroke:#6fa7b6;stroke-width:1.50999999" />
+        <path
+           id="path2326"
+           d="m 201,171 -29,-11 1,16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4ca2c4;stroke:#4ca2c4;stroke-width:1.50999999" />
+        <path
+           id="path2328"
+           d="m 201,171 -28,5 27,17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#429ac3;stroke:#429ac3;stroke-width:1.50999999" />
+        <path
+           id="path2330"
+           d="m 38,211 -9,24 h 25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#89bdc3;stroke:#89bdc3;stroke-width:1.50999999" />
+        <path
+           id="path2332"
+           d="m 29,195 -11,5 20,11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#95cacc;stroke:#95cacc;stroke-width:1.50999999" />
+        <path
+           id="path2334"
+           d="M 8,176 36,172 18,155 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a2d7cc;stroke:#a2d7cc;stroke-width:1.50999999" />
+        <path
+           id="path2336"
+           d="M -3,152 8,176 18,155 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dacf;stroke:#a8dacf;stroke-width:1.50999999" />
+        <path
+           id="path2338"
+           d="m 160,216 18,-1 -5,-25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3b9bc7;stroke:#3b9bc7;stroke-width:1.50999999" />
+        <path
+           id="path2340"
+           d="m 171,243 7,-28 -18,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3594c3;stroke:#3594c3;stroke-width:1.50999999" />
+        <path
+           id="path2342"
+           d="M 33,97 11,112 H 39 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b9e3c0;stroke:#b9e3c0;stroke-width:1.50999999" />
+        <path
+           id="path2344"
+           d="m 13,139 -16,13 21,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#acddcd;stroke:#acddcd;stroke-width:1.50999999" />
+        <path
+           id="path2346"
+           d="m 6,90 5,22 22,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#bfe6c2;stroke:#bfe6c2;stroke-width:1.50999999" />
+        <path
+           id="path2348"
+           d="M 77,68 60,48 53,71 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#bae4bd;stroke:#bae4bd;stroke-width:1.50999999" />
+        <path
+           id="path2350"
+           d="M 93,48 77,68 98,77 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#abddc0;stroke:#abddc0;stroke-width:1.50999999" />
+        <path
+           id="path2352"
+           d="M 109,48 98,77 118,71 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a0d9c3;stroke:#a0d9c3;stroke-width:1.50999999" />
+        <path
+           id="path2354"
+           d="m 200,193 -27,-17 v 14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#409ec6;stroke:#409ec6;stroke-width:1.50999999" />
+        <path
+           id="path2356"
+           d="m 136,53 -18,18 16,5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#96d1c7;stroke:#96d1c7;stroke-width:1.50999999" />
+        <path
+           id="path2358"
+           d="m 177,95 -7,-19 -9,16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7eb9be;stroke:#7eb9be;stroke-width:1.50999999" />
+        <path
+           id="path2360"
+           d="m 194,91 -24,-15 7,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7bb3bc;stroke:#7bb3bc;stroke-width:1.50999999" />
+        <path
+           id="path2362"
+           d="m 132,237 19,3 -14,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#41a2ca;stroke:#41a2ca;stroke-width:1.50999999" />
+        <path
+           id="path2364"
+           d="m 135,261 16,-21 -19,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3d9cc7;stroke:#3d9cc7;stroke-width:1.50999999" />
+        <path
+           id="path2366"
+           d="m 135,261 -3,-24 -13,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#47a0c4;stroke:#47a0c4;stroke-width:1.50999999" />
+        <path
+           id="path2368"
+           d="M 53,71 H 39 l 21,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#bae4bc;stroke:#bae4bc;stroke-width:1.50999999" />
+        <path
+           id="path2370"
+           d="m 38,52 1,19 h 14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c3e7c1;stroke:#c3e7c1;stroke-width:1.50999999" />
+        <path
+           id="path2372"
+           d="m 136,53 -2,23 15,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#94cecc;stroke:#94cecc;stroke-width:1.50999999" />
+        <path
+           id="path2374"
+           d="M 109,48 H 93 l 5,29 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a7dcc3;stroke:#a7dcc3;stroke-width:1.50999999" />
+        <path
+           id="path2376"
+           d="m 149,53 -15,23 26,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8dc8c8;stroke:#8dc8c8;stroke-width:1.50999999" />
+        <path
+           id="path2378"
+           d="m 88,242 10,13 21,-14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5ca9bf;stroke:#5ca9bf;stroke-width:1.50999999" />
+        <path
+           id="path2380"
+           d="M 54,235 80,252 70,230 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#77b3bb;stroke:#77b3bb;stroke-width:1.50999999" />
+        <path
+           id="path2382"
+           d="m 80,252 18,3 -10,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#66aabc;stroke:#66aabc;stroke-width:1.50999999" />
+        <path
+           id="path2384"
+           d="M 11,222 38,211 18,200 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#94c7cc;stroke:#94c7cc;stroke-width:1.50999999" />
+        <path
+           id="path2386"
+           d="m -13,135 10,17 16,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b1e0ce;stroke:#b1e0ce;stroke-width:1.50999999" />
+        <path
+           id="path2388"
+           d="m 178,215 22,-22 -27,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3998c5;stroke:#3998c5;stroke-width:1.50999999" />
+        <path
+           id="path2390"
+           d="m 171,53 h -22 l 11,26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8dc3c6;stroke:#8dc3c6;stroke-width:1.50999999" />
+        <path
+           id="path2392"
+           d="M 136,53 116,37 109,48 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a1d6ca;stroke:#a1d6ca;stroke-width:1.50999999" />
+        <path
+           id="path2394"
+           d="m 190,109 4,-18 -17,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#75aeb8;stroke:#75aeb8;stroke-width:1.50999999" />
+        <path
+           id="path2396"
+           d="m 161,35 -20,3 8,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#95cacd;stroke:#95cacd;stroke-width:1.50999999" />
+        <path
+           id="path2398"
+           d="m 211,117 -21,-8 4,21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#67a4b8;stroke:#67a4b8;stroke-width:1.50999999" />
+        <path
+           id="path2400"
+           d="m 200,149 13,-9 -19,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#599fba;stroke:#599fba;stroke-width:1.50999999" />
+        <path
+           id="path2402"
+           d="m 217,160 -4,-20 -13,9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5198ba;stroke:#5198ba;stroke-width:1.50999999" />
+        <path
+           id="path2404"
+           d="m 217,160 -17,-11 1,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4c98bc;stroke:#4c98bc;stroke-width:1.50999999" />
+        <path
+           id="path2406"
+           d="M 79,27 60,48 77,54 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#bbe5c0;stroke:#bbe5c0;stroke-width:1.50999999" />
+        <path
+           id="path2408"
+           d="M 77,54 60,48 77,68 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b8e3bd;stroke:#b8e3bd;stroke-width:1.50999999" />
+        <path
+           id="path2410"
+           d="m 54,235 -2,20 28,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#79b1ba;stroke:#79b1ba;stroke-width:1.50999999" />
+        <path
+           id="path2412"
+           d="m 11,222 18,13 9,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#90c1c8;stroke:#90c1c8;stroke-width:1.50999999" />
+        <path
+           id="path2414"
+           d="M -5,193 18,200 8,176 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#9ed2d4;stroke:#9ed2d4;stroke-width:1.50999999" />
+        <path
+           id="path2416"
+           d="m 110,275 2,-11 -14,-9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#549fbd;stroke:#549fbd;stroke-width:1.50999999" />
+        <path
+           id="path2418"
+           d="m 98,255 14,9 7,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#54a3bf;stroke:#54a3bf;stroke-width:1.50999999" />
+        <path
+           id="path2420"
+           d="M 110,275 98,255 88,280 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#5b9fba;stroke:#5b9fba;stroke-width:1.50999999" />
+        <path
+           id="path2422"
+           d="m 213,140 -2,-23 -17,13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5f9eb8;stroke:#5f9eb8;stroke-width:1.50999999" />
+        <path
+           id="path2424"
+           d="m 200,193 14,-19 -13,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4093c0;stroke:#4093c0;stroke-width:1.50999999" />
+        <path
+           id="path2426"
+           d="m 11,112 -20,6 22,21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b8e3ca;stroke:#b8e3ca;stroke-width:1.50999999" />
+        <path
+           id="path2428"
+           d="M 13,75 6,90 33,97 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c4e8c4;stroke:#c4e8c4;stroke-width:1.50999999" />
+        <path
+           id="path2430"
+           d="M 13,75 33,97 39,71 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c3e8c1;stroke:#c3e8c1;stroke-width:1.50999999" />
+        <path
+           id="path2432"
+           d="m -3,152 -6,25 17,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8d9d4;stroke:#a8d9d4;stroke-width:1.50999999" />
+        <path
+           id="path2434"
+           d="m -22,181 13,-4 -22,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#addbd9;stroke:#addbd9;stroke-width:1.50999999" />
+        <path
+           id="path2436"
+           d="M 109,48 101,29 93,48 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#abddc7;stroke:#abddc7;stroke-width:1.50999999" />
+        <path
+           id="path2438"
+           d="M 93,48 79,27 77,54 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e2c2;stroke:#b5e2c2;stroke-width:1.50999999" />
+        <path
+           id="path2440"
+           d="m 141,38 -25,-1 20,16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9dd3cd;stroke:#9dd3cd;stroke-width:1.50999999" />
+        <path
+           id="path2442"
+           d="m 200,193 14,6 v -25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#378fc0;stroke:#378fc0;stroke-width:1.50999999" />
+        <path
+           id="path2444"
+           d="m 178,215 18,2 4,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3390c0;stroke:#3390c0;stroke-width:1.50999999" />
+        <path
+           id="path2446"
+           d="m 193,239 3,-22 -18,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2d8bbe;stroke:#2d8bbe;stroke-width:1.50999999" />
+        <path
+           id="path2448"
+           d="m 171,243 -11,-27 -9,24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3696c4;stroke:#3696c4;stroke-width:1.50999999" />
+        <path
+           id="path2450"
+           d="m 214,174 3,-14 -16,11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4693bd;stroke:#4693bd;stroke-width:1.50999999" />
+        <path
+           id="path2452"
+           d="m 213,140 22,-6 -24,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5c96b2;stroke:#5c96b2;stroke-width:1.50999999" />
+        <path
+           id="path2454"
+           d="m 172,253 -1,-10 -20,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#308fc0;stroke:#308fc0;stroke-width:1.50999999" />
+        <path
+           id="path2456"
+           d="m 112,264 23,-3 -16,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4b9ec1;stroke:#4b9ec1;stroke-width:1.50999999" />
+        <path
+           id="path2458"
+           d="m -9,177 4,16 13,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a3d5d6;stroke:#a3d5d6;stroke-width:1.50999999" />
+        <path
+           id="path2460"
+           d="m 29,235 23,20 2,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#83b6bf;stroke:#83b6bf;stroke-width:1.50999999" />
+        <path
+           id="path2462"
+           d="m -3,218 14,4 7,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97c8cf;stroke:#97c8cf;stroke-width:1.50999999" />
+        <path
+           id="path2464"
+           d="m 29,235 3,25 20,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#86b4bf;stroke:#86b4bf;stroke-width:1.50999999" />
+        <path
+           id="path2466"
+           d="m -9,99 v 19 l 20,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c0e6c9;stroke:#c0e6c9;stroke-width:1.50999999" />
+        <path
+           id="path2468"
+           d="m -9,118 -4,17 26,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b7e2cd;stroke:#b7e2cd;stroke-width:1.50999999" />
+        <path
+           id="path2470"
+           d="m 6,90 -15,9 20,13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c2e8c6;stroke:#c2e8c6;stroke-width:1.50999999" />
+        <path
+           id="path2472"
+           d="M 15,52 13,75 39,71 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#cbebc6;stroke:#cbebc6;stroke-width:1.50999999" />
+        <path
+           id="path2474"
+           d="m 135,261 15,-3 1,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3996c4;stroke:#3996c4;stroke-width:1.50999999" />
+        <path
+           id="path2476"
+           d="M 60,48 38,52 53,71 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c3e7c1;stroke:#c3e7c1;stroke-width:1.50999999" />
+        <path
+           id="path2478"
+           d="M 55,28 38,52 60,48 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c6e9c3;stroke:#c6e9c3;stroke-width:1.50999999" />
+        <path
+           id="path2480"
+           d="m 149,53 -8,-15 -5,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97cece;stroke:#97cece;stroke-width:1.50999999" />
+        <path
+           id="path2482"
+           d="m 171,53 -11,26 10,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#86bdc2;stroke:#86bdc2;stroke-width:1.50999999" />
+        <path
+           id="path2484"
+           d="m 200,72 -30,4 24,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7db0bb;stroke:#7db0bb;stroke-width:1.50999999" />
+        <path
+           id="path2486"
+           d="m 196,60 -25,-7 -1,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#86b7c1;stroke:#86b7c1;stroke-width:1.50999999" />
+        <path
+           id="path2488"
+           d="m 196,217 18,-18 -14,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#328cbf;stroke:#328cbf;stroke-width:1.50999999" />
+        <path
+           id="path2490"
+           d="m 214,174 18,-14 h -15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#478eb6;stroke:#478eb6;stroke-width:1.50999999" />
+        <path
+           id="path2492"
+           d="m 217,213 -3,-14 -18,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2d86bc;stroke:#2d86bc;stroke-width:1.50999999" />
+        <path
+           id="path2494"
+           d="m 116,37 -15,-8 8,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8dbca;stroke:#a8dbca;stroke-width:1.50999999" />
+        <path
+           id="path2496"
+           d="m 119,17 -18,12 15,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a9dbcd;stroke:#a9dbcd;stroke-width:1.50999999" />
+        <path
+           id="path2498"
+           d="M -8,67 -9,99 6,90 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#caeacb;stroke:#caeacb;stroke-width:1.50999999" />
+        <path
+           id="path2500"
+           d="m -27,117 5,21 9,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#bde5d2;stroke:#bde5d2;stroke-width:1.50999999" />
+        <path
+           id="path2502"
+           d="m 171,243 22,-4 -15,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2c8bbe;stroke:#2c8bbe;stroke-width:1.50999999" />
+        <path
+           id="path2504"
+           d="m 150,258 22,-5 -21,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3390c1;stroke:#3390c1;stroke-width:1.50999999" />
+        <path
+           id="path2506"
+           d="m -3,218 13,15 1,-11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#95c3ce;stroke:#95c3ce;stroke-width:1.50999999" />
+        <path
+           id="path2508"
+           d="m 11,222 -1,11 19,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#91bfc9;stroke:#91bfc9;stroke-width:1.50999999" />
+        <path
+           id="path2510"
+           d="m 135,261 18,13 -3,-16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3691c2;stroke:#3691c2;stroke-width:1.50999999" />
+        <path
+           id="path2512"
+           d="m 150,258 3,16 19,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#308cbe;stroke:#308cbe;stroke-width:1.50999999" />
+        <path
+           id="path2514"
+           d="m 112,264 17,17 6,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4698c0;stroke:#4698c0;stroke-width:1.50999999" />
+        <path
+           id="path2516"
+           d="M 88,280 98,255 80,252 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#64a5b9;stroke:#64a5b9;stroke-width:1.50999999" />
+        <path
+           id="path2518"
+           d="m -5,193 2,25 21,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bccd3;stroke:#9bccd3;stroke-width:1.50999999" />
+        <path
+           id="path2520"
+           d="m -23,195 20,23 -2,-25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a0cfd7;stroke:#a0cfd7;stroke-width:1.50999999" />
+        <path
+           id="path2522"
+           d="m -27,117 14,18 4,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#bee6d0;stroke:#bee6d0;stroke-width:1.50999999" />
+        <path
+           id="path2524"
+           d="m -13,135 -9,3 19,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e2d2;stroke:#b5e2d2;stroke-width:1.50999999" />
+        <path
+           id="path2526"
+           d="m -9,177 -13,4 17,12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a6d6d9;stroke:#a6d6d9;stroke-width:1.50999999" />
+        <path
+           id="path2528"
+           d="m 212,79 -12,-7 -6,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#79a8b8;stroke:#79a8b8;stroke-width:1.50999999" />
+        <path
+           id="path2530"
+           d="M 101,29 79,27 93,48 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b2e1c6;stroke:#b2e1c6;stroke-width:1.50999999" />
+        <path
+           id="path2532"
+           d="m 172,253 21,-14 -22,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2888bc;stroke:#2888bc;stroke-width:1.50999999" />
+        <path
+           id="path2534"
+           d="m 52,255 18,19 10,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#74aab7;stroke:#74aab7;stroke-width:1.50999999" />
+        <path
+           id="path2536"
+           d="M 58,276 70,274 52,255 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#77a8b7;stroke:#77a8b7;stroke-width:1.50999999" />
+        <path
+           id="path2538"
+           d="m -31,153 22,24 6,-25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#afddd6;stroke:#afddd6;stroke-width:1.50999999" />
+        <path
+           id="path2540"
+           d="M 141,38 119,17 116,37 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#a2d6cf;stroke:#a2d6cf;stroke-width:1.50999999" />
+        <path
+           id="path2542"
+           d="M 171,53 161,35 149,53 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#91c4c8;stroke:#91c4c8;stroke-width:1.50999999" />
+        <path
+           id="path2544"
+           d="m 174,36 -13,-1 10,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8fbfc7;stroke:#8fbfc7;stroke-width:1.50999999" />
+        <path
+           id="path2546"
+           d="m 235,180 -3,-20 -18,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4289b4;stroke:#4289b4;stroke-width:1.50999999" />
+        <path
+           id="path2548"
+           d="m 217,160 h 15 l -19,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4d91b4;stroke:#4d91b4;stroke-width:1.50999999" />
+        <path
+           id="path2550"
+           d="m 211,117 8,-24 -25,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6fa2b3;stroke:#6fa2b3;stroke-width:1.50999999" />
+        <path
+           id="path2552"
+           d="m 11,254 21,6 -3,-25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8ab6c3;stroke:#8ab6c3;stroke-width:1.50999999" />
+        <path
+           id="path2554"
+           d="M 11,254 29,235 10,233 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8ebac7;stroke:#8ebac7;stroke-width:1.50999999" />
+        <path
+           id="path2556"
+           d="m 70,274 18,6 -8,-28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6aa4b7;stroke:#6aa4b7;stroke-width:1.50999999" />
+        <path
+           id="path2558"
+           d="m 238,115 -19,-22 -8,24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6898ad;stroke:#6898ad;stroke-width:1.50999999" />
+        <path
+           id="path2560"
+           d="m 214,58 -18,2 4,12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#80aaba;stroke:#80aaba;stroke-width:1.50999999" />
+        <path
+           id="path2562"
+           d="M 200,72 196,60 170,76 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#81b1bd;stroke:#81b1bd;stroke-width:1.50999999" />
+        <path
+           id="path2564"
+           d="m 214,199 21,-19 -21,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3a89b9;stroke:#3a89b9;stroke-width:1.50999999" />
+        <path
+           id="path2566"
+           d="m 212,231 5,-18 -21,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2883ba;stroke:#2883ba;stroke-width:1.50999999" />
+        <path
+           id="path2568"
+           d="M 219,93 212,79 194,91 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#75a4b5;stroke:#75a4b5;stroke-width:1.50999999" />
+        <path
+           id="path2570"
+           d="M 38,52 H 15 l 24,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ccebc5;stroke:#ccebc5;stroke-width:1.50999999" />
+        <path
+           id="path2572"
+           d="M 13,75 -8,67 6,90 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ccebca;stroke:#ccebca;stroke-width:1.50999999" />
+        <path
+           id="path2574"
+           d="m 79,27 -24,1 5,20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c1e7c2;stroke:#c1e7c2;stroke-width:1.50999999" />
+        <path
+           id="path2576"
+           d="M 17,29 15,52 H 38 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d1edca;stroke:#d1edca;stroke-width:1.50999999" />
+        <path
+           id="path2578"
+           d="m 36,277 22,-1 -6,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7caab9;stroke:#7caab9;stroke-width:1.50999999" />
+        <path
+           id="path2580"
+           d="m 70,274 3,28 15,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#699db2;stroke:#699db2;stroke-width:1.50999999" />
+        <path
+           id="path2582"
+           d="m 110,275 19,6 -17,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4c98bd;stroke:#4c98bd;stroke-width:1.50999999" />
+        <path
+           id="path2584"
+           d="m 121,304 8,-23 -19,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4892b9;stroke:#4892b9;stroke-width:1.50999999" />
+        <path
+           id="path2586"
+           d="m -9,253 20,1 -1,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#90b9c9;stroke:#90b9c9;stroke-width:1.50999999" />
+        <path
+           id="path2588"
+           d="m -22,181 -1,14 18,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a6d5db;stroke:#a6d5db;stroke-width:1.50999999" />
+        <path
+           id="path2590"
+           d="m -31,153 8,42 1,-14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#addadc;stroke:#addadc;stroke-width:1.50999999" />
+        <path
+           id="path2592"
+           d="m 172,253 27,6 -6,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2480b8;stroke:#2480b8;stroke-width:1.50999999" />
+        <path
+           id="path2594"
+           d="m 129,281 24,-7 -18,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3991c1;stroke:#3991c1;stroke-width:1.50999999" />
+        <path
+           id="path2596"
+           d="m -22,138 -9,15 28,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e1d5;stroke:#b5e1d5;stroke-width:1.50999999" />
+        <path
+           id="path2598"
+           d="m -27,117 -4,36 9,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#bce4d5;stroke:#bce4d5;stroke-width:1.50999999" />
+        <path
+           id="path2600"
+           d="m 232,160 3,-26 -22,6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#518fb0;stroke:#518fb0;stroke-width:1.50999999" />
+        <path
+           id="path2602"
+           d="m -9,99 -18,18 18,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c3e8ce;stroke:#c3e8ce;stroke-width:1.50999999" />
+        <path
+           id="path2604"
+           d="m -29,96 2,21 18,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c9eace;stroke:#c9eace;stroke-width:1.50999999" />
+        <path
+           id="path2606"
+           d="m 129,12 -10,5 22,21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a2d6d2;stroke:#a2d6d2;stroke-width:1.50999999" />
+        <path
+           id="path2608"
+           d="M 101,29 89,14 79,27 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e2c9;stroke:#b5e2c9;stroke-width:1.50999999" />
+        <path
+           id="path2610"
+           d="M 79,27 75,12 55,28 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c1e7c4;stroke:#c1e7c4;stroke-width:1.50999999" />
+        <path
+           id="path2612"
+           d="m 155,12 h -26 l 12,26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9dd1d4;stroke:#9dd1d4;stroke-width:1.50999999" />
+        <path
+           id="path2614"
+           d="M 196,60 174,36 171,53 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8ab8c3;stroke:#8ab8c3;stroke-width:1.50999999" />
+        <path
+           id="path2616"
+           d="m 232,160 3,20 v -46 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4988ad;stroke:#4988ad;stroke-width:1.50999999" />
+        <path
+           id="path2618"
+           d="m 233,200 2,-20 -21,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3383b5;stroke:#3383b5;stroke-width:1.50999999" />
+        <path
+           id="path2620"
+           d="m 217,213 16,-13 -19,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2e82b6;stroke:#2e82b6;stroke-width:1.50999999" />
+        <path
+           id="path2622"
+           d="m 193,239 19,-8 -16,-14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2783ba;stroke:#2783ba;stroke-width:1.50999999" />
+        <path
+           id="path2624"
+           d="m 199,259 13,-28 -19,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#207db6;stroke:#207db6;stroke-width:1.50999999" />
+        <path
+           id="path2626"
+           d="M 119,17 89,14 101,29 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#afdfcc;stroke:#afdfcc;stroke-width:1.50999999" />
+        <path
+           id="path2628"
+           d="m 32,260 4,17 16,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#82aebc;stroke:#82aebc;stroke-width:1.50999999" />
+        <path
+           id="path2630"
+           d="M -11,233 H 10 L -3,218 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#96c2cf;stroke:#96c2cf;stroke-width:1.50999999" />
+        <path
+           id="path2632"
+           d="M 15,52 -8,67 13,75 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d0edcb;stroke:#d0edcb;stroke-width:1.50999999" />
+        <path
+           id="path2634"
+           d="m 236,218 -3,-18 -16,13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2c7bb1;stroke:#2c7bb1;stroke-width:1.50999999" />
+        <path
+           id="path2636"
+           d="m -34,221 23,12 8,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bc6d4;stroke:#9bc6d4;stroke-width:1.50999999" />
+        <path
+           id="path2638"
+           d="m 235,134 3,-19 -27,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6093ab;stroke:#6093ab;stroke-width:1.50999999" />
+        <path
+           id="path2640"
+           d="m 219,93 h 15 L 212,79 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#729bae;stroke:#729bae;stroke-width:1.50999999" />
+        <path
+           id="path2642"
+           d="m 235,180 3,-65 -3,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#518aa9;stroke:#518aa9;stroke-width:1.50999999" />
+        <path
+           id="path2644"
+           d="M 15,52 -3,50 -8,67 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d4eece;stroke:#d4eece;stroke-width:1.50999999" />
+        <path
+           id="path2646"
+           d="M 55,28 36,27 38,52 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ccebc7;stroke:#ccebc7;stroke-width:1.50999999" />
+        <path
+           id="path2648"
+           d="m 39,14 -3,13 19,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ceecca;stroke:#ceecca;stroke-width:1.50999999" />
+        <path
+           id="path2650"
+           d="M 114,-5 H 93 l -4,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5e2cf;stroke:#b5e2cf;stroke-width:1.50999999" />
+        <path
+           id="path2652"
+           d="m 155,12 -14,26 20,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#98cacf;stroke:#98cacf;stroke-width:1.50999999" />
+        <path
+           id="path2654"
+           d="M 89,14 75,12 79,27 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#bce4c8;stroke:#bce4c8;stroke-width:1.50999999" />
+        <path
+           id="path2656"
+           d="M 93,-5 75,12 89,14 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#bce4cb;stroke:#bce4cb;stroke-width:1.50999999" />
+        <path
+           id="path2658"
+           d="m -34,79 5,17 20,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#cfedd0;stroke:#cfedd0;stroke-width:1.50999999" />
+        <path
+           id="path2660"
+           d="m -27,117 -7,-38 3,74 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c7e9d3;stroke:#c7e9d3;stroke-width:1.50999999" />
+        <path
+           id="path2662"
+           d="m 153,274 h 21 l -2,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2a85bb;stroke:#2a85bb;stroke-width:1.50999999" />
+        <path
+           id="path2664"
+           d="m 160,298 14,-24 h -21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2882b9;stroke:#2882b9;stroke-width:1.50999999" />
+        <path
+           id="path2666"
+           d="m 15,282 21,-5 -4,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#85abbe;stroke:#85abbe;stroke-width:1.50999999" />
+        <path
+           id="path2668"
+           d="m 58,276 -5,16 17,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#74a3b4;stroke:#74a3b4;stroke-width:1.50999999" />
+        <path
+           id="path2670"
+           d="m 196,60 4,-25 -26,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#89b3c2;stroke:#89b3c2;stroke-width:1.50999999" />
+        <path
+           id="path2672"
+           d="m 212,79 2,-21 -14,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7da6b8;stroke:#7da6b8;stroke-width:1.50999999" />
+        <path
+           id="path2674"
+           d="M 238,115 234,93 H 219 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#6b95a7;stroke:#6b95a7;stroke-width:1.50999999" />
+        <path
+           id="path2676"
+           d="m 174,274 25,-15 -27,-6 z"
+           inkscape:connector-curvature="0"
+           style="fill:#237fb8;stroke:#237fb8;stroke-width:1.50999999" />
+        <path
+           id="path2678"
+           d="m 234,232 2,-14 -19,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2777ae;stroke:#2777ae;stroke-width:1.50999999" />
+        <path
+           id="path2680"
+           d="M 240,69 214,58 212,79 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#799eb1;stroke:#799eb1;stroke-width:1.50999999" />
+        <path
+           id="path2682"
+           d="M -8,67 -34,79 -9,99 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d0edcf;stroke:#d0edcf;stroke-width:1.50999999" />
+        <path
+           id="path2684"
+           d="M 17,29 -3,50 15,52 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d5efcf;stroke:#d5efcf;stroke-width:1.50999999" />
+        <path
+           id="path2686"
+           d="m 173,13 -18,-1 6,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#96c4ce;stroke:#96c4ce;stroke-width:1.50999999" />
+        <path
+           id="path2688"
+           d="m 173,13 -12,22 13,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#92c0ca;stroke:#92c0ca;stroke-width:1.50999999" />
+        <path
+           id="path2690"
+           d="M 36,27 17,29 38,52 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d1edca;stroke:#d1edca;stroke-width:1.50999999" />
+        <path
+           id="path2692"
+           d="M 39,14 17,29 36,27 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d4eecd;stroke:#d4eecd;stroke-width:1.50999999" />
+        <path
+           id="path2694"
+           d="m 234,232 -17,-19 -5,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2479b2;stroke:#2479b2;stroke-width:1.50999999" />
+        <path
+           id="path2696"
+           d="m 233,200 3,18 -1,-38 z"
+           inkscape:connector-curvature="0"
+           style="fill:#307baf;stroke:#307baf;stroke-width:1.50999999" />
+        <path
+           id="path2698"
+           d="m 235,180 1,38 2,-103 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4183ad;stroke:#4183ad;stroke-width:1.50999999" />
+        <path
+           id="path2700"
+           d="m 36,277 17,15 5,-16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7aa4b7;stroke:#7aa4b7;stroke-width:1.50999999" />
+        <path
+           id="path2702"
+           d="m 88,280 9,24 13,-29 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5898b6;stroke:#5898b6;stroke-width:1.50999999" />
+        <path
+           id="path2704"
+           d="m 89,14 30,3 -5,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#afdfd0;stroke:#afdfd0;stroke-width:1.50999999" />
+        <path
+           id="path2706"
+           d="M 76,-12 49,10 75,12 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c7e9c9;stroke:#c7e9c9;stroke-width:1.50999999" />
+        <path
+           id="path2708"
+           d="M 75,12 49,10 55,28 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c7e9c8;stroke:#c7e9c8;stroke-width:1.50999999" />
+        <path
+           id="path2710"
+           d="M 49,10 39,14 55,28 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#cdeccb;stroke:#cdeccb;stroke-width:1.50999999" />
+        <path
+           id="path2712"
+           d="m -32,236 23,17 -2,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#98bed1;stroke:#98bed1;stroke-width:1.50999999" />
+        <path
+           id="path2714"
+           d="m -11,233 2,20 19,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#94bdcd;stroke:#94bdcd;stroke-width:1.50999999" />
+        <path
+           id="path2716"
+           d="m 11,254 4,28 17,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#89b0c2;stroke:#89b0c2;stroke-width:1.50999999" />
+        <path
+           id="path2718"
+           d="m 36,277 -4,23 21,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7da2b5;stroke:#7da2b5;stroke-width:1.50999999" />
+        <path
+           id="path2720"
+           d="M 214,58 200,35 196,60 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#84abbc;stroke:#84abbc;stroke-width:1.50999999" />
+        <path
+           id="path2722"
+           d="m 73,302 24,2 -9,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6197af;stroke:#6197af;stroke-width:1.50999999" />
+        <path
+           id="path2724"
+           d="m 129,281 10,20 14,-27 z"
+           inkscape:connector-curvature="0"
+           style="fill:#358cbf;stroke:#358cbf;stroke-width:1.50999999" />
+        <path
+           id="path2726"
+           d="m -23,195 -11,26 31,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a1ccd8;stroke:#a1ccd8;stroke-width:1.50999999" />
+        <path
+           id="path2728"
+           d="m -31,153 -3,68 11,-26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#aad7df;stroke:#aad7df;stroke-width:1.50999999" />
+        <path
+           id="path2730"
+           d="m -34,79 v 142 l 3,-68 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b8e2d9;stroke:#b8e2d9;stroke-width:1.50999999" />
+        <path
+           id="path2732"
+           d="m 53,292 20,10 -3,-28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#709eb0;stroke:#709eb0;stroke-width:1.50999999" />
+        <path
+           id="path2734"
+           d="m -29,96 -5,-17 7,38 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ceecd1;stroke:#ceecd1;stroke-width:1.50999999" />
+        <path
+           id="path2736"
+           d="M -28,58 -34,79 -8,67 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d4;stroke:#d8f0d4;stroke-width:1.50999999" />
+        <path
+           id="path2738"
+           d="m -28,58 20,9 5,-17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d2;stroke:#d8f0d2;stroke-width:1.50999999" />
+        <path
+           id="path2740"
+           d="m 97,304 h 24 l -11,-29 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4f92b4;stroke:#4f92b4;stroke-width:1.50999999" />
+        <path
+           id="path2742"
+           d="m 235,258 -1,-26 -22,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1d70ab;stroke:#1d70ab;stroke-width:1.50999999" />
+        <path
+           id="path2744"
+           d="m 121,304 18,-3 -10,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3e8bb8;stroke:#3e8bb8;stroke-width:1.50999999" />
+        <path
+           id="path2746"
+           d="m 200,275 10,-13 -11,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1873b2;stroke:#1873b2;stroke-width:1.50999999" />
+        <path
+           id="path2748"
+           d="m 199,259 11,3 2,-31 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1c77b4;stroke:#1c77b4;stroke-width:1.50999999" />
+        <path
+           id="path2750"
+           d="m 200,275 -1,-16 -25,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1c78b4;stroke:#1c78b4;stroke-width:1.50999999" />
+        <path
+           id="path2752"
+           d="m 200,35 -27,-22 1,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8eb9c7;stroke:#8eb9c7;stroke-width:1.50999999" />
+        <path
+           id="path2754"
+           d="m 114,-5 15,17 4,-26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#aad9d7;stroke:#aad9d7;stroke-width:1.50999999" />
+        <path
+           id="path2756"
+           d="m 114,-5 5,22 10,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a9dad3;stroke:#a9dad3;stroke-width:1.50999999" />
+        <path
+           id="path2758"
+           d="m 155,-2 -26,14 h 26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9ecfd6;stroke:#9ecfd6;stroke-width:1.50999999" />
+        <path
+           id="path2760"
+           d="m 51,313 18,4 4,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6d94a6;stroke:#6d94a6;stroke-width:1.50999999" />
+        <path
+           id="path2762"
+           d="m -4,279 19,3 -4,-28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8baec3;stroke:#8baec3;stroke-width:1.50999999" />
+        <path
+           id="path2764"
+           d="m 210,262 25,-4 -23,-27 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1970ae;stroke:#1970ae;stroke-width:1.50999999" />
+        <path
+           id="path2766"
+           d="m 194,297 6,-22 -26,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1874b2;stroke:#1874b2;stroke-width:1.50999999" />
+        <path
+           id="path2768"
+           d="m 151,319 9,-21 -21,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2f7db1;stroke:#2f7db1;stroke-width:1.50999999" />
+        <path
+           id="path2770"
+           d="m 139,301 21,-3 -7,-24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2f84b8;stroke:#2f84b8;stroke-width:1.50999999" />
+        <path
+           id="path2772"
+           d="m -9,253 5,26 15,-25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8eb3c8;stroke:#8eb3c8;stroke-width:1.50999999" />
+        <path
+           id="path2774"
+           d="m -34,221 2,15 21,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9dc4d5;stroke:#9dc4d5;stroke-width:1.50999999" />
+        <path
+           id="path2776"
+           d="m 214,58 7,-32 -21,9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#85a7bd;stroke:#85a7bd;stroke-width:1.50999999" />
+        <path
+           id="path2778"
+           d="m 234,93 6,-24 -28,10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7398ab;stroke:#7398ab;stroke-width:1.50999999" />
+        <path
+           id="path2780"
+           d="m 238,115 2,-46 -6,24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6d91a4;stroke:#6d91a4;stroke-width:1.50999999" />
+        <path
+           id="path2782"
+           d="m 242,318 -2,-249 -2,46 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4382aa;stroke:#4382aa;stroke-width:1.50999999" />
+        <path
+           id="path2784"
+           d="M -14,30 -3,50 17,29 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#daf1d3;stroke:#daf1d3;stroke-width:1.50999999" />
+        <path
+           id="path2786"
+           d="M -28,34 V 58 L -3,50 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ddf2d6;stroke:#ddf2d6;stroke-width:1.50999999" />
+        <path
+           id="path2788"
+           d="M 173,13 155,-2 v 14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#99c7d2;stroke:#99c7d2;stroke-width:1.50999999" />
+        <path
+           id="path2790"
+           d="m 176,-6 -21,4 18,15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#98c3d1;stroke:#98c3d1;stroke-width:1.50999999" />
+        <path
+           id="path2792"
+           d="m 97,304 22,11 2,-11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4b8aae;stroke:#4b8aae;stroke-width:1.50999999" />
+        <path
+           id="path2794"
+           d="m 121,304 8,18 10,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#3d84b1;stroke:#3d84b1;stroke-width:1.50999999" />
+        <path
+           id="path2796"
+           d="m 73,302 15,10 9,-8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5f92aa;stroke:#5f92aa;stroke-width:1.50999999" />
+        <path
+           id="path2798"
+           d="M 69,317 88,312 73,302 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#6691a6;stroke:#6691a6;stroke-width:1.50999999" />
+        <path
+           id="path2800"
+           d="M 93,-5 76,-12 75,12 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#c0e6cc;stroke:#c0e6cc;stroke-width:1.50999999" />
+        <path
+           id="path2802"
+           d="M 49,10 35,-5 39,14 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d3eecf;stroke:#d3eecf;stroke-width:1.50999999" />
+        <path
+           id="path2804"
+           d="m -5,16 -9,14 31,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#dcf2d6;stroke:#dcf2d6;stroke-width:1.50999999" />
+        <path
+           id="path2806"
+           d="m 75,-30 1,18 21,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c5e9d2;stroke:#c5e9d2;stroke-width:1.50999999" />
+        <path
+           id="path2808"
+           d="M 118,-24 93,-5 h 21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b4e1d4;stroke:#b4e1d4;stroke-width:1.50999999" />
+        <path
+           id="path2810"
+           d="m 15,282 17,18 4,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#83a5ba;stroke:#83a5ba;stroke-width:1.50999999" />
+        <path
+           id="path2812"
+           d="M 6,301 32,300 15,282 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#84a3b9;stroke:#84a3b9;stroke-width:1.50999999" />
+        <path
+           id="path2814"
+           d="m 88,312 31,3 -22,-11 z"
+           inkscape:connector-curvature="0"
+           style="fill:#538cab;stroke:#538cab;stroke-width:1.50999999" />
+        <path
+           id="path2816"
+           d="m -30,263 26,16 -5,-26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#92b3cb;stroke:#92b3cb;stroke-width:1.50999999" />
+        <path
+           id="path2818"
+           d="m 155,-2 -22,-12 -4,26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a4d4d9;stroke:#a4d4d9;stroke-width:1.50999999" />
+        <path
+           id="path2820"
+           d="M 10,7 17,29 39,14 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d1;stroke:#d8f0d1;stroke-width:1.50999999" />
+        <path
+           id="path2822"
+           d="m 240,69 -3,-19 -23,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7c9aae;stroke:#7c9aae;stroke-width:1.50999999" />
+        <path
+           id="path2824"
+           d="M 200,35 194,7 173,13 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8fb6c8;stroke:#8fb6c8;stroke-width:1.50999999" />
+        <path
+           id="path2826"
+           d="m 194,297 23,-22 h -17 z"
+           inkscape:connector-curvature="0"
+           style="fill:#106cae;stroke:#106cae;stroke-width:1.50999999" />
+        <path
+           id="path2828"
+           d="m 200,275 h 17 l -7,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#126eaf;stroke:#126eaf;stroke-width:1.50999999" />
+        <path
+           id="path2830"
+           d="m 179,302 -5,-28 -14,24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2279b2;stroke:#2279b2;stroke-width:1.50999999" />
+        <path
+           id="path2832"
+           d="m 171,320 8,-18 -19,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2372ac;stroke:#2372ac;stroke-width:1.50999999" />
+        <path
+           id="path2834"
+           d="m 88,312 41,10 -10,-7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4b86aa;stroke:#4b86aa;stroke-width:1.50999999" />
+        <path
+           id="path2836"
+           d="M 51,313 73,302 53,292 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#7299ab;stroke:#7299ab;stroke-width:1.50999999" />
+        <path
+           id="path2838"
+           d="M 49,-14 35,-5 49,10 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d4eed0;stroke:#d4eed0;stroke-width:1.50999999" />
+        <path
+           id="path2840"
+           d="M 27,315 51,313 32,300 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#7b99ad;stroke:#7b99ad;stroke-width:1.50999999" />
+        <path
+           id="path2842"
+           d="m 32,300 19,13 2,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#789bae;stroke:#789bae;stroke-width:1.50999999" />
+        <path
+           id="path2844"
+           d="m 161,-28 -29,-4 1,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8d5de;stroke:#a8d5de;stroke-width:1.50999999" />
+        <path
+           id="path2846"
+           d="M 221,19 194,7 200,35 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8badc4;stroke:#8badc4;stroke-width:1.50999999" />
+        <path
+           id="path2848"
+           d="m 236,218 6,100 -4,-203 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2872a9;stroke:#2872a9;stroke-width:1.50999999" />
+        <path
+           id="path2850"
+           d="m 234,232 1,26 1,-40 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1e6da7;stroke:#1e6da7;stroke-width:1.50999999" />
+        <path
+           id="path2852"
+           d="m 217,275 18,-17 -25,4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#136aaa;stroke:#136aaa;stroke-width:1.50999999" />
+        <path
+           id="path2854"
+           d="M 35,-5 10,7 39,14 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d2;stroke:#d8f0d2;stroke-width:1.50999999" />
+        <path
+           id="path2856"
+           d="M 237,50 221,26 214,58 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#81a0b4;stroke:#81a0b4;stroke-width:1.50999999" />
+        <path
+           id="path2858"
+           d="M 10,7 -5,16 17,29 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#dcf1d6;stroke:#dcf1d6;stroke-width:1.50999999" />
+        <path
+           id="path2860"
+           d="m 217,275 19,4 -1,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1163a4;stroke:#1163a4;stroke-width:1.50999999" />
+        <path
+           id="path2862"
+           d="m 179,302 15,-5 -20,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1b73af;stroke:#1b73af;stroke-width:1.50999999" />
+        <path
+           id="path2864"
+           d="m 197,-7 -21,1 18,13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#93b8cd;stroke:#93b8cd;stroke-width:1.50999999" />
+        <path
+           id="path2866"
+           d="M 194,7 176,-6 173,13 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#93bccd;stroke:#93bccd;stroke-width:1.50999999" />
+        <path
+           id="path2868"
+           d="M 76,-12 49,-14 V 10 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ceeccd;stroke:#ceeccd;stroke-width:1.50999999" />
+        <path
+           id="path2870"
+           d="M 35,-5 17,-12 10,7 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ddf2d6;stroke:#ddf2d6;stroke-width:1.50999999" />
+        <path
+           id="path2872"
+           d="m 50,-28 -1,14 27,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#d0edd0;stroke:#d0edd0;stroke-width:1.50999999" />
+        <path
+           id="path2874"
+           d="m 119,315 10,7 -8,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#4384ad;stroke:#4384ad;stroke-width:1.50999999" />
+        <path
+           id="path2876"
+           d="m 179,302 23,16 -8,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1768a6;stroke:#1768a6;stroke-width:1.50999999" />
+        <path
+           id="path2878"
+           d="m 69,317 60,5 -41,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#578aa7;stroke:#578aa7;stroke-width:1.50999999" />
+        <path
+           id="path2880"
+           d="m -32,236 2,27 21,-10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#98bbd1;stroke:#98bbd1;stroke-width:1.50999999" />
+        <path
+           id="path2882"
+           d="m -4,279 10,22 9,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#89a7c0;stroke:#89a7c0;stroke-width:1.50999999" />
+        <path
+           id="path2884"
+           d="m -33,312 3,-49 -2,-27 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97b4cf;stroke:#97b4cf;stroke-width:1.50999999" />
+        <path
+           id="path2886"
+           d="M -28,58 V 34 l -6,45 z"
+           inkscape:connector-curvature="0"
+           style="fill:#def2d8;stroke:#def2d8;stroke-width:1.50999999" />
+        <path
+           id="path2888"
+           d="m -14,30 -14,4 25,16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#def2d8;stroke:#def2d8;stroke-width:1.50999999" />
+        <path
+           id="path2890"
+           d="m -31,16 3,18 14,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e3f5dd;stroke:#e3f5dd;stroke-width:1.50999999" />
+        <path
+           id="path2892"
+           d="m 129,322 22,-3 -12,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#347fb1;stroke:#347fb1;stroke-width:1.50999999" />
+        <path
+           id="path2894"
+           d="m 133,-14 -15,-10 -4,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#aedbd8;stroke:#aedbd8;stroke-width:1.50999999" />
+        <path
+           id="path2896"
+           d="m 132,-32 -14,8 15,10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#aedadc;stroke:#aedadc;stroke-width:1.50999999" />
+        <path
+           id="path2898"
+           d="m 232,28 -11,-9 v 7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#85a1b8;stroke:#85a1b8;stroke-width:1.50999999" />
+        <path
+           id="path2900"
+           d="M 221,26 V 19 L 200,35 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#87a8bf;stroke:#87a8bf;stroke-width:1.50999999" />
+        <path
+           id="path2902"
+           d="M 237,50 232,28 221,26 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#819cb3;stroke:#819cb3;stroke-width:1.50999999" />
+        <path
+           id="path2904"
+           d="M -14,292 6,301 -4,279 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8aa7c1;stroke:#8aa7c1;stroke-width:1.50999999" />
+        <path
+           id="path2906"
+           d="m 6,301 21,14 5,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#819db3;stroke:#819db3;stroke-width:1.50999999" />
+        <path
+           id="path2908"
+           d="m 51,313 -24,2 42,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7594a7;stroke:#7594a7;stroke-width:1.50999999" />
+        <path
+           id="path2910"
+           d="m 69,317 -61,3 121,2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#6a8fa0;stroke:#6a8fa0;stroke-width:1.50999999" />
+        <path
+           id="path2912"
+           d="m -30,263 2,15 24,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#93b1cc;stroke:#93b1cc;stroke-width:1.50999999" />
+        <path
+           id="path2914"
+           d="m 129,322 42,-2 -20,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2e76ab;stroke:#2e76ab;stroke-width:1.50999999" />
+        <path
+           id="path2916"
+           d="m 151,319 20,1 -11,-22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2874ab;stroke:#2874ab;stroke-width:1.50999999" />
+        <path
+           id="path2918"
+           d="m 223,300 13,-21 -19,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#095fa3;stroke:#095fa3;stroke-width:1.50999999" />
+        <path
+           id="path2920"
+           d="m 37,-23 -20,11 18,7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ddf2d6;stroke:#ddf2d6;stroke-width:1.50999999" />
+        <path
+           id="path2922"
+           d="m 97,-34 -21,22 17,7 z"
+           inkscape:connector-curvature="0"
+           style="fill:#c0e6d1;stroke:#c0e6d1;stroke-width:1.50999999" />
+        <path
+           id="path2924"
+           d="m 6,301 2,19 19,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#829ab2;stroke:#829ab2;stroke-width:1.50999999" />
+        <path
+           id="path2926"
+           d="m -28,278 14,14 10,-13 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8facc8;stroke:#8facc8;stroke-width:1.50999999" />
+        <path
+           id="path2928"
+           d="m -5,16 h -26 l 17,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e2f4dc;stroke:#e2f4dc;stroke-width:1.50999999" />
+        <path
+           id="path2930"
+           d="M 10,7 -1,-3 -5,16 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#e0f3da;stroke:#e0f3da;stroke-width:1.50999999" />
+        <path
+           id="path2932"
+           d="m 37,-23 -2,18 14,-9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d3;stroke:#d8f0d3;stroke-width:1.50999999" />
+        <path
+           id="path2934"
+           d="m 210,-10 -13,3 -3,14 z"
+           inkscape:connector-curvature="0"
+           style="fill:#91b2ca;stroke:#91b2ca;stroke-width:1.50999999" />
+        <path
+           id="path2936"
+           d="m 161,-28 -28,14 22,12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a3cfda;stroke:#a3cfda;stroke-width:1.50999999" />
+        <path
+           id="path2938"
+           d="M 210,-10 194,7 221,19 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#8cadc6;stroke:#8cadc6;stroke-width:1.50999999" />
+        <path
+           id="path2940"
+           d="m 132,-32 -35,-2 21,10 z"
+           inkscape:connector-curvature="0"
+           style="fill:#b5dfda;stroke:#b5dfda;stroke-width:1.50999999" />
+        <path
+           id="path2942"
+           d="M 118,-24 97,-34 93,-5 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#b9e3d5;stroke:#b9e3d5;stroke-width:1.50999999" />
+        <path
+           id="path2944"
+           d="m 161,-28 -6,26 21,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9dc7d5;stroke:#9dc7d5;stroke-width:1.50999999" />
+        <path
+           id="path2946"
+           d="m 235,258 7,60 -6,-100 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1460a0;stroke:#1460a0;stroke-width:1.50999999" />
+        <path
+           id="path2948"
+           d="m 223,300 -6,-25 -23,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#0965a8;stroke:#0965a8;stroke-width:1.50999999" />
+        <path
+           id="path2950"
+           d="M 17,-12 -1,-3 10,7 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#e0f3da;stroke:#e0f3da;stroke-width:1.50999999" />
+        <path
+           id="path2952"
+           d="M 17,-12 14,-24 -1,-3 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#e2f4dc;stroke:#e2f4dc;stroke-width:1.50999999" />
+        <path
+           id="path2954"
+           d="m 50,-28 -13,5 12,9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#d8f0d4;stroke:#d8f0d4;stroke-width:1.50999999" />
+        <path
+           id="path2956"
+           d="m 75,-30 -25,2 26,16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#cdeccf;stroke:#cdeccf;stroke-width:1.50999999" />
+        <path
+           id="path2958"
+           d="m 97,-34 -47,6 25,-2 z"
+           inkscape:connector-curvature="0"
+           style="fill:#cbebd2;stroke:#cbebd2;stroke-width:1.50999999" />
+        <path
+           id="path2960"
+           d="m 181,-25 -20,-3 15,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9cc3d4;stroke:#9cc3d4;stroke-width:1.50999999" />
+        <path
+           id="path2962"
+           d="m -30,-4 -1,20 h 26 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e6f6e0;stroke:#e6f6e0;stroke-width:1.50999999" />
+        <path
+           id="path2964"
+           d="m -28,34 -3,-18 -3,63 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e2f4db;stroke:#e2f4db;stroke-width:1.50999999" />
+        <path
+           id="path2966"
+           d="m 202,318 21,-18 -29,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#0e61a3;stroke:#0e61a3;stroke-width:1.50999999" />
+        <path
+           id="path2968"
+           d="m 197,-7 -16,-18 -5,19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#96bbd0;stroke:#96bbd0;stroke-width:1.50999999" />
+        <path
+           id="path2970"
+           d="m 199,-31 -18,6 16,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#97b8d0;stroke:#97b8d0;stroke-width:1.50999999" />
+        <path
+           id="path2972"
+           d="m 232,-5 -22,-5 11,29 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8aa5c0;stroke:#8aa5c0;stroke-width:1.50999999" />
+        <path
+           id="path2974"
+           d="M -11,313 8,320 6,301 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#859cb6;stroke:#859cb6;stroke-width:1.50999999" />
+        <path
+           id="path2976"
+           d="m 27,315 -19,5 61,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7b96aa;stroke:#7b96aa;stroke-width:1.50999999" />
+        <path
+           id="path2978"
+           d="M -11,313 6,301 -14,292 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#89a1bd;stroke:#89a1bd;stroke-width:1.50999999" />
+        <path
+           id="path2980"
+           d="m 171,320 31,-2 -23,-16 z"
+           inkscape:connector-curvature="0"
+           style="fill:#1b68a4;stroke:#1b68a4;stroke-width:1.50999999" />
+        <path
+           id="path2982"
+           d="M -1,-3 -30,-4 -5,16 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#e4f5df;stroke:#e4f5df;stroke-width:1.50999999" />
+        <path
+           id="path2984"
+           d="m 37,-23 -23,-1 3,12 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e0f3da;stroke:#e0f3da;stroke-width:1.50999999" />
+        <path
+           id="path2986"
+           d="m 50,-28 -36,4 23,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#dff2d7;stroke:#dff2d7;stroke-width:1.50999999" />
+        <path
+           id="path2988"
+           d="m -8,-25 22,1 -40,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#eaf7e4;stroke:#eaf7e4;stroke-width:1.50999999" />
+        <path
+           id="path2990"
+           d="m -33,312 5,-34 -2,-15 z"
+           inkscape:connector-curvature="0"
+           style="fill:#93adcc;stroke:#93adcc;stroke-width:1.50999999" />
+        <path
+           id="path2992"
+           d="m -33,312 4,-15 1,-19 z"
+           inkscape:connector-curvature="0"
+           style="fill:#91a7c6;stroke:#91a7c6;stroke-width:1.50999999" />
+        <path
+           id="path2994"
+           d="m -28,278 -1,19 15,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#91aac8;stroke:#91aac8;stroke-width:1.50999999" />
+        <path
+           id="path2996"
+           d="m -29,297 18,16 -3,-21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8ca3c0;stroke:#8ca3c0;stroke-width:1.50999999" />
+        <path
+           id="path2998"
+           d="m 242,318 1,-308 -3,59 z"
+           inkscape:connector-curvature="0"
+           style="fill:#5788a5;stroke:#5788a5;stroke-width:1.50999999" />
+        <path
+           id="path3000"
+           d="m 240,69 3,-59 -6,40 z"
+           inkscape:connector-curvature="0"
+           style="fill:#7e96ab;stroke:#7e96ab;stroke-width:1.50999999" />
+        <path
+           id="path3002"
+           d="m 237,50 6,-40 -11,18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8198b0;stroke:#8198b0;stroke-width:1.50999999" />
+        <path
+           id="path3004"
+           d="m 232,28 11,-18 -22,9 z"
+           inkscape:connector-curvature="0"
+           style="fill:#849db6;stroke:#849db6;stroke-width:1.50999999" />
+        <path
+           id="path3006"
+           d="m 242,318 -4,-19 -15,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#0a5193;stroke:#0a5193;stroke-width:1.50999999" />
+        <path
+           id="path3008"
+           d="m 223,300 15,-1 -2,-20 z"
+           inkscape:connector-curvature="0"
+           style="fill:#09589b;stroke:#09589b;stroke-width:1.50999999" />
+        <path
+           id="path3010"
+           d="m 236,279 6,39 -7,-60 z"
+           inkscape:connector-curvature="0"
+           style="fill:#09589b;stroke:#09589b;stroke-width:1.50999999" />
+        <path
+           id="path3012"
+           d="M 243,10 232,-5 221,19 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#869eb8;stroke:#869eb8;stroke-width:1.50999999" />
+        <path
+           id="path3014"
+           d="m 210,-10 -11,-21 -2,24 z"
+           inkscape:connector-curvature="0"
+           style="fill:#93b2cc;stroke:#93b2cc;stroke-width:1.50999999" />
+        <path
+           id="path3016"
+           d="m -8,-25 -22,21 29,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e8f7e2;stroke:#e8f7e2;stroke-width:1.50999999" />
+        <path
+           id="path3018"
+           d="m 214,-33 -15,2 11,21 z"
+           inkscape:connector-curvature="0"
+           style="fill:#94afcd;stroke:#94afcd;stroke-width:1.50999999" />
+        <path
+           id="path3020"
+           d="m 181,-25 18,-6 -38,3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9bbfd4;stroke:#9bbfd4;stroke-width:1.50999999" />
+        <path
+           id="path3022"
+           d="m 161,-28 38,-3 -67,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a1c9d9;stroke:#a1c9d9;stroke-width:1.50999999" />
+        <path
+           id="path3024"
+           d="m 132,-32 82,-1 -117,-1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#a8d2df;stroke:#a8d2df;stroke-width:1.50999999" />
+        <path
+           id="path3026"
+           d="m 14,-24 -22,-1 7,22 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e6f5e0;stroke:#e6f5e0;stroke-width:1.50999999" />
+        <path
+           id="path3028"
+           d="m -26,-29 40,5 36,-4 z"
+           inkscape:connector-curvature="0"
+           style="fill:#e5f5de;stroke:#e5f5de;stroke-width:1.50999999" />
+        <path
+           id="path3030"
+           d="m 202,318 20,5 1,-23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#0a589b;stroke:#0a589b;stroke-width:1.50999999" />
+        <path
+           id="path3032"
+           d="m 171,320 51,3 -20,-5 z"
+           inkscape:connector-curvature="0"
+           style="fill:#135e9e;stroke:#135e9e;stroke-width:1.50999999" />
+        <path
+           id="path3034"
+           d="m 129,322 93,1 -51,-3 z"
+           inkscape:connector-curvature="0"
+           style="fill:#2069a3;stroke:#2069a3;stroke-width:1.50999999" />
+        <path
+           id="path3036"
+           d="m -29,297 -4,15 22,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8da1bf;stroke:#8da1bf;stroke-width:1.50999999" />
+        <path
+           id="path3038"
+           d="m -11,313 -22,-1 41,8 z"
+           inkscape:connector-curvature="0"
+           style="fill:#889cb8;stroke:#889cb8;stroke-width:1.50999999" />
+        <path
+           id="path3040"
+           d="m -34,221 1,91 1,-76 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9abad2;stroke:#9abad2;stroke-width:1.50999999" />
+        <path
+           id="path3042"
+           d="m 232,-5 -18,-28 -4,23 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8fa8c6;stroke:#8fa8c6;stroke-width:1.50999999" />
+        <path
+           id="path3044"
+           d="m 199,-31 15,-2 -82,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#9cbfd4;stroke:#9cbfd4;stroke-width:1.50999999" />
+        <path
+           id="path3046"
+           d="m 235,-33 h -21 l 18,28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#8fa4c2;stroke:#8fa4c2;stroke-width:1.50999999" />
+        <path
+           id="path3048"
+           d="m 222,323 20,-5 -19,-18 z"
+           inkscape:connector-curvature="0"
+           style="fill:#0a5193;stroke:#0a5193;stroke-width:1.50999999" />
+        <path
+           id="path3050"
+           d="m 238,299 4,19 -6,-39 z"
+           inkscape:connector-curvature="0"
+           style="fill:#095294;stroke:#095294;stroke-width:1.50999999" />
+        <path
+           id="path3052"
+           d="m -8,-25 -18,-4 -4,25 z"
+           inkscape:connector-curvature="0"
+           style="fill:#eef8e6;stroke:#eef8e6;stroke-width:1.50999999" />
+        <path
+           id="path3054"
+           d="m 97,-34 -123,5 76,1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#dcf2d7;stroke:#dcf2d7;stroke-width:1.50999999" />
+        <path
+           id="path3056"
+           d="m 243,10 -8,-43 -3,28 z"
+           inkscape:connector-curvature="0"
+           style="fill:#899cb9;stroke:#899cb9;stroke-width:1.50999999" />
+        <path
+           id="path3058"
+           d="m 214,-33 h 21 L 97,-34 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#9cbfd5;stroke:#9cbfd5;stroke-width:1.50999999" />
+      </g>
+    </g>
+    <g
+       id="g977"
+       transform="matrix(0.26458333,0,0,0.26458333,40.785838,124.44844)">
+      <g
+         id="g1006"
+         transform="translate(22.474002,-28)">
+        <g
+           transform="matrix(1.1839036,0,0,1.1839036,228.52427,-188.80041)"
+           id="g982">
+          <path
+             id="path1948"
+             d="m 60.510156,6.3979729 c -4.583653,0.021298 -8.960939,0.4122177 -12.8125,1.09375 C 36.35144,9.4962267 34.291407,13.691825 34.291406,21.429223 v 10.21875 h 26.8125 v 3.40625 h -26.8125 -10.0625 c -7.792459,0 -14.6157592,4.683717 -16.7500002,13.59375 -2.46182,10.212966 -2.5710151,16.586023 0,27.25 1.9059283,7.937852 6.4575432,13.593748 14.2500002,13.59375 h 9.21875 v -12.25 c 0,-8.849902 7.657144,-16.656248 16.75,-16.65625 h 26.78125 c 7.454951,0 13.406253,-6.138164 13.40625,-13.625 v -25.53125 c 0,-7.266339 -6.12998,-12.7247775 -13.40625,-13.9375001 -4.605987,-0.7667253 -9.385097,-1.1150483 -13.96875,-1.09375 z m -14.5,8.2187501 c 2.769547,0 5.03125,2.298646 5.03125,5.125 -2e-6,2.816336 -2.261703,5.09375 -5.03125,5.09375 -2.779476,-1e-6 -5.03125,-2.277415 -5.03125,-5.09375 -1e-6,-2.826353 2.251774,-5.125 5.03125,-5.125 z"
+             style="fill:url(#linearGradient1478);fill-opacity:1"
+             inkscape:connector-curvature="0" />
+          <path
+             id="path1950"
+             d="m 91.228906,35.054223 v 11.90625 c 0,9.230755 -7.825895,16.999999 -16.75,17 h -26.78125 c -7.335833,0 -13.406249,6.278483 -13.40625,13.625 v 25.531247 c 0,7.26634 6.318588,11.54032 13.40625,13.625 8.487331,2.49561 16.626237,2.94663 26.78125,0 6.750155,-1.95439 13.406253,-5.88761 13.40625,-13.625 V 92.897973 h -26.78125 v -3.40625 h 26.78125 13.406254 c 7.79246,0 10.69625,-5.435408 13.40624,-13.59375 2.79933,-8.398886 2.68022,-16.475776 0,-27.25 -1.92578,-7.757441 -5.60387,-13.59375 -13.40624,-13.59375 z m -15.0625,64.65625 c 2.779478,3e-6 5.03125,2.277417 5.03125,5.093747 -2e-6,2.82635 -2.251775,5.125 -5.03125,5.125 -2.76955,0 -5.03125,-2.29865 -5.03125,-5.125 2e-6,-2.81633 2.261697,-5.093747 5.03125,-5.093747 z"
+             style="fill:url(#linearGradient1475);fill-opacity:1"
+             inkscape:connector-curvature="0" />
+          <ellipse
+             transform="matrix(0.73406,0,0,0.809524,16.24958,27.00935)"
+             id="path1894"
+             style="opacity:0.44382025;fill:url(#radialGradient1480);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:20;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             cx="61.518883"
+             cy="132.28575"
+             rx="48.948284"
+             ry="8.6066771" />
+        </g>
+        <text
+           id="text986"
+           y="-199.67831"
+           x="56.548134"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:94.04141235px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25948322"
+           xml:space="preserve"><tspan
+             style="stroke-width:1.25948322"
+             y="-199.67831"
+             x="56.548134"
+             id="tspan984"
+             sodipodi:role="line">Python</tspan></text>
+        <text
+           id="text990"
+           y="-135.47481"
+           x="64.675957"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48.01171875px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.64301407"
+           xml:space="preserve"><tspan
+             style="stroke-width:0.64301407"
+             y="-135.47481"
+             x="64.675957"
+             id="tspan988"
+             sodipodi:role="line">for the</tspan></text>
+        <text
+           id="text994"
+           y="-46.066097"
+           x="56.548134"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:94.04141235px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25948322"
+           xml:space="preserve"><tspan
+             style="stroke-width:1.25948322"
+             y="-46.066097"
+             x="56.548134"
+             id="tspan992"
+             sodipodi:role="line">Lab</tspan></text>
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:56.10600281px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.40265012"
+         x="-47.99456"
+         y="590.88934"
+         id="text1010"><tspan
+           sodipodi:role="line"
+           id="tspan1008"
+           x="-47.99456"
+           y="590.88934"
+           style="stroke-width:1.40265012">Dr. Aquiles Carattino</tspan></text>
+    </g>
+  </g>
+</svg>
