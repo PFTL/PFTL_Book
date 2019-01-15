@@ -7,3 +7,6 @@ _minted-index/
 *.toc
 *.out
 *.kate-swp
+.kile/
+*.kilepr
+*.pdf_tex

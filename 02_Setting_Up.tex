@@ -77,17 +77,20 @@ Pip works both with Python 3 and Python 2, therefore you have to be sure you are
 
 Installing a package becomes very simple. Linux users should type:
 \begin{minted}{bash}
-pip install [package_name]
+pip install package_name
 \end{minted}
 
 Windows users should instead type:
 \begin{minted}{powershell}
-pip.exe install [package_name]
+pip.exe install package_name
 \end{minted}
 
-Pip will automatically grab the latest version of the package from the repository and will install to your computer. Installing a package is normally equivalent to having a folder with the package name and all of its contents in a special location where Python automatically looks for packages. After installing a package, you can try to find where it is actually located.
+Where \mint{bash}|package_name| has to be replaced by what you want to install. For example, if you would like to install a package called numpy, you would do:
+\begin{minted}{powershell}
+ pip.exe install numpy
+\end{minted}
 
-To follow the book, you will need to install the packages listed below:
+Pip will automatically grab the latest version of the package from the repository and will install it on your computer. To follow the book, you will need to install the packages listed below:
 \begin{itemize}
  \item numpy -> For working with numerical arrays
  \item Pint -> Allows the use of units and not just numbers
@@ -99,7 +102,7 @@ To follow the book, you will need to install the packages listed below:
 
 \note{Before installing the packages, I suggest you read the following section on the Virtual Environment. It will help you keep clean and separated environments for your software development.}
 
-All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mint{bash}|pip search [package_name]|. For the listed packages, it is not important the order in which you install them.
+All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mint{bash}|pip search package_name|. For the listed packages, it is not important the order in which you install them.
 
 To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements into a window.
 
@@ -265,7 +268,43 @@ pip freeze
 
 It will give you a list of all the packages that you have installed within that working environment and their exact versions. So, you know exactly what you are using and you can revert back if anything goes wrong. Moreover, for people who are really worried about the reproducibility of the results, keeping track of specific packages is a great way to be sure that everything can be repeated at a later time.
 
-\section{Using GIT for Version Control}
+\section{About using Anaconda}
+If you have used Python for a while, most likely you have come across a program called Anaconda, and it is very important that you understand the differences between a plain Python installation (what is recommended for you in the previous sections) and an Anaconda Python installation. 
+
+Python in its bare essentials is a collection of specifications, i.e., it specifies what the computer should do when it finds a specific syntax. This opens the door to different implementations of the specifications. For example, if you download Python from the official website, you are downloading the \emph{official} implementation, also knowns as CPython, because it was written in a language called C. There are others, such as Jython, written in Java, Iron Python written in .NET, etc. Each has some advantages and some disadvantages. Therefore, the best is to stick to the official Python until you have a broader understanding.
+
+Coming back to Anaconda. We have seen that you can install packages with the command pip. However, pip only allows you to install Python packages. If you are trying to use a library that depends on external libraries written in a different language, pip will fail. Anaconda developed a package manager that solves those problems because it works for software written in any language, not only Python. For scientific computing, many packages depend on specific libraries, compiled for different operating systems. 
+
+This book relies on using plain Python packages. This means that you don't need to use Anaconda to follow it. Moreover, the vast majority of the things you can do with Python don't require Anaconda to be installed. However, it is important to admit that Anaconda comes with a lot of pre-installed packages that sets you up to speed much faster. If you are an Anaconda user and would like to stick to it, you will need to adapt the code and instructions yourself. Just to get you started I will point out some of the commands that need to be changed, such as those involving pip and virtual environments. 
+
+First, you need to be sure to be running within the Anaconda Prompt. It is a terminal in which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mint{bash}|~/.bash_profile|. To install packages, the command now becomes:
+\begin{minted}{bash}
+ conda install numpy
+\end{minted}
+
+Of course, not all packages are available directly from Anaconda. The standard place to find packages provided by the community is called \emph{conda-forge}. For example, if you would like to install Pint, you would run the following command:
+\begin{minted}{bash}
+  conda install -c conda-forge pint
+\end{minted}
+
+Finally, Anaconda also provides a custom version of virtual environments. It is \textbf{very important} not to mix conda environments and virtual environments, since they work in very different ways. To create a virtual environment with Anaconda, the command is:
+\begin{minted}{bash}
+ conda create --name myenv
+\end{minted}
+
+Where you should replace \minted{bash}|myenv| with the name of the environment you want to create. To activate the environment, on Windows you have to execute within the Anaconda Prompt:
+\begin{minted}{powershell}
+ activate myenv
+\end{minted}
+
+While on Linux the command becomes:
+\begin{minted}{bash}
+ source activate myenv
+\end{minted}
+
+Anaconda and its possibilities is a full topic that needs to be studied separately and it goes beyond the scope of this book. The documentation on the website is very extensive and is worth a read.
+
+\section{Using Git for Version Control}
 Generally speaking, version control means keeping track of all the changes within a project. The project can be a software development project, but also writing a paper or maintaining a blog (or even writing this book!). When you do version control by hand, probably you implement solutions such as changing the name of the file, which leads to generating files such as file-rev1.doc, file-new-rev1.doc, file-rev1-friend.doc. You can quickly see that it becomes a hassle as soon as you have more than one.
 
 Fortunately, there is software that can help you keep the history of the changes in a very efficient way: by looking only at the differences and not storing the entire file again and again. If you add one line to a file, you can just store that extra line and where it should be added, instead of copying the entire file to a new location. This will allow you to go back in time and recover to how things were in the past. Moreover, version control programs are great tools for collaborating in groups.
@@ -285,14 +324,14 @@ On Windows, you can download git from Git-SCM. Install it, especially paying att
 
 Git is a distributed version control; it means that you can track the changes locally on your own computer, without the need to connect to a remote server. Each project that you create is normally called a repository, a place where everything is stored. At some point in time, you will want to share your code with your colleagues or with the public. You will need a resource outside of your computer where you can place and synchronize the repositories in order to grant access to other developers. Some of those resources have web interfaces that allow you to manage the repositories and their users in a very convenient way. Such websites are, for example, Github, Bitbucket or Gitlab.
 
-Creating an account on those websites is free of charge but with some restrictions. The free version of Github, for example, doesn’t allow you to create private repositories and therefore your code will be public. Bitbucket allows you to create private repositories but puts a limit on the team size unless you start paying. Gitlab is not only a web interface, it can also be installed on your own server. This means that perhaps your university or institute already provides a host for Git repositories. Github is the place were major open source programs can be found. If you are planning to generate code that can be interesting to other, you should consider it. If keeping your files secret, for example, while writing a paper, you should consider Bitbucket.
+Creating an account on those websites is free of charge but with some restrictions. The free version of Github, for example, doesn’t allow you to create private repositories and therefore your code will be public. Bitbucket allows you to create private repositories but puts a limit on the team size unless you start paying. Gitlab is not only a web interface, but it can also be installed on your own server. This means that perhaps your university or institute already provides a host for Git repositories. Github is the place were major open source programs can be found. If you are planning to generate code that can be interesting to other, you should consider it. If keeping your files secret, for example, while writing a paper, you should consider Bitbucket.
 Quick Introduction to Working with Git
 
 The best way to start working with Git is through an example that guides you through the different stages of the process. This guide assumes that you have created an account on Github.
 
 Go to Github and click on the + symbol at the top right corner of the page, next to your picture. Select New repository. You can name it whatever you like, I suggest you call it PythonForTheLab. Leave all the options as they are; the repository is marked as public and is not initialized it with a README file because you are going to create it later.
 
-You will see that Github is kind enough to show you how to start working with it in few simple steps. Create a folder where you would like to host your code, you can call it PythonForTheLab to keep the consistency. From the command line go to that folder and type:
+You will see that Github is kind enough to show you how to start working with it in a few simple steps. Create a folder where you would like to host your code, you can call it PythonForTheLab to keep the consistency. From the command line go to that folder and type:
 \begin{minted}{bash}
 git init
 \end{minted}
@@ -358,7 +397,7 @@ git pull origin master
 Open again the README.md file and you will see that the changes you did online appear in your local file. The number of things that you can try is endless and I would seriously advise you to look around for more examples.
 Different Editors
 
-To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful for you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, and it is simple and powerful. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux is text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
+To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful to you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, and it is simple and powerful. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux is text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
 
 If you are looking for something a bit more complete, you can look into Sublime and Atom. Both of them look very much alike. One of the nicest features is that you can extend them through plug-ins. If you look around, you will find that there are a lot of extensions that can accommodate your needs. Atom is very well integrated with Git, and therefore all the work of committing, pushing, etc. can be done directly within the editor. Both programs allow you to work on multiple files and projects.
 
