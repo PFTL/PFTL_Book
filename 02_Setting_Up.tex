@@ -102,7 +102,9 @@ Pip will automatically grab the latest version of the package from the repositor
 
 \note{Before installing the packages, I suggest you read the following section on the Virtual Environment. It will help you keep clean and separated environments for your software development.}
 
-All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mint{bash}|pip search package_name|. For the listed packages, it is not important the order in which you install them.
+All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing 
+\mint{bash}|pip search package_name| 
+For the listed packages, it is not important the order in which you install them.
 
 To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements into a window.
 
@@ -113,7 +115,7 @@ Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Ru
  pip install pyqt5-tools
 \end{minted}
 
-And the designer should be located in a folder called \mint{bash}|site-packages/pyqt5-tools|. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mint{bash}|designer.exe|
+And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
 \subsection{Installing Qt Designer on Linux}
 
@@ -277,7 +279,7 @@ Coming back to Anaconda. We have seen that you can install packages with the com
 
 This book relies on using plain Python packages. This means that you don't need to use Anaconda to follow it. Moreover, the vast majority of the things you can do with Python don't require Anaconda to be installed. However, it is important to admit that Anaconda comes with a lot of pre-installed packages that sets you up to speed much faster. If you are an Anaconda user and would like to stick to it, you will need to adapt the code and instructions yourself. Just to get you started I will point out some of the commands that need to be changed, such as those involving pip and virtual environments. 
 
-First, you need to be sure to be running within the Anaconda Prompt. It is a terminal in which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mint{bash}|~/.bash_profile|. To install packages, the command now becomes:
+First, you need to be sure to be running within the Anaconda Prompt. It is a terminal in which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mintinline{bash}{~/.bash_profile}. To install packages, the command now becomes:
 \begin{minted}{bash}
  conda install numpy
 \end{minted}
@@ -292,7 +294,7 @@ Finally, Anaconda also provides a custom version of virtual environments. It is 
  conda create --name myenv
 \end{minted}
 
-Where you should replace \minted{bash}|myenv| with the name of the environment you want to create. To activate the environment, on Windows you have to execute within the Anaconda Prompt:
+Where you should replace \mintinline{bash}{myenv} with the name of the environment you want to create. To activate the environment, on Windows you have to execute within the Anaconda Prompt:
 \begin{minted}{powershell}
  activate myenv
 \end{minted}
