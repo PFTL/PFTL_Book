@@ -1,23 +1,23 @@
 \chapter{Setting Up The Development Environment}
 \section{Objectives}
-In order to start developing software for the lab, you are going to need different programs. The process to install programs is different depending on your operating system. It is almost impossible to keep an up-to-date detailed instruction set for every possible version of each program and for every possible hardware configuration. Therefore, follow the steps provided below carefully and with an eye of criticism. When in doubt, check the instructions that the developers of the different packages provide.
+In order to start developing software for the lab, you are going to need different programs. The process to install programs is different depending on your operating system. It is almost impossible to keep an up-to-date detailed instruction set for every possible version of each program and for every possible hardware configuration. Therefore, follow the steps provided below carefully. When in doubt, check the instructions that the developers of the different packages provide, or ask in the forums. 
 
 \section{Installing Python}
-You are going to start by installing Python itself. This book is based on Python version 3.6. Most likely earlier versions such as 3.3 or 3.4 are also going to work, but versions 2.x are going to fail. If it happens that you have a Python version 3.x installed and don’t want to update it, follow the book and see if it gives any errors. Let us know when that happens.
+You are going to start by installing Python itself. This book is based on Python version 3.6. Most likely earlier versions such as 3.3 or 3.4 are also going to work, but versions 2.x are going to fail. If it happens that you have a Python version 3.x installed and don’t want to update it, follow the book and see if it gives any errors. Let us know when that happens. Remember that Python version 2.x is finishing its life during 2020. It is therefore very wise to start developing code in a language that will be supported beyond that timeframe. 
 
 \subsection{Installation on Windows}
-Sadly Windows doesn’t come with a pre-installed version of Python, however, it is not a complicated process. Go to the download page at Python.org, where you will find a link to download the latest version of Python.
+Windows doesn’t come with a pre-installed version of Python. Therefore, you will need to install it yourself. Fortunately, it is not a complicated process. Go to the download page at Python.org, where you will find a link to download the latest version of Python.
 
-Download the file that corresponds to Python 3.6 to your hard drive. Once it is done, you should launch it and follow the steps to install Python on your computer. Be sure that you select Add Python 3.6 to the PATH. If there are more users on the computer, you can also select Install Launcher for all users. Just click on Install Now and you are good to go. Pay attention to the messages that appear, in case anything goes wrong but it is unlikely.
-Testing your installation
+Download the file that corresponds to Python 3.6 or later to your hard drive. Once it is done, you should launch it and follow the steps to install Python on your computer. Be sure that \textbf{you select Add Python 3.6 to the PATH}. If there are more users on the computer, you can also select Install Launcher for all users. Just click on \textit{Install Now} and you are good to go. Pay attention to the messages that appear, in case anything goes wrong.
 
+\subsubsection{Testing your installation}
 To test that Python was correctly installed, you are going to need to launch the Command Prompt. The Command Prompt in Windows is the equivalent to a Terminal in the majority of the operating systems based on Unix. Throughout this book, we are going to talk about the Terminal, the Command Prompt or the Command Line interchangeably. The Command Prompt is a program that will allow you to interact with your computer by writing commands instead of using the mouse. We will see some of the options you have.
 
-To start it, just go to the Start Button and search for the Command Prompt (it may be within the Windows System apps). A shorter way is to just press Win+r. It will open a dialog called Run, allowing you to start different programs. Type cmd.exe` and press enter. A black screen should pop up, this is the Command Prompt of Windows.
+To start it, just go to the Start Button and search for the Command Prompt (it may be within the Windows System apps). A shorter way is to just press Win+r. It will open a dialog called Run, allowing you to start different programs. Type \mintinline{bash}{cmd.exe} and press enter. A black screen should pop up, this is the Command Prompt of Windows.
 
-In the Command Prompt, you can do almost everything what you can do with the mouse. You will notice that you are in a specific folder on your computer. You can type dir and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command cd. For example, if you want to go one level up you can type cd .. if you want to enter into a folder, you type cd Folder. It is out of the scope of this book to cover all the different possibilities that the Command Prompt offer, but you shouldn’t have any problems finding help online.
+In the Command Prompt, you can do almost everything what you can do with the mouse. You will notice that you are in a specific folder on your computer. You can type \mintinline{bash}|dir| and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command \mintinline{bash}{cd}. If you want to go one level up you can type \mintinline{bash}{cd ..} if you want to enter into a folder, you type \mintinline{bash}{cd Folder} (where \textit{Folder} is the name of the folder you want to change to). It is out of the scope of this book to cover all the different possibilities that the Command Prompt offers, but you shouldn’t have any problems finding help online.
 
-To test that your Python installation was successful, just type \mint{python}|python.exe| and hit enter. You should see a message like this:
+To test that your Python installation was successful, just type \mintinline{bash}{python.exe} and hit enter. You should see a message like this:
 
 \begin{minted}{powershell}
 Python 3.6.3 (default, Oct  3 2017, 21:45:48)
@@ -30,7 +30,7 @@ It will show which Python version you are using and some extra information. When
 \begin{minted}{pycon}
 >>> 2+3
 5
->>> 2.3
+>>> 2/3
 0.6666666666666666
 \end{minted}
 
@@ -55,7 +55,7 @@ Once you find the file python.exe, copy the full path of that directory, i.e. th
 You have to restart the Command Prompt in order for it to refresh the settings. Try again to run python.exe and it should be working now.
 
 \subsection{Installation on Linux}
-Most Linux distributions come with pre-installed Python, so we have to check whether it is already in your system. Open up a terminal (Ubuntu users can do Ctrl+Alt+T). You can then execute python3 and check if it starts. If it works you should see something like this appearing on screen:
+Most Linux distributions come with pre-installed Python, so we have to check whether it is already in your system. Open up a terminal (Ubuntu users can do Ctrl+Alt+T). You can then type \mintinline{bash}{python3} if it works you should see something like this appearing on screen:
 
 \begin{minted}{bash}
 Python 3.6.3 (default, Oct  3 2017, 21:45:48)
@@ -71,7 +71,7 @@ sudo apt install python3
 Each Linux distribution will have a slightly different procedure to install Python but all of them follow more or less the same ideas. After the installation check again if it went well by typing python3 and hitting enter.
 
 \section{Installing Python Packages}
-One of the characteristics that make Python such a versatile language is the variety of packages that can be used in addition to the standard distribution. Python has a repository of applications called PyPI that counts with more than 100000 packages available. The easiest way to install and manage packages is through a command called pip. Pip will fetch the needed packages from the repository and will install them for you. Pip is also capable of removing and upgrading packages. More importantly, Pip also handles dependencies so you won’t have to worry about them.
+One of the characteristics that make Python such a versatile language is the variety of packages that can be used in addition to the standard distribution. Python has a repository of applications called PyPI that counts with more than 100000 packages available. The easiest way to install and manage packages is through a command called \textbf{pip}. Pip will fetch the needed packages from the repository and will install them for you. Pip is also capable of removing and upgrading packages. More importantly, Pip also handles dependencies so you won’t have to worry about them.
 
 Pip works both with Python 3 and Python 2, therefore you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, most likely you will find that you have two commands, pip2 and pip3. You should use the latter in order to install packages for Python 3. On Windows, most likely you will need to use pip.exe instead of just pip. If for some reason it doesn’t work, you need to follow the same procedure that was explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
 
@@ -85,10 +85,12 @@ Windows users should instead type:
 pip.exe install package_name
 \end{minted}
 
-Where \mint{bash}|package_name| has to be replaced by what you want to install. For example, if you would like to install a package called numpy, you would do:
+Where \mintinline{bash}{package_name} has to be replaced by what you want to install. For example, if you would like to install a package called numpy, you would do:
 \begin{minted}{powershell}
  pip.exe install numpy
 \end{minted}
+
+\note{Before installing the rest of the packages, I suggest you read the section on the Virtual Environment. It will help you keep clean and separated environments for your software development.}
 
 Pip will automatically grab the latest version of the package from the repository and will install it on your computer. To follow the book, you will need to install the packages listed below:
 \begin{itemize}
@@ -100,13 +102,9 @@ Pip will automatically grab the latest version of the package from the repositor
  \item pyqtgraph -> Used for plotting results within the User Interfaces
 \end{itemize}
 
-\note{Before installing the packages, I suggest you read the following section on the Virtual Environment. It will help you keep clean and separated environments for your software development.}
+All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mintinline{bash}{pip search package_name}. Normally, it is not important the order in which you install the packages. Notice that since dependencies will also be installed, sometimes you will get a message saying that a package is already installed even if you didn't do it manually. 
 
-All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing 
-\mint{bash}|pip search package_name| 
-For the listed packages, it is not important the order in which you install them.
-
-To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements into a window.
+To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements onto a window.
 
 \subsection{Installing Qt Designer on Windows}
 Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Run the following command:
@@ -118,28 +116,27 @@ Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Ru
 And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
 \subsection{Installing Qt Designer on Linux}
-
 Linux users can install Qt Designer directly from within the terminal by running:
 
 \begin{minted}{bash}
 sudo apt install qttools5-dev-tools
 \end{minted}
 
-To start the designer just look for it within your installed programs, or type designer and press enter in a terminal.
+To start the designer just look for it within your installed programs, or type designer and press enter on a terminal.
 
 \section{Virtual Environment}
 When you start developing software, it is of utmost importance to have an isolated programming environment in which you can control precisely the packages installed. This will allow you, for example, to use experimental libraries without overwriting software that other programs use on your computer. Isolated environments allow you, for example, to update a package only within that specific environment, without altering the dependencies in any other development you are doing.
 
-For people working in the lab, it is even more important to isolate different environments: you will be developing a program with a certain set of libraries, each with its own version and installation method. One day you, or another researcher who works with the same setup, decide to try out a program that requires slightly different versions for some of the packages. The outcome can be a disaster: If there is an incompatibility between the new libraries and the software on the computer, you will ruin the software that controls your experiment.
+For people working in the lab, it is even more important to isolate different environments: you will be developing a program with a certain set of libraries, each with its own version and installation method. One day you, or another researcher who works with the same setup, decides to try out a program that requires slightly different versions for some of the packages. The outcome can be a disaster: If there is an incompatibility between the new libraries and the software on the computer, you will ruin the program that controls your experiment.
 
-Unintentional upgrades of libraries can set you back several days. Sometimes it was so long since you installed a library that you can no longer remember how to do it, or where to get the exact same version you had. Sometimes you want just to check what would happen if you upgrade a library, or you want to reproduce the set of packages installed by a different user in order to troubleshoot.
+Unintentional upgrades of libraries can set you back several days. Sometimes it was so long since you installed a library that you can no longer remember how to do it, or where to get the exact same version you had. Sometimes you want just to check what would happen if you upgrade a library, or you want to reproduce the set of packages installed by a different user in order to troubleshoot. There is no way of over estimating the benefits of isolating environments on your computer. 
 
-Fortunately, Python provides a great tool called Virtual Environment that overcomes all the mentioned difficulties. A Virtual Environment is nothing more than a folder where you find copies of the Python executable and of all the packages that you are going to use. Once you activate the virtual environment, every time you trigger pip for installing a package it will be done within that directory; the python interpreter is going to be the one inside the virtual environment and not any other. It may sound complicated, but in practice is incredibly simple.
+Fortunately, Python provides a great tool called Virtual Environment that overcomes all the mentioned difficulties. A Virtual Environment is nothing more than a folder where you find copies of the Python executable and of all the packages that you install. Once you activate the virtual environment, every time you trigger pip for installing a package it will be done within that directory; the python interpreter is going to be the one inside the virtual environment and not any other. It may sound complicated, but in practice is incredibly simple.
 
 You can create isolated working environments for developing software, for running specific programs or to perform tests. If you need to update or downgrade a library, you are going to do it within that specific Virtual Environment and you are not going to alter the functioning of anything else on your computer. Acknowledging the advantages of a Virtual Environment comes with time; once you lose days or even weeks reinstalling packages because something went wrong and your experiment doesn’t run anymore, you will understand it.
 
 \subsection{Virtual Environment on Windows}
-Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configure. If there is something failing, try to find help or examples online. There are a lot of great examples at StackOverflow.
+Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configuration. If there is something failing, try to find help or examples online. There are a lot of great examples at StackOverflow.
 
 Virtual Environment is a python package, and therefore it can be installed with pip.
 
@@ -148,7 +145,7 @@ pip.exe install virtualenv
 pip.exe install virtualenvwrapper-win
 \end{minted}
 
-At this point, you have a working installation of the virtual environment that will allow you to isolate your development from your computer. To create a new working environment called Testing you have to run:
+To create a new environment called Testing you have to run:
 
 \begin{minted}{powershell}
 mkvirtualenv Testing --python=path\to\python\python.exe
@@ -174,7 +171,7 @@ If you want to test that things are working fine, you can upgrade pip by running
 pip install --upgrade pip
 \end{minted}
 
-If there is a new version available, it will be installed. You can try to install the packages listed before, such as numpy, and see that they get installed only within your Test environment. If you activate/deactivate the virtual environment, the packages you installed within it are not going to be available.
+If there is a new version available, it will be installed. You can try to install the packages listed before, such as numpy, PyQt, etc. and see that they get installed only within your Test environment. If you activate/deactivate the virtual environment, the packages you installed within it are not going to be available.
 
 One of the most useful commands to run within a virtual environment is:
 
@@ -216,8 +213,8 @@ Now you are running within a Virtual Environment in the Power Shell.
 On Linux, it is very easy to install the Virtual Environment package. Depending on where you installed Python in your system you may need root access to follow the installation. If you are unsure, first try to run the commands without sudo, and if they fail, run them with sudo as shown below:
 
 \begin{minted}{bash}
-sudo pip install virtualenv
-sudo pip install virtualenvwrapper
+sudo -H pip install virtualenv
+sudo -H pip install virtualenvwrapper
 \end{minted}
 
 If you are on Ubuntu, you can also install the package through apt, although it is not recommended:
@@ -231,12 +228,12 @@ To create a Virtual Environment you will need to know where is located the versi
 which python3
 \end{minted}
 
-It will tell you what is being triggered when you actually run python3 in a terminal. Replace the location of Python in the following command:
+It will tell you what is being triggered when you actually run python3 on a terminal. Replace the location of Python in the following command:
 \begin{minted}{bash}
 mkvirtualenv Testing --python=/location/of/python3
 \end{minted}
 
-Which will create a folder, normally ~/.virtualenvs/Testing with a copy of the Python interpreter and all the packages that you need, including pip. That folder will be the place where new modules will be installed. If everything went well, you will see (Testing) string at the beginning of the line in the terminal. This lets you know that you are working within a Virtual Environment.
+Which will create a folder, normally ~/.virtualenvs/Testing with a copy of the Python interpreter and all the packages that you need, including pip. That folder will be the place where new modules will be installed. If everything went well, you will see the \mintinline{bash}{(Testing)} string at the beginning of the line in the terminal. This lets you know that you are working within a Virtual Environment.
 
 To close the Virtual Environment you have to type:
 
@@ -277,9 +274,9 @@ Python in its bare essentials is a collection of specifications, i.e., it specif
 
 Coming back to Anaconda. We have seen that you can install packages with the command pip. However, pip only allows you to install Python packages. If you are trying to use a library that depends on external libraries written in a different language, pip will fail. Anaconda developed a package manager that solves those problems because it works for software written in any language, not only Python. For scientific computing, many packages depend on specific libraries, compiled for different operating systems. 
 
-This book relies on using plain Python packages. This means that you don't need to use Anaconda to follow it. Moreover, the vast majority of the things you can do with Python don't require Anaconda to be installed. However, it is important to admit that Anaconda comes with a lot of pre-installed packages that sets you up to speed much faster. If you are an Anaconda user and would like to stick to it, you will need to adapt the code and instructions yourself. Just to get you started I will point out some of the commands that need to be changed, such as those involving pip and virtual environments. 
+This book relies on using plain Python packages. This means that you don't need to use Anaconda to follow it. Moreover, the vast majority of the things you can do with Python don't require Anaconda to be installed. However, it is important to admit that Anaconda comes with a lot of pre-installed packages that sets you up to speed much faster. If you are an Anaconda user and would like to stick to it, you will need to adapt the code and instructions yourself. Just to get you started we will point out some of the commands that need to be changed, such as those involving pip and virtual environments. 
 
-First, you need to be sure to be running within the Anaconda Prompt. It is a terminal in which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mintinline{bash}{~/.bash_profile}. To install packages, the command now becomes:
+First, you need to be sure to be running within the Anaconda Prompt. It is a terminal on which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mintinline{bash}{~/.bash_profile}. To install packages, the command now becomes:
 \begin{minted}{bash}
  conda install numpy
 \end{minted}
@@ -294,7 +291,7 @@ Finally, Anaconda also provides a custom version of virtual environments. It is 
  conda create --name myenv
 \end{minted}
 
-Where you should replace \mintinline{bash}{myenv} with the name of the environment you want to create. To activate the environment, on Windows you have to execute within the Anaconda Prompt:
+Where you should replace \mintinline{bash}{myenv} with the name of the environment you want to create. To activate the environment, on Windows you have to execute, within the Anaconda Prompt:
 \begin{minted}{powershell}
  activate myenv
 \end{minted}
@@ -304,14 +301,14 @@ While on Linux the command becomes:
  source activate myenv
 \end{minted}
 
-Anaconda and its possibilities is a full topic that needs to be studied separately and it goes beyond the scope of this book. The documentation on the website is very extensive and is worth a read.
+Anaconda and its possibilities is a full topic that needs to be studied separately and it goes beyond the scope of this book. The documentation on the official website is very extensive and is worth a read.
 
 \section{Using Git for Version Control}
-Generally speaking, version control means keeping track of all the changes within a project. The project can be a software development project, but also writing a paper or maintaining a blog (or even writing this book!). When you do version control by hand, probably you implement solutions such as changing the name of the file, which leads to generating files such as file-rev1.doc, file-new-rev1.doc, file-rev1-friend.doc. You can quickly see that it becomes a hassle as soon as you have more than one.
+Generally speaking, version control means keeping track of all the changes within a project. The project can be a software development project, but also writing a paper or maintaining a blog (or even writing this book). When you do version control by hand, probably you implement solutions such as changing the name of the file, which leads to generating monstruosities such as file-rev1-by-me\_yesterday.doc, file-rev2-by-john\_today.doc, etc. You can quickly see that it becomes a hassle as soon as you have more than one.
 
-Fortunately, there is software that can help you keep the history of the changes in a very efficient way: by looking only at the differences and not storing the entire file again and again. If you add one line to a file, you can just store that extra line and where it should be added, instead of copying the entire file to a new location. This will allow you to go back in time and recover to how things were in the past. Moreover, version control programs are great tools for collaborating in groups.
+Fortunately, there is software that can help you keep the history of the changes in a very efficient way: by looking only at the differences and not storing the entire file again and again. If you add one line to a file, you can just store that extra line and where it should be added, instead of copying the entire file to a new location. This will allow you to go back in time and recover exactly how things were in the past. Moreover, version control programs are great tools for collaborating in groups.
 
-Git is one of the programs you can use for version control. It is in itself an entire world, and therefore it cannot be covered completely in this book. You can check Uetke’s website because there is going to be more material regarding the use of git for scientific environments. To follow the book you don’t need to use Git, but you are encouraged to do so in order to practice and add one more tool to your box.
+Git is one of the programs you can use for version control. It is in itself an entire world, and therefore it cannot be covered completely in this book. You can check Uetke’s website because there is going to be more material regarding the use of Git for scientific environments. To follow the book you don’t need to use Git, but you are encouraged to do so in order to practice and add one more tool to your box.
 
 The majority of Linux distributions come with Git already packaged and installed, you can test it by just going to a terminal and running:
 \begin{minted}{bash}
@@ -324,16 +321,16 @@ sudo apt install git
 
 On Windows, you can download git from Git-SCM. Install it, especially paying attention to add git to the path and integrating it with the Command prompt and Powershell. In the downloads page, you can see that there are also some programs that provide a graphical interface for working with git repositories. They are not mandatory, but you are welcome to try them out.
 
-Git is a distributed version control; it means that you can track the changes locally on your own computer, without the need to connect to a remote server. Each project that you create is normally called a repository, a place where everything is stored. At some point in time, you will want to share your code with your colleagues or with the public. You will need a resource outside of your computer where you can place and synchronize the repositories in order to grant access to other developers. Some of those resources have web interfaces that allow you to manage the repositories and their users in a very convenient way. Such websites are, for example, Github, Bitbucket or Gitlab.
+Git is a distributed version control; it means that you can track the changes locally on your own computer, without the need to connect to a remote server. Each project that you create is normally called a repository, a place where everything is stored. At some point in time, you will want to share your code with your colleagues or with the public. You will need a resource outside of your computer where you can place and synchronize the repositories in order to grant access to other developers. Some of those resources have web interfaces that allow you to manage the repositories and their users in a very convenient way. Such websites are, for example, Github, Bitbucket, or Gitlab.
 
-Creating an account on those websites is free of charge but with some restrictions. The free version of Github, for example, doesn’t allow you to create private repositories and therefore your code will be public. Bitbucket allows you to create private repositories but puts a limit on the team size unless you start paying. Gitlab is not only a web interface, but it can also be installed on your own server. This means that perhaps your university or institute already provides a host for Git repositories. Github is the place were major open source programs can be found. If you are planning to generate code that can be interesting to other, you should consider it. If keeping your files secret, for example, while writing a paper, you should consider Bitbucket.
-Quick Introduction to Working with Git
+Creating an account on those websites is free of charge but with some restrictions. The free version of Github, for example, doesn’t allow you to create private repositories with more than 3 collaborators. Bitbucket allows you to create private repositories but puts a limit on the team size unless you start paying. Gitlab is not only a web interface, but it can also be installed on your own server. This means that perhaps your university or institute already provides a host for Git repositories. Github is the place were major open source programs can be found. If you are planning to generate code that can be interesting to others, you should consider it. If you want to keep your files secret, for example, while writing a paper, you should consider Bitbucket.
 
+\subsubsection{Quick Introduction to Working with Git}
 The best way to start working with Git is through an example that guides you through the different stages of the process. This guide assumes that you have created an account on Github.
 
-Go to Github and click on the + symbol at the top right corner of the page, next to your picture. Select New repository. You can name it whatever you like, I suggest you call it PythonForTheLab. Leave all the options as they are; the repository is marked as public and is not initialized it with a README file because you are going to create it later.
+Go to Github.com and click on the + symbol at the top right corner of the page, next to your picture. Select New repository. You can name it whatever you like, I suggest you call it PythonForTheLab. Leave all the options as they are; the repository is marked as public and is not initialized with a README file because you are going to create it later.
 
-You will see that Github is kind enough to show you how to start working with it in a few simple steps. Create a folder where you would like to host your code, you can call it PythonForTheLab to keep the consistency. From the command line go to that folder and type:
+You will see that Github is kind enough to show you how to start working with it in a few simple steps. Create a folder on your computer where you would like to keep your code, you can call it PythonForTheLab to keep the consistency. From the command line go to that folder and type:
 \begin{minted}{bash}
 git init
 \end{minted}
@@ -397,16 +394,21 @@ git pull origin master
 \end{minted}
 
 Open again the README.md file and you will see that the changes you did online appear in your local file. The number of things that you can try is endless and I would seriously advise you to look around for more examples.
-Different Editors
 
-To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful to you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, and it is simple and powerful. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux is text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
 
-If you are looking for something a bit more complete, you can look into Sublime and Atom. Both of them look very much alike. One of the nicest features is that you can extend them through plug-ins. If you look around, you will find that there are a lot of extensions that can accommodate your needs. Atom is very well integrated with Git, and therefore all the work of committing, pushing, etc. can be done directly within the editor. Both programs allow you to work on multiple files and projects.
+\subsection{Editors}
+To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful to you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, it is very basic simple and simple. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux are text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
 
-Besides text editors, there is another category of programs called IDE’s, or Integrated Development Environments. These programs include not only a text editor but tools to check the consistency of your code, they warn you if you forgot to close a parenthesis, they are able to refactor your code or to clean it up. The most powerful one for Python is perhaps Pycharm. Pycharm is not free, but it has a community edition. If you have an e-mail from a University, you can install the professional edition for free.
+If you are looking for something a bit more complete, you can look into Atom. One of its nicest features is that you can extend them through plug-ins. If you look around, you will find that there are a lot of extensions that can accommodate your needs. Atom is very well integrated with Git, and therefore all the work of committing, pushing, etc. can be done directly within the editor. Both programs allow you to work on multiple files and projects.
+
+Besides text editors, there is another category of programs called IDE’s, or Integrated Development Environments. These programs include not only a text editor but also tools to check the consistency of your code, they warn you if you forgot to close a parenthesis, they are able to refactor your code, or to clean it up. The most powerful one for Python is Pycharm. Pycharm is not free, but it has a community edition. If you have an e-mail from a University, you can install the professional edition for free.
 
 Another very powerful IDE for Python is Microsoft’s Visual Studio, which is very similar to Pycharm. If you have previous experience with Visual Studio, I strongly suggest you to keep using it, you will see that it integrates very nicely with your workflow. Visual Studio is available not only for Windows but also for Linux and Mac. It has some nice features for inspecting elements and help you debug your code. The community edition is free of charge.
 
-If you are new to Python, the best is to start simple. Both Sublime and Atom are great choices. Once you start building more complex software, then you should check complete IDE’s such as Pycharm or Visual Studio. Both of them integrate nicely with Virtual Environments, and therefore they are aware of the packages that you have installed, missing dependencies, etc. They also allow you to run the code without leaving the editor. The downside of IDE’s over text editors is that they consume much more resources of your computer.
+A third option is called Sublime. It is a very popular editor that can be installed for free. The only catch is that every certain amount of time a pop up will appear that will prevent you from working until you click on it. If the pop up is hindering your productivity, you should seriously consider the license.
 
-The choice is yours. Whichever one you make it is going to be more than appropriate for following the course. Remember to practice before starting to program in order to clear all the doubts you may face when dealing with the editor. It is also important to stick with your choice for a while. Once you start developing with one editor, you should use it for a while before changing to another.
+Getting the time to familiarize yourself with tools such as Pycharm really pays out. If you make a trivial mistake like forgetting a \mintinline{python}{:}, or if you forget to import a package, IDE's will warn you. Moreover, they integrate automatically with virtual environments and many other tools, making your development a breeze. The only downside of IDE’s over plain text editors is that they consume much more resources of your computer. 
+
+The choice is yours. Whichever you make it is going to be more than appropriate for following the course. Remember to practice before starting to program in order to clear all the doubts you may face when dealing with the editor. It is also important to stick with your choice for a while. Once you start developing with one editor, you should use it for a long time before changing to another.
+
+\warning{Python is sensitive to tabs and spaces. You shouldn't mix them. A standard is to use 4 spaces to indent your code. If you decide to go for a text editor, be sure to configure it such that it will respect Python's stylistic choices.}
