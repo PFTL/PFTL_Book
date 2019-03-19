@@ -10,3 +10,4 @@ _minted-index/
 .kile/
 *.kilepr
 *.pdf_tex
+*checkpoints/
