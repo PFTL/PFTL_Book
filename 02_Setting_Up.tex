@@ -48,8 +48,9 @@ Once you find the file python.exe, copy the full path of that directory, i.e. th
  \item Open the System Control Panel. How to open it is slightly dependant on your Windows version, but it should be Start/Settings/Control Panel/System
  \item Open the Advanced tab.
  \item Click the Environment Variables button.
- \item You will find a section called System Variables, select Path, then click Edit. You’ll see a list of folders, each one separated from the next one by a ;.
- \item Add the folder where you found the python.exe file at the end of the list (don’t forget the ; to separate it from the previous entry). \item Click OK.
+ \item You will find a section called System Variables, select Path, then click Edit. You’ll see a list of folders, each one separated from the next one by a \texttt{;}.
+ \item Add the folder where you found the python.exe file at the end of the list (don’t forget the \texttt{;} to separate it from the previous entry). 
+\item Click OK.
 \end{enumerate}
 
 You have to restart the Command Prompt in order for it to refresh the settings. Try again to run python.exe and it should be working now.
@@ -129,14 +130,14 @@ When you start developing software, it is of utmost importance to have an isolat
 
 For people working in the lab, it is even more important to isolate different environments: you will be developing a program with a certain set of libraries, each with its own version and installation method. One day you, or another researcher who works with the same setup, decides to try out a program that requires slightly different versions for some of the packages. The outcome can be a disaster: If there is an incompatibility between the new libraries and the software on the computer, you will ruin the program that controls your experiment.
 
-Unintentional upgrades of libraries can set you back several days. Sometimes it was so long since you installed a library that you can no longer remember how to do it, or where to get the exact same version you had. Sometimes you want just to check what would happen if you upgrade a library, or you want to reproduce the set of packages installed by a different user in order to troubleshoot. There is no way of over estimating the benefits of isolating environments on your computer. 
+Unintentional upgrades of libraries can set you back several days. Sometimes it was so long since you installed a library that you can no longer remember how to do it, or where to get the exact same version you had. Sometimes you want just to check what would happen if you upgrade a library, or you want to reproduce the set of packages installed by a different user in order to troubleshoot. There is no way of overestimating the benefits of isolating environments on your computer. 
 
 Fortunately, Python provides a great tool called Virtual Environment that overcomes all the mentioned difficulties. A Virtual Environment is nothing more than a folder where you find copies of the Python executable and of all the packages that you install. Once you activate the virtual environment, every time you trigger pip for installing a package it will be done within that directory; the python interpreter is going to be the one inside the virtual environment and not any other. It may sound complicated, but in practice is incredibly simple.
 
 You can create isolated working environments for developing software, for running specific programs or to perform tests. If you need to update or downgrade a library, you are going to do it within that specific Virtual Environment and you are not going to alter the functioning of anything else on your computer. Acknowledging the advantages of a Virtual Environment comes with time; once you lose days or even weeks reinstalling packages because something went wrong and your experiment doesn’t run anymore, you will understand it.
 
 \subsection{Virtual Environment on Windows}
-Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configuration. If there is something failing, try to find help or examples online. There are a lot of great examples at StackOverflow.
+Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configuration. If there is something failing, try to find help or examples online. There are a lot of great examples in StackOverflow.
 
 Virtual Environment is a python package, and therefore it can be installed with pip.
 
@@ -308,7 +309,7 @@ Generally speaking, version control means keeping track of all the changes withi
 
 Fortunately, there is software that can help you keep the history of the changes in a very efficient way: by looking only at the differences and not storing the entire file again and again. If you add one line to a file, you can just store that extra line and where it should be added, instead of copying the entire file to a new location. This will allow you to go back in time and recover exactly how things were in the past. Moreover, version control programs are great tools for collaborating in groups.
 
-Git is one of the programs you can use for version control. It is in itself an entire world, and therefore it cannot be covered completely in this book. You can check Uetke’s website because there is going to be more material regarding the use of Git for scientific environments. To follow the book you don’t need to use Git, but you are encouraged to do so in order to practice and add one more tool to your box.
+Git is one of the programs you can use for version control. It is in itself an entire world, and therefore it cannot be covered completely in this book. You can check Python for the Lab’s website because there is going to be more material regarding the use of Git for scientific environments. To follow the book you don’t need to use Git, but you are encouraged to do so in order to practice and add one more tool to your box.
 
 The majority of Linux distributions come with Git already packaged and installed, you can test it by just going to a terminal and running:
 \begin{minted}{bash}
@@ -397,11 +398,11 @@ Open again the README.md file and you will see that the changes you did online a
 
 
 \subsection{Editors}
-To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful to you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, it is very basic simple and simple. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux are text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
+To complete the Python For The Lab book, you will need a text editor. As with a lot of decisions in this book, you are completely free to choose whatever you like. However, it is important to point out some resources that can be useful to you. For editing code, you don’t need anything more sophisticated than a plain text editor, such as Notepad++. It is available only for Windows, it is very basic simple and simple. You can have several tabs opened with different files, you can perform a search for a specific string in your opened documents or within an entire folder. Notepad++ is very good for small changes to the code, perhaps directly in the lab. The equivalent to Notepad++ on Linux is text editors such as Gedit or Kate. Every Linux distribution comes with a pre-installed text editor.
 
 If you are looking for something a bit more complete, you can look into Atom. One of its nicest features is that you can extend them through plug-ins. If you look around, you will find that there are a lot of extensions that can accommodate your needs. Atom is very well integrated with Git, and therefore all the work of committing, pushing, etc. can be done directly within the editor. Both programs allow you to work on multiple files and projects.
 
-Besides text editors, there is another category of programs called IDE’s, or Integrated Development Environments. These programs include not only a text editor but also tools to check the consistency of your code, they warn you if you forgot to close a parenthesis, they are able to refactor your code, or to clean it up. The most powerful one for Python is Pycharm. Pycharm is not free, but it has a community edition. If you have an e-mail from a University, you can install the professional edition for free.
+Besides text editors, there is another category of programs called IDE’s, or Integrated Development Environments. These programs include not only a text editor but also tools to check the consistency of your code, they warn you if you forgot to close a parenthesis, they are able to refactor your code or to clean it up. The most powerful one for Python is Pycharm. Pycharm is not free, but it has a community edition. If you have an e-mail from a University, you can install the professional edition for free.
 
 Another very powerful IDE for Python is Microsoft’s Visual Studio, which is very similar to Pycharm. If you have previous experience with Visual Studio, I strongly suggest you to keep using it, you will see that it integrates very nicely with your workflow. Visual Studio is available not only for Windows but also for Linux and Mac. It has some nice features for inspecting elements and help you debug your code. The community edition is free of charge.
 
@@ -411,4 +412,4 @@ Getting the time to familiarize yourself with tools such as Pycharm really pays 
 
 The choice is yours. Whichever you make it is going to be more than appropriate for following the course. Remember to practice before starting to program in order to clear all the doubts you may face when dealing with the editor. It is also important to stick with your choice for a while. Once you start developing with one editor, you should use it for a long time before changing to another.
 
-\warning{Python is sensitive to tabs and spaces. You shouldn't mix them. A standard is to use 4 spaces to indent your code. If you decide to go for a text editor, be sure to configure it such that it will respect Python's stylistic choices.}
+\warning{Python is sensitive to tabs and spaces. You shouldn't mix them. A standard is to use 4 spaces to indent your code. If you decide to go for a text editor, be sure to configure it such that it will respect Python's stylistic choices. Notably, Notepad++ comes configured by default to use tabs instead of spaces. This is a problem if you ever copy-paste code from other sources.}

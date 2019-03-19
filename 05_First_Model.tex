@@ -264,6 +264,87 @@ exists in the class, inherited from the base.
 
 \exercise{Fix the \mintinline{python}{idn()} method to display the correct information.}
 
+
+\section{Adding Units to the code}\label{adding-units-to-thecode}
+
+There is one great example of why using the proper units is important: a
+multi-million satellite fell from its orbit because of a mix up of
+\href{http://articles.latimes.com/1999/oct/01/news/mn-17288}{metric and
+imperial units}. Fortunately, there is a Python package called
+\emph{Pint}, that allows you to work with units. By using \emph{Pint},
+you will be adding a new type of variable called a \texttt{Quantity},
+which is a combination of a number and a unit. \emph{Pint} has a lot of
+options that you should explore yourself by reading their documentation.
+We are going to point out some of the more important ones that can be
+useful for your developments.
+
+\begin{minted}{pycon}
+>>> import pint
+
+>>> ur = pint.UnitRegistry()
+>>> meter = ur('meter')
+>>> b = 5*meter
+>>> print(b)
+5 meter
+>>> c = b.to('inch')
+>>> print(c)
+196.8503937007874 inch
+\end{minted}
+
+In the example above, you can already grasp the potential of
+\emph{Pint}. First, you import the package and start the \emph{Unit
+Registry}. In principle, Pint allows you to work with custom-made units,
+but the fundamental ones are already included in their \emph{Unit
+Registry}. Then, because of convenience, we define the variable
+\texttt{meter}, as actually the unit meter. Finally, we assigned the
+value \texttt{5\ meters} to a variable \texttt{b}. Remember that
+\texttt{b} is a \texttt{Quantity}, therefore it is not just a number,
+but a number and a unit attached to it. \emph{Pint} allows you to
+convert between units, and this is how we create the variable
+\texttt{c}, which is 5 meters converted to inches. But this is not all,
+look at the following example:
+
+\begin{minted}{pycon}
+>>> d = c*b
+>>> print(d.to('m**2'))
+25.0 meter ** 2
+>>> print(d.to('in**2'))
+38750.07750015501 inch ** 2
+>>> t = 2.5*ur('s')
+>>> v = c/t
+>>> print(v.to('in/s'))
+78.74015748031496 inch / second
+\end{minted}
+
+You can see in the example above that \emph{Pint} can handle complex
+units such as speed, current, etc. You can operate on them as you would
+with pen and paper, and you can convert from one to another very easily.
+Converting from one unit to another will become very handy later on when
+you want to pass a value to your device, and you want to be sure that
+the value you are passing has the proper units. An important feature
+that you may also need at some point is to get the number associated
+with a \emph{Quantity}, without the units:
+
+\begin{minted}{pycon}
+>>> current = 5*ur('A')
+>>> res = 10*ur('ohm')
+>>> voltage = current*res
+>>> print(voltage)
+50 ampere * ohm
+>>> print(voltage.to('V'))
+50.0 volt
+>>> print(voltage.m_as('mV'))
+50000.0
+\end{minted}
+
+\exercise{In the device driver that you have developed, change the way you 
+return
+the value of an analog input to include its units. You will have to
+transform from integers to the real voltage.}
+
+\exercise{Change the way you handle the setting of an analog output in order to
+account for real-world units.}
+
 \section{Dummy DAQ}\label{dummy-daq}
 You have just seen how to develop a model for a device such as the
 {PFTL} {DAQ}. However, when you develop software for the lab, sometimes
