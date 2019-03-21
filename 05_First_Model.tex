@@ -1,82 +1,30 @@
 \chapter{Writing the first Model for a Device}\label{writing-the-first-model-for-adevice}
 
 \section{Objectives}
-In this chapter, you are going to develop a model for a real device. You
-are going to start seeing why the Model-View-Controller pattern is so
-useful. Models are specific ways in which the user can interact with the
-devices or with other data sources. In the models is where you are going
-to start developing the logic of your experiment, where you are going to
-establish the safeguards to avoid things going wrong.
+In this chapter, we are going to develop a model for a real device. You are going to start seeing why the Model-View-Controller pattern is so useful. In the previous chapter we discussed that models specify the ways in which the user can interact with devices. The logic of the experiment that we are going to perform is going to manifest in the models that we develop. 
 
-Even if hard to believe, you should spend the most of your time working
-and improving the models. The controllers can be downloaded or quickly
-developed, the view is more often than not a simple script to read a
-file, or you can use existing libraries. The Model, however, is where
-your true experiment is defined. Is where you have to be very focused
-and decide in which order the steps are taken and what things can be
-given for granted or not.
+Even if hard to realize at the beginning, most of the development time will be spent working and improving the models. Many controllers can be downloaded, installed, or quickly developed. The view, once developed, is going to stay more or less the same over long periods. Models, on the other hand, is where your true experiment is defined. In the models you are going to decide the order of the steps to perform an experiment, is where you are going to automatize tasks, etc. 
 
-In this chapter you are going to develop the core of the program, and
-hopefully, the basis for your future program when you are working in your
-own lab.
+In this chapter we are going to develop a model for the device based on the controller that we wrote on Chapter \ref{chapter:controller}. 
 
 \section{Introduction}
-When developing models, you have to keep in mind that you will start
-specifying how the devices are going to behave. This means that models
-are somewhat specific to your experiment and sometimes the names you
-give to the functions can reflect a specific task, but it doesn't mean
-that it cannot be used in a different context. For example, a confocal
-microscope normally needs a couple of analog outputs to perform a scan,
-and at least one input to record a signal. The analog outputs can be
-plugged into a piezo device that moves either the sample or the beam. If
-you do this systematically, you can construct an image pixel by pixel.
-You move to a location, record the input, move to a new location, etc.
-If you want to study the current that flows through a diode as a function of the voltage applied, you could use the same code developed
-for the confocal microscope without changing a single line. However,
-using a function called \mintinline{python}{do_confocal_scan} to measure a current
-through a diode may be misleading.
+The secret to succesfully develop a model is to think beforehand what do we expect from the device, how are we actually planning to use it. The first time you start thinking about models it can be complicated, because you need to anticipate your future needs. For example, the PFTL DAQ device doesn't handle units. It would be great if the model would allow us to specify the output voltage instead of converting it to an integer because it is what the driver uses. This requirement seems trivial and probably is the first one that comes to mind. Later, once you really start using the program, you will see that some other useful options were missing, and you could have saved a lot of time if you would have thought about them. 
 
-Developing a model for the first time is a bit tricky because it implies
-that you know what is going to happen in the future. In a normal
-situation, you will have a lot of back and forths with the models, but
-for the purposes of this book, it is important that you follow the
-recommendations carefully. For developing a model, you need to
-understand how your experiment works and what do you want to achieve.
-The goal of this book is to measure the current that flows through a
-diode. But if you are building a confocal microscope, for example, you
-should really understand which analog outputs you are using, how your
-piezo is connected, what are the limits of the device, etc.
+Sadly, there is no magical recipe to teach you exactly how to develop models for your devices. The best we can do is to guide you through the processes of developing a model for the first time. With practice you will get better at it, and you will learn how to anticipate your future needs. It is very important to separate what you expect from the device and what you expect from the experiment as a whole. If you master this technique, you will be able to use the models and controllers for very different purposes, without needing to re-write the entire program. 
 
-It is impossible to overstress how important it is for you to understand
-your own experiment before starting to code. Remember that what you are
-developing in this book is the simplest of the examples. Nothing can
-really be broken, no expensive device is going to receive an input
-voltage higher than what it can handle. What you probably have in your
-setup is much more complex. Maybe you have to use external triggers,
-maybe you have to push some device to the edge of its capabilities and
-you should be aware of what the limits are. There is no better friend in
-the lab than the manuals and the technical support.
+In this book we are going to see how to linearly change an analog output while recording an analog input. You know that the ultimate goal is to measure the I-V curve of a diode, but if you would hook the analog output to a piezo stage, you could be doing a scan in a confocal microscope. When the software is well designed, you will have plenty of smaller building blocks that you can keep using in your future projects. You won't need to write and think everything from scratch. Moreover, an improvement because of a new experiment can still benefit the program that controls your previous setup. 
+
+All the predicates in this chapter rely on the fact that you really understand your own experiment before you start coding. Remember that what you are developing in this book is the simplest of the examples. In your own lab, there are going to be several devices, each will have a manual, they are going to be connected to each other. Be sure you understand not only the science behind what you are trying to measure, but also the technical aspects of your setup, its limitations and characteristics. 
+
+\warning{It is impossible to overestimate the importance of reading the manuals of your devices. Hardware in the lab is not the same as consumer hardware. Things can brake, signals may not make sense. Be always sure to understand the limits under which each component operates.}
 
 \section{Base Model}\label{basemodel}
-A model in Python is a class with some special elements. The first step
-when building a model is to think what methods we are going to need, and
-if possible what is the output that each method is going to produce. A
-method may produce an array of values, a single value, no value, etc.
-Remember that the idea of having models, amongst other things, is that
-if in the future you change the device, you only need to write a new
-model with the same functions and the rest of your code will work
-without further problems. Since we are writing a model for a {DAQ} (an
-acquisition card), we should create an appropriate package in the
-\emph{Model} folder. Create a folder called \emph{daq} and remember to
-add an empty \mintinline{python}{__init__.py} file in each new folder you make.
-Perhaps you already did this in the previous chapter.
+In practical terms, a model for a device is nothing more than a class. Remember that whenever a user is going to interact with the device, it is going to happen through the model and never directly to the controller (i.e. the driver). The first step is to think what methods we are going to need and, if possible, the output that each method is going to produce. If you haven't already, create a folder called \textbf{DAQ} inside the \emph{Model} folder and remember to also add an empty \texttt{\_\_init\_\_.py} file. 
 
-Instead of starting with the model for our {DAQ}, you can instead create
-a base class, in which you will keep track of all the functions that a proper model should have. You can create a file called \textbf{base.py}
-and define a class called \mintinline{python}{DAQBase}:
+We want all the DAQ models that we develop to have exactly the same methods. If we ever change the PFTL DAQ card for a different one, we would like our experiment to keep running. Therefore, the best strategy is to create a base class. This class will hold all the methods that are going to be used during our experiments. Create a file called \textbf{base.py} inside the DAQ folder, and define a class called \mintinline{python}{DAQBase}:
 
 \begin{minted}{python}
-class DAQBase(object):
+class DAQBase:
     def __init__(self):
         pass
     
@@ -89,129 +37,68 @@ class DAQBase(object):
     def set_analog_value(self, channel, value):
         pass
     
-    def get_digital_value(self, channel):
-        pass
-    
-    def set_digital_value(self, channel, value):
+    def finalize(self):
         pass
 \end{minted}
 
-This class doesn't do anything, it only defines the methods that you
-need to develop for each device. The \mintinline{python}{pass} takes care of
-functions in which nothing happens and nothing is returned either.
-Having the base class defined allows you to do several things. One is to
-keep track of all the methods that you need to define when you develop a new model, as we are going to do later. The other is that you can
-inherit this class, and be sure that all the functions are already
-present, even if they don't do anything.
-
-Each method is quite self-explanatory. The \mintinline{python}{idn} refers just to
-identify the device. You also see that setting and getting values
-require a port, and a value. You can also start to notice that for this
-simple example, the model is only a relay for the Controller class. For
-the time being, there is no method in the base class that doesn't exist
-in the controller itself.
+This class doesn't do anything by itself, it is only the schematics of what a model should contain. The \mintinline{python}{pass} that was added after every definition takes care of functions in which nothing happens. The step of defining a base class may not seem important at first, but it will become clearer later. The base class defines the common interface for all our devices. We have chosen to implement $5$ methods: An instantiation that will start the comunication with our device. An identification, that will allow us to be sure which device we are communicating with. Two methods for setting and reading an analog channel. Pay attention to the fact that we define also the arguments needed. And lastly, a method to finalize the communication with the device.  
 
 \section{Device Model}\label{devicemodel}
-Once you have established what are the base methods that your model
-needs to define, you can start developing a model for the real device.
-There are two important modules that you will need to import, the base
-model and the controller for your device. Create a file called
-\textbf{analog\_daq.py} and add the following:
+After defining what are the methods that a DAQ model should implement, we can start developing the true model for the {PFTL DAQ}. Let's start by creating a new file called \textbf{analog_daq.py}. You can add the following:
 
 \begin{minted}{python}
-from ...Controller import SimpleDaq
-from .base import DAQBase
+from PythonForTheLab.Controller.simple_daq import SimpleDaq 
+from PythonForTheLab.Model.daq import DAQBase
 
 class AnalogDaq(DAQBase):
     def __init__(self, port):
-        super().__init__()
         self.port = port
 \end{minted}
 
-First, you have to notice that you are using relative imports, i.e., the
-three \mintinline{python}{...} before \mintinline{python}{Controller}. This means that Python
-will look three directories up for a module called \emph{Controller}.
-One dot is for the current directory, two brings you to the \emph{Model}
-and three to the root of the package. When you are not sure whether the
-package you are developing is in the \emph{path} or not, using relative
-imports is a way of ensuring that you can still find what you need to
-import. If the package is in the path, you could change the first
-line to:
+First, you have to notice that we are using absolute imports. We start with \mint{python}|from PythonForTheLab.Controller.simple_daq import SimpleDaq |, wich means that it is important that you added the root folder of your project to the PYTHONPATH as we discussed in the previous chapter. The \mintinline{python}{AnalogDaq} class inherits the \mintinline{python}{DAQBase} class, meaning that all the methods defined in it are going to be available in the new class. You can see this by running the following code:
 
 \begin{minted}{python}
-from PythonForTheLab.Controller import SimpleDaq
+ from analog_daq import AnalogDaq
+ daq = AnalogDaq('/dev/ttyACM0')
+ print(daq.port)
+ # /dev/ttyACM0
+ daq.idn()
+ # Nothing will happen, but it doesn't give an error
 \end{minted}
 
-Going back to the code, the \mintinline{python}{AnalogDaq} class inherits the
-\mintinline{python}{DAQBase} class, meaning that all the methods and properties
-defined in it are going to be available also in the new class. When you
-inherit a class, you need to be sure that the \mintinline{python}{__init__}
-method of the parent is executed. This is what the line
-\mintinline{python}{super().__init__()} is doing. We request a port from the user, that for the time being is just stored in a property called
-\mintinline{python}{port}. You can use the class, and you will see that the methods
-defined in \mintinline{python}{DAQBase} are available also in \mintinline{python}{AnalogDaq},
-even if they don't do anything:
+The snippet above shows you that even if \mintinline{python}{AnalogDaq} doesn't define any methods besides \mintinline{python}{__init__}, you can use \mintinline{python}{daq.idn()} and it won't give you an error. This is happening, because when you inherit the \texttt{DAQBase} class, the methods defined in it are readily available in the child class. 
 
-\begin{minted}{pycon}
->>> from analog_daq import AnalogDaq
->>> dev = AnalogDaq('COM1')
->>> dev.idn()
-\end{minted}
+Note, however, that the \mintinline{python}{__init__} method takes \texttt{port} as an argument, while the DAQBase doesn't. In order to be consistent, you should modify DAQBase to reflect this need. Remember that the base and the model should always be synchronized, even if lazyness dictates the contrary. 
 
-To make the class actually work, you need to start overwriting the
-methods defined in the base class. This just means defining a new method
-with the same name. You can start with the \mintinline{python}{initialize} to open
-the communication with the device.
+\exercise{Change \texttt{DAQBase} in order to have an \texttt{\_\_init\_\_} method that takes the port as an argument}
+
+To make our class actually do something, we need to add more code. For example, we need to start communicating with the device on the specified port. Let's assume that we want to start the communication right away, when the class gets instantiated. We can do the following:
 
 \begin{minted}{python}
 class AnalogDaq(DAQBase):
     def __init__(self, port):
         super().__init__()
         self.port = port
-        self._driver = SimpleDaq(self.port)
-    
-    def initialize(self):
-        self._driver.initialize()
+        self.driver = SimpleDaq(self.port)
+        self.driver.initialize()
 \end{minted}
 
-You can see that in the \mintinline{python}{__init__} method, you are
-instantiating the SimpleDaq with the specified port. You store the
-object in a property called \mintinline{python}{_driver}. The driver is going to
-handle all the communication with the device. Remember that the {MVC}
-pattern imposes that the user will never communicate with the device
-directly, but always through the model. If there is something that the
-device can do but the model can't, you should expand your model before
-bypassing it.
+You can see that in the \mintinline{python}{__init__} method, we are instantiating the SimpleDaq with the specified port. You store the
+object in an attribute called \mintinline{python}{driver}. The driver is going to handle all the communication with the device. Remember that the {MVC} pattern imposes that the user will never communicate with the device directly, but always through the model. If there is something that the device can do but the model can't, you should expand your model before bypassing it. Remember that when we developed the driver, we split the creation of the class and the beginning of the communication. 
 
-Python doesn't have a way of declaring private properties as other
-languages do. Private properties are those properties that can be used
-only within an object, but not from outside. After you instantiate the
-class, you can get access to the driver just by typing
-\mintinline{python}{dev._driver}. The fact that the property starts with an
-underscore is a sign that it should be left alone and not used from
-outside, but there is no easy way to enforce this in Python. The first
-one that has to be consistent with its use is yourself.
+\exercise{Add the \texttt{idn} method to your model in order to return the serial number from the device.}
 
-The \mintinline{python}{initialize} method uses the driver to initialize the
-communication with the device, using the specified port. Probably you
-have realized it already, the \mintinline{python}{DAQBase} class doesn't have an
-\mintinline{python}{initialize} method defined. Don't worry about it now, but you
-will see why you should have added it also there. Now it is time to
-improve the class, for example by defining a \mintinline{python}{get_analog_value}
-method.
+The next step would be to be able to read a value from the device. We could add the following to the \texttt{AnalogDaq} model:
 
 \begin{minted}{python}
 def get_analog_value(self, port):
-   value = self._driver.get_analog_value(port)
+   value = self.driver.get_analog_value(port)
    return value
 \end{minted}
 
-Having a \emph{model} as a relay for methods defined in the
-\emph{controller} doesn't look too useful. But now is when things start
-to get interesting. The controller returns arguments that are simply
-integers, but that you can translate to a voltage, as specified in the
-device manual. As you can imagine, improving the rest of the class is up
-to you.
+Having a \emph{model} as a relay for methods defined in the \emph{controller} doesn't look too useful. So far, both the \texttt{idn} and \texttt{get_analog_value} methods do \emph{exactly} the same as the methods in the driver. However, this is exactly the point where things start to get interesting. The controller returns values that are simply integers, but at the beginning of the chapter we said that we wanted to interact with the device in volts, including the values being read. 
+
+If you go through the manual of the {PFTL DAQ}, you will see that 
 
 \exercise{Complete the \mintinline{python}{get_analog_value} by setting the proper units to the
 returned value. Don't forget to use Pint.}
