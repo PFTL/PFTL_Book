@@ -74,7 +74,7 @@ A design pattern is nothing more than a set of rules that determine where differ
 A \emph{Controller} can also be called \emph{the driver}, which is responsible for communicating with the devices. It can be a Python class you developed yourself such as the one we did in the previous chapter, but it can also be a Python package developed by someone else. The latter scenario is the case in which manufacturers provide the drivers themselves, such as PyPylons from Basler, or the NI-DAQmx bindings for Python. The driver has to reflect the capabilities of the device, nothing less and nothing more. For example, if a device is able to acquire just a data point at a time, the
 driver shouldn't include a function for acquiring an array of data using a loop. We briefly discussed this in the previous chapter. Whatever belongs to the logic that a user imposes belongs to Model component. 
 
-The \emph{Model} is where all the logic is defined. In the models, you are going to define how you are going to use a device for your own experiment. A clear example would be the introduction of units. The device from the previous chapter takes only integer values as inputs. If you would like to transform that input to voltages, you could do it in the model for the device. Moreover, one of the analog inputs is measuring volts, but they can be translated to a current. This is very specific to our experiment and thus the option shouldn't be hardcoded in the driver, but it has to be an option in the model. The main advantage of splitting \emph{Controllers} and \emph{Models} is that it becomes simple to upgrade or replace a device. You will need to update the \emph{Model} in order to reflect the new options of the device, but the logic of the experiment is left intact. 
+The \emph{Model} is where all the logic is defined. In the models, you are going to define how you are going to use a device for your own experiment. A clear example would be the introduction of units. The device from the previous chapter takes only integer values as inputs. If you would like to transform that input to voltages, you could do it in the model for the device. Moreover, one of the analog  inputs is measuring volts, but they can be translated to a current. This is very specific to our experiment and thus the option shouldn't be hardcoded in the driver, but it has to be an option in the model. The main advantage of splitting \emph{Controllers} and \emph{Models} is that it becomes simple to upgrade or replace a device. You will need to update the \emph{Model} in order to reflect the new options of the device, but the logic of the experiment is left intact. 
 
 Splitting the Model from the Controller will look like extra work at the beginning without a clear gain. The main advantages appear when you are using a driver developed by someone else and when you know you will need to change the devices on your setup. In this book, we work only with one device and in a very simple experiment. Therefore, the advantages of the Model are not going to be evident to inexperienced developers. Once the program you are developing has enough mileage, you will see the payoff of having a clear structure. 
 
@@ -104,7 +104,7 @@ sometimes to channel number 0. You don't want to change the code every time you 
 
 Now that you have started to split the code into different folders and files, it is important to discuss how can you make programs that use the code available in different files. That is called \emph{importing} and is the focus of the next section. 
 
-\section{Importing modules in Python}
+\section{Importing modules in Python}\label{section:importing-python}
 In the previous chapter, we have already seen some lines that look like this:
 
 \begin{minted}{python}
@@ -406,7 +406,7 @@ The appropriate place to develop a method to load the configuration file is in t
     └── View/
 \end{minted}
 
-In the Experiment folder, we are going to put all the code that will allow us to perform a measurement. As always, create empty \texttt{\_\_init\_\_.py} files in every new folder. Inside of \textbf{Experiment} create a file called \textbf{IV_Curve.py}. We are going to see the details of the experimental model in Chapter \ref{chapter:experiment-model}, but for the time being we can work with the loading of the configuration file. Inside of \textbf{IV_Curve.py}, you can create a function that will open the configuration file and return its contents organized as a dictionary. Something like this:
+In the Experiment folder, we are going to put all the code that will allow us to perform a measurement. As always, create empty \texttt{\_\_init\_\_.py} files in every new folder. Inside of \textbf{Experiment} create a file called \textbf{IV\_Curve.py}. We are going to see the details of the experimental model in Chapter \ref{chapter:experiment-model}, but for the time being we can work with the loading of the configuration file. Inside of \textbf{IV\_Curve.py}, you can create a function that will open the configuration file and return its contents organized as a dictionary. Something like this:
 
 \begin{minted}{python}
  import yaml
@@ -427,7 +427,7 @@ We have just used the same code from the previous section but encapsulated in a 
 
 Now we have a consistent interface for loading the configuration file into our programs. This gives us a great deal of flexibility and makes the code nicely reusable and extendable. 
 
-\exercise{When the function \mintedinline{python}{load_config} loads the configuration from a file, verify that some important parameters are defined. For example, verify that there is a user associated with an experiment. If there is something missing, print an error message or raise an Exception.}
+\exercise{When the function \texttt{load\_config} loads the configuration from a file, verify that some important parameters are defined. For example, verify that there is a user associated with an experiment. If there is something missing, print an error message or raise an Exception.}
 
 \section{Conclusions}\label{section:layout-conclusions}
 In this chapter, we haven't done much coding but we have discussed some general ideas that should accompany you through every software

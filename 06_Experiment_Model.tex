@@ -508,6 +508,92 @@ this changes, your code is ready for performing a scan. There are some
 concerns, such as how do you stop a scan while it is running. But the
 core ideas and methods are already there.
 
+\section{Dummy DAQ}\label{dummy-daq}
+The previous sections have been focused onto developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device
+connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you
+can define a fake model that generates fake data. We like calling fake devices of \textbf{dummy} devices. 
+
+Create a new file called \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
+
+\begin{minted}{python}
+from PythonForTheLab.Model.daq import DAQBase
+
+class DummyDaq(DAQBase):
+    serial_number = '1234ABC'
+    def idn(self):
+        return self.serial_number
+\end{minted}
+
+You start by importing the base class \mintinline{python}{DAQBase}, as you did for
+the real \emph{model}, but you don't need the controller since you are
+not going to communicate with any device. The class defines a fake
+serial, just to be able to return it as if it was the real device. Now
+you have to think what do you actually expect from a fake device. Since
+you are developing a dummy {DAQ}, you don't need to do anything when
+setting a value to an output, but you do need to get a value when you
+read back. And you need to use the proper units as well. It can look
+something like this:
+
+\begin{minted}{python}
+import numpy as np
+import pint
+
+from .base import DAQBase
+
+ur = pint.UnitRegistry()
+V = ur('V')
+
+class DummyDaq(DAQBase):
+    serial_number = '1234ABC'
+    
+    def __init__(self):
+        super().__init__()
+    
+    def idn(self):
+        return self.serial_number
+    
+    def get_analog_value(self, port):
+        return np.random.random(1)*V
+\end{minted}
+
+The \mintinline{python}{idn} is quite clear, it just returns the serial number that
+was defined during initialization. The \mintinline{python}{get_analog_value}
+accepts a port as a parameter, even if they don't use it, but you need
+to keep the compatibility with what was already defined. The value that
+is returned is a random number with volts as units. Remember that the
+random generator outputs values only between 0 and 1. You can try to run
+the test, but using this DummyClass instead. Open the file
+\textbf{test\_daq.py}, and replace the line:
+
+\begin{minted}{python}
+# from analog_daq import AnalogDaq
+from dummy_daq import DummyDaq as AnalogDaq
+\end{minted}
+
+And run \textbf{test\_daq.py}. You will see that an error appears
+because you are using the \mintinline{python}{initialize} method in the test, but it
+is not defined within the class. This happened because you included
+\mintinline{python}{initialize} in the
+\mintinline{python}{AnalogDaq} but you never added it to the DAQBase.
+Now you see the power that being organized and systematic has. Keeping
+track of the methods in a general, base class, allows you not to make
+the same mistakes. Moreover, it would have allowed you to run the test
+without issues.
+
+\exercise{Add an \mintinline{python}{initialize} method into the base class.}
+
+If you run the test after completing the exercise, you will see that
+there are no errors appearing, even if you don't modify the dummy class.
+Now you see that you can exchange the models in a relatively simple way,
+and the script that is responsible for measuring works without problems.
+Of course, this is a simple example, where you exchange a real device
+for a dummy one, but if you would have two different devices, exchanging
+them would have been just as simple and the measurement would have
+been performed.
+
+\exercise{Make the \mintinline{python}{get_analog_value} return the value of a sine function
+and not just a random value.}
+
 \section{Conclusions}\label{conclusions}
 With this chapter, the core code for a functioning experiment is
 finished. Since the beginning of the book, you have developed from a
