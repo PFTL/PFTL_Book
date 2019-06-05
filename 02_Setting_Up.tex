@@ -2,20 +2,29 @@
 \section{Objectives}
 In order to start developing software for the lab, you are going to need different programs. The process to install programs is different depending on your operating system. It is almost impossible to keep an up-to-date detailed instruction set for every possible version of each program and for every possible hardware configuration. Therefore, follow the steps provided below carefully. When in doubt, check the instructions that the developers of the different packages provide, or ask in the forums. 
 
+\section{Python or Anaconda}
+If you are already familiar with Python, probably you have encountered that there are different \emph{distributions} which are worth discussing. Broadly speaking, Python in itself is a text document in which it is specified what to expect when certain commands are encountered. This gives a lot of freedom to develop different implementation of those specifications, each one with different advantages. The \emph{official} distribution, i.e. the distribution maintained by the Python Software Foundation, is one of the two that we recommend in this book and can be found on Python.org. We will discuss step by step how to install it the following sections. The official distribution is also referred to as CPython, because it is written in the programming language \textbf{C}. 
+
+The official distribution follows the specification of Python to the letter, and thus is the one that comes bundled with Linux and Mac computers. Newer versions of Windows will also start including the official Python distribution. However, some developers started to release Python distributions which are optimized for certain tasks. For example, Intel releases its own version of Python which is especially design to use multi-core architectures. There are other version of Python, such as Pypy, Jython, Iron Python, etc. Each one has its own merits and drawbacks. Between this wealth of options, there is one that is very popular amongst scientists called Anaconda, which is worth discussing and which is the second option we will cover in this book. 
+
+Python can be expanded through external packages that can be developed and made publicly available by anyone. Some time ago, the python package manager was very limited, and a group of developers decided to develop a tool that allowed people to install complex libraries, especially those needed for numerical computations. The main requirement was to have a package manager which could install also libraries not written in Python. This is how Anaconda was born and is still thriving nowadays. Anaconda is a distribution of Python which comes with \emph{batteries included} for scientists. It includes many Python libraries by default but also other programs. 
+
+The first edition of this book included instructions for using exclusively plain Python, because Anaconda is an overkill for the purposes we are covering. However, it is a reality that many researchers already have Anaconda installed on their computers and thus it is worth mentioning how to work with it. If you are starting from scratch, the decision is yours. If you use plain Python, you will end up with a system with just the libraries needed for achieving our goals. Once you require special libraries which are harder to install or create some dependency issues, then you can explore what Anaconda offers.
+
 \section{Installing Python}
-You are going to start by installing Python itself. This book is based on Python version 3.6. Most likely earlier versions such as 3.3 or 3.4 are also going to work, but versions 2.x are going to fail. If it happens that you have a Python version 3.x installed and don’t want to update it, follow the book and see if it gives any errors. Let us know when that happens. Remember that Python version 2.x is finishing its life during 2020. It is therefore very wise to start developing code in a language that will be supported beyond that timeframe. 
+You are going to start by installing Python itself. This book is based on Python version 3.6. For most features discussed in this book, earlier versions such as 3.3 or 3.4 are also going to work, but versions 2.x are going to fail. If it happens that you have a Python version 3.x installed and don't want to update it, follow the book and see if it gives any errors. Let us know when that happens. Remember that Python version 2.x is finishing its life during 2020. It is therefore very wise to start developing code in a language that will be supported beyond that time-frame. 
 
-\subsection{Installation on Windows}
-Windows doesn’t come with a pre-installed version of Python. Therefore, you will need to install it yourself. Fortunately, it is not a complicated process. Go to the download page at Python.org, where you will find a link to download the latest version of Python.
+\subsection{Python Installation on Windows}
+Windows doesn't come with a pre-installed version of Python. Therefore, you will need to install it yourself. Fortunately, it is not a complicated process. Go to the download page at Python.org, where you will find a link to download the latest version of Python.
 
-Download the file that corresponds to Python 3.6 or later to your hard drive. Once it is done, you should launch it and follow the steps to install Python on your computer. Be sure that \textbf{you select Add Python 3.6 to the PATH}. If there are more users on the computer, you can also select Install Launcher for all users. Just click on \textit{Install Now} and you are good to go. Pay attention to the messages that appear, in case anything goes wrong.
+Download the file that corresponds to Python 3.6 or later to your hard drive. Once it is complete, you should launch it and follow the steps to install Python on your computer. Be sure that \textbf{you select Add Python 3.6 to the PATH}. If there are more users on the computer, you can also select \emph{Install Launcher} for all users. Just click on \textit{Install Now} and you are good to go. Pay attention to the messages that appear, in case anything goes wrong.
 
 \subsubsection{Testing your installation}
-To test that Python was correctly installed, you are going to need to launch the Command Prompt. The Command Prompt in Windows is the equivalent to a Terminal in the majority of the operating systems based on Unix. Throughout this book, we are going to talk about the Terminal, the Command Prompt or the Command Line interchangeably. The Command Prompt is a program that will allow you to interact with your computer by writing commands instead of using the mouse. We will see some of the options you have.
+To test whether Python was correctly installed, you are going to need to launch the Command Prompt. The Command Prompt in Windows is the equivalent to a Terminal in the majority of the operating systems based on Unix. Throughout this book, we are going to talk about the Terminal, the Command Prompt or the Command Line interchangeably. The Command Prompt is a program that will allow you to interact with your computer by writing commands instead of using the mouse. We will see some of the options you have.
 
-To start it, just go to the Start Button and search for the Command Prompt (it may be within the Windows System apps). A shorter way is to just press Win+r. It will open a dialog called Run, allowing you to start different programs. Type \mintinline{bash}{cmd.exe} and press enter. A black screen should pop up, this is the Command Prompt of Windows.
+To start it, just go to the Start Button and search for the Command Prompt (it may be within the Windows System apps). A shorter way is to just press Win+r. It will open a dialogue called Run, allowing you to start different programs. Type \mintinline{bash}{cmd.exe} and press enter. A black screen should pop up, this is the Command Prompt of Windows.
 
-In the Command Prompt, you can do almost everything what you can do with the mouse. You will notice that you are in a specific folder on your computer. You can type \mintinline{bash}|dir| and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command \mintinline{bash}{cd}. If you want to go one level up you can type \mintinline{bash}{cd ..} if you want to enter into a folder, you type \mintinline{bash}{cd Folder} (where \textit{Folder} is the name of the folder you want to change to). It is out of the scope of this book to cover all the different possibilities that the Command Prompt offers, but you shouldn’t have any problems finding help online.
+In the Command Prompt, you can do almost everything what you can do with the mouse. You will notice that you are in a specific folder on your computer. You can type \mintinline{bash}{dir} and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command \mintinline{bash}{cd}. If you want to go one level up you can type \mintinline{bash}{cd ..} if you want to enter into a folder, you type \mintinline{bash}{cd Folder} (where \textit{Folder} is the name of the folder you want to change to). It is out of the scope of this book to cover all the different possibilities that the Command Prompt offers, but you shouldn't have any problems finding help online.
 
 To test that your Python installation was successful, just type \mintinline{bash}{python.exe} and hit enter. You should see a message like this:
 
@@ -56,7 +65,7 @@ Once you find the file python.exe, copy the full path of that directory, i.e. th
 You have to restart the Command Prompt in order for it to refresh the settings. Try again to run python.exe and it should be working now.
 
 \subsection{Installation on Linux}
-Most Linux distributions come with pre-installed Python, so we have to check whether it is already in your system. Open up a terminal (Ubuntu users can do Ctrl+Alt+T). You can then type \mintinline{bash}{python3} if it works you should see something like this appearing on screen:
+Most Linux distributions come with pre-installed Python, therefore you have to check whether it is already in your system. Open up a terminal (Ubuntu users can do Ctrl+Alt+T). You can then type \mintinline{bash}{python3} and press enter. If it works you should see something like this appearing on screen:
 
 \begin{minted}{bash}
 Python 3.6.3 (default, Oct  3 2017, 21:45:48)
@@ -64,17 +73,17 @@ Python 3.6.3 (default, Oct  3 2017, 21:45:48)
 Type "help", "copyright", "credits" or "license" for more information.
 \end{minted}
 
-If it doesn’t work, you will need to install Python 3 on your system. Ubuntu users can do it by running:
+If it doesn't work, you will need to install Python 3 on your system. Ubuntu users can do it by running:
 \begin{minted}{bash}
 sudo apt install python3
 \end{minted}
 
-Each Linux distribution will have a slightly different procedure to install Python but all of them follow more or less the same ideas. After the installation check again if it went well by typing python3 and hitting enter.
+Each Linux distribution will have a slightly different procedure to install Python but all of them follow more or less the same ideas. After the installation check again if it went well by typing python3 and hitting enter. Future releases of operating system will include only Python 3 by default, and therefore you won't need to explicitly include the \emph{3}. In case there is an error, try first running only \mintinline{bash}{python} and checking whether it recognized that you want to use Python 3.
 
-\section{Installing Python Packages}
+\subsection{Installing Python Packages}
 One of the characteristics that make Python such a versatile language is the variety of packages that can be used in addition to the standard distribution. Python has a repository of applications called PyPI that counts with more than 100000 packages available. The easiest way to install and manage packages is through a command called \textbf{pip}. Pip will fetch the needed packages from the repository and will install them for you. Pip is also capable of removing and upgrading packages. More importantly, Pip also handles dependencies so you won’t have to worry about them.
 
-Pip works both with Python 3 and Python 2, therefore you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, most likely you will find that you have two commands, pip2 and pip3. You should use the latter in order to install packages for Python 3. On Windows, most likely you will need to use pip.exe instead of just pip. If for some reason it doesn’t work, you need to follow the same procedure that was explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
+Pip works both with Python 3 and Python 2, therefore you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, most likely you will find that you have two commands, pip2 and pip3. You should use the latter in order to install packages for Python 3. On Windows, most likely you will need to use pip.exe instead of just pip. If for some reason it doesn't work, you need to follow the same procedure that was explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
 
 Installing a package becomes very simple. Linux users should type:
 \begin{minted}{bash}
@@ -96,7 +105,7 @@ Where \mintinline{bash}{package_name} has to be replaced by what you want to ins
 Pip will automatically grab the latest version of the package from the repository and will install it on your computer. To follow the book, you will need to install the packages listed below:
 \begin{itemize}
  \item numpy -> For working with numerical arrays
- \item Pint -> Allows the use of units and not just numbers
+ \item pint -> Allows the use of units and not just numbers
  \item pyserial -> For communicating with serial devices
  \item PyYAML -> To work with YAML files, a specially structured text file
  \item PyQt5 -> Used for building Graphical User Interfaces
@@ -105,27 +114,9 @@ Pip will automatically grab the latest version of the package from the repositor
 
 All the packages can be installed with pip without much trouble. If you are in doubt, you can search for packages by typing \mintinline{bash}{pip search package_name}. Normally, it is not important the order in which you install the packages. Notice that since dependencies will also be installed, sometimes you will get a message saying that a package is already installed even if you didn't do it manually. 
 
-To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don’t need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements onto a window.
+To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don't need to have this program in order to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements onto a window.
 
-\subsection{Installing Qt Designer on Windows}
-Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Run the following command:
-
-\begin{minted}{bash}
- pip install pyqt5-tools
-\end{minted}
-
-And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
-
-\subsection{Installing Qt Designer on Linux}
-Linux users can install Qt Designer directly from within the terminal by running:
-
-\begin{minted}{bash}
-sudo apt install qttools5-dev-tools
-\end{minted}
-
-To start the designer just look for it within your installed programs, or type designer and press enter on a terminal.
-
-\section{Virtual Environment}
+\subsection{Virtual Environment}
 When you start developing software, it is of utmost importance to have an isolated programming environment in which you can control precisely the packages installed. This will allow you, for example, to use experimental libraries without overwriting software that other programs use on your computer. Isolated environments allow you, for example, to update a package only within that specific environment, without altering the dependencies in any other development you are doing.
 
 For people working in the lab, it is even more important to isolate different environments: you will be developing a program with a certain set of libraries, each with its own version and installation method. One day you, or another researcher who works with the same setup, decides to try out a program that requires slightly different versions for some of the packages. The outcome can be a disaster: If there is an incompatibility between the new libraries and the software on the computer, you will ruin the program that controls your experiment.
@@ -136,7 +127,7 @@ Fortunately, Python provides a great tool called Virtual Environment that overco
 
 You can create isolated working environments for developing software, for running specific programs or to perform tests. If you need to update or downgrade a library, you are going to do it within that specific Virtual Environment and you are not going to alter the functioning of anything else on your computer. Acknowledging the advantages of a Virtual Environment comes with time; once you lose days or even weeks reinstalling packages because something went wrong and your experiment doesn’t run anymore, you will understand it.
 
-\subsection{Virtual Environment on Windows}
+\subsubsection{Virtual Environment on Windows}
 Windows doesn’t have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below will guide you through with the installation and configuration. If there is something failing, try to find help or examples online. There are a lot of great examples in StackOverflow.
 
 Virtual Environment is a python package, and therefore it can be installed with pip.
@@ -210,7 +201,7 @@ Which will create your virtual environment within the Testing folder. Go to the 
 
 Now you are running within a Virtual Environment in the Power Shell.
 
-\subsection{Virtual Environment on Linux}
+\subsubsection{Virtual Environment on Linux}
 On Linux, it is very easy to install the Virtual Environment package. Depending on where you installed Python in your system you may need root access to follow the installation. If you are unsure, first try to run the commands without sudo, and if they fail, run them with sudo as shown below:
 
 \begin{minted}{bash}
@@ -268,26 +259,61 @@ pip freeze
 
 It will give you a list of all the packages that you have installed within that working environment and their exact versions. So, you know exactly what you are using and you can revert back if anything goes wrong. Moreover, for people who are really worried about the reproducibility of the results, keeping track of specific packages is a great way to be sure that everything can be repeated at a later time.
 
-\section{About using Anaconda}
-If you have used Python for a while, most likely you have come across a program called Anaconda, and it is very important that you understand the differences between a plain Python installation (what is recommended for you in the previous sections) and an Anaconda Python installation. 
+\subsection{Installing Qt Designer on Windows}
+Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Run the following command:
 
-Python in its bare essentials is a collection of specifications, i.e., it specifies what the computer should do when it finds a specific syntax. This opens the door to different implementations of the specifications. For example, if you download Python from the official website, you are downloading the \emph{official} implementation, also knowns as CPython, because it was written in a language called C. There are others, such as Jython, written in Java, Iron Python written in .NET, etc. Each has some advantages and some disadvantages. Therefore, the best is to stick to the official Python until you have a broader understanding.
+\begin{minted}{bash}
+ pip install pyqt5-tools
+\end{minted}
 
-Coming back to Anaconda. We have seen that you can install packages with the command pip. However, pip only allows you to install Python packages. If you are trying to use a library that depends on external libraries written in a different language, pip will fail. Anaconda developed a package manager that solves those problems because it works for software written in any language, not only Python. For scientific computing, many packages depend on specific libraries, compiled for different operating systems. 
+And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
-This book relies on using plain Python packages. This means that you don't need to use Anaconda to follow it. Moreover, the vast majority of the things you can do with Python don't require Anaconda to be installed. However, it is important to admit that Anaconda comes with a lot of pre-installed packages that sets you up to speed much faster. If you are an Anaconda user and would like to stick to it, you will need to adapt the code and instructions yourself. Just to get you started we will point out some of the commands that need to be changed, such as those involving pip and virtual environments. 
+\subsection{Installing Qt Designer on Linux}
+Linux users can install Qt Designer directly from within the terminal by running:
 
-First, you need to be sure to be running within the Anaconda Prompt. It is a terminal on which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mintinline{bash}{~/.bash_profile}. To install packages, the command now becomes:
+\begin{minted}{bash}
+sudo apt install qttools5-dev-tools
+\end{minted}
+
+To start the designer just look for it within your installed programs, or type designer and press enter on a terminal. 
+
+\section{Installing Anaconda}
+To install Anaconda, you just need to head to the official website: anaconda.com. Go to the download section and select the installer of the newest version of Python. Normally it will auto-detect your operating system and offer you either a graphical installation (recommended) or a command line one. If you are on Linux, you have to be careful whether you want the Anaconda Python to become your default Python installation. Normally, there won't be any issues, you just need to be aware of the fact that other programs which rely on Python will use the Anaconda version and not the stock version. 
+
+Similar to the different distributions of Python, Anaconda also comes in two main flavours: Anaconda and Miniconda. The main difference is that the latter bundles less programs and therefore is lighter to download. Unless you are very low in space on your computer or you have very specific requirements, we strongly recommend downloading just Anaconda. 
+
+\subsection{About using Anaconda}
+In the previous sections we have seen that to install packages you use the command \mintinline{bash}{pip}. However, pip only allows you to install Python packages. If you are trying to use a package which depends on external libraries written in a different language, pip will fail. 
+
+\note{Since the moment in which Anaconda was born to nowadays, pip has gone through a very long road. Today, complex packages such as numpy or PyQt can be installed directly. However, there is still some discussion regarding how much can be expected from pip at the moment of compiling programs or performing complex tasks.}
+
+Anaconda developed a package manager which is able to install software written in any language, not only in Python. For scientific computing, many packages depend on specific libraries, compiled for different operating systems and architectures. Sometimes it may even be required for a proper installation of a package to compile a library. Anaconda refers to the procedure of installing a program as a \emph{recipe}. Those recipes have all the instructions for automatically installing not only Python packages but almost any program you may need for scientific computing. 
+
+For following this book, we will need only Python-based libraries, and most come already bundled with Anaconda. If you are in Windows, you need to be sure to be running within the \textbf{Anaconda Prompt}. It is a terminal on which the default Python installation points to the Anaconda installation. If you are on Linux, this is achieved during the installation and you can check it by looking at the file \mintinline{bash}{~/.bash_profile}. To install packages, the command is:
 \begin{minted}{bash}
  conda install numpy
 \end{minted}
 
-Of course, not all packages are available directly from Anaconda. The standard place to find packages provided by the community is called \emph{conda-forge}. For example, if you would like to install Pint, you would run the following command:
+The packages which are installable like that are those maintained by Anaconda. Those are the official packages which come with a \emph{certification} of quality. Many companies, for example, allow people only to install packages officially supported by Anaconda. The packages required for following this book, are all but one available on the official Anaconda repository. These are the packages which you should install with the command shown above: 
+
+\begin{itemize}
+ \item numpy -> For working with numerical arrays
+ \item pyserial -> For communicating with serial devices
+ \item PyYAML -> To work with YAML files, a specially structured text file
+ \item PyQt5 -> Used for building Graphical User Interfaces
+ \item pyqtgraph -> Used for plotting results within the User Interfaces
+\end{itemize}
+
+The only package which cannot be installed in this way is called \emph{Pint}, which is very useful for handling units, but it is not crucial for our program to run. The standard place to find packages provided by the community is called \emph{conda-forge}. For example, to install Pint, you would run the following command:
+
 \begin{minted}{bash}
   conda install -c conda-forge pint
 \end{minted}
 
-Finally, Anaconda also provides a custom version of virtual environments. It is \textbf{very important} not to mix conda environments and virtual environments, since they work in very different ways. To create a virtual environment with Anaconda, the command is:
+\subsection{Conda Environments}
+If you went through the section on Virtual Environments with Python and found them useful, you probably will be glad to see that Anaconda includes its own version of virtual environments which are also incredibly powerful. Conda Environments allow you to isolate different development configurations from each other. In this way, if you are developing a program which requires a special version of a library, you will be sure you don't alter other programs when upgrading/downgrading a library. 
+
+It is \textbf{very important} not to mix conda environments and virtual environments, since they work in very different ways. To create a virtual environment with Anaconda, the command is:
 \begin{minted}{bash}
  conda create --name myenv
 \end{minted}
@@ -302,7 +328,13 @@ While on Linux the command becomes:
  source activate myenv
 \end{minted}
 
-Anaconda and its possibilities is a full topic that needs to be studied separately and it goes beyond the scope of this book. The documentation on the official website is very extensive and is worth a read.
+Anaconda and its possibilities is a full topic that needs to be studied separately and it goes beyond the scope of this book. The documentation on the official website is very extensive and is worth a read. Lastly, it is worth mentioning that when you create a conda environment, you can explicitly set the version of Python you want to use, even if it is not the one you have installed on your computer:
+
+\begin{minted}{powershell}
+ conda create -n myenv python=x.x
+\end{minted}
+
+Where you will need to replace \mintinline{bash}{python=x.x} by the version of Python you would like to use. This is great if you are debugging code and would like to see whether it works on older versions of Python, or if a program you need to run is not available for newer versions, etc.
 
 \section{Using Git for Version Control}
 Generally speaking, version control means keeping track of all the changes within a project. The project can be a software development project, but also writing a paper or maintaining a blog (or even writing this book). When you do version control by hand, probably you implement solutions such as changing the name of the file, which leads to generating monstruosities such as file-rev1-by-me\_yesterday.doc, file-rev2-by-john\_today.doc, etc. You can quickly see that it becomes a hassle as soon as you have more than one.
