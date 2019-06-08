@@ -68,7 +68,10 @@ from Model.experiment import DaqControl
 daq = AnalogDaq()
 daq.initialize()
 
+config_file = 'Config/experiment.yml'
+
 e = DaqControl(user='me')
+e.load_config(config_file)
 e.load_daq(daq)
 \end{minted}
 
@@ -84,14 +87,14 @@ e.load_daq()
 \end{minted}
 
 The two approaches are very different and is worth discussing their advantages and dissadvantages. In the first one, we are
-importing the daq, we initialize it, and then we add it to the experiment class through the method \texttt{load\_daq}. This approach is quick, because the experiment model doesn't need to do much, just to accept the DAQ and store it within itself. If you want to use a different DAQ device, you would alter the code above, importing the proper model, etc. At first sight, this approach may seem simple enough, however, it will become harder when you are dealing with several devices which can be changed. Moreover, future users of your code need to be comfortable editing Python files. 
+importing the daq, we initialize it, and then we pass it to the experiment class through the method \texttt{load\_daq}. This approach is quick, because the experiment model doesn't need to do much, just to accept the DAQ and store it within itself. If you want to use a different DAQ device, you would alter the code above, importing the proper model, etc. At first sight, this approach may seem simple enough, however, it will become harder when you are dealing with several devices which can be changed. Moreover, future users of your code need to be comfortable editing Python files. 
 
 The second approach involves loading a module based on information stored as a string on a file, which is slightly more complicated programmatically speaking. One of the advantages of this approach is that the information on the devices used is automatically saved as metadata. The other advantage is that we are really splitting the code itself from the peculiarities of our own experiment. This approach is also a good opportunity to learn few new things about Python. 
 
 In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therfore, we are going to see not only the practical approach to solving the problem of loading the DAQ to the program, but also how to work with programs that may be in use by more people at the same time. 
 
 \subsection{Loading a DAQ}\label{loading-a-daq}
-We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then load it to the \emph{model}. The method \mintinline{python}{load_daq} will look like this:
+We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it to the \emph{model}. The method \mintinline{python}{load_daq} will look like this:
 
 \begin{minted}{python}
 def load_daq(self, daq):
@@ -101,11 +104,11 @@ def load_daq(self, daq):
 \end{minted}
 
 The code is straightforward. The \mintinline{python}{load_daq} method gets one
-argument, daq, that is stored into the class property \mintinline{python}{self.daq}.
+argument, \texttt{daq}, which is in turn stored as the class property \mintinline{python}{self.daq}.
 You also update the \mintinline{python}{properties} dictionary to keep the name of
 the model that you are using. There are few things that need to be
-addressed. First, is to check what happens when you do
-\mintinline{python}{str(self.daq)}. Open a terminal and start python.
+addressed. First, you need to check what happens when you do
+\mintinline{python}{str(self.daq)}. Open a terminal and start Python:
 
 \begin{minted}{python}
 >>> from Model.daq import DummyDaq
@@ -117,38 +120,24 @@ addressed. First, is to check what happens when you do
 The result of doing \mintinline{python}{str(daq)} may not be what you were
 expecting. It is, however, a good starting point, because it allows you
 to identify which class did you use to define the daq. Fortunately, this
-can be improved. Open the file where you store the \mintinline{python}{DummyDaq}
-class and add the following to it:
+can be improved. Open the file \textbf{dummy\_daq.py} and add the following to the \mintinline{python}{DummyDaq}
+class:
 
 \begin{minted}{python}
 def __str__(self):
     return "DummyDaq"
 \end{minted}
 
-If you repeat the steps above, you will see that now, the output of
-doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"DummyDaq"}. The
-\mintinline{python}{__str__} method of a class tells Python how to convert an
-object to a string. It is also responsible for the behavior of
-\mintinline{python}{print(daq)}. Now you will have a nicely formatted string to
-store in your \mintinline{python}{properties} dictionary. Remember that if you
-assign the same output for the \mintinline{python}{__str__} method, to two
-different classes, you won't be able to distinguish which one you used.
+If you go back to the terminal, restart Python (remember that changes to the source code of a module need Python to be restarted to make effect), and repeat the steps above, you will see that the output of \mintinline{python}{str(daq)} is exactly \mintinline{python}{"DummyDaq"}. The\mintinline{python}{__str__} method of a class tells Python how to convert an
+object to a string. It is also responsible for the behavior of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. 
 
-There is something else that is worth learning at this stage. If the
-user supplies a class, you won't be certain that it is the correct
-class. It is wise to verify every user input that can alter the
-functioning of the program. For example, loading the daq can happen at
-the beginning of your code, but perhaps you use it much later. If an
-error occurs because it was the wrong class the program is going to
-crash and you are going to lose very valuable time because of a
-simple mistake.
+\note{The default string representation of an object, includes a squence that looks like: 0x7fe8c53c0c50. This is the memory address of the object you are inspecting. If you create two DummyDaq objects, you will see that the values are different. This may be useful because it makes explicit the fact that they are different objects (or the same, depending on the use case).}
 
-If you think about what the {DAQ} Models have in common, you should
-realize that it is that both of them are child classes of the DAQBase
-class. Therefore, if you want to know if you are dealing with the proper
-model, you should check whether the daq variable that \mintinline{python}{load_daq}
-is getting is actually derived from the base model. There is no easy way
-of doing this in Python, and therefore you can build a workaround.
+At this stage, we have working code which accepts the DAQ model after it was initialized. However, there is a scenario which we could also consider. We are assuming that our code will also be used by someone else, therefore, we have to be sure that the DAQ supplied to the \mintinline{python}{load_daq} is the correct class. As a general rule, it is wise to verify every user input that can alter the functioning of the program. For example, loading the daq can happen atthe beginning of your code, but perhaps you use it much later. If an error occurs because it was the wrong class the program is going to crash and you are going to lose very valuable time because of a simple mistake.
+
+Verifying every single user-supplied value is very time consuming for the developer. That is why at some point we are going to assume the user of our code knows what she is doing and if an error arises it won't be the fault of our program. Checking whether the DAQ supplied is a proper object, however, allows us to understand something else about how Python works. In our code, both the Real Daq and the Dummy Daq should pass the test, but also all future Daqs which may be added. Therefore, you have think about what the {DAQ} Models have in common. Both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting as an argument, is actually derived from the base model. 
+
+There is no easy way of doing this in Python, and therefore you can build a workaround.
 First, update the base model for the daq, adding a property called
 \mintinline{python}{_type}:
 
