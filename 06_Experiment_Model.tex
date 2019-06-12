@@ -63,7 +63,7 @@ The code for the first option would look like this:
 
 \begin{minted}{python}
 from PythonForTheLab.Model.DAQ.simple_daq import AnalogDaq
-from Model.experiment import DaqControl
+from PythonForTheLab.Model.experiment import DaqControl
 
 daq = AnalogDaq()
 daq.initialize()
@@ -88,10 +88,10 @@ importing the daq, we initialize it, and then we add it to the experiment class 
 
 The second approach involves loading a module based on information stored as a string on a file, which is slightly more complicated programmatically speaking. One of the advantages of this approach is that the information on the devices used is automatically saved as metadata. The other advantage is that we are really splitting the code itself from the peculiarities of our own experiment. This approach is also a good opportunity to learn few new things about Python. 
 
-In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therfore, we are going to see not only the practical approach to solving the problem of loading the DAQ to the program, but also how to work with programs that may be in use by more people at the same time. 
+In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therfore, we are going to see not only how to solve the specific problem of loading the DAQ to the program, but also how to organize the workflow in order to guarantee that changes are backwards compatible, and therefore other users can keep working. 
 
 \subsection{Loading a DAQ}\label{loading-a-daq}
-We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then load it to the \emph{model}. The method \mintinline{python}{load_daq} will look like this:
+We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it to the \emph{experiment model}. The method \mintinline{python}{load_daq} will look like this:
 
 \begin{minted}{python}
 def load_daq(self, daq):
@@ -103,89 +103,58 @@ def load_daq(self, daq):
 The code is straightforward. The \mintinline{python}{load_daq} method gets one
 argument, daq, that is stored into the class property \mintinline{python}{self.daq}.
 You also update the \mintinline{python}{properties} dictionary to keep the name of
-the model that you are using. There are few things that need to be
-addressed. First, is to check what happens when you do
-\mintinline{python}{str(self.daq)}. Open a terminal and start python.
+the model which you are using. This is important if you want to be sure you are able to reproduce the experiment at a later stage. If you save the properties, there will be no doubts regarding which DAQ you used to measure. This approach holds for any device that you may want to use in the future. 
+
+There are, however, few things that need to be addressed. First, let's check what happens on the line which reads \mintinline{python}{str(self.daq)}. Remember, every time you see something with an unclear behavior, you can always check what is going on by opening a terminal and starting Python. Then, we can do the following:
 
 \begin{minted}{python}
->>> from Model.daq import DummyDaq
->>> daq = DummyDaq(port=1)
+>>> from Model.daq import AnalogDaq
+>>> daq = AnalogDaq(port=1)
 >>> str(daq)
-'<dummy_daq.DummyDaq object at 0x7fe8c53c0c50>'
+'<analog_daq.AnalogDaq object at 0x7fe8c53c0c50>'
 \end{minted}
 
-The result of doing \mintinline{python}{str(daq)} may not be what you were
-expecting. It is, however, a good starting point, because it allows you
-to identify which class did you use to define the daq. Fortunately, this
-can be improved. Open the file where you store the \mintinline{python}{DummyDaq}
-class and add the following to it:
+The result of doing \mintinline{python}{str(daq)} may not be what you were expecting. It is, however, a good starting point, because it allows you to identify which class did you use to define the daq. Fortunately, this can be improved. Open the file where you store the \mintinline{python}{AnalogDaq} class and add the following to it:
 
 \begin{minted}{python}
 def __str__(self):
-    return "DummyDaq"
+    return "AnalogDaq"
 \end{minted}
 
-If you repeat the steps above, you will see that now, the output of
-doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"DummyDaq"}. The
-\mintinline{python}{__str__} method of a class tells Python how to convert an
-object to a string. It is also responsible for the behavior of
-\mintinline{python}{print(daq)}. Now you will have a nicely formatted string to
-store in your \mintinline{python}{properties} dictionary. Remember that if you
-assign the same output for the \mintinline{python}{__str__} method, to two
-different classes, you won't be able to distinguish which one you used.
+If you repeat the steps above, you will see now that the output of doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"AnalogDaq"}. The
+\mintinline{python}{__str__} method of a class tells Python how to convert an object to a string. It is also responsible for the behavior of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. Therefore, deciding what to include in the string representation requires some thinking. In principle, you can also add something that identifies that specific DAQ such as its serial number or the port to which it is connected. 
 
-There is something else that is worth learning at this stage. If the
-user supplies a class, you won't be certain that it is the correct
-class. It is wise to verify every user input that can alter the
-functioning of the program. For example, loading the daq can happen at
-the beginning of your code, but perhaps you use it much later. If an
-error occurs because it was the wrong class the program is going to
-crash and you are going to lose very valuable time because of a
-simple mistake.
+There is something else that is worth discussing at this stage. Remember that in principle we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash, before it was able to write the data to the hard drive. 
 
-If you think about what the {DAQ} Models have in common, you should
-realize that it is that both of them are child classes of the DAQBase
-class. Therefore, if you want to know if you are dealing with the proper
-model, you should check whether the daq variable that \mintinline{python}{load_daq}
-is getting is actually derived from the base model. There is no easy way
-of doing this in Python, and therefore you can build a workaround.
-First, update the base model for the daq, adding a property called
-\mintinline{python}{_type}:
+Even if the example above can be a bit of an extreme, it can be wise to verify the user input, especially if it can alter the functioning of the program in some very wrong ways. If you think about what the {DAQ} Models have in common, you should realize that it is that both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting is actually derived from the base model. To achieve this, you will need to update the experiment model, pay attention to the first line, which should be at the top of the file:
 
 \begin{minted}{python}
-class DAQBase(object):
-    _type = 'DAQModel'
-    def __init__(self, port):
-        pass
-\end{minted}
+from PythonForTheLab.Model.daq.base import DAQBase
 
-Every child of \mintinline{python}{DAQBase} will have a property called
-\mintinline{python}{_type} that can be used to identify the model. Therefore, you
-can update the \mintinline{python}{load_daq} in the experiment model with
-the following:
+[...]
 
-\begin{minted}{python}
-def load_daq(self, daq):
-    if daq._type is not 'DAQModel':
-        raise Exception('The DAQ Model specified \
-                    should be a child of DAQ Base')
+	def load_daq(self, daq):
+	    if not isinstance(daq, DAQBase):
+	        raise Exception('The DAQ Model specified should be a child of DAQ Base')
     [...]
 \end{minted}
 
-It is not a particularly elegant solution, but it works in most cases.
-Remember that with this approach you should be consistent in the naming
-conventions. If different models end up being called DAQModel, the check
-may give you unexpected warnings. The same works for the
-\mintinline{python}{__str__} method since you are using it to identify the
-model you used, if two different models end up calling themselves in the
-same way, you won't be able to tell which one you used.
+The \mintinline{python}{isinstance} function is very useful to check whether the object we are inspecting belongs to a special class, including parents. It works not only with custom classes, but also with default data types of Python, for example:
 
-The first approach on how to load the daq model into the experiment is
-relatively easy. Now it is time to work on the second approach. The idea
-is that you will load a specific class based on what the {YAML} file
-specifies. In the first approach, you have updated the properties of the
-experiment model, adding an extra key called \mintinline{python}{DAQ}. Therefore,
-you should do the same in the {YAML} file \textbf{experiment.yml}:
+\begin{minted}{pycon}
+>>> a = 1
+>>> isinstance(a, int)
+True
+>>> isinstance(a, str)
+False
+\end{minted}
+
+Now we know that if the program is to continue, the user should have provided a model which inherits from the DAQBase class. This is one approach, which seems very adequate, but which may have some friction in the Python community. Many developers follow a pattern called duck typing. In a broad sense, it means that if a class behaves as expected, why would you care about what type of class it is? If someone develops a valid DAQ class, the only difference is that it does not inherit from DAQBase, is it correct to raise an exception? The discussion is not closed at all. You will find some people who are strong opponents of duck typing, other who are strong followers. Once you gain experience, you can make your own call. For the time being, our code is quite robust even if it could be at the expense of loosing flexibility later on. 
+
+The first approach on how to load the daq model into the experiment is relatively easy, and is a pattern that will be repeated also in other places. Whenever you need information from outside the class, in this case the DAQ model, you can create a method which accepts that information and you store it as an attribute. This will make it available throughout your class, in any other method. 
+
+Let's see how the second approach would look like. The idea is that the experiment model will load a class based on what the {YAML} file specifies. In the first approach, you have updated the properties of the
+experiment model, adding an extra key called \mintinline{python}{DAQ}. Therefore, we can do the same in the {YAML} file \textbf{experiment.yml}:
 
 \begin{minted}{python}
 User: me
@@ -194,22 +163,21 @@ DAQ:
   port: 0
 \end{minted}
 
-Next time you use the method \mintinline{python}{load_config}, you will also have a
-key for the {DAQ}. Importing a module into Python can also be done
-within a function, at any step of the program. You can also do it within
-the \mintinline{python}{load_daq} method of the Experiment class. Since you want to
-be able to provide a daq externally, you have to do the following:
+Next time you use the method \mintinline{python}{load_config}, you will also have a key for the {DAQ}. Importing a module into Python can be done at any stage of the program, also within a function or class method. We can therefore do it within the \mintinline{python}{load_daq} method of the Experiment class. For the time being we have developed only one DAQ, AnalogDaq, but let's assume we have a second one available, called DummyDaq (which we will actually develop by the end of this chapter), the method for loading the daq would look like:
 
 \begin{minted}{python}
 def load_daq(self, daq=None):
     if daq is None:
-        name = self.properties['Experiment']['DAQ']['name']
-        port = self.properties['Experiment']['DAQ']['port']
+        try:
+	       name = self.properties['Experiment']['DAQ']['name']
+            port = self.properties['Experiment']['DAQ']['port']
+        except KeyError:
+            raise Exception('You must either provide a daq or specify it in the configuration file')
         if name == 'DummyDaq':
             from PythonForTheLab.Model.daq import DummyDaq
             self.daq = DummyDaq(port)
         
-        elif self.properties['DAQ']['name'] == 'RealDaq':
+        elif self.properties['DAQ']['name'] == 'AnalogDaq':
             from PythonForTheLab.Model.daq import AnalogDaq
             self.daq = AnalogDaq(port)
         
@@ -220,68 +188,43 @@ def load_daq(self, daq=None):
         # Here goes the same code you had before
 \end{minted}
 
-The first to notice is that we have added a default value for the
-\mintinline{python}{daq} argument. Adding a default value allows you to use the
-method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If
-you call the method without an argument, \mintinline{python}{if daq is None} will
-be \mintinline{python}{True}. The way of importing the different models is quite
-straightforward, you check the name and make the import. However, it is
-not very flexible. If you ever add a model for a new device, you need to
-manually add it to the experiment model.
+The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case \mintinline{python}{None}. Adding a default value allows you to use the
+method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another failsafe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweights the flexibility. 
 
-\exercise{Go ahead and trigger the exception by defining a name of the {DAQ}
-different from `DummyDaq' or `RealDaq'. What happens to the code after
-the exception? Does it get executed?}
+The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specifcied in the past. Adding default values when you add new input to your methods or functions is an excellent way of keeping backwards compatibility. Sometimes it will not be possible though. Bigger libraries, such as numpy, normally release intermediate versions, in which a warning appears telling you that in a future version a function will change, and they normally document it quite extensively. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
 
-The way in which you are handling the import of different classes in the code above is not a particularly elegant solution, but it works.
-Switching between DAQs is something that can happen, but it won't happen
-often enough to justify more complexity at this time. It is worth
-noting, however, that if you plan to make your code available to users
-with different devices, you should find a less pedestrian way of doing
-importing and initializing the classes that you need. However, it is a
-more complex behavior, and it will not be discussed in this book. If you
-are interested in this and other useful ideas, you can check
-\emph{Advance topics for Python in the Lab}.
+\exercise{Go ahead and trigger the exception by defining a name of the {DAQ} different from `DummyDaq' or `RealDaq'. What happens to the code after the exception? Does it get executed?}
+
+There is something else that is very easy to overlook. Imagine you run the experiment supplying the daq yourself, and then you save the properties dictionary in YAML format. The information contained will include the name of the DAQ and the port. If you use that file as a configuration file, the experiment model will be able to load the DAQ automatically, without you having to initialize it beforehand. This happens only because the string representation of our model coincides with the options of the \mintinline{python}{load_daq}. This, however is not mandatory. If you want to enforce it, you need to write very clear documentation, explaining it. You  may also take a different approach. Since we are forcing all DAQs to be children of DAQBase, we can add the following to DAQBase:
+
+\begin{minted}{python}
+    def __str__(self):
+        return self.__class__.__name__
+\end{minted}
+
+And then just remove the \mintinline{python}{__str__} method from AnalogDaq. What we have done is that by default the string representation of a class is the name of the class. This may not be wise in all contexts, but at least you get to see the power of inheritance and how to use some of the magic methods of Python. 
 
 \section{Defining a Scan}\label{defining-ascan}
-The goal of the project is to measure the {IV} curve of a diode.
-Therefore, doing a scan means changing an analog voltage output in a
-controlled way and, at the same time, recording an analog input. This
-kind of measurement is very common in a lot of different experiments,
-not only for electronics.
+The goal that we were set to achieve at the beginning of the book is to measure the {IV} curve of a diode. Therefore, doing a scan means changing an analog voltage output in a controlled way and, at the same time, recording an analog input. This kind of measurement is very common in a lot of different experiments, not only in electronics.
 
-\exercise{Think at least three different examples of experiments that you can
-perform by changing an analog output and recording an analog input.}
+\exercise{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
-Performing a scan requires some parameters, that you should have defined
-in previous chapters, in any case, you can find them below as well.
+Performing a scan requires some parameters, that you should have defined in previous chapters, in any case, you can find them below as well.
 
 \begin{minted}{yaml}
 Scan:
-  port_in: 2
-  port_out: 1
+  channel_in: 2
+  channel_out: 1
   start: 0.1V
   stop: 0.7V
   step: 0.1V
   delay: 10ms
 \end{minted}
 
-\mintinline{python}{port_in} and \mintinline{python}{port_out} are the numbers of the ports
-needed for the scan, i.e., the analog in and the analog out.
-\mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output
-parameters, note that units are added, and we will see how to deal with
-them later. It is important to point out that they don't need to have
-the same unit but they have to be the same quantity. For example, you
-can mix \mintinline{python}{mV}, \mintinline{python}{nV}, \mintinline{python}{V}, etc. The delay means how
-often the output is going to change from one value to the next.
+\mintinline{python}{channel_in} and \mintinline{python}{channel_out} are the numbers of the channels on the DAQ needed for the scan, i.e., the analog in and the analog out. \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output parameters. Note that units are added, and we will see how to deal with them later. It is important to point out that they don't need to have the same unit but they have to be the same quantity. For example, you can mix \textttt{mV},  \textttt{nV},  \textttt{V}, etc. The delay means how often the output is going to change from one value to the next.
 
-The advantage of starting by defining the parameters in a {YAML} file is
-that now you know what parameters do you have available and what are
-their names. The next step is to create the method for doing the scan.
-You have already done the scan before, so you can adapt the code that
-you have developed in the past. If you remember, the general idea is to
-generate an output and record an input within a \emph{for loop} with the
-range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You
+The advantage of starting by defining the parameters in a {YAML} file is that now you know what parameters you have available and what are their names. The next step is to create the method for doing the scan. You have already done a scan in the previous chapters. If you dig up the code, you can adapt it in order to make it work as a method in the experiment class. The general idea is to
+generate an output and record an input within a \emph{for loop} with the range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You
 should have something like this:
 
 \begin{minted}{python}
@@ -300,36 +243,20 @@ def do_scan(self):
     scan_values = np.linspace(start, stop, num_points)
 
     for value in scan_values:
-        value = value
         self.daq.set_analog_value(port_out, value)
         data = self.read_analog(port_in)
-            sleep(delay)
+        sleep(delay)
 \end{minted}
 
-The code is quite clear. The first step is to store the parameters of
-the scan into a variable called \mintinline{python}{scan_params}. This is only a
-way of shortening the amount of typing required later on. The loop is
-responsible for changing the output value and reading the analog input.
-As you can probably see, there are some issues that you will need to
-solve, one by one.
+The code is quite clear. The first step is to store the parameters of the scan into a variable called \mintinline{python}{scan_params}. This is only a way of shortening the amount of typing required later on. The loop is responsible for changing the output value and reading the analog input. Probably you have realized that there are some issues with the code above which we will need to solve, one by one.
 
-\exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every
-step. This is not what you want if you intend to do anything with it.
-Store the information into an array. The array should be a property of
-the class, i.e. it should be defined in the \mintinline{python}{__init__} method
-and you can refer to it as \mintinline{python}{self.NAME_OF_VARIABLE}.}
+\exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every step. This is not what you want if you intend to do anything with it. Store the information into an array. The array should be an attribute of the class, i.e. it should be defined in the \mintinline{python}{__init__} method and you can refer to it as \mintinline{python}{self.NAME_OF_VARIABLE}.}
 
-The advantage of having the data stored in a property is that it
-becomes available to other methods of the class and that it is
-accessible from outside of it, for example for plotting. However,
-storing the data is only one of the concerns that need to be addressed.
-The other one is that the parameters that you are using have units
-attached to them, and yaml is reading them as a string that needs to be
-transformed into units.
+The advantage of having the data stored in an attribute is that it becomes available to other methods of the class and that it is accessible from outside of it, for example for plotting. However,
+storing the data is only one of the concerns that need to be addressed. The other one is that the parameters that you are using have units attached to them, and yaml is reading them as a string that needs to be
+transformed into quantities.
 
-We have covered how to use units in Python when you developed the first
-driver for the {PFTL} {DAQ}. You have to use the Unit Registry from a
-package called Pint. The code looked like this:
+We have covered how to use units in Python when you have developed the first driver for the {PFTL} {DAQ}. You have to use the Unit Registry from a package called Pint. The code looked like this:
 
 \begin{minted}{pycon}
 >>> from pint import UnitRegistry
@@ -337,14 +264,7 @@ package called Pint. The code looked like this:
 >>> var = ur.Quantity('5V')
 \end{minted}
 
-With this code, \emph{Pint} interprets a string,
-\mintinline{python}{'5V'} and transforms it into a
-quantity. You could add the same code at the beginning of the
-\emph{experiment} model, and transform the parameters when you use them,
-or you can have a more elegant approach. In the root of your project,
-the folder that contains the folders \emph{Model}, \emph{View} and
-\emph{Controller}, create a file called \textbf{\_\_init\_\_.py} and add
-the following code to it:
+With this code, \emph{Pint} interprets a string, \mintinline{python}{'5V'} and transforms it into a quantity. You could add the same code at the beginning of the \emph{experiment} model, and transform the parameters when you use them, or you can have a more elegant approach. In the root of your project, the folder that contains the folders \emph{Model}, \emph{View} and \emph{Controller}, create a file called \textbf{\_\_init\_\_.py} and add the following code to it:
 
 \begin{minted}{python}
 from pint import UnitRegistry
@@ -352,25 +272,18 @@ ureg = UnitRegistry()
 Q_ = ureg.Quantity
 \end{minted}
 
-At the top of the file where you define the experiment model, you
-can add:
+At the top of the file where you define the experiment model, you can add:
 
 \begin{minted}{python}
 from PythonForTheLab import Q_
 \end{minted}
 
-And you can use \mintinline{python}{Q_} for transforming the parameters into
-quantities, simply doing \mintinline{python}{Q_(parameter)}.
+And you can use \mintinline{python}{Q_} for transforming the parameters into quantities, simply doing \mintinline{python}{Q_(parameter)}.
 
-\exercise{Update the code to transform each one of the appropriate parameters to a
-Quantity. Remember that the port numbers are supposed to be integers,
-not quantities.}
+\exercise{Update the code to transform each one of the appropriate parameters to a Quantity. Remember that the port numbers are supposed to be integers, not quantities.}
 
-Once you start working with units, you need to take care of other
-concerns. For example, to calculate the number of points in your scan,
-you should transform all the parameters to the same quantity. One of the
-possible ways of doing it is by picking the units of one of the
-parameters, like this:
+Once you complete the exercise above, one of the problems was addressed. But still, if you try to run the program you will face other issues. For example, to calculate the number of points in the scan,
+we should transform all the parameters to the same units. One of the possible ways of doing it is by picking the units of one of the parameters, like this:
 
 \begin{minted}{python}
 units = start.u
@@ -380,33 +293,21 @@ num_points = (stop-start)/step
 num_points = int(num_points.m_as(''))+1
 \end{minted}
 
-The \mintinline{python}{u} grabs the units from a \emph{Quantity}. You transform
-everything into the same units to avoid problems with the number of
-points you are computing. However, when dividing quantities, the result
-will be another quantity, just that \emph{dimensionless}. To transform
-it to a number, you have to append
-\mintinline{python}{.m_as('')}. Doing
-\mintinline{python}{num_points.m_as('')} means
-that you want to take the magnitude of the variable, without units, and
-the \mintinline{python}{''} are there because we
-are dealing with a dimensionless quantity. It is possible to do things
-like \mintinline{python}{start.m_as('pV')}.
+The \mintinline{python}{u} grabs the units from a \emph{Quantity}. You transform everything into the same units to avoid problems with the number of points you are computing. However, when dividing quantities, the result will be another quantity, just that \emph{dimensionless}. To transform it to a number, you have to append \mintinline{python}{.m_as('')}. Doing \mintinline{python}{num_points.m_as('')} means that you want to take the magnitude of the variable, without units, and the \mintinline{python}{''} are there because we are dealing with a dimensionless quantity. 
 
-There is one more parameter that you need to take care of. The
-\mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes
-seconds as an argument. The easiest way to deal with it is simply
-writing the following:
+\exercise{What happens if you calculate the number of points without transforming start, stop and step to the same units?}
+
+There is one more parameter that you need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is simply writing the following:
 
 \begin{minted}{python}
 sleep(delay.m_as('s'))
 \end{minted}
 
-Which ensures that you use the delay magnitude expressed in seconds. If
-you use milliseconds or hours for that matter, it will be translated
-into the proper number before the \mintinline{python}{sleep} function uses it. With
-this changes, your code is ready for performing a scan. There are some
-concerns, such as how do you stop a scan while it is running. But the
-core ideas and methods are already there.
+Which ensures that you use the delay magnitude expressed in seconds. 
+
+!!!!
+
+If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With this changes, your code is ready for performing a scan. There are some concerns, such as how do you stop a scan while it is running. But the core ideas and methods are already there.
 
 \section{Dummy DAQ}\label{dummy-daq}
 The previous sections have been focused onto developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device
