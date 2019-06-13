@@ -250,7 +250,7 @@ def do_scan(self):
 
 The code is quite clear. The first step is to store the parameters of the scan into a variable called \mintinline{python}{scan_params}. This is only a way of shortening the amount of typing required later on. The loop is responsible for changing the output value and reading the analog input. Probably you have realized that there are some issues with the code above which we will need to solve, one by one.
 
-\exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every step. This is not what you want if you intend to do anything with it. Store the information into an array. The array should be an attribute of the class, i.e. it should be defined in the \mintinline{python}{__init__} method and you can refer to it as \mintinline{python}{self.NAME_OF_VARIABLE}.}
+\exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every step. This is not what you want if you intend to do anything with it. Store the information into an array. The array should be an attribute of the class, i.e. it should be defined in the \mintinline{python}{__init__} method and you can refer to it as \mintinline{python}{self.scan_data}.}
 
 The advantage of having the data stored in an attribute is that it becomes available to other methods of the class and that it is accessible from outside of it, for example for plotting. However,
 storing the data is only one of the concerns that need to be addressed. The other one is that the parameters that you are using have units attached to them, and yaml is reading them as a string that needs to be
@@ -282,8 +282,7 @@ And you can use \mintinline{python}{Q_} for transforming the parameters into qua
 
 \exercise{Update the code to transform each one of the appropriate parameters to a Quantity. Remember that the port numbers are supposed to be integers, not quantities.}
 
-Once you complete the exercise above, one of the problems was addressed. But still, if you try to run the program you will face other issues. For example, to calculate the number of points in the scan,
-we should transform all the parameters to the same units. One of the possible ways of doing it is by picking the units of one of the parameters, like this:
+Once you complete the exercise above, one of the problems was addressed. But still, if you try to run the program you will face other issues. For example, to calculate the number of points in the scan, we should transform all the parameters to the same units. One of the possible ways of doing it is by picking the units of one of the parameters, like this:
 
 \begin{minted}{python}
 units = start.u
@@ -303,16 +302,41 @@ There is one more parameter that you need to take care of. The \mintinline{pytho
 sleep(delay.m_as('s'))
 \end{minted}
 
-Which ensures that you use the delay magnitude expressed in seconds. 
+Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With this changes, your code is ready for performing a scan. 
 
-!!!!
+Since everything is working, we may be temped to step ahead. However, it is worth discussing how Pint and Numpy play along, since it can give raise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
 
-If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With this changes, your code is ready for performing a scan. There are some concerns, such as how do you stop a scan while it is running. But the core ideas and methods are already there.
+\begin{minted}{pycon}
+>>> start = Q_('5V')
+>>> stop = Q_('10V')
+>>> num_points = 6
+>>> np.linspace(start, stop, num_points)
+array([ 5.,  6.,  7.,  8.,  9., 10.])
+\end{minted}
+
+We see in the output that the array doesn't have units. That is not particularly bad, it is easy to add them later. But what happens if we mix different units?
+
+\begin{minted}{pycon}
+>>> start = ur('5mV')
+>>> np.linspace(start, stop, num_points)
+array([ 5.,  6.,  7.,  8.,  9., 10.])
+\end{minted}
+
+Surprisingly, what is happening is that Pint stripped the units from the quantities and just used the magnitude. This is a huge problem for our program. If at some point a user mixes units for start and stop, our program will behave in a completely unintended way. These kind of bugs are very hard to find and to solve because the only indication of something going badly is when we look at the data and we realize that something is incredibly off. The number of points is correct, but the values used for the output are not. 
+
+In our solution, we have forced the same units, because we assumed that we needed them to calculate the number of points in our scan. The reality is that we don't need to do it for the number of points, but we do need it for the scan dimension. There is only one last thing that we are missing and is that we should use units when we set the output on our device. Therefore the quickest way of doing it is like this:
+
+\begin{minted}{python}
+def do_scan(self):
+    [...]
+    units = start.u
+    stop = stop.to(units)
+    scan = np.linspace(start, stop, num_points) * units
+\end{minted}
+
 
 \section{Dummy DAQ}\label{dummy-daq}
-The previous sections have been focused onto developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device
-connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you
-can define a fake model that generates fake data. We like calling fake devices of \textbf{dummy} devices. 
+The previous sections have been focused onto developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. 
 
 Create a new file called \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
 
@@ -325,24 +349,13 @@ class DummyDaq(DAQBase):
         return self.serial_number
 \end{minted}
 
-You start by importing the base class \mintinline{python}{DAQBase}, as you did for
-the real \emph{model}, but you don't need the controller since you are
-not going to communicate with any device. The class defines a fake
-serial, just to be able to return it as if it was the real device. Now
-you have to think what do you actually expect from a fake device. Since
-you are developing a dummy {DAQ}, you don't need to do anything when
-setting a value to an output, but you do need to get a value when you
-read back. And you need to use the proper units as well. It can look
-something like this:
+You start by importing the base class \mintinline{python}{DAQBase}, as you did for the real \emph{model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to get a value when you read back. And you need to use the proper units as well. It can look something like this:
 
 \begin{minted}{python}
 import numpy as np
-import pint
-
+from PythonForTheLab import Q_
 from .base import DAQBase
 
-ur = pint.UnitRegistry()
-V = ur('V')
 
 class DummyDaq(DAQBase):
     serial_number = '1234ABC'
@@ -353,97 +366,40 @@ class DummyDaq(DAQBase):
     def idn(self):
         return self.serial_number
     
-    def get_analog_value(self, port):
-        return np.random.random(1)*V
+    def get_analog_value(self, channel):
+        return np.random.random(1)*Q_('V')
+
 \end{minted}
 
-The \mintinline{python}{idn} is quite clear, it just returns the serial number that
-was defined during initialization. The \mintinline{python}{get_analog_value}
-accepts a port as a parameter, even if they don't use it, but you need
-to keep the compatibility with what was already defined. The value that
-is returned is a random number with volts as units. Remember that the
-random generator outputs values only between 0 and 1. You can try to run
-the test, but using this DummyClass instead. Open the file
-\textbf{test\_daq.py}, and replace the line:
+The \mintinline{python}{idn} is quite clear, it just returns the serial number that was defined beforehand. The \mintinline{python}{get_analog_value} accepts a channel as a parameter, even if it doesn't use it, you need to keep the compatibility with what was already defined. The value that is returned is a random number with volts as units. Remember that the random generator outputs values only between 0 and 1. You can try to run the test, but using this DummyDaq instead. Open the file \textbf{test\_daq.py}, and replace the line:
 
 \begin{minted}{python}
 # from analog_daq import AnalogDaq
 from dummy_daq import DummyDaq as AnalogDaq
 \end{minted}
 
-And run \textbf{test\_daq.py}. You will see that an error appears
-because you are using the \mintinline{python}{initialize} method in the test, but it
-is not defined within the class. This happened because you included
-\mintinline{python}{initialize} in the
-\mintinline{python}{AnalogDaq} but you never added it to the DAQBase.
-Now you see the power that being organized and systematic has. Keeping
-track of the methods in a general, base class, allows you not to make
-the same mistakes. Moreover, it would have allowed you to run the test
-without issues.
+And run \textbf{test\_daq.py}. You will see that an error appears because we are using the \mintinline{python}{initialize} method in the test, but it is not defined within the class. This happened because we included \mintinline{python}{initialize} in the \mintinline{python}{AnalogDaq} but we never added it to the DAQBase. Now you see the power that has being organized and systematic. Keeping track of the methods in a base class, allows you not to make the same mistakes. Moreover, it would have allowed you to run the test without issues.
 
 \exercise{Add an \mintinline{python}{initialize} method into the base class.}
 
-If you run the test after completing the exercise, you will see that
-there are no errors appearing, even if you don't modify the dummy class.
-Now you see that you can exchange the models in a relatively simple way,
-and the script that is responsible for measuring works without problems.
-Of course, this is a simple example, where you exchange a real device
-for a dummy one, but if you would have two different devices, exchanging
-them would have been just as simple and the measurement would have
-been performed.
+If you run the test after completing the exercise, you will see that there are no errors appearing, even if you don't modify the dummy class. Now you see that you can exchange the models in a relatively simple way, and the script that is responsible for measuring works without problems. Of course, this is a simple example, where you exchange a real device for a dummy one, but if you would have two different devices, exchanging them would have been just as simple and the measurement would have been performed regardless of which device you are using.
 
-\exercise{Make the \mintinline{python}{get_analog_value} return the value of a sine function
-and not just a random value.}
+\exercise{Make the \mintinline{python}{get_analog_value} return the value of a sine function and not just a random value.}
 
-\section{Conclusions}\label{conclusions}
-With this chapter, the core code for a functioning experiment is
-finished. Since the beginning of the book, you have developed from a
-driver to the logic of how to perform a scan, including how to use text
-files to store the parameters that you need. Of course there are things
-that can be done better but, in any case, what you have achieved so far
-is functioning and useful.
+\section{Conclusions}\label{experiment-model-conclusions}
+With this chapter, the core code for a functioning experiment is finished. We went from the development of a driver for a device, to splitting the code into controllers and models. Defining a scan as we did in this chapter was so simple because of all the previous preparation. Of course there are things that we can do better but what we have achieved so far is functioning and quite useful.
 
-When you develop your own program, it can be wise to start with the
-experiment model. Once you established the steps of a measurement it
-will become clear what do you need to develop in order to achieve it. It
-is a good way of being focused on a clear objective. If you are
-developing a driver, or a model, without knowing to what end, you may
-end up creating methods and options that you don't really need.
+When you develop your own program, it can be wise to start with the experiment model. Once you established the steps of a measurement it will become clear what you need to develop in order to achieve it. Starting by outlining the experiment model is a good way of being focused on a clear objective. If you are developing a driver, or a model, without knowing to what end, you may end up creating methods and options that you don't really need.
 
-In this chapter, you also start to realize that if you plan to open your
-code to others, not just as developers, but as users, you will need to
-verify the input that they supply. For example, you learned how to
-verify that the {DAQ} model is actually what you want. Following that
-idea, there are several improvements to your code, for example, you can
-check if the units of the parameters used are correct.
+In this chapter, you also start to realize that if you plan to open your code to others, not just as developers, but as users, you will need to verify the input that they supply. For example, you learned how to verify that the {DAQ} model is actually what you want. Following that idea, there are several improvements to your code, for example, you can check if the units of the parameters used are correct. It is not the same trying to apply $5\,\textrm{V}$ to an analog output than $5,\textrm{nm}$. 
 
 \section{Extras: Defining a Monitor}\label{extras-defining-amonitor}
-The clear objective of the book is to show you how to build the software
-that you need in order to measure an I-V curve of a diode. However,
-there are some other options that you can add to the program, such as
-continuous monitoring of a signal. In a lot of experiments, measuring a
-signal is all you need, especially in the phase of setting up. Imagine
-that you are monitoring a temperature, perhaps you need to wait until it
-reaches a certain value, or you monitor the signal generated by a
-photodiode in order to align a laser.
+The principal objective of this book is to show you how to build the software that you need in order to measure the I-V curve of a diode. However, there are some other options that you can add to the program, such as continuous monitoring of a signal. In a lot of experiments, measuring a signal is all you need, especially in the phase of setting up. Imagine that you are monitoring a temperature, perhaps you need to wait until it reaches a certain value, or you monitor the signal generated by a photodiode in order to align a laser.
 
-Monitoring a signal is somehow simpler than performing a scan because
-you have fewer options. The parameters that you need are the port to
-monitor, the total time, and time resolution of the monitor. The total
-time is for how long do you want to acquire a signal before it starts
-overwriting the information, and the time resolution defines the time
-interval between consecutive acquisitions. The main difficulty with a
-monitor is that the loop should be infinite and you should be able to
-stop it somehow. We will see that in the next chapter, for the time
-being, you can complete the exercises:
+Monitoring a signal is somehow simpler than performing a scan because you have fewer options. The parameters that you need are the channel to monitor, the total time, and time resolution of the monitor. The total time means for how long do you want to acquire a signal before it starts overwriting the information, and the time resolution defines the time interval between consecutive acquisitions. The main difficulty with a monitor is that the loop should be infinite and you should be able to stop it somehow. We will see that in the next chapter, for the time
+being, you can complete these exercises:
 
-\exercise{Add one more block in the {YAML} file with the parameters that you need
-to monitor a signal}
+\exercise{Add one more block in the {YAML} file with the parameters that you need to monitor a signal}
 
-\exercise{Define a new method, called \mintinline{python}{monitor_signal} that used the
-parameters defined in the previous exercise to continuously acquire a
-value. If you want to test how the monitor works, you can make the loop
-stop after a certain amount of time, for example using the module
-\mintinline{python}{time.time()}.\\ 
-\textbf{{HINT}}: You should define a numpy array where to store the data. In order to move all the values one step to the
-left (or right), you can use \mintinline{python}{np.roll}.}
+\exercise{Define a new method, called \mintinline{python}{monitor_signal} that uses the parameters defined in the previous exercise to continuously acquire a value. If you want to test how the monitor works, you can make the loop stop after a certain amount of time, for example using the module \mintinline{python}{time.time()}.\\ 
+\textbf{{HINT}}: You should define a numpy array where to store the data. In order to move all the values one step to the left (or right), you can use \mintinline{python}{np.roll}.}
