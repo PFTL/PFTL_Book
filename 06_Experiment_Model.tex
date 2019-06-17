@@ -27,7 +27,7 @@ class Experiment:
 
 The class defines three attributes: a \mintinline{python}{user}, a \mintinline{python}{daq}, and \mintinline{python}{properties}. The user is set to \mintinline{python}{None} by default, but it is useful to keep track of who is running an experiment and saving its results. The \texttt{daq} attribute is where we are going to keep the DAQ model, and the \texttt{properties} are going to be a dictionary with all the parameters needed to perform a measurement. 
 
-\exercise{If you want to get the username of the user logged in on the computer, you can try the package \emph{getpass}, which you can test by running \mintinline{python}{getpass.getuser(). Bear in mind that if several users share the same log-in, this approach is useless.}.
+\exercise{If you want to get the username of the user logged in on the computer, you can try the package \emph{getpass}, which you can test by running \mintinline{python}{getpass.getuser()}. Bear in mind that if several users share the same log-in, this approach is useless.}.
 
 It is important to show the kind of functionality we are after in order for you to have a clearer picture of what is missing. The idea is that to perform a measurement, you would write a short script like the one below:
 
@@ -221,7 +221,7 @@ Scan:
   delay: 10ms
 \end{minted}
 
-\mintinline{python}{channel_in} and \mintinline{python}{channel_out} are the numbers of the channels on the DAQ needed for the scan, i.e., the analog in and the analog out. \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output parameters. Note that units are added, and we will see how to deal with them later. It is important to point out that they don't need to have the same unit but they have to be the same quantity. For example, you can mix \textttt{mV},  \textttt{nV},  \textttt{V}, etc. The delay means how often the output is going to change from one value to the next.
+\mintinline{python}{channel_in} and \mintinline{python}{channel_out} are the numbers of the channels on the DAQ needed for the scan, i.e., the analog in and the analog out. \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output parameters. Note that units are added, and we will see how to deal with them later. It is important to point out that they don't need to have the same unit but they have to be the same quantity. For example, you can mix \texttt{mV},  \texttt{nV},  \texttt{V}, etc. The delay means how often the output is going to change from one value to the next.
 
 The advantage of starting by defining the parameters in a {YAML} file is that now you know what parameters you have available and what are their names. The next step is to create the method for doing the scan. You have already done a scan in the previous chapters. If you dig up the code, you can adapt it in order to make it work as a method in the experiment class. The general idea is to
 generate an output and record an input within a \emph{for loop} with the range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You
