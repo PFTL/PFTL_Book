@@ -1,18 +1,18 @@
 \chapter{Writing The Experiment Model}\label{chapter:experiment-model}
 
 \section{Objectives}
-In the previous chapter, we have seen how to define a model for a device. Models specify the logic behind the use of a device. In the previous chapter, for example, we have implemented the use of units. The manual of the device specifies that values must be integers in a pre-determined range, but working with volts is much handier for the purpose of the experiment we are performing. 
+In the previous chapter, we have seen how to define a model for a device. Models specify the logic behind the use of a device. In the previous chapter, for example, we have implemented the use of units. The manual of the device specifies that values must be integers in a predetermined range, but working with volts is much handier for the purpose of the experiment we are performing. 
 
-However, models for devices alone are not sufficient perform a complete measurement. For example, we are still missing a way to save data. We are also missing a way of transforming a voltage to a current, or the to perform a scan in a given range. In this chapter, we are going to see how to define a model for the entire experiment. The \emph{experiment model} will include all the steps that build a measurement.
+However, models for devices alone are not sufficient to perform a complete measurement. For example, we are still missing a way to save data. We are also missing a way of transforming a voltage to a current, or the to perform a scan in a given range. In this chapter, we are going to see how to define a model for the entire experiment. The \emph{experiment model} will include all the steps that build a measurement.
 
 \section{Introduction}
 In the \textbf{MVCs} design pattern, the \emph{Model} is where all the logic and experimental decisions should be placed. In the previous chapter, for example, you have decided that you wanted to use voltage as the default units to handle inputs and outputs. However, this is not always the handiest. Imagine you use the same {DAQ} device connected to a piezo stage. Voltage is going to be translated to nanometers or microns, and the program should take it into account. In this book, measuring the IV curve of a diode requires you to measure the current passing through a diode, but the physical quantity that you are actually measuring is a voltage.
 
 Following the \emph{onion principle}, it makes sense to define volts as the default units for the device, because it is what it outputs and what it measures. With a simple example such as the one in this book, it is hard to understand what are the limits for the models of devices and for the experiment. One of the parameters you can think of is about the future. Do you think that the model we have developed can be used by someone else in a different context? For example, if you were to start developing a program for a confocal microscope, would you be able to re-use the {PFTL DAQ} model? If the answer is yes, then it is a good start. The truth is that you can't really know what is going to be the future of your program in a year's time.
 
-In this chapter we are going to add another layer to the onion. So far, we are able to set a and read a voltage with our DAQ device. However, we would like to perform a scan, specifying voltages for start, stop, and step, for example. A model for experiments will allow you to quickly develop the logic that drives a measurement. In a more complex scenario, you may want to switch-on a laser only if a shutter is closed, and then you would like to open the shutter before doing a measurement. In the example that concerns us, measuring the  I-V curve, we are going to deal with inputs and outputs of one device. But remember that in more complicated setups this will most likely not be the case.
+In this chapter, we are going to add another layer to the onion. So far, we are able to set a and read a voltage with our DAQ device. However, we would like to perform a scan, specifying voltages for start, stop, and step, for example. A model for experiments will allow you to quickly develop the logic that drives a measurement. In a more complex scenario, you may want to switch-on a laser only if a shutter is closed, and then you would like to open the shutter before doing a measurement. In the example that concerns us, measuring the  I-V curve, we are going to deal with inputs and outputs of one device. But remember that in more complicated setups this will most likely not be the case.
 
-Writing an experiment model as a Python class has a twofold advantage. On the one hand, it isnaturally going to lead to reproducible experiments. If you keep track of the parameters you use and do version control on the model, you can go back exactly to the same conditions in which you have performed a specific measurement. On the other hand, there is a more technical benefit in defining the experiment as a class. Once we are ready, the model is going to perform as the backend of our program, and it is going to be very easy to build a Graphical User Interface ({GUI}) on top of it.
+Writing an experiment model as a Python class has a twofold advantage. On the one hand, it is naturally going to lead to reproducible experiments. If you keep track of the parameters you use and do version control on the model, you can go back exactly to the same conditions in which you have performed a specific measurement. On the other hand, there is a more technical benefit in defining the experiment as a class. Once we are ready, the model is going to perform as the backend of our program, and it is going to be very easy to build a Graphical User Interface ({GUI}) on top of it.
 
 \section{Starting the Experiment Class}\label{starting-the-experimentclass}
 In section \ref{subsection:loading-the-config}, we have started defining a class that was able to read from a configuration file. We are going to start building on top of it. If you didn't create any files yet, be sure to create a folder called \textbf{Experiment} inside of \textbf{Model}. In that file, create a filled called  \textbf{IV\_Curve.py}. Let's start by defining a class called \texttt{Experiment} with some attributes: 
@@ -25,7 +25,7 @@ class Experiment:
         self.properties = {}
 \end{minted}
 
-The class defines three attributes: a \mintinline{python}{user}, a \mintinline{python}{daq}, and \mintinline{python}{properties}. The user is set to \mintinline{python}{None} by default, but it is useful to keep track of who is running an experiment and saving its results. The \texttt{daq} attribute is where we are going to keep the DAQ model, and the \texttt{properties} are going to be a dictionary with all the paremetres needed to perform a measurement. 
+The class defines three attributes: a \mintinline{python}{user}, a \mintinline{python}{daq}, and \mintinline{python}{properties}. The user is set to \mintinline{python}{None} by default, but it is useful to keep track of who is running an experiment and saving its results. The \texttt{daq} attribute is where we are going to keep the DAQ model, and the \texttt{properties} are going to be a dictionary with all the parameters needed to perform a measurement. 
 
 \exercise{If you want to get the username of the user logged in on the computer, you can try the package \emph{getpass}, which you can test by running \mintinline{python}{getpass.getuser(). Bear in mind that if several users share the same log-in, this approach is useless.}.
 
@@ -42,18 +42,18 @@ It is important to show the kind of functionality we are after in order for you 
 >>> exp.save_meta_data() 
 \end{minted}
 
-We import the model of the experiment that we want toperform. Instantiate it with a specific user, in this case just \mintinline{python}{'Me'}. Then we specify the configuration file with the different parameters for the experiment, and load it. We load the daq, based on what the configuration file specifies. To perform a scan, we simply execute \mintinline{python}{do_scan}. In principle, the model could have a quick way of plotting the data and, more importantly, to save the data and metadata needed to reproduce the measurement.
+We import the model of the experiment that we want to perform. Instantiate it with a specific user, in this case just \mintinline{python}{'Me'}. Then we specify the configuration file with the different parameters for the experiment and load it. We load the daq, based on what the configuration file specifies. To perform a scan, we simply execute \mintinline{python}{do_scan}. In principle, the model could have a quick way of plotting the data and, more importantly, to save the data and metadata needed to reproduce the measurement.
 
 One of the advantages of defining a class for a measurement is that you can also use it in other projects. For example, you could trigger a measurement from a Jupyter notebook and analyze the results directly within it. You can also trigger measurements remotely and you will be able to programmatically change the parameters that you used for a scan. Let's start simple and build on complexity.
 
 \exercise{Write a method for loading the properties from a {YAML} file. Remember that you have already done a version of this in the Lay Out chapter. Store the properties in a dictionary called \texttt{self.properties}}
 
 Once you have a method for loading a {YAML} configuration file, you will also know all the properties that are available
-to perform a measurement. It may be hard to understand at the beginning the usefulness of having a separated configuration file. When the program gets largerWhich brings you to the following exercise:
+to perform a measurement. It may be hard to understand at the beginning the usefulness of having a separated configuration file. When the program gets larger it is going to speed a lot the debugging and future improvements of your own code. In the following exercise you can already see that expanding the functionality of your program is relatively quick when the needed information is centralized: 
 
 \exercise{Write a \texttt{do\_scan} method that relies on the parameters stored at \texttt{self.properties} to perform a measurement. Assume that \texttt{self.daq} is the model for the daq we are going to use. Store the data of the measurement in an attribute of the experiment class, remember that stylistic rules say that you should add every new attribute to the \texttt{\_\_init\_\_} method of the class.}
 
-The two previous exercises are based on things that we have done more than once in the previous chapters. But in this chapter we are systematizing all these information. Clear programs are great not only to yourself but also to other developers and users of your code. Moreover, once you start using the class in a real scenario, you will really appreciate the advantages of this approach.
+The two previous exercises are based on things that we have done more than once in the previous chapters. But in this chapter, we are systematizing all this information. Clear programs are great not only to yourself but also to other developers and users of your code. Moreover, once you start using the class in a real scenario, you will really appreciate the advantages of this approach.
 
 \exercise{Write a method for saving the metadata of your experiment, i.e., all the information stored in the \texttt{self.properties} dictionary. \textbf{TIP}: Where do you save the data? Perhaps you can add one more parameter to the original {YAML} file to specify the destination folder.}
 
@@ -83,12 +83,12 @@ e.load_config(config_file)
 e.load_daq()
 \end{minted}
 
-The two approaches are very different and is worth discussing their advantages and dissadvantages. In the first one, we are
-importing the daq, we initialize it, and then we add it to the experiment class through the method \texttt{load\_daq}. This approach is quick, because the experiment model doesn't need to do much, just to accept the DAQ and store it within itself. If you want to use a different DAQ device, you would alter the code above, importing the proper model, etc. At first sight, this approach may seem simple enough, however, it will become harder when you are dealing with several devices which can be changed. Moreover, future users of your code need to be comfortable editing Python files. 
+The two approaches are very different and are worth discussing their advantages and disadvantages. In the first one, we are
+importing the daq, we initialize it, and then we add it to the experiment class through the method \texttt{load\_daq}. This approach is quick because the experiment model doesn't need to do much, just to accept the DAQ and store it within itself. If you want to use a different DAQ device, you would alter the code above, importing the proper model, etc. At first sight, this approach may seem simple enough, however, it will become harder when you are dealing with several devices which can be changed. Moreover, future users of your code need to be comfortable editing Python files. 
 
-The second approach involves loading a module based on information stored as a string on a file, which is slightly more complicated programmatically speaking. One of the advantages of this approach is that the information on the devices used is automatically saved as metadata. The other advantage is that we are really splitting the code itself from the peculiarities of our own experiment. This approach is also a good opportunity to learn few new things about Python. 
+The second approach involves loading a module based on information stored as a string on a file, which is slightly more complicated programmatically speaking. One of the advantages of this approach is that the information on the devices used is automatically saved as metadata. The other advantage is that we are really splitting the code itself from the peculiarities of our own experiment. This approach is also a good opportunity to learn a few new things about Python. 
 
-In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therfore, we are going to see not only how to solve the specific problem of loading the DAQ to the program, but also how to organize the workflow in order to guarantee that changes are backwards compatible, and therefore other users can keep working. 
+In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therefore, we are going to see not only how to solve the specific problem of loading the DAQ to the program, but also how to organize the workflow in order to guarantee that changes are backward compatible, and therefore other users can keep working. 
 
 \subsection{Loading a DAQ}\label{loading-a-daq}
 We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it to the \emph{experiment model}. The method \mintinline{python}{load_daq} will look like this:
@@ -124,7 +124,7 @@ def __str__(self):
 If you repeat the steps above, you will see now that the output of doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"AnalogDaq"}. The
 \mintinline{python}{__str__} method of a class tells Python how to convert an object to a string. It is also responsible for the behavior of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. Therefore, deciding what to include in the string representation requires some thinking. In principle, you can also add something that identifies that specific DAQ such as its serial number or the port to which it is connected. 
 
-There is something else that is worth discussing at this stage. Remember that in principle we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash, before it was able to write the data to the hard drive. 
+There is something else that is worth discussing at this stage. Remember that in principle we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash before it was able to write the data to the hard drive. 
 
 Even if the example above can be a bit of an extreme, it can be wise to verify the user input, especially if it can alter the functioning of the program in some very wrong ways. If you think about what the {DAQ} Models have in common, you should realize that it is that both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting is actually derived from the base model. To achieve this, you will need to update the experiment model, pay attention to the first line, which should be at the top of the file:
 
@@ -133,9 +133,9 @@ from PythonForTheLab.Model.daq.base import DAQBase
 
 [...]
 
-	def load_daq(self, daq):
-	    if not isinstance(daq, DAQBase):
-	        raise Exception('The DAQ Model specified should be a child of DAQ Base')
+    def load_daq(self, daq):
+        if not isinstance(daq, DAQBase):
+            raise Exception('The DAQ Model specified should be a child of DAQ Base')
     [...]
 \end{minted}
 
@@ -149,9 +149,9 @@ True
 False
 \end{minted}
 
-Now we know that if the program is to continue, the user should have provided a model which inherits from the DAQBase class. This is one approach, which seems very adequate, but which may have some friction in the Python community. Many developers follow a pattern called duck typing. In a broad sense, it means that if a class behaves as expected, why would you care about what type of class it is? If someone develops a valid DAQ class, the only difference is that it does not inherit from DAQBase, is it correct to raise an exception? The discussion is not closed at all. You will find some people who are strong opponents of duck typing, other who are strong followers. Once you gain experience, you can make your own call. For the time being, our code is quite robust even if it could be at the expense of loosing flexibility later on. 
+Now we know that if the program is to continue, the user should have provided a model which inherits from the DAQBase class. This is one approach, which seems very adequate, but which may have some friction in the Python community. Many developers follow a pattern called duck typing. In a broad sense, it means that if a class behaves as expected, why would you care about what type of class it is? If someone develops a valid DAQ class, the only difference is that it does not inherit from DAQBase, is it correct to raise an exception? The discussion is not closed at all. You will find some people who are strong opponents of duck typing, others who are strong followers. Once you gain experience, you can make your own call. For the time being, our code is quite robust even if it could be at the expense of losing flexibility later on. 
 
-The first approach on how to load the daq model into the experiment is relatively easy, and is a pattern that will be repeated also in other places. Whenever you need information from outside the class, in this case the DAQ model, you can create a method which accepts that information and you store it as an attribute. This will make it available throughout your class, in any other method. 
+The first approach on how to load the daq model into the experiment is relatively easy and is a pattern that will be repeated also in other places. Whenever you need information from outside the class, in this case, the DAQ model, you can create a method which accepts that information and you store it as an attribute. This will make it available throughout your class, in any other method. 
 
 Let's see how the second approach would look like. The idea is that the experiment model will load a class based on what the {YAML} file specifies. In the first approach, you have updated the properties of the
 experiment model, adding an extra key called \mintinline{python}{DAQ}. Therefore, we can do the same in the {YAML} file \textbf{experiment.yml}:
@@ -169,7 +169,7 @@ Next time you use the method \mintinline{python}{load_config}, you will also hav
 def load_daq(self, daq=None):
     if daq is None:
         try:
-	       name = self.properties['Experiment']['DAQ']['name']
+           name = self.properties['Experiment']['DAQ']['name']
             port = self.properties['Experiment']['DAQ']['port']
         except KeyError:
             raise Exception('You must either provide a daq or specify it in the configuration file')
@@ -188,14 +188,14 @@ def load_daq(self, daq=None):
         # Here goes the same code you had before
 \end{minted}
 
-The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case \mintinline{python}{None}. Adding a default value allows you to use the
-method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another failsafe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweights the flexibility. 
+The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case, \mintinline{python}{None}. Adding a default value allows you to use the
+method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another failsafe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweighs the flexibility. 
 
-The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specifcied in the past. Adding default values when you add new input to your methods or functions is an excellent way of keeping backwards compatibility. Sometimes it will not be possible though. Bigger libraries, such as numpy, normally release intermediate versions, in which a warning appears telling you that in a future version a function will change, and they normally document it quite extensively. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
+The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specified in the past. Adding default values when you add a new input to your methods or functions is an excellent way of keeping backward compatibility. Sometimes it will not be possible though. Bigger libraries, such as numpy, normally release intermediate versions, in which a warning appears telling you that in a future version a function will change, and they normally document it quite extensively. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
 
 \exercise{Go ahead and trigger the exception by defining a name of the {DAQ} different from `DummyDaq' or `RealDaq'. What happens to the code after the exception? Does it get executed?}
 
-There is something else that is very easy to overlook. Imagine you run the experiment supplying the daq yourself, and then you save the properties dictionary in YAML format. The information contained will include the name of the DAQ and the port. If you use that file as a configuration file, the experiment model will be able to load the DAQ automatically, without you having to initialize it beforehand. This happens only because the string representation of our model coincides with the options of the \mintinline{python}{load_daq}. This, however is not mandatory. If you want to enforce it, you need to write very clear documentation, explaining it. You  may also take a different approach. Since we are forcing all DAQs to be children of DAQBase, we can add the following to DAQBase:
+There is something else that is very easy to overlook. Imagine you run the experiment supplying the daq yourself, and then you save the properties dictionary in YAML format. The information contained will include the name of the DAQ and the port. If you use that file as a configuration file, the experiment model will be able to load the DAQ automatically, without you having to initialize it beforehand. This happens only because of the string representation of our model coincides with the options of the \mintinline{python}{load_daq}. This, however, is not mandatory. If you want to enforce it, you need to write very clear documentation, explaining it. You may also take a different approach. Since we are forcing all DAQs to be children of DAQBase, we can add the following to DAQBase:
 
 \begin{minted}{python}
     def __str__(self):
@@ -302,9 +302,9 @@ There is one more parameter that you need to take care of. The \mintinline{pytho
 sleep(delay.m_as('s'))
 \end{minted}
 
-Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With this changes, your code is ready for performing a scan. 
+Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With these changes, your code is ready for performing a scan. 
 
-Since everything is working, we may be temped to step ahead. However, it is worth discussing how Pint and Numpy play along, since it can give raise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
+Since everything is working, we may be tempted to step ahead. However, it is worth discussing how Pint and Numpy play along since it can give rise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
 
 \begin{minted}{pycon}
 >>> start = Q_('5V')
@@ -336,7 +336,7 @@ def do_scan(self):
 
 
 \section{Dummy DAQ}\label{dummy-daq}
-The previous sections have been focused onto developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. 
+The previous sections have been focused on developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. 
 
 Create a new file called \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
 
@@ -349,7 +349,7 @@ class DummyDaq(DAQBase):
         return self.serial_number
 \end{minted}
 
-You start by importing the base class \mintinline{python}{DAQBase}, as you did for the real \emph{model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to get a value when you read back. And you need to use the proper units as well. It can look something like this:
+You start by importing the base class \mintinline{python}{DAQBase}, as you did for the real \emph{model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think about what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to get a value when you read back. And you need to use the proper units as well. It can look something like this:
 
 \begin{minted}{python}
 import numpy as np
@@ -378,7 +378,7 @@ The \mintinline{python}{idn} is quite clear, it just returns the serial number t
 from dummy_daq import DummyDaq as AnalogDaq
 \end{minted}
 
-And run \textbf{test\_daq.py}. You will see that an error appears because we are using the \mintinline{python}{initialize} method in the test, but it is not defined within the class. This happened because we included \mintinline{python}{initialize} in the \mintinline{python}{AnalogDaq} but we never added it to the DAQBase. Now you see the power that has being organized and systematic. Keeping track of the methods in a base class, allows you not to make the same mistakes. Moreover, it would have allowed you to run the test without issues.
+And run \textbf{test\_daq.py}. You will see that an error appears because we are using the \mintinline{python}{initialize} method in the test, but it is not defined within the class. This happened because we included \mintinline{python}{initialize} in the \mintinline{python}{AnalogDaq} but we never added it to the DAQBase. Now you see the power that comes with been organized and systematic. Keeping track of the methods in a base class allows you not to make the same mistakes. Moreover, it would have allowed you to run the test without issues.
 
 \exercise{Add an \mintinline{python}{initialize} method into the base class.}
 
@@ -387,7 +387,7 @@ If you run the test after completing the exercise, you will see that there are n
 \exercise{Make the \mintinline{python}{get_analog_value} return the value of a sine function and not just a random value.}
 
 \section{Conclusions}\label{experiment-model-conclusions}
-With this chapter, the core code for a functioning experiment is finished. We went from the development of a driver for a device, to splitting the code into controllers and models. Defining a scan as we did in this chapter was so simple because of all the previous preparation. Of course there are things that we can do better but what we have achieved so far is functioning and quite useful.
+With this chapter, the core code for a functioning experiment is finished. We went from the development of a driver for a device to split the code into controllers and models. Defining a scan as we did in this chapter was so simple because of all the previous preparation. Of course, there are things that we can do better but what we have achieved so far is functioning and quite useful.
 
 When you develop your own program, it can be wise to start with the experiment model. Once you established the steps of a measurement it will become clear what you need to develop in order to achieve it. Starting by outlining the experiment model is a good way of being focused on a clear objective. If you are developing a driver, or a model, without knowing to what end, you may end up creating methods and options that you don't really need.
 

@@ -143,12 +143,7 @@ straight from the device into the motherboard. The numbering can change
 if you plug/unplug the cables. The {PFTL} device, since it acts as a hub
 for a serial connection, can show the same behavior.}
 
-Once you identify on which port the device is connected, you can start sending some commands to it. Devices normally have an
-instruction to identify themselves, and the {PFTL DAQ} is no exception. It is always 
-a
-good idea to start by checking that everything is working properly, and getting 
-the serial
-number from the device seems like a good idea. Please note that in the code on the book, it always
+Once you identify on which port the device is connected, you can start sending some commands to it. Devices normally have an instruction to identify themselves, and the {PFTL DAQ} is no exception. It is always a good idea to start by checking that everything is working properly, and getting the serial number from the device seems like a good idea. Please note that in the code on the book, it always
 appears an example port. You should change it for what you have found in
 the previous step.
 
@@ -257,8 +252,7 @@ you that it doesn't take a long time to be able to achieve a very
 important goal.}
 
 \section{Going Higher Level}\label{going-higherlevel}
-In the previous section, we have seen that for communication with a device there are a lot of
-steps that one needs to take into account, such as the
+In the previous section, we have seen that for communication with a device there are a lot of steps that one needs to take into account, such as the
 line ending, the encoding, etc. Moreover, it becomes very unhandy every time we want
 to send a command to have to type it. In the application we are developing we will need to set a voltage plenty of times and we will need to read values very often. If you still remember the \emph{Onion
 Principle}(sec. \ref{section:onion-principle}), it is now the time to start applying it. 
@@ -471,16 +465,7 @@ def read(self):
 The code above starts by defining an empty string with the proper
 encoding. You have to do this in order to accumulate the message into
 that string. For convenience, we also defined the
-\mintinline{python}{read_termination} variable, encoded properly. Remember that if
-you don't encode the \mintinline{python}{read_termination} you won't be able to
-check whether the character being returned by the device is the
-termination or not. Once you have these two variables in place, you
-start an infinite loop \mintinline{python}{while True}. Since you don't know how
-long the message is going to be, you need to read from the device as
-long as needed. Within the loop, you read from the device one
-character at a time (\mintinline{python}{size=1}). This character is appended to
-\mintinline{python}{line} and if it matches the termination character, the
-\emph{while} loop is ended with the command \mintinline{python}{break}. Once the message is
+\mintinline{python}{read_termination} variable, encoded properly. Remember that if you don't encode the \mintinline{python}{read_termination} you won't be able to check whether the character which is returned by the device is the termination or not. Once you have these two variables in place, you start an infinite loop \mintinline{python}{while True}. Since you don't know how long the message is going to be, you need to read from the device as long as needed. Within the loop, you read from the device one character at a time (\mintinline{python}{size=1}). This character is appended to \mintinline{python}{line} and if it matches the termination character, the \emph{while} loop is ended with the command \mintinline{python}{break}. Once the message is
 complete, it is decoded and returned to the user.
 
 Remember that using a \mintinline{python}{while True} statement can be a risk.
@@ -921,12 +906,12 @@ string. As you may be aware, computers do not understand what is a letter, they 
 character into bytes and the other way around. 
 
 A standard that appeared several years ago is called ASCII, which you may have already heard of. ASCII contemplates transforming 128 different characters to binary. Remember that characters also include marks such as \texttt{!} or 
-\texttt{:}, and numbers. 128 is not a random number, it is $2^7$. For the English language, 128 characters are enough. But for languages such as Spanish, which have characters like \texttt{ñ}, French with its different accents, and without even mentioning languages that use a non-latin script, forced the appearance of new standards. 
+\texttt{:}, and numbers. 128 is not a random number, it is $2^7$. For the English language, 128 characters are enough. But for languages such as Spanish, which have characters like \texttt{ñ}, French with its different accents, and without even mentioning languages that use a non-Latin script, forced the appearance of new standards. 
 
 As you can imagine, having more than one \textit{standard} is incompatible with the definition of a standard. Imagine that you write a text in French, using a special encoding, and then you share it with someone else. That other person does not know which encoding you used and decides to decode it using a Spanish standard. 
 What will the output be? Very hard to know, and probably very hard to read by a person. 
 Remember that this doesn't even consider the possibility of having text 
-written in a non-latin script such as Russian or Chinese.
+written in a non-Latin script such as Russian or Chinese.
 
 If you are old enough, you may remember that some websites were not rendering correctly, and it was very common to find weird characters on e-mails. This was all due to the mess that different string encodings generated. I even remember that some web hosting companies did not allow hosting Chinese websites because of the overhead that decoding Chinese characters imposed on the servers. This unbearable situation gave rise to a new encoding standard called, as you guessed, 
 \textbf{Unicode}. 
@@ -957,4 +942,4 @@ valid in Python 3:
  var_ñ = 1
 \end{minted}
 
-If you are curious to see how Unicode works, the Wikipedia article is very descriptive. Plus, the Unicode consortium keeps adding new characters based on the input not only from industrial leaders but also from individuals. You can see the latest emojis added and notice that some were proposed by local organizations that wanted to have a way of expressing their idiosyncrasies. 
+If you are curious to see how Unicode works, the Wikipedia article is very descriptive. Plus, the Unicode consortium keeps adding new characters based on the input not only from industry leaders but also from individuals. You can see the latest emojis added and notice that some were proposed by local organizations that wanted to have a way of expressing their idiosyncrasies. 
