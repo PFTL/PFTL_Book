@@ -19,7 +19,7 @@ the \mintinline{python}{delay} does. Sadly, this user can very well be yourself 
 the future.
 
 Incorrect input data from a user can not only lead to the wrong
-experiment, it can also mean a big problem in your setup. Imagine that
+experiment, but it can also mean a big problem in your setup. Imagine that
 you set a voltage to a value higher than what your device can handle. Or
 you set a piezo stage to a position that will break your sample (a very,
 very common issue in microscopes). To avoid these issues, the program
@@ -269,7 +269,7 @@ your own computer. Computer screens normally refresh at a maximum rate
 of 60 frames per second (fps). However, your eyes most likely will not
 be able to tell the difference beyond 30fps. 30fps is equivalent to
 updating every 33ms, while many experiments can acquire data at much
-higher rates than that. Even 60fps, which are equivalent to a refresh
+higher rates than that. Even 60fps, which are equivalent to a refreshing
 time of 16ms, can be longer than what your experiment is handling. It is
 important therefore to decouple the experiment refresh rate from the
 update process. If you try to update your plots at higher frame rates,
@@ -291,7 +291,7 @@ you are not able to see.
 
 This discussion, by no means, implies that your acquisition cannot be
 faster or with a higher resolution. For example, you can acquire data
-with a fast {CCD} at thousand frames per second. However, if you display
+with a fast {CCD} at a thousand frames per second. However, if you display
 all the frames to the user or only one in every 30, the user will not be
 able to tell any difference. While you display a subset of the data, you
 can save the rest for later analysis. Confocal images, for example, are
@@ -303,7 +303,7 @@ in order to preserve the features that you are after.
 \subsection{Decoupling acquisition and refreshing}\label{decoupling-acquisition-andrefreshing}
 Enough of a theoretical discussion, now it is time to implement in your
 code the decoupling between the acquisition and the update of the plot.
-You need to define a refresh time somewhere, and since it is a parameter
+You need to define a refreshing time somewhere, and since it is a parameter
 that you may be interested in changing you can add it to a configuration
 file. In the \mintinline{python}{YAML} file where you defined the experiment, you
 can add a \mintinline{python}{refresh_time} option. If you have downloaded the
@@ -576,7 +576,7 @@ functionality you need to solve the following exercises in order:
 model, using the finalize method from the driver.}
 
 \exercise{Create a method in the experiment model that handles what happens when
-the experiment is over. For example, the communication with the {DAQ}
+the experiment is over. For example, communication with the {DAQ}
 should be ended with the \mintinline{python}{finalize} method. Perhaps you want to
 add something else, such as forcing the save of the parameter metadata
 or the data itself.}
