@@ -622,23 +622,32 @@ for a device, such as what we have been doing in this chapter, we have to keep a
 \section{Using PyVISA}\label{section:pyvisa}
 What we did in the previous section is very interesting, but as you may have guessed, we are not the first ones who want to achieve the same. Plus, you may ask yourself what happens if you have a device that can communicate through different connections, not only serial. You will have to develop a new driver for each one and that is not handy. 
 
-Even if not super well known, there is a standard developed by a consortium of companies called \href{https://en.wikipedia.org/wiki/Virtual_instrument_software_architecture}{Virtual instrument software architecture}, or VISA for short. This standard allows communicating with devices independently from the communication channel selected. There are different backends developed, including the one of National Instruments and Tektronix. They are hard to install and do not work on every operating system. 
+Some decades ago, big manufacturers of measurement instruments sat together and developed a standard called \href{https://en.wikipedia.org/wiki/Virtual_instrument_software_architecture}{Virtual instrument software architecture}, or VISA for short. This standard allows communicating with devices independently from the communication channel selected, and from the backend chosen. Different companies have developed different backends, such as NI-VISA, or TekVISA, but they \emph{should} be interchangeable. The backends are normally hard to install and do not work on every operating system. But they do allow to switch from a device connected via COM to a USB connection without changing the code. 
 
-There is also a pure Python implementation of VISA called \mintinline{python}{pyvisa-py} which is still work in progress but for simple devices like the {PFTL DAQ} it should be enough. We will show you in this section how to get started with pyvisa-py, but it is not a requirement of the book. You can use it as a reference for later in your projects. 
+There is also a pure Python implementation of the VISA backend called \mintinline{python}{pyvisa-py} which is relatively stable even if it is still work in progress. It does not cover 100\% of the VISA standard, but for simple devices like the {PFTL DAQ} it should be enough. If you are working on more complex projects, you should definitely check some of the solutions provided by bigger vendros such as Tektronix or National Instruments. In the next few paragraphs, we will show you how to get started with pyvisa-py, but it is not a requirement of the book. You can use it as a reference for your other projects. 
 
-First, you need to install two libraries, \mintinline{python}{pyvisa} and \mintinline{python}{pyvisa-py}:
+First, you need to install \mintinline{python}{pyvisa}, which is a wrapper around the VISA standard. This package will allow you to control devices directly from within Python: 
 
 \begin{minted}{bash}
  pip install pyvisa
 \end{minted}
 
-And then, you can install the backend:
+If you already have a backend on your computer, then this is all you need. If you don't, and whish to install the pure-python implementation, you can do it like this:
 
 \begin{minted}{bash}
  pip install pyvisa-py
 \end{minted}
 
-If you are working on a clear environment, you will also need to install PySerial since it is not marked as a dependency of pyvisa-py. And now, you can start using it. Let's start in a python interpreter directly, before going to more complex code. Visa allows you to list your devices:
+If you are working on a clean environment, you will also need to install PySerial since it is not marked as a dependency of pyvisa-py. Pyvisa-py relies on lower-level libraries for communicating with devices, but it does not require you to install them beforehand. You will have to install them as you need them. The \href{https://pyvisa-py.readthedocs.io/en/latest/}{documentation of pyvisa-py} has very useful information. 
+
+If you are using \textbf{Anaconda}, the commands above have to be replaced by:
+
+\begin{minted}{bash}
+ conda install -c conda-forge pyvisa pyvisa-py
+\end{minted}
+
+
+To see who to work with PyVISA, let's start in a python interpreter directly, before going to more complex code. VISA allows you to list your devices:
 
 \begin{minted}{pycon}
  >>> import visa
@@ -646,7 +655,7 @@ If you are working on a clear environment, you will also need to install PySeria
  >>> rm.list_resources()
  ('ASRL/dev/ttyACM0::INSTR',)
  >>> dev = rm.open_resource('ASRL/dev/ttyACM0::INSTR')
- >>> dev.query('IDN\n')
+ >>> dev.query('IDN')
  'General DAQ Device built by Uetke. v.1.2017\n'
 \end{minted}
 
