@@ -1,163 +1,99 @@
 \chapter{Run an experiment}\label{run-anexperiment}
 
 \section{Objectives}
-In this chapter, you are going to learn how to run a proper experiment.
-You have developed all the code you need to acquire data, but you need
-to put everything together and make it work. This chapter is also the
-opportunity to wrap up everything that you have achieved so far and be
-sure that all the classes, packages and configuration files are where
+In this chapter, you are going to learn how to run a complete measurement. You have developed all the code you need to acquire data, but you need
+to put everything together and make it work. For example, we are not saving The data yet. This chapter is also the opportunity to wrap up all what you have achieved so far and to be sure that all the classes, packages and configuration files are where
 they are supposed to be.
 
-Once you finish this chapter, you will have working knowledge on how to
-start controlling your own experiments in the lab. Of course, you will
-need to adapt the concepts explained in the book to the devices and
-settings that you have, but the foundations are strong enough to build
+Once you finish this chapter, you will have working knowledge on how to start controlling your own experiments in the lab. Of course, you will
+need to adapt the concepts explained in the book to the devices and settings that you have, but the foundations are strong enough to build
 reliable and expandable software.
 
 \section{Introduction}
-The contents of this chapter are going to become ubiquitous in almost
-all your lab experiments. Most likely a big part of your job is to
-either repeat measurements in order to improve your statistics or to
-change some parameters in order to find correlations in your data. A
-smart way of doing both tasks is through a computer with the appropriate
-devices hooked to it and with the appropriate software to control them.
+The contents of this chapter are going to become ubiquitous in almost all your lab experiments. Most likely a big part of your job is to either repeat measurements in order to improve your statistics or to change some parameters in order to find correlations in your data. A smart way of doing both tasks is through a computer with the appropriate devices hooked to it and with the appropriate software to control them.
 
-Up to now, you have developed a package for controlling your experiment,
-but now you have to use the package. It is a good idea to separate the
-files that build up the package from the ones that specify a specific
-status of the setup. That is why you have created a separate folder for
-\emph{Examples}. But this is not enough, when you run the experiment and
-save the data, you will need to do it in a different location. This will
-prevent polluting the base code and will allow you to separate the
-settings from different users working on the same computer.
+Up to now, we have been developing a package for controlling devices. Now it is time to use it. It is a good idea to separate the files that build up the package from the ones that show a specific way of using the program. That is why we have created a separate folder for \emph{Examples}. But this is not enough, when you run the experiment and save the data, for example, you will need to do it in a different location. This will prevent polluting the base code and will allow you to separate the settings from different users working on the same computer.
 
-Remember, that in order to be able to reproduce results of your
-experiments, it is important to keep track of the parameters used to
-perform a measurement. Through this chapter, you are going to learn some
-ideas on how to use {YAML} files to store the metadata of your
-experiment, together with the data and use it to repeat a measurement.
-Moreover, you will learn how you can extend the Experiment model without
-writing new methods.
+Remember that in order to be able to reproduce results of your experiments, it is important to keep track of the parameters used to
+perform a measurement, also known as metadata. Through this chapter, you are going to learn some ideas on how to use {YAML} files to store this information together with the data of a measurement. Moreover, you will learn how you can extend the Experiment model without writing new methods.
 
 \section{The Layout of the Project}\label{the-layout-of-theproject}
-In the previous chapters, you have developed a lot of code, and it may
-have ended up in the wrong location. That is why it is important to
-recap on how the structure of the package looks like.
+In the previous chapters, we have developed a lot of code, and it may have ended up in the wrong location. It is important, therefore, to recap  how the structure of the package looks like:
 
 \begin{minted}{text}
 ROOT
-├── Docs
 ├── Examples
 │   └── Config
 │       └── experiment.yml
-├── PythonForTheLab
-│   ├── Controller
-│   │   ├── __init__.py
-│   │   └── simple_daq.py
-│   ├── __init__.py
-│   ├── Model
-│   │   ├── daq
-│   │   │   ├── analog_daq.py
-│   │   │   ├── base.py
-│   │   │   ├── dummy_daq.py
-│   │   │   └── __init__.py
-│   │   ├── experiment
-│   │   │   ├── __init__.py
-│   │   │   └── IV_measurement.py
-│   │   └── __init__.py
-│   └── View
-└── README.md
+└── PythonForTheLab
+    ├── Controller
+    │   ├── __init__.py
+    │   └── simple_daq.py
+    ├── __init__.py
+    ├── Model
+    │   ├── daq
+    │   │   ├── analog_daq.py
+    │   │   ├── base.py
+    │   │   ├── dummy_daq.py
+    │   │   └── __init__.py
+    │   ├── experiment
+    │   │   ├── __init__.py
+    │   │   └── IV_measurement.py
+    │   └── __init__.py
+    └── View
 \end{minted}
 
-If you don't have the same structure in your project, you will have to
-either adapt the code for making the proper imports or reproduce the
-structure. Pay attention to the fact that every folder has its own
-\emph{\_\_init\_\_.py} folder, and in some of them there are
-instructions for making the imports shorter. If you see something that
-you can't understand, you can always refer to the repository on Github.
+It is strongly recommended that you copy the structure of the project. This will allow you to follow the code without having to adapt all the import statements. Pay attention to the fact that every folder has its own \emph{\_\_init\_\_.py} file, which we have discussed earlier, and in some cases we have used it to define useful components, such as \texttt{Q\_}. If you see something that you can't understand, you can always refer to the repository on Github\footnote{https://github.com/PFTL/SimpleDaq}.
 
-For the contents of this chapter to work, you should have the {ROOT}
-folder added to the path. In this way, you can use it as
-\mint{python}|from PythonForTheLab.Controller import SimpleDaq| 
-regardless of where you are in your computer. It was briefly explained in Chapter 4
-when you learned how to import different modules to Python.
+There is a topic that normally generates headaches with newcomers to Python: how importing works. Imagine that we would like to use the \texttt{DummyDaq} model. We can be tempted to do the following: 
 
-After you have added the folder the {PATH} in your computer, you can
-start working in any folder that you wish. The files that we are going
-to create from now on in this chapter are not going to be part of the main package, so you don't mix them, just create a separate folder
-wherever you like.
-
-\section{{YAML} file for configuring}\label{yaml-file-forconfiguring}
-In our experiment, we are going to perform a 1D scan of the voltage
-generated at an analog output, while recording the voltage at an analog
-input. The first step is to create a file \textbf{experiment.yml} with
-the needed parameters. The contents should follow the contents that you
-have in the examples folder. It can be something like this:
-
-\begin{minted}{yaml}
-User:
-  name: Me
-Experiment:
-  DAQ:
-    name: DummyDaq
-    port: 1
-  Scan:
-    port_in: 0
-    port_out: 0
-    start: 0.V
-    stop: 3.3V
-    step: 100mV
-    delay: 200ms
+\begin{minted}{pycon}
+>>> from Model.daq.dummy_daq import DummyDaq
 \end{minted}
+
+which will work only if we have started the Python interpreter inside the PythonForTheLab folder. When you import, Python will try to find what you want to load in a very specific order and in very special folders. If we are inside the Examples folder, for example, how can Python know that it is supposed to go one level up and into PythonForTheLab to find the \emph{Model} module? 
+
+There are different ways of solving this problem. The easiest is to always start Python in the root folder. In that case, we will be able to import whatever module we are interested like this:
+
+\begin{minted}{pycon}
+>>> from PythonForTheLab import Q_
+>>> from PythonForTheLab.Model.daq.dummy_daq import DummyDaq
+\end{minted}
+
+This also means that if you have a script in the Examples folder, you would run it like this:
+
+\begin{minted}{bash}
+python Examples/my_script.py
+\end{minted}
+
+This works, but it is not very handy. At some point you would like to run a script which is in a different place in your computer, or you would like to be able to build on the PythonForTheLab package. This is all possible, but it is very dependent on the operating system which you are using. You can refer to section \ref{section:importing-python}, in which we discussed how to add folders to the Python path. If you are using an IDE such as Pycharm or Visual Studio Code, these steps are taken care for you, provided that you trigger your program from within the editor. 
+
+A more elegant solution will be discussed at the end of the book, when we develop a \textttt{setup.py} script that will allow us to install our package in the environment in which we work and not worrying about paths, etc. After you have added the folder the {PATH} in your computer, you can start working in any folder that you wish. The files that we are going to create from now on in this chapter are not going to be part of the main package, the recommendation is to work inside the \emph{Examples} folder, but you are free to choose. 
 
 \section{Running an Experiment}\label{running-anexperiment}
-Once the configuration file is defined, you have to start using the
-experiment model. Since the program will run from the command line,
-create a file called \textbf{start\_cli.py}, which you will trigger to
-perform the measurement, and now you can start adding what you need.
+We have the configuration file defined from the previous chapter. Therefore, we can start using the experiment model right away. We can start by creating a file in the \emph{Examples} folder, let's call it \textbf{start\_cli.py}, and add the following:
 
 \begin{minted}{python}
 from PythonForTheLab.Model import Experiment
 
 e = Experiment()
-e.load_config('experiment.yml')
+e.load_config('Config/experiment.yml')
 e.load_daq()
 \end{minted}
 
-Remember to change the path to the {YAML} file with the configuration
-for your experiment. In principle, you could have several configurations
-for different experiments and you load each one accordingly.
+Remember to change the path to the {YAML} file with the configuration for your experiment. The advantage of this approach is that you could have several configuration files for different experiments and you load the one you want. For example, you may want to do a coarse scan just to check everything is well connected, or you may want to decrease the delay, etc. 
 
-\exercise{Now already know how to trigger a scan with the default parameters.
-Perform a measurement and print the data to screen.}
+\exercise{You already know how to trigger a scan with the default parameters specified in the configuration file. Perform a measurement and print the data to screen.}
 
-If you use the experiment model as is, and you trigger the
-\mintinline{python}{do_scan} method, you will notice several things. The first is
-that you don't know if the program is running or not. When you are
-facing this situation, the easiest solution is to use some
-\mintinline{python}{print} statements in order to know where you are at. For
-example, you can add \mintinline{python}{print(value)} inside the loop for the scan,
-in this way you can see the value that you are passing to the analog
-output being printed to screen. Printing to screen is also a useful
-debugging tool. For example, you could print to screen the parameters
-for a scan before performing it, to be sure that everything is in order.
+If you use the experiment model as is, and you trigger the \mintinline{python}{do_scan} method, you will notice several things. The first is that you don't know if the program is running or not. When you are facing this situation, the easiest solution is to use some \mintinline{python}{print} statements in order to know where you are at. For example, you can add 
+\begin{minted}{python}
+print('Starting scan...')
+\end{minted} 
+Right before the scan starts, and you can do the same right after it finished. This, at least, will allow you to see something happening on the screen. You could also think about using print statements in the experiment model, so you can see what values are being passed to the DAQ device. This all seems reasonable at the beginning, but be careful. Printing to screen is a quick way of distracting users with too much input. Imagine you are scanning 1 million points and you get a message for each one of them. Moreover, we are going to improve on this later in this chapter. 
 
-The other thing that perhaps you have realized is that if you want to
-stop the scan, you have to interrupt the execution of the program, which
-leads to unexpected results, for example, you are going to lose the
-acquired data. Finally, you should have realized that the program blocks
-the execution of any other code while the scan is running. If you want
-to plot the progress, you will have to wait until it is finished.
-Solving this is slightly more complicated because it is going to imply
-the use of \emph{threads}. However, there is something important to
-point out first.
+The other thing that perhaps you have realized is that if you want to stop the scan, you have to interrupt the execution of the program, which leads to unexpected results. For example, you are going to lose the acquired data, and the DAQ will be left in a state which may not be safe. Finally, you probably realized that the program blocks the execution of any other code while the scan is running. If you want to plot the progress, you will have to wait until it is finished. We are going to solve all of this. However, there is something important to point out first.
 
-Once you instantiate the Experiment class and load the config file, you
-will have a dictionary located at \mintinline{python}{e.properties} with all the
-information contained in \textbf{experiment.yml}. Those parameters are
-used by the \mintinline{python}{do_scan} method, but nothing prevents you from
-changing them before doing it. For example, you can add the following to
-the code:
+Once you instantiate the Experiment class and load the config file, you will have a dictionary located at \mintinline{python}{e.properties} with all the information contained in \textbf{experiment.yml}. Those parameters are used by the \mintinline{python}{do_scan} method, but nothing prevents you from changing them before doing it. For example, you can add the following to the code:
 
 \begin{minted}{python}
 e.properties['Experiment']['Scan']['start'] = '0.5V'
@@ -165,13 +101,7 @@ e.properties['Experiment']['Scan']['step'] = '500mV'
 e.do_scan()
 \end{minted}
 
-When the scan is performed, the parameters that are going to be used are
-the ones just defined, and not the ones in the {YAML} file. This is very
-handy because you could even wrap the code in order to study the
-dependence of the results with some parameters which perhaps you didn't
-think of before. For example, imagine that you want to see if the {IV}
-curve depends on the step size or the delay between points. You could do
-the following:
+When the scan is performed, the parameters that are going to be used are the ones just defined, and not the ones in the {YAML} file. This is very handy because you could even wrap the code in order to study the dependence of the results with some parameters which perhaps you didn't think of before. For example, imagine that you want to see if the {IV} curve depends on the step size or the delay between points. You could do the following:
 
 \begin{minted}{python}
 for delay in range(10, 100):
@@ -180,58 +110,33 @@ for delay in range(10, 100):
     e.do_scan()
 \end{minted}
 
-You can see that by having a model class for the experiment, the biggest
-work was already resolved. There are some details that you will have to
-address, for example, how to save the data, but they are normally simple
-to resolve. Also, you have to remember that the scan is happening with
-parameters not defined in the {YAML} file. In order to maintain the idea
-of doing reproducible research, you should always save the parameters
-you used as part of the results.
+You can see that by having a model class for the experiment, the biggest work was already resolved. There are some details that you will have to address, for example, how to save the data, but they are normally simple to resolve. Also, you have to remember that the scan is happening with parameters not defined in the {YAML} file. In order to maintain the idea of doing reproducible research, you should always save the parameters you used as part of the results.
 
 \section{Plot results and save data}\label{plot-results-and-savedata}
-You know how to perform one or several measurements, but now you need to
-do something with the data you have just acquired. First, you are going
-to plot it and then you are going to save it to a text file.
+We know how to perform one or several measurements, but now we need to do something with the data we have just acquired. First, we are going to plot it and then we are going to save it to a text file.
 
-For plotting you are going to use a library called
-\href{http://www.pyqtgraph.org/}{PyQtGraph} which was developed mainly
-to generate fast data visualizations. If you are familiar with any other
-plotting libraries such as matplotlib, feel more than free to adapt the
-example to them. The examples are based on PyQtGraph because it is the
-library that you are going to use while building a {GUI}. The first
-thing you have to do is to import the library and make a plot of
-the data.
+For plotting we are going to use a library called \href{http://www.pyqtgraph.org/}{PyQtGraph} which was developed mainly to generate fast data visualizations. Exactly what we need when we are dealing with experiments. If you are familiar with any other plotting libraries such as matplotlib, feel more than free to adapt the code to use them. The examples in this section are based on PyQtGraph because it is the library that we are going to use while building a {GUI}. The first thing you have to do is to import the library and make a plot of the data.
 
 \begin{minted}{python}
 import pyqtgraph as pg
 
-pg.plot(e.xdata_scan, e.ydata_scan)
+pg.plot(e.scan_values, e.scan_data)
 \end{minted}
 
-It is a super simple example but it works. You are using the data stored
-directly within the class. If you called the data differently, adapt the
-code. At this point, you should see the curve of your results appearing.
-If you want to add labels and a title to the plot, you can do
-the following:
+It is a super simple example but it works. You are using the data stored directly within the class. If you called the data differently, adapt the code so you can use it. At this point, you should see the curve of your results appearing. If you want to add labels and a title to the plot, you can do the following:
 
 \begin{minted}{python}
 PlotWidget = pg.plot(title="Plotting I vs V")
-PlotWidget.setLabel('bottom', 'Port: {}'.format(
-    e.properties['Scan']['port_out']), units="V")
+PlotWidget.setLabel('bottom', 'Channel: {}'.format(
+    e.properties['Scan']['channel_out']), units="V")
     
-PlotWidget.setLabel('left', 'Port: {}'.format(
-    e.properties['Scan']['port_in']), units="V")
+PlotWidget.setLabel('left', 'Channel: {}'.format(
+    e.properties['Scan']['channel_in']), units="V")
     
-PlotWidget.plot(e.xdata_scan, e.ydata_scan)
+PlotWidget.plot(e.scan_values, e.scan_data)
 \end{minted}
 
-There is no much complexity at this point; once you have the data it is
-endless the number of things you can do. You can fit a model, repeat a
-new scan with parameters based on your results, etc. However, saving the
-data is crucial if you are intending to use it in a publication or if
-you want to do a better analysis at a later stage. You should have
-developed a method for saving data in the experiment model, but in case
-you haven't done it yet, you can follow the example below:
+There is no much complexity at this point; once you have the data the number of things you can do is endless. You can fit a model, repeat a new scan with parameters based on your results, etc. However, saving the data is crucial if you are intending to use it in a publication or if you want to do a better analysis at a later stage. To save the data, we can do the following:
 
 \begin{minted}{python}
 from datetime import datetime
@@ -242,70 +147,40 @@ header = "# Data saved by Python For The Lab\n"
 header += "# Creation date: {:%Y-%m-%d %H:%M:%S}\n".format(
     datetime.now())
 
-header += "# Number of lines: {}\n".format(len(e.xdata_scan))
+header += "# Number of lines: {}\n".format(len(e.scan_values))
 header += "##################################\n"
 \end{minted}
 
-First, you define the filename in such a way that we can add numbers to
-it. The \mintinline{python}{\{:03\}} means that there are going to be 3 spaces for
-the number, therefore the filename will look like
-\textbf{Data\_scan\_001.dat}, \textbf{Data\_scan\_002.dat}, etc. You can
-try it if you do something like \mint{python}|print(filename.format(34))|
-Later you define the header of the file. First, you have a title and you
-also write down the creation date and the number of points you have
-acquired. The creation date is essential for keeping a tidy record
-because it will allow you to match the data with whatever you have
-written in your lab journal. The number of lines is a bit old-fashioned;
-it is very useful when you are reading line by line and you need to stop
-right at the last line before an error occurs. Note that at the end of
-each line there is a \mintinline{python}{\n} in order to force a new
-line after each statement.
+First, you define the \texttt{filename} in such a way that we can add numbers to it. The \texttt{\{:03\}} means that there are going to be 3 spaces for the number, therefore the filename will look like \textbf{Data\_scan\_001.dat}, \textbf{Data\_scan\_002.dat}, etc. You can try it if you do something like \mintinline{python}{print(filename.format(34))}. Later we define the header of the file. The header has to describe what is stored in the file. We have added a title, the creation date, and the number of points we have acquired. The creation date is essential for keeping a tidy record because it will allow us to match the data with whatever we have written in the lab journal. The number of lines is a bit old-fashioned; it is very useful when you are reading line by line and you need to stop right at the last line before an error occurs. Note that at the end of each line there is a \mintinline{python}{\n} in order to force a new line after each statement.
 
-Now you have to be sure that you are not overriding a previous file with
-the new one. You need to check if the file exists, like this:
+Now we have to be sure that we are not overriding a previous file with the new one. We need to check if the file exists, like this:
 
 \begin{minted}{python}
 import os
 os.path.exists(filename.format(0))
 \end{minted}
 
-The command will return \mintinline{python}{True} if the file
-\mintinline{python}{Data_scan_000.dat} exists or \mintinline{python}{False} if not.
+The command will return \mintinline{python}{True} if the file \mintinline{python}{Data_scan_000.dat} exists or \mintinline{python}{False} if not.
 
-\exercise{Check what is the smaller number for which a file doesn't exist.
-\emph{Hint}: the \mintinline{python}{while} loop is your best friend in this case.}
+\exercise{Check what is the smallest number for which a file doesn't exist. \emph{Hint}: the \mintinline{python}{while} loop is your best friend in this case.}
 
-Once we know which number is available for saving our file, you will
-just write the data. Assuming that the number for the file is
+Once we know which number is available for saving our file, you will just write the data. Assuming that the number for the file is
 \mintinline{python}{i}:
 
 \begin{minted}{python}
 with open(filename.format(i), 'w') as f:
     f.write(header)
-    for i in range(len(e.xdata_scan)):
+    for i in range(len(e.scan_values)):
         line = "{:4.4f}, {:4.4f}\n".format(
-                e.xdata_scan[i], e.ydata_scan[i])
+                e.scan_values[i], e.scan_data[i])
         f.write(line)
 \end{minted}
 
-As you can see, the header is written in just one go. Thanks to the
-\mintinline{python}{\n} characters that were appended to every line
-it is going to be correctly displayed if you open the file. The saving
-of the data itself happens in a for loop, that covers every data point
-acquired. The format specifies that each point is going to be saved with
-a precision of 4 decimal points. If you want to read about the possible
-formats, you can check \href{https://pyformat.info/}{PyFormat} or the
-\href{https://docs.python.org/3.6/library/stdtypes.html\#str.format}{Python
-Documentation}. Go ahead and open the file to see how does the final
-version looks like.
+As you can see, the header is written in just one go. Thanks to the \mintinline{python}{\n} characters that were appended to every line it is going to be correctly displayed if you open the file with any text editor. The saving of the data itself happens in a for loop, that covers every data point acquired. The format specifies that data is going to be saved with a precision of 4 decimal points. If you want to read about the possible formats, you can check \href{https://pyformat.info/}{PyFormat} or the \href{https://docs.python.org/3.6/library/stdtypes.html\#str.format}{Python Documentation}. Go ahead and open the file to see how does the final version look like.
 
-If you are confident with the results, you can add this procedure as a
-method in the experiment model. You can also add a parameter to the
-yaml file for specifying the name of the files that you are producing.
-Remember, if you change the code and a new parameter is needed, you have
-to update the file in the \emph{Examples} folder to reflect it. If you
-fail to do so, you will be solving a lot of issues every time someone
-wants to start a new experiment.
+# 01/08/19
+
+If you are confident with the results, you can add this procedure as a method in the experiment model. You can also add a parameter to the yaml file for specifying the name of the files that you are producing. Remember, if you change the code and a new parameter is needed, you have to update the file in the \emph{Examples} folder to reflect it. If you fail to do so, you will be solving a lot of issues every time someone wants to start a new experiment.
 
 \section{Running the scan in a nonblocking way}\label{running-the-scan-in-a-nonblockingway}
 
