@@ -94,7 +94,7 @@ The second approach involves loading a module based on information stored as a s
 In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therefore, we are going to see not only how to solve the specific problem of loading the DAQ to the program, but also how to organize the workflow in order to guarantee that changes are backward compatible, and therefore other users can keep working. 
 
 \subsection{Loading a DAQ}\label{loading-a-daq}
-We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it to the \emph{experiment model}. The method \mintinline{python}{load_daq} will look like this:
+We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it. The method \mintinline{python}{load_daq} will look like this:
 
 \begin{minted}{python}
 def load_daq(self, daq):
@@ -104,11 +104,11 @@ def load_daq(self, daq):
 \end{minted}
 
 The code is straightforward. The \mintinline{python}{load_daq} method gets one
-argument, \texttt{daq}, which is in turn stored as the class property \mintinline{python}{self.daq}.
+argument, \texttt{daq}, which is in turn stored as the class attribute \mintinline{python}{self.daq}.
 You also update the \mintinline{python}{properties} dictionary to keep the name of
 the model which you are using. This is important if you want to be sure you are able to reproduce the experiment at a later stage. If you save the properties, there will be no doubts regarding which DAQ you used to measure. This approach holds for any device that you may want to use in the future. 
 
-There are, however, few things that need to be addressed. First, let's check what happens on the line which reads \mintinline{python}{str(self.daq)}. Remember, every time you see something with an unclear behavior, you can always check what is going on by opening a terminal and starting Python. Then, we can do the following:
+There are, however, few things that need to be addressed. First, let's check what happens on the line which reads \mintinline{python}{str(self.daq)}. Remember, every time you see something with an unclear behaviour, you can always check what is going on by opening a terminal and starting Python. Then, we can do the following:
 
 \begin{minted}{python}
 >>> from Model.daq import AnalogDaq
@@ -117,7 +117,7 @@ There are, however, few things that need to be addressed. First, let's check wha
 '<analog_daq.AnalogDaq object at 0x7fe8c53c0c50>'
 \end{minted}
 
-The result of doing \mintinline{python}{str(daq)} may not be what you were expecting. It is, however, a good starting point, because it allows you to identify which class did you use to define the daq. Fortunately, this can be improved. Open the file where you store the \mintinline{python}{AnalogDaq} class and add the following to it:
+The result of doing \mintinline{python}{str(daq)} may not be what you were expecting. It is, nonetheless, a good starting point because it allows you to identify which class you used. Fortunately, this can be improved. Open the file where you store the \mintinline{python}{AnalogDaq} class and add the following to it:
 
 \begin{minted}{python}
 def __str__(self):
@@ -125,11 +125,11 @@ def __str__(self):
 \end{minted}
 
 If you repeat the steps above, you will see now that the output of doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"AnalogDaq"}. The
-\mintinline{python}{__str__} method of a class tells Python how to convert an object to a string. It is also responsible for the behavior of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. Therefore, deciding what to include in the string representation requires some thinking. In principle, you can also add something that identifies that specific DAQ such as its serial number or the port to which it is connected. 
+\mintinline{python}{__str__} method of a class tells Python how to convert an object to a string. It is also responsible for the behaviour of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. Therefore, deciding what to include in the string representation requires some thinking. You can also add something that identifies that specific DAQ such as its serial number or the port to which it is connected. 
 
-There is something else that is worth discussing at this stage. Remember that in principle we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash before it was able to write the data to the hard drive. 
+There is something else that is worth discussing at this stage. Remember that we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash before it was able to write the data to the hard drive. 
 
-Even if the example above can be a bit of an extreme, it can be wise to verify the user input, especially if it can alter the functioning of the program in some very wrong ways. If you think about what the {DAQ} Models have in common, you should realize that it is that both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting is actually derived from the base model. To achieve this, you will need to update the experiment model, pay attention to the first line, which should be at the top of the file:
+Even if the example above can be a bit of an extreme, it can be wise to verify the user input, especially if it can alter the functioning of the program in some very wrong ways. If you think about what the {DAQ} Models have in common, you should realize that both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting is actually derived from the base model. To achieve this, you will need to update the experiment model, pay attention to the first line, which should be at the top of the file:
 
 \begin{minted}{python}
 from PythonForTheLab.Model.daq.base import DAQBase
@@ -142,7 +142,7 @@ from PythonForTheLab.Model.daq.base import DAQBase
     [...]
 \end{minted}
 
-The \mintinline{python}{isinstance} function is very useful to check whether the object we are inspecting belongs to a special class, including parents. It works not only with custom classes, but also with default data types of Python, for example:
+The \mintinline{python}{isinstance} function is very useful to check whether the object we are inspecting belongs to a special class, including parents. The function works also with default data types of Python, for example:
 
 \begin{minted}{pycon}
 >>> a = 1
@@ -172,7 +172,7 @@ Next time you use the method \mintinline{python}{load_config}, you will also hav
 def load_daq(self, daq=None):
     if daq is None:
         try:
-           name = self.properties['Experiment']['DAQ']['name']
+            name = self.properties['Experiment']['DAQ']['name']
             port = self.properties['Experiment']['DAQ']['port']
         except KeyError:
             raise Exception('You must either provide a daq or specify it in the configuration file')
@@ -191,10 +191,10 @@ def load_daq(self, daq=None):
         # Here goes the same code you had before
 \end{minted}
 
-The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case, \mintinline{python}{None}. Adding a default value allows you to use the
-method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another failsafe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweighs the flexibility. 
+The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case \mintinline{python}{None}. Adding a default value allows you to use the
+method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another fail-safe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweighs the flexibility. 
 
-The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specified in the past. Adding default values when you add a new input to your methods or functions is an excellent way of keeping backward compatibility. Sometimes it will not be possible though. Bigger libraries, such as numpy, normally release intermediate versions, in which a warning appears telling you that in a future version a function will change, and they normally document it quite extensively. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
+The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specified in the past. Adding default values when you add a new input to your methods or functions is an excellent way of keeping backward compatibility. The other way around is also important: when you want to remove input from a function, you can add a default value to the argument; in the function you check whether the user supplied a value or not and raise a warning saying that the input is deprecated. Bigger libraries, such as numpy, before eliminating variables or adding mandatory arguments to a function, normally release intermediate versions in which a warning appears. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
 
 \exercise{Go ahead and trigger the exception by defining a name of the {DAQ} different from `DummyDaq' or `RealDaq'. What happens to the code after the exception? Does it get executed?}
 
@@ -212,7 +212,7 @@ The goal that we were set to achieve at the beginning of the book is to measure 
 
 \exercise{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
-Performing a scan requires some parameters, that you should have defined in previous chapters, in any case, you can find them below as well.
+Performing a scan requires some parameters, that you should have defined in previous chapters. As a reminder, you can find them below:
 
 \begin{minted}{yaml}
 Scan:
@@ -226,9 +226,8 @@ Scan:
 
 \mintinline{python}{channel_in} and \mintinline{python}{channel_out} are the numbers of the channels on the DAQ needed for the scan, i.e., the analog in and the analog out. \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output parameters. Note that units are added, and we will see how to deal with them later. It is important to point out that they don't need to have the same unit but they have to be the same quantity. For example, you can mix \texttt{mV},  \texttt{nV},  \texttt{V}, etc. The delay means how often the output is going to change from one value to the next.
 
-The advantage of starting by defining the parameters in a {YAML} file is that now you know what parameters you have available and what are their names. The next step is to create the method for doing the scan. You have already done a scan in the previous chapters. If you dig up the code, you can adapt it in order to make it work as a method in the experiment class. The general idea is to
-generate an output and record an input within a \emph{for loop} with the range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You
-should have something like this:
+The advantage of starting by defining the parameters in a {YAML} file is that now you know what parameters you have available and what are their names. The next step is to create the method for doing the scan. Remember that you have already done a scan in the previous chapters. If you dig up the code, you can adapt it in order to make it work as a method in the experiment class. The general idea is to
+generate an output and record an input within a \emph{for loop} with the range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You should have something like this:
 
 \begin{minted}{python}
 def do_scan(self):
@@ -237,15 +236,15 @@ def do_scan(self):
     start = scan_params['start']
     stop = scan_params['stop']
     step = scan_params['step']
-    port_in = scan_params['port_in']
-    port_out = scan_params['port_out']
+    channel_in = scan_params['channel_in']
+    channel_out = scan_params['channel_out']
     delay = scan_params['delay']
 
     num_points = int((start-stop)/step) + 1
 
-    scan_values = np.linspace(start, stop, num_points)
+    self.scan_values = np.linspace(start, stop, num_points)
 
-    for value in scan_values:
+    for value in self.scan_values:
         self.daq.set_analog_value(port_out, value)
         data = self.read_analog(port_in)
         sleep(delay)
@@ -255,9 +254,7 @@ The code is quite clear. The first step is to store the parameters of the scan i
 
 \exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every step. This is not what you want if you intend to do anything with it. Store the information into an array. The array should be an attribute of the class, i.e. it should be defined in the \mintinline{python}{__init__} method and you can refer to it as \mintinline{python}{self.scan_data}.}
 
-The advantage of having the data stored in an attribute is that it becomes available to other methods of the class and that it is accessible from outside of it, for example for plotting. However,
-storing the data is only one of the concerns that need to be addressed. The other one is that the parameters that you are using have units attached to them, and yaml is reading them as a string that needs to be
-transformed into quantities.
+The advantage of having the data stored in an attribute is that it becomes available to other methods of the class and it is also accessible from outside of the object, for example if you would like to make plot. However, storing the data is only one of the concerns that need to be addressed. Another one is that the parameters you are using have units attached to them, and YAML is reading them as a string that needs to be transformed into quantities. 
 
 We have covered how to use units in Python when you have developed the first driver for the {PFTL} {DAQ}. You have to use the Unit Registry from a package called Pint. The code looked like this:
 
@@ -285,29 +282,39 @@ And you can use \mintinline{python}{Q_} for transforming the parameters into qua
 
 \exercise{Update the code to transform each one of the appropriate parameters to a Quantity. Remember that the port numbers are supposed to be integers, not quantities.}
 
-Once you complete the exercise above, one of the problems was addressed. But still, if you try to run the program you will face other issues. For example, to calculate the number of points in the scan, we should transform all the parameters to the same units. One of the possible ways of doing it is by picking the units of one of the parameters, like this:
+\exercise{Update the DAQ model to use {Q_} instead of importing Pint and generating a unit registry in the model file.}
 
-\begin{minted}{python}
-units = start.u
-stop = stop.to(units)
-step = step.to(units)
-num_points = (stop-start)/step
-num_points = int(num_points.m_as(''))+1
+\note{By defining \texttt{Q_} at the root of the project, we are actually hiding a problem that you may encounter in other projects. The unit registry is a complex object, in which you specify how units relate to each other and it allows you to define your own units if needed. This means that different unit registries cannot be mixed together. If you define the unit registry in the experiment model and in the daq model, at some point you will see an exception warning you about mixing different unit registries. It is good practice to create only one unit registry per project.}
+
+Once you complete the exercise above, one of the problems was addressed. But if you try to run the program you will face other issues. First, we can check what happens with the number of points for the scan. We can test directly on the python console to see how Pint behaves:
+
+\begin{minted}{pycon}
+>>> import pint
+>>> ur = pint.UnitRegistry()
+>>> Q_ = ur.Quantity
+>>> start = Q_('0V')
+>>> stop = Q_('1V')
+>>> step = Q_('100mV')
+>>> ((stop-start)/step)
+<Quantity(0.01, 'volt / millivolt')>
 \end{minted}
 
-The \mintinline{python}{u} grabs the units from a \emph{Quantity}. You transform everything into the same units to avoid problems with the number of points you are computing. However, when dividing quantities, the result will be another quantity, just that \emph{dimensionless}. To transform it to a number, you have to append \mintinline{python}{.m_as('')}. Doing \mintinline{python}{num_points.m_as('')} means that you want to take the magnitude of the variable, without units, and the \mintinline{python}{''} are there because we are dealing with a dimensionless quantity. 
+You see that, if we divide two quantities, Pint does not immediately simplify the units, it just keeps the units of the numerator and the denominator almost intact. That is why you see volt/millivolt. You can try to change the units to, for example, \texttt{kV}, etc. and see what happens when you mix them. However, if we do the following:
 
-\exercise{What happens if you calculate the number of points without transforming start, stop and step to the same units?}
+\begin{minted}{picon}
+>>> int((stop-start)/step)
+10
+\end{minted}
 
-There is one more parameter that you need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is simply writing the following:
+When we apply \texttt{int} to a quantity, Pint automatically tries to transform the variable to a dimensionless quantity. This is exactly the case when we divide volts and millivolts. The same is valid if we use \textttt{float}, for example. However, if you use \texttt{int} to a Quantity with units, it will raise an exception. The number of points is not an issue for performing the scan. There is another parameter which we need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is to simply transform the delay to the units needed by the function:
 
 \begin{minted}{python}
 sleep(delay.m_as('s'))
 \end{minted}
 
-Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With these changes, your code is ready for performing a scan. 
+Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With these changes, your code is almost ready for performing a scan. 
 
-Since everything is working, we may be tempted to step ahead. However, it is worth discussing how Pint and Numpy play along since it can give rise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
+If you do a quick test, you will probably notice that everything is working as expected, and you may be tempted to step ahead. However, it is worth discussing how Pint and Numpy play along since it can give rise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
 
 \begin{minted}{pycon}
 >>> start = Q_('5V')
@@ -317,7 +324,7 @@ Since everything is working, we may be tempted to step ahead. However, it is wor
 array([ 5.,  6.,  7.,  8.,  9., 10.])
 \end{minted}
 
-We see in the output that the array doesn't have units. That is not particularly bad, it is easy to add them later. But what happens if we mix different units?
+We see that the output array doesn't have units. That is not particularly bad, it is easy to add them later. But what happens if we mix different units?
 
 \begin{minted}{pycon}
 >>> start = ur('5mV')
@@ -325,23 +332,103 @@ We see in the output that the array doesn't have units. That is not particularly
 array([ 5.,  6.,  7.,  8.,  9., 10.])
 \end{minted}
 
-Surprisingly, what is happening is that Pint stripped the units from the quantities and just used the magnitude. This is a huge problem for our program. If at some point a user mixes units for start and stop, our program will behave in a completely unintended way. These kind of bugs are very hard to find and to solve because the only indication of something going badly is when we look at the data and we realize that something is incredibly off. The number of points is correct, but the values used for the output are not. 
+What you see in the examples above is that Pint stripped the units from the quantities and just used their magnitude. This is a huge problem for our program because it means units are not being used at all. If, at some point, a user mixes units for start and stop, our program will behave in a completely unintended way. These kind of bugs are very hard to find and to solve because the only indication of something going badly is when we look at the data and we realize that something is incredibly off. The number of points is correct, but the values used for the output are not. This will make it incredibly hard to trace back the errors because you will notice that something is not wrong only when you are analysing the data. 
 
-In our solution, we have forced the same units, because we assumed that we needed them to calculate the number of points in our scan. The reality is that we don't need to do it for the number of points, but we do need it for the scan dimension. There is only one last thing that we are missing and is that we should use units when we set the output on our device. Therefore the quickest way of doing it is like this:
+A way around this problem is to select the units we want to work with before using \texttt{linspace}. There is no problem with this approach, because in any case the DAQ model will take care of translating the units before sending the command to the device. We can to the following:
 
 \begin{minted}{python}
 def do_scan(self):
     [...]
-    units = start.u
-    stop = stop.to(units)
-    scan = np.linspace(start, stop, num_points) * units
+    start = start.to('V')
+    stop = stop.to('V')
+    scan = np.linspace(start, stop, num_points) * Q_('V')
 \end{minted}
+
+We force \texttt{start} and \texttt{stop} to be in volts. Of course this works only when we are scanning a voltage and thus it will not work if you are scanning distances, for example. When we use \texttt{linspace}, we will have a Numpy array, and we can add units by multiplying it with a quantity. You can test whether this works or not:
+
+\begin{minted}{pycon}
+>>> start = Q_('1mV')
+>>> stop = Q_('1V')
+>>> num_points = 10
+>>> start = start.to('V')
+>>> stop = stop.to('V')
+>>> scan = np.linspace(start, stop, num_points) * Q_('V')
+>>> scan[0]
+<Quantity(0.001, 'volt')>
+\end{minted}
+
+\subsection{Linspace or Arage}
+When we develop software, there are so many details that we need to take into account that it is possible to miss some of the important ones. In this section, we have been using \texttt{linspace} to define the scan points. However, this function takes the number of points in a given range, while we are using the step size in the config file. What happens if, for example, the step gives a non-integer number of points? We can test it out:
+
+\begin{minted}{pycon}
+>>> start = 0
+>>> stop = 10
+>>> step = .3
+>>> num_points = int((stop-start)/step)+1
+>>> np.linspace(start, stop, num_points)
+array([ 0.        ,  0.3030303 ,  0.60606061,  0.90909091,  1.21212121,
+[...]
+\end{minted}
+
+In the output of the code above, you see that the step is not exactly \texttt{0.3} but a bit more. A possible solution to this problem is to use \texttt{arange} instead of \texttt{linspace}. If you check the documentation you will see that it fits the decisions we have made:
+
+\begin{quote}
+ numpy.arange([start, ]stop, [step, ]dtype=None)¶
+
+    Return evenly spaced values within a given interval.
+
+    Values are generated within the half-open interval [start, stop) (in other words, the interval including start but excluding stop). For integer arguments the function is equivalent to the Python built-in range function, but returns an ndarray rather than a list.
+
+    When using a non-integer step, such as 0.1, the results will often not be consistent. It is better to use numpy.linspace for these cases.
+\end{quote}
+
+If we quickly try it out:
+
+\begin{minted}{pycon}
+>>> np.arange(start, stop, step)
+array([0. , 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1, 2.4, 2.7, 3. , 3.3, 3.6,
+       3.9, 4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6. , 6.3, 6.6, 6.9, 7.2, 7.5,
+       7.8, 8.1, 8.4, 8.7, 9. , 9.3, 9.6, 9.9])
+\end{minted}
+
+We see that now the size of the step is what we specified, and thus, it looks like a neat idea to change linspace and start using arange. However, if we go back to the previous case, which gives an integer number of points:
+
+\begin{minted}{pycon}
+>>> step = 1
+>>> np.arange(start, stop, step)
+array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+\end{minted}
+
+And we see that the last point is missing, values should have gone all the way to 10. This is in the documentation, where you read that the output is given in the half-open interval [start, stop). We may be tempted to force \texttt{arange} to include the last step, for example:
+
+\begin{minted}{pycon}
+>>> np.arange(start, stop+step, step)
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10])
+\end{minted}
+
+But again, if we go back to the non-integer number of points:
+
+\begin{minted}{pycon}
+>>> np.arange(start, stop+step, step)
+array([ 0. ,  0.3,  0.6,  0.9,  1.2,  1.5,  1.8,  2.1,  2.4,  2.7,  3. ,
+        3.3,  3.6,  3.9,  4.2,  4.5,  4.8,  5.1,  5.4,  5.7,  6. ,  6.3,
+        6.6,  6.9,  7.2,  7.5,  7.8,  8.1,  8.4,  8.7,  9. ,  9.3,  9.6,
+        9.9, 10.2])
+\end{minted}
+
+You can see now that the last value is beyond the range we set.
+
+You can think about including more elaborated solutions. For example checking whether the last step falls out or in the range, etc. However, the main reflection of this section is that there is no unique way of solving this problem. If we use \texttt{linspace}, we are sure we are within the specified range, but the step may not be what we specified. If we use \texttt{arange}, we can be sure about the step size, but the limits are not clear. 
+
+When these issues arise, you have to consider what do you want to define as \textit{expected behavior}. Is missing the last point of a scan acceptable? Is having a different step size acceptable? You can also redefine the configuration file in order to include number of steps and not step size. But in that case, you loose track of whether the real step size is beyond the resolution of your devices. The choice is ultimately yours, while you are consistent in your code, you know your results will also be consistent. 
+
+In the rest of the book, we will keep using \texttt{linspace} for defining scans.
 
 
 \section{Dummy DAQ}\label{dummy-daq}
-The previous sections have been focused on developing a model for interacting with the real device that drives your experiment. However, when you develop software for the lab, sometimes you would like to test your program without having the real device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. 
+The previous sections have been focused on developing a model for interacting with the real device that drives the experiment. However, when you develop software for the lab, sometimes you would like to test your program without having a device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. You can also refer to them as \textit{simulated} devices. 
 
-Create a new file called \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
+In our program, created a dummy daq is relatively easy. Create a new file \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
 
 \begin{minted}{python}
 from PythonForTheLab.Model.daq import DAQBase
@@ -352,7 +439,7 @@ class DummyDaq(DAQBase):
         return self.serial_number
 \end{minted}
 
-You start by importing the base class \mintinline{python}{DAQBase}, as you did for the real \emph{model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think about what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to get a value when you read back. And you need to use the proper units as well. It can look something like this:
+You start by importing the base class \mintinline{python}{DAQBase}, as you did for the \emph{real model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think about what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to generate a value when you read back. And you need to use the proper units as well. It can look something like this:
 
 \begin{minted}{python}
 import numpy as np
@@ -383,7 +470,7 @@ from dummy_daq import DummyDaq as AnalogDaq
 
 And run \textbf{test\_daq.py}. You will see that an error appears because we are using the \mintinline{python}{initialize} method in the test, but it is not defined within the class. This happened because we included \mintinline{python}{initialize} in the \mintinline{python}{AnalogDaq} but we never added it to the DAQBase. Now you see the power that comes with been organized and systematic. Keeping track of the methods in a base class allows you not to make the same mistakes. Moreover, it would have allowed you to run the test without issues.
 
-\exercise{Add an \mintinline{python}{initialize} method into the base class.}
+\exercise{Add an \texttt{initialize} method into the base class.}
 
 If you run the test after completing the exercise, you will see that there are no errors appearing, even if you don't modify the dummy class. Now you see that you can exchange the models in a relatively simple way, and the script that is responsible for measuring works without problems. Of course, this is a simple example, where you exchange a real device for a dummy one, but if you would have two different devices, exchanging them would have been just as simple and the measurement would have been performed regardless of which device you are using.
 
@@ -392,17 +479,17 @@ If you run the test after completing the exercise, you will see that there are n
 \section{Conclusions}\label{experiment-model-conclusions}
 With this chapter, the core code for a functioning experiment is finished. We went from the development of a driver for a device to split the code into controllers and models. Defining a scan as we did in this chapter was so simple because of all the previous preparation. Of course, there are things that we can do better but what we have achieved so far is functioning and quite useful.
 
-When you develop your own program, it can be wise to start with the experiment model. Once you established the steps of a measurement it will become clear what you need to develop in order to achieve it. Starting by outlining the experiment model is a good way of being focused on a clear objective. If you are developing a driver, or a model, without knowing to what end, you may end up creating methods and options that you don't really need.
+When you develop your own program, it can be wise to start with the experiment model. Once you establish the steps of a measurement it will become clear what you need to develop in order to achieve it. Starting by outlining the experiment model is a good way of being focused on a clear objective. If you are developing a driver, or a model, without knowing to what end, you may end up creating methods and options that you don't really need.
 
-In this chapter, you also start to realize that if you plan to open your code to others, not just as developers, but as users, you will need to verify the input that they supply. For example, you learned how to verify that the {DAQ} model is actually what you want. Following that idea, there are several improvements to your code, for example, you can check if the units of the parameters used are correct. It is not the same trying to apply $5\,\textrm{V}$ to an analog output than $5,\textrm{nm}$. 
+In this chapter, you also start to realize that if you plan to open your code to others, not just as developers, but as users, you will need to verify the input that they supply. For example, you have learned how to verify that the {DAQ} model is actually what you want. Following that idea, there are several improvements to your code, for example, you can check if the units of the parameters used are correct. It is not the same trying to apply $5\,\textrm{V}$ to an analog output than $5,\textrm{nm}$. 
 
 \section{Extras: Defining a Monitor}\label{extras-defining-amonitor}
-The principal objective of this book is to show you how to build the software that you need in order to measure the I-V curve of a diode. However, there are some other options that you can add to the program, such as continuous monitoring of a signal. In a lot of experiments, measuring a signal is all you need, especially in the phase of setting up. Imagine that you are monitoring a temperature, perhaps you need to wait until it reaches a certain value, or you monitor the signal generated by a photodiode in order to align a laser.
+The principal objective of this book is to show you how to build software in order to measure the I-V curve of a diode. However, there are some other options that you can add to the program, such as continuous monitoring of a signal. In a lot of experiments, measuring a signal is all you need, especially in the phase of setting up. Imagine that you are monitoring a temperature, perhaps you need to wait until it reaches a certain value, or you monitor the signal generated by a photodiode in order to align a laser.
 
-Monitoring a signal is somehow simpler than performing a scan because you have fewer options. The parameters that you need are the channel to monitor, the total time, and time resolution of the monitor. The total time means for how long do you want to acquire a signal before it starts overwriting the information, and the time resolution defines the time interval between consecutive acquisitions. The main difficulty with a monitor is that the loop should be infinite and you should be able to stop it somehow. We will see that in the next chapter, for the time
+Monitoring a signal is somehow simpler than performing a scan because you have fewer options. The parameters that you need are the channel to monitor, the total time, and time resolution of the monitor. The total time means for how long do you want to acquire a signal before it starts overwriting the information, and the time resolution defines the time interval between consecutive acquisitions. The main difficulty with a monitor is that the loop should be infinite and you should be able to stop it somehow. We will see those topics in the next chapter, for the time
 being, you can complete these exercises:
 
 \exercise{Add one more block in the {YAML} file with the parameters that you need to monitor a signal}
 
-\exercise{Define a new method, called \mintinline{python}{monitor_signal} that uses the parameters defined in the previous exercise to continuously acquire a value. If you want to test how the monitor works, you can make the loop stop after a certain amount of time, for example using the module \mintinline{python}{time.time()}.\\ 
-\textbf{{HINT}}: You should define a numpy array where to store the data. In order to move all the values one step to the left (or right), you can use \mintinline{python}{np.roll}.}
+\exercise{Define a new method, called \mintinline{python}{monitor_signal} which uses the parameters defined in the previous exercise to continuously acquire a value. If you want to test how the monitor works, you can make the loop stop after a certain amount of time, for example using the module \mintinline{python}{time.time()}.\\ 
+\textbf{{HINT}}: You should define a numpy array where to store the data. In order to move all the values one step to the left (or right), you can use \mintinline{python}{np.roll}. It is always a good exercise to look up the documentation online to understand how Numpy functions work.}
