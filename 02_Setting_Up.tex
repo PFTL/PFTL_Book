@@ -259,7 +259,10 @@ pip freeze
 
 It will give you a list of all the packages that you have installed within that working environment and their exact versions. So, you know exactly what you are using and you can revert back if anything goes wrong. Moreover, for people who are really worried about the reproducibility of the results, keeping track of specific packages is a great way to be sure that everything can be repeated at a later time.
 
-\subsection{Installing Qt Designer on Windows}
+\section{Qt Designer}
+Qt Designer is a great tool to quickly build user interfaces by dragging and dropping elements to a canvas. It allows you to quickly develop complex windows and dialogs, styling them, and defining some basic behavior without writing actual code. We will use this program to develop a complex window in which the user will be able to tune the parameters of the experiment and data will be shown in real-time. 
+
+\subsection{Installing on Windows}
 Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Run the following command:
 
 \begin{minted}{bash}
@@ -268,7 +271,7 @@ Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Ru
 
 And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder will depend on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
-\subsection{Installing Qt Designer on Linux}
+\subsection{Installing on Linux}
 Linux users can install Qt Designer directly from within the terminal by running:
 
 \begin{minted}{bash}
