@@ -68,7 +68,7 @@ python Examples/my_script.py
 
 This works, but it is not very handy. At some point you would like to run a script which is in a different place in your computer, or you would like to be able to build on the PythonForTheLab package. This is all possible, but it is very dependent on the operating system which you are using. You can refer to section \ref{section:importing-python}, in which we discussed how to add folders to the Python path. If you are using an IDE such as Pycharm or Visual Studio Code, these steps are taken care for you, provided that you trigger your program from within the editor. 
 
-A more elegant solution will be discussed at the end of the book, when we develop a \textttt{setup.py} script that will allow us to install our package in the environment in which we work and not worrying about paths, etc. After you have added the folder the {PATH} in your computer, you can start working in any folder that you wish. The files that we are going to create from now on in this chapter are not going to be part of the main package, the recommendation is to work inside the \emph{Examples} folder, but you are free to choose. 
+A more elegant solution will be discussed at the end of the book, when we develop a \texttt{setup.py} script that will allow us to install our package in the environment in which we work and not worrying about paths, etc. After you have added the folder the {PATH} in your computer, you can start working in any folder that you wish. The files that we are going to create from now on in this chapter are not going to be part of the main package, the recommendation is to work inside the \emph{Examples} folder, but you are free to choose. 
 
 \section{Running an Experiment}\label{running-anexperiment}
 We have the configuration file defined from the previous chapter. Therefore, we can start using the experiment model right away. We can start by creating a file in the \emph{Examples} folder, let's call it \textbf{start\_cli.py}, and add the following:
@@ -178,7 +178,6 @@ with open(filename.format(i), 'w') as f:
 
 As you can see, the header is written in just one go. Thanks to the \mintinline{python}{\n} characters that were appended to every line it is going to be correctly displayed if you open the file with any text editor. The saving of the data itself happens in a for loop, that covers every data point acquired. The format specifies that data is going to be saved with a precision of 4 decimal points. If you want to read about the possible formats, you can check \href{https://pyformat.info/}{PyFormat} or the \href{https://docs.python.org/3.6/library/stdtypes.html\#str.format}{Python Documentation}. Go ahead and open the file to see how does the final version look like.
 
-# 01/08/19
 
 If you are confident with the results, you can add this procedure as a method in the experiment model. You can also add a parameter to the yaml file for specifying the name of the files that you are producing. Remember, if you change the code and a new parameter is needed, you have to update the file in the \emph{Examples} folder to reflect it. If you fail to do so, you will be solving a lot of issues every time someone wants to start a new experiment.
 

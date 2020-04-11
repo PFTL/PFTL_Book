@@ -282,9 +282,9 @@ And you can use \mintinline{python}{Q_} for transforming the parameters into qua
 
 \exercise{Update the code to transform each one of the appropriate parameters to a Quantity. Remember that the port numbers are supposed to be integers, not quantities.}
 
-\exercise{Update the DAQ model to use {Q_} instead of importing Pint and generating a unit registry in the model file.}
+\exercise{Update the DAQ model to use {Q\_} instead of importing Pint and generating a unit registry in the model file.}
 
-\note{By defining \texttt{Q_} at the root of the project, we are actually hiding a problem that you may encounter in other projects. The unit registry is a complex object, in which you specify how units relate to each other and it allows you to define your own units if needed. This means that different unit registries cannot be mixed together. If you define the unit registry in the experiment model and in the daq model, at some point you will see an exception warning you about mixing different unit registries. It is good practice to create only one unit registry per project.}
+\note{By defining \texttt{Q\_} at the root of the project, we are actually hiding a problem that you may encounter in other projects. The unit registry is a complex object, in which you specify how units relate to each other and it allows you to define your own units if needed. This means that different unit registries cannot be mixed together. If you define the unit registry in the experiment model and in the daq model, at some point you will see an exception warning you about mixing different unit registries. It is good practice to create only one unit registry per project.}
 
 Once you complete the exercise above, one of the problems was addressed. But if you try to run the program you will face other issues. First, we can check what happens with the number of points for the scan. We can test directly on the python console to see how Pint behaves:
 
@@ -301,12 +301,12 @@ Once you complete the exercise above, one of the problems was addressed. But if 
 
 You see that, if we divide two quantities, Pint does not immediately simplify the units, it just keeps the units of the numerator and the denominator almost intact. That is why you see volt/millivolt. You can try to change the units to, for example, \texttt{kV}, etc. and see what happens when you mix them. However, if we do the following:
 
-\begin{minted}{picon}
+\begin{minted}{pycon}
 >>> int((stop-start)/step)
 10
 \end{minted}
 
-When we apply \texttt{int} to a quantity, Pint automatically tries to transform the variable to a dimensionless quantity. This is exactly the case when we divide volts and millivolts. The same is valid if we use \textttt{float}, for example. However, if you use \texttt{int} to a Quantity with units, it will raise an exception. The number of points is not an issue for performing the scan. There is another parameter which we need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is to simply transform the delay to the units needed by the function:
+When we apply \texttt{int} to a quantity, Pint automatically tries to transform the variable to a dimensionless quantity. This is exactly the case when we divide volts and millivolts. The same is valid if we use \texttt{float}, for example. However, if you use \texttt{int} to a Quantity with units, it will raise an exception. The number of points is not an issue for performing the scan. There is another parameter which we need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is to simply transform the delay to the units needed by the function:
 
 \begin{minted}{python}
 sleep(delay.m_as('s'))

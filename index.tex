@@ -8,8 +8,9 @@
 \definecolor{notecolor}{RGB}{100, 149, 237}
 \definecolor{warncolor}{RGB}{255, 59, 0}
 \definecolor{warntitle}{RGB}{255, 59, 0}
-\usepackage{hyperref} 
+\usepackage{hyperref}
 \usepackage{fontspec}
+\usepackage{pdfpages}
 \setmainfont{DejaVu Serif}
 
 \usepackage{polyglossia}
@@ -49,9 +50,9 @@
 \title{Python For The Lab}
 \author{Aquiles Carattino}
 
-\input{structure}
 
 \begin{document}
+\includepdf[pages=-]{cover-pftl.pdf}
 
 \include{00_title}
 

@@ -290,7 +290,7 @@ a device and get its serial number. Before going into the discussion of what the
   print("The device serial number is: {}".format(serial_number))
 \end{minted}
 
-In the first line, you create an object \mintinline{python}{Device} using a specific port. Note that when you want to get the serial number from the device, you can now simply do \mintinline{python}{dev.idn()}. It looks much neater than having to explicitly send the command with the line ending, etc.
+In the first line, you create an object \texttt{Device} using a specific port. Note that when you want to get the serial number from the device, you can now simply do \mintinline{python}{dev.idn()}. It looks much neater than having to explicitly send the command with the line ending, etc.
 
 Having a class and not a plain script makes your code much
 easier to share, to reuse and to maintain. The Device class defines a method called \mintinline{python}{__init__}

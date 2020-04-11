@@ -1,4 +1,4 @@
-\chapter{Writing the first Model for a Device}\label{writing-the-first-model-for-adevice}
+    \chapter{Writing the first Model for a Device}\label{writing-the-first-model-for-adevice}
 
 \section{Objectives}
 In this chapter, we are going to develop a model for a real device. You are going to start seeing why the Model-View-Controller pattern is so useful. In the previous chapter, we discussed that models specify the ways in which the user can interact with devices. The logic of the experiment that we are going to perform is going to manifest in the models that we develop. 
@@ -110,7 +110,7 @@ If you go through the manual of the {PFTL DAQ}, you will see that it is possible
 
 After completing the previous exercises, you can test that everything is working. Write a simple script that initializes the communication with the device, sets the output in some channel and reads some input. Verify that the values make sense when thinking in volts. 
 
-\section{Adding \emph{real} units to the code}\label{adding-units-to-thecode}
+\section{Adding real units to the code}\label{adding-units-to-thecode}
 If you completed the previous exercises, you should have ended up with code that works great if you provide output voltages in volts and you know that the value you get when reading an analog input is also in volts. Volts seem like a natural choice in the context in which we are working now, but you could have also decided to use millivolts, for example. Handling units in computer programs is always a headache because you need to document exactly what units each function takes and returns. 
 
 If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite. You can check the \href{http://articles.latimes.com/1999/oct/01/news/mn-17288}{news article} with the story of how the Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems. 
