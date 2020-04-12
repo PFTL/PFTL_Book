@@ -1,36 +1,105 @@
-\chapter{Writing the first Model for a Device}\label{chapter:device-model}
-
-\section{Objectives}
-In this chapter, we are going to develop a model for a real device. You are going to start seeing why the Model-View-Controller pattern is so useful. In the previous chapter, we discussed that models specify the ways in which the user can interact with devices. The logic of the experiment that we are going to perform is going to manifest in the models that we develop. 
-
-Even if hard to realize at the beginning, most of the development time will be spent working and improving the models. Many controllers can be downloaded, installed, or quickly developed. The view, once developed, is going to stay more or less the same over long periods. Models, on the other hand, is where your true experiment is defined. In the models you are going to decide the order of the steps to perform an experiment, is where you are going to automatize tasks, etc. 
-
-In this chapter, we are going to develop a model for the device based on the controller that we wrote on Chapter \ref{chapter:controller}. 
+\chapter{Writing a Model for the Device}\label{chapter:device-model}
 
 \section{Introduction}
-The secret to successfully develop a model is to think beforehand what do we expect from the device, how are we actually planning to use it. The first time you start thinking about models it can be complicated because you need to anticipate your future needs. For example, the PFTL DAQ device doesn't handle units. It would be great if the model would allow us to specify the output voltage instead of converting it to an integer because it is what the driver uses. This requirement seems trivial and probably is the first one that comes to mind. Later, once you really start using the program, you will see that some other useful options were missing, and you could have saved a lot of time if you would have thought about them. 
+The secret to successfully develop a model for a device is to think beforehand what do we expect from the device, how are we actually planning to use it. The first time we start thinking about models it can become complicated because we need to anticipate our future needs. For example, the {PFTL DAQ} device doesn't handle units. It would be great if the model would allow us to specify the output voltage instead of converting it to an integer because it is what the driver uses. This requirement seems trivial and probably is the first one that comes to mind. Later, once you really start using the program, you will see that some other useful options were missing, and you could have saved a lot of time if you would have thought about them. 
 
-Sadly, there is no magical recipe to teach you exactly how to develop models for your devices. The best we can do is to guide you through the processes of developing a model for the first time. With practice, you will get better at it, and you will learn how to anticipate your future needs. It is very important to separate what you expect from the device and what you expect from the experiment as a whole. If you master this technique, you will be able to use the models and controllers for very different purposes, without needing to re-write the entire program. 
-
-In this book, we are going to see how to linearly change an analog output while recording an analog input. You know that the ultimate goal is to measure the I-V curve of a diode, but if you would hook the analog output to a piezo stage, you could be doing a scan in a confocal microscope. When the software is well designed, you will have plenty of smaller building blocks that you can keep using in your future projects. You won't need to write and think everything from scratch. Moreover, an improvement because of a new experiment can still benefit the program that controls your previous setup. 
-
-All the predicates in this chapter rely on the fact that you really understand your own experiment before you start coding. Remember that what you are developing in this book is the simplest of the examples. In your own lab, there are going to be several devices, each will have a manual, they are going to be connected to each other. Be sure you understand not only the science behind what you are trying to measure but also the technical aspects of your setup, its limitations, and characteristics. 
+There is no magical recipe to teach exactly how to develop models for devices. Each device and each experiment will be special, the best we can do is to focus on the task at hand. The rest can be extrapolated to other devices and experiments. Once you understand the role that models play, you will be able to use them for very different purposes, without needing to re-write the entire program. With a simple device and a simple experiment the gain of having models separated from controllers may not be immediate, but as soon as the complexity grows, the value will become apparent. 
 
 \warning{It is impossible to overestimate the importance of reading the manuals of your devices. Hardware in the lab is not the same as consumer hardware. Things can break, signals may not make sense. Be always sure to understand the limits under which each component operates.}
 
-\section{Base Model}\label{basemodel}
-In practical terms, a model for a device is nothing more than a class. Remember that whenever a user is going to interact with the device, it is going to happen through the model and never directly to the controller (i.e. the driver). The first step is to think what methods we are going to need and, if possible, the output that each method is going to produce. If you haven't already, create a folder called \textbf{DAQ} inside the \emph{Model} folder and remember to also add an empty \texttt{\_\_init\_\_.py} file. 
+\section{Device Model}\label{devicemodel}
+The first step when defining a model for a device is to think how do we want to interact with that piece of hardware. Of course, we would like to initialize the device, set a voltage, read a voltage and finalize the device. But we don't want to just repeat what the controller can do. When we initialize or finalize the device, we want to be sure the output voltages are set at $0\,\textrm{V}$. This ensures that no current will be flowing through the LED unless we explicitly want it. We also want to be able to use values in volts when setting an output, and getting values in volts when reading a voltage. 
 
-We want all the DAQ models that we develop to have exactly the same methods. If we ever change the PFTL DAQ card for a different one, we would like our experiment to keep running. Therefore, the best strategy is to create a base class. This class will hold all the methods that are going to be used during our experiments. Create a file called \textbf{base.py} inside the DAQ folder, and define a class called \mintinline{python}{DAQBase}:
+We can develop a skeleton of the model, using empty methods, to have an idea of what we need to develop and the arguemtns and outputs of each method. Let's start by creating a file \textbf{analog\_daq.py} in the \emph{Model} folder, we can then add the following code:
+
+\begin{minted}{python}
+class AnalogDaq:
+    def __init__(self, port):
+        pass
+    
+    def initialize(self):
+        pass
+    
+    def get_voltage(self, channel):
+        pass
+    
+    def set_voltage(self, channel, volts):
+        pass
+    
+    def finalize(self):
+        pass
+\end{minted}
+
+New we can start step by setp. We start very similarly to how we started the controller, the \texttt{AnalogDaq} class takes port as argument for initializing. The main difference will be that we don't use PySerial directly, but we will use the controller, so we can start improving our code, like this:
+
+\begin{minted}{python}
+from PythonForTheLab.Controller.pftl_daq import Device
+ 
+class AnalogDaq:
+    def __init__(self, port):
+        self.port = port
+        self.driver = Device(self.port)
+    
+    def initialize(self):
+        self.driver.initialize()
+        self.set_voltage(0, 0)
+        self.set_voltage(1, 0)
+\end{minted}
+
+We initialize the class by storing the \texttt{port} and by creating a \texttt{self.driver} attribute. Remember that the \texttt{Device} has a separate method for initializing. The \texttt{initialize} method now not only initializes the the driver itself, but also sets the output voltages to 0. We haven't developed a way of setting voltaes, yet, but we see the flow. The same works for the \texttt{finalize} method:
+
+\begin{minted}{python}
+    def finalize(self):
+        self.set_voltage(0, 0)
+        self.set_voltage(1, 0)
+        self.driver.finalize()
+\end{minted}
+
+We first set the voltages to 0 and then we finalize the controller. This is a clear example of our own logic imposed to the device. In some cases, we don't want to set the voltage to 0 when closing the communication. Perhaps we are just switching on a laser and we want it to stay on even if we switch off the computer, or we are using piezo stages and is not recommended to suddenly shake them by setting a different voltage, it is better just to leave a voltage applied to them. That is why, adding these features to the controller would imply violating the separation of models and controllers. What we do with the voltages is part of the logic, not of the device itself. Now that we have this code, we can also add an example to the end of the file, to show how the model can be used:
+
+\begin{minted}{python}
+if __name__ == "__main__":
+    daq = AnalogDaq('/dev/ttyACM0')
+    daq.initialize()
+    voltage = 3
+    daq.set_voltage(0, voltage)
+    input_volts = daq.get_voltage(0)
+    print(input_volts)
+    daq.finalize()
+\end{minted}
+
+The last missing bits are the methods for getting and setting a voltage. What we are going to do in these steps was discussed on Section \ref{subsection:digitazing}. To set a voltage, we first need to transform a voltage in the range $0-3.3$ to an integer in the range $0-4095$ and then we apply it:
+
+\begin{minted}{python}
+    def set_voltage(self, channel, volts):
+        voltage_bits = voltage*4095/3.3
+        self.driver.set_analog_output(channel, voltage_bits)
+\end{minted}
+
+And we can do the same for the get method:
+
+\begin{minted}{python}
+    def get_voltage(self, channel):
+        voltage_bits = self.driver.get_analog_input(channel)
+        voltage = voltage_bits*3.3/1023
+        return voltage
+\end{minted}
+
+And that is all what is needed. We can now run the code and see that we are actually reading voltages and setting voltages. Because of how the experiment works, the values we get at the analog input are going to be very small, in the order of few tens of millivolts, but enough to be detected by the {PFTL DAQ}. 
+
+\section{Base Model}\label{section:base-model}
+In this book we are working with only one device, and therefore we are using only one model. But if we want to make our program compatible with more devices, we will need to start developing models for each new device. Since we have one model, it would look reasonable to copy it and adapt the methods based on what the new drivers allow us to do. Another option is to create a base class which will be inherited by all the models. In this way, we know that all the methods are defined, perhaps they don't do anything, but at least they are there. 
+
+What we will do in this section is not a requirement to keep going, but is important to show the pattern, because sooner or later when the program grows, it will be a very useful approach. Create a file called \textbf{base\_daq.py} inside the Controller folder, we can add the following code to it:
 
 \begin{minted}{python}
 class DAQBase:
-    def __init__(self):
-        pass
+    def __init__(self, port):
+        self.port = port
     
-    def idn(self):
-        pass
-    
+    def initialize(self):
+        pass 
+            
     def get_analog_value(self, channel):
         pass
     
@@ -41,88 +110,48 @@ class DAQBase:
         pass
 \end{minted}
 
-This class doesn't do anything by itself, it is only the schematics of what a model should contain. The \mintinline{python}{pass} that was added after every definition takes care of functions in which nothing happens. The step of defining a base class may not seem important at first, but it will become clearer later. The base class defines the common interface for all our devices. We have chosen to implement $5$ methods: An instantiation that will start the communication with our device. An identification, that will allow us to be sure which device we are communicating with. Two methods for setting and reading an analog channel. Pay attention to the fact that we define also the arguments needed. And lastly, a method to finalize the communication with the device.  
+This class doesn't do anything by itself, it is only the schematics of what a model should contain. The \texttt{pass} that was added after every definition takes care of functions in which nothing happens. We can see that we specify also the arguments that each method will take, the initialize takes a port, setting a value takes channel and value and so forth. In programming, this is also called an API, or Application Programming Interface. The base class defines the interface that all the DAQ models will use. There will be an initialize method, a get and set analog and a finalize. Just by looking at this very simple example, we already know how things are going to work and what do we need to do to make them work. 
 
-\section{Device Model}\label{devicemodel}
-After defining what are the methods that a DAQ model should implement, we can start developing the true model for the {PFTL DAQ}. Let's start by creating a new file called \textbf{analog\_daq.py}. You can add the following:
-
-\begin{minted}{python}
-from PythonForTheLab.Controller.simple_daq import SimpleDaq 
-from PythonForTheLab.Model.daq import DAQBase
-
-class AnalogDaq(DAQBase):
-    def __init__(self, port):
-        self.port = port
-\end{minted}
-
-First, you have to notice that we are using absolute imports. We start with \mint{python}|from PythonForTheLab.Controller.simple_daq import SimpleDaq |, wich means that it is important that you added the root folder of your project to the PYTHONPATH as we discussed in the previous chapter. The \mintinline{python}{AnalogDaq} class inherits the \mintinline{python}{DAQBase} class, meaning that all the methods defined in it are going to be available in the new class. You can see this by running the following code:
+As an example, let's create a dummy DAQ that is able to generate random values when requested, and since it is not going to be connected to any real device, it will not do anything else. We can add the following code to \textbf{dummy\_daq.py} in the Models folder:
 
 \begin{minted}{python}
- from analog_daq import AnalogDaq
- daq = AnalogDaq('/dev/ttyACM0')
- print(daq.port)
- # /dev/ttyACM0
- daq.idn()
- # Nothing will happen, but it doesn't give an error
+from random import random
+from PythonForTheLab.Model.daq_base import DAQBase
+
+class DummyDaq(DAQBase):
+     def get_analog_value(self, channel):
+         return random()
 \end{minted}
 
-The snippet above shows you that even if \mintinline{python}{AnalogDaq} doesn't define any methods besides \mintinline{python}{__init__}, you can use \mintinline{python}{daq.idn()} and it won't give you an error. This is happening, because when you inherit the \texttt{DAQBase} class, the methods defined in it are readily available in the child class. 
-
-Note, however, that the \mintinline{python}{__init__} method takes \texttt{port} as an argument, while the DAQBase doesn't. In order to be consistent, you should modify DAQBase to reflect this need. Remember that the base and the model should always be synchronized, even if laziness dictates the contrary. 
-
-\exercise{Change \texttt{DAQBase} in order to have an \texttt{\_\_init\_\_} method that takes the port as an argument}
-
-To make our class actually do something, we need to add more code. For example, we need to start communicating with the device on the specified port. Let's assume that we want to start the communication right away when the class gets instantiated. We can do the following:
+And if we copy the example code from our real daq, things are still going to work fine:
 
 \begin{minted}{python}
-class AnalogDaq(DAQBase):
-    def __init__(self, port):
-        super().__init__()
-        self.port = port
-        self.driver = SimpleDaq(self.port)
-        self.driver.initialize()
+if __name__ == "__main__":
+    daq = AnalogDaq('/dev/ttyACM0')
+    daq.initialize()
+    voltage = 3
+    daq.set_voltage(0, voltage)
+    input_volts = daq.get_voltage(0)
+    print(input_volts)
+    daq.finalize()
 \end{minted}
 
-You can see that in the \mintinline{python}{__init__} method, we are instantiating the SimpleDaq with the specified port. You store the
-object in an attribute called \mintinline{python}{driver}. The driver is going to handle all the communication with the device. Remember that the {MVC} pattern imposes that the user will never communicate with the device directly, but always through the model. If there is something that the device can do but the model can't, you should expand your model before bypassing it. Remember that when we developed the driver, we split the creation of the class and the beginning of the communication. 
+Of course, when we set a voltage, initialize, or finalize the model nothing actually happens, but when we ask for a value, we get one. You see that the way of using this class is the same as the real model, and it took us only 3 lines of code to develop. Perhaps in the future you move to a more complex DAQ, such as an oscilloscope. If you maintain the same names for the methods of the model, everything will keep working in the same way. 
 
-\exercise{Add the \texttt{idn} method to your model in order to return the serial number from the device.}
+\exercise{Update the real model to inherit from the base class}
 
-The next step would be to be able to read a value from the device. We could add the following to the \texttt{AnalogDaq} model:
+\section{Adding real units to the code}\label{section:pint}
+The model for the {PFTL DAQ} device is working great, but it has one problem. It allows us to set the output in volts and reads a value in volts. But if we ever make the mistake of supplying the value in millivolts, the program won't work as expected. In real cases, it is very hard to remember the units that every method should take. Sometimes you have very different outputs and inputs with each one taking different units. Imagine you want to make a periodic signal, perhaps the device asks for the frequency, perhaps for the period. 
 
-\begin{minted}{python}
-def get_analog_value(self, port):
-   value = self.driver.get_analog_value(port)
-   return value
-\end{minted}
-
-Having a \emph{model} as a relay for methods defined in the \emph{controller} doesn't look too useful. So far, both the \texttt{idn} and \texttt{get\_analog\_value} methods do \emph{exactly} the same as the methods in the driver. However, this is exactly the point where things start to get interesting. The controller returns values that are simply integers, but at the beginning of the chapter, we said that we wanted to interact with the device in volts, including the values being read. 
-
-If you go through the manual of the {PFTL DAQ}, you will see that it is possible to convert from the device integer value to volts by using the following relationship:
-
-\begin{equation}
- \textrm{Volts} = 3.3\,\textrm{V} \cdot \frac{\textrm{bits}}{1023}
-\end{equation}
-
-\exercise{Complete the \mintinline{python}{get_analog_value} by converting the output from the integer value read generated by the device to the corresponding value in \emph{volts}.}
-
-\exercise{Define the method \mintinline{python}{set_analog_value} taking into account that the value is going to be provided in volts. Remember that the maximum value is $4095$ instead of $1023$}. 
-
-After completing the previous exercises, you can test that everything is working. Write a simple script that initializes the communication with the device, sets the output in some channel and reads some input. Verify that the values make sense when thinking in volts. 
-
-\section{Adding real units to the code}\label{adding-units-to-thecode}
-If you completed the previous exercises, you should have ended up with code that works great if you provide output voltages in volts and you know that the value you get when reading an analog input is also in volts. Volts seem like a natural choice in the context in which we are working now, but you could have also decided to use millivolts, for example. Handling units in computer programs is always a headache because you need to document exactly what units each function takes and returns. 
-
-If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite. You can check the \href{http://articles.latimes.com/1999/oct/01/news/mn-17288}{news article} with the story of how the Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems. 
-
-Fortunately for us, there is a Python package called \emph{Pint}, that allows us to work with \emph{real} units in our programs. Let's quickly see how Pint can be used in our programs with a simple example:
+In Python we can overcome the limitations of working with plain numbers by using a package called \emph{Pint}, that allows us to work with \emph{real} units. Let's quickly see how Pint can be used with a simple example:
 
 \begin{minted}{pycon}
 >>> import pint
-
 >>> ur = pint.UnitRegistry()
 >>> meter = ur('meter')
 >>> b = 5*meter
+>>> type(b)
+<class 'pint.quantity.build_quantity_class.<locals>.Quantity'>
 >>> print(b)
 5 meter
 >>> c = b.to('inch')
@@ -130,15 +159,14 @@ Fortunately for us, there is a Python package called \emph{Pint}, that allows us
 196.8503937007874 inch
 \end{minted}
 
-In the example above, you can start to see the true potential of \emph{Pint}. First, we import the package and start the \emph{Unit
-Registry}. In principle, Pint allows you to work with custom-made units, but the fundamental ones are already included in their own \emph{Unit Registry}. Then, because of convenience, we define the variable \texttt{meter}, as actually the unit meter. Finally, we assign the value of \texttt{5 meters} to a variable called \texttt{b}. In this case, \texttt{b} is of type \texttt{Quantity}, therefore it is not just a number, but a number and a unit attached to it. \emph{Pint} allows you to convert between units, and this is how we create the variable \texttt{c}, which is 5 meters converted to inches. And things can get very interesting:
+First, we import the package and start the \emph{Unit Registry}. In principle, Pint allows us to work with custom-made units, but the fundamental ones are already included in their own \emph{Unit Registry}. Then, because of convenience, we define the variable \texttt{meter}, as actually the unit meter. Finally, we assign the value of \texttt{5 meters} to \texttt{b}. In this case, \texttt{b} is of type \texttt{Quantity}, therefore it is not just a number, but a number and a unit attached to it. \emph{Pint} allows us to convert between units, and this is how we create the variable \texttt{c}, which is 5 meters converted to inches. And things can get very interesting:
 
 \begin{minted}{pycon}
  >>> b == c
  True
 \end{minted}
 
-Even if the numeric value of \texttt{b} and \texttt{c} is different, they are still equal to each other, exactly as you would have imagined. But this is not all. Look at the following example:
+Even if the numeric value of \texttt{b} and \texttt{c} is different, they are still equal to each other, exactly as we would have imagined. We can also work with more complex units:
 
 \begin{minted}{pycon}
 >>> d = c*b
@@ -152,7 +180,7 @@ Even if the numeric value of \texttt{b} and \texttt{c} is different, they are st
 78.74015748031496 inch / second
 \end{minted}
 
-You can see in the example above that \emph{Pint} can handle combined units such as what happens with speed. You can operate on them as you would with pen and paper, and you can convert from one to another very easily. Pint also supports conversion between units that have a complex relationship. For example:
+So far we have always been transforming between units of the same type, i.e. a length in meters to a length in inches, etc. But Pint can also handle combined units such as what happens with voltage, current and resistance:
 
 \begin{minted}{pycon}
 >>> current = 5*ur('A')
@@ -173,7 +201,7 @@ The snippet above shows you that Pint is able to understand the relationship bet
  >>> resistance = ur('10 ohm')
 \end{minted}
 
-Being able to parse strings so easily is going to make our life much easier when we will be dealing with user input. Now you have seen how to handle \emph{real} units on your code. However, the device still requires you to set the output using plain numbers. In the context of Pint, just the number, without the units is called the \emph{magnitude}. To get the magnitude out of a quantity, you can do the following:
+Being able to parse strings so easily is going to make our life much easier when we will be dealing with user input. Now we have seen how to handle \emph{real} units on our code. However, the device still requires us to set the output using plain numbers. In the context of Pint, just the number, without the units is called the \emph{magnitude}. To get the magnitude out of a quantity, we can do the following:
 
 \begin{minted}{pycon}
  >>> current = ur('5 A')
@@ -190,33 +218,76 @@ Being able to parse strings so easily is going to make our life much easier when
 We start with a quantity called \texttt{current} of $5\,\textrm{A}$. If we just append the \texttt{.m} to the variable, we get the magnitude in whatever unit it is already expressed. If we want to be sure to get the magnitude in a specific unit, we use the command \texttt{.m\_as()}. In our case, we will need to transform the user input to an integer, and we will not need to assume it is in volts, we can transform it to volts before converting it to an integer. The \texttt{set\_analog\_value} method would look like this:
 
 \begin{minted}{python}
- def set_analog_value(self, channel, value):
-     value_volts = value.m_as('V')
-     value_int = round(value_volts/3.3*4095)
-     self.driver.set_analog_value(channel, value_int)
+def set_analog_value(self, channel, value):
+    value_volts = value.m_as('V')
+    value_int = round(value_volts/3.3*4095)
+    self.driver.set_analog_value(channel, value_int)
 \end{minted}
 
-You can see that we first transform the value to volts and get only the magnitude. Then we transform that value to bits, using the round function to get a true integer after the operation. We use that rounded value to set the output on the device. You can see that our program is now very flexible since the user can provide the output value in whatever units she pleases, provided that they can be transformed to volts.
+We transform the value to volts and get only the magnitude. Then we transform that value to bits, using the round function to get a true integer after the operation. We use that rounded value to set the output on the device. Our program is now very flexible since the user can provide the output value in whatever units she pleases, provided that they can be transformed to volts.
 
 \exercise{Update the method \texttt{get\_analog\_value} so it generates an in volts. Pay attention to the fact that you will need to import pint and create the unit registry before you define your class in order to be able to use it.}
 
+We should also update the method for getting a voltage in order to return a voltage and not a plain number. The code below only shows the parts that have changed or added, not the entire class:
+
+\begin{minted}{python}
+import pint
+
+ur = pint.UnitRegistry()
+
+[...]
+
+    def get_voltage(self, channel):
+        voltage_bits = self.driver.get_analog_input(channel)
+        voltage = voltage_bits * ur('3.3V')/1023
+        return voltage
+\end{minted}
+
+However, we also need to update the \texttt{initialize} and \texttt{finalize} methods in order to use units and not plain numbers:
+
+\begin{minted}{python}
+def initialize(self):
+    self.driver = Device(self.port)
+    self.set_voltage(0, ur('0V'))
+    self.set_voltage(1, ur('0V'))
+            
+def finalize(self):
+    self.set_voltage(0, ur('0V'))
+    self.set_voltage(1, ur('0V'))
+    self.driver.close()
+\end{minted}
+
+The class is complete and we need to update the example code at the bottom of the file in order to use the real units:
+
+\begin{minted}{python}
+if __name__ == "__main__":
+    daq = AnalogDaq('/dev/ttyACM0')
+    daq.initialize()
+    voltage = ur('3000mV')
+    daq.set_voltage(0, voltage)
+    input_volts = daq.get_voltage(0)
+    print(input_volts)
+    daq.finalize()
+\end{minted}
+
+If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite. You can check the \href{http://articles.latimes.com/1999/oct/01/news/mn-17288}{news article}\footnote{http://articles.latimes.com/1999/oct/01/news/mn-17288} with the story of how the Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems. 
+
 \section{Testing the DAQ Model}
-At this point, we have a very functional program. We are able to handle units, we have split the logic of the units from the driver, meaning that we can easily share our code with colleagues or the world. It is time now to test our program. On the root folder of your project, outside of the PythonForTheLab folder, create a file called \textbf{test\_daq.py}. Add the following code to it:
+At this point, we have a very functional program. We are able to handle units, we have split the logic of the units from the driver, meaning that we can easily share our code with colleagues or the rest of the world. It is time to test our program. On of the reasons we created the Examples folder was to be able to add extra python files that don't belong to our core program. In the Examples folder, create a file called \textbf{test\_daq.py}, and we can start using the model to do some measurements:
 
 \begin{minted}{python}
 import numpy as np
 import pint
 
-from PythonForTheLab.Model.DAQ.analog_daq import AnalogDaq
+from PythonForTheLab.Model.analog_daq import AnalogDaq
 
 ur = pint.UnitRegistry()
 V = ur('V')
 
 daq = AnalogDaq('/dev/ttyACM0') # <-- Remember to change the port
-print('The DAQ serial number is {}'.format(daq.idn()))
 
-# 20 Values with units in a numpy array
-volt_range = np.linspace(0, 3, 20) * V 
+# 11 Values with units in a numpy array... 0, 0.3, 0.6, etc.
+volt_range = np.linspace(0, 3, 11) * V 
 current = [] # Empty list to store the values
 
 for volt in volt_range:
@@ -226,30 +297,16 @@ for volt in volt_range:
 print(current)
 \end{minted}
 
-At this stage, you should be able to go through the code above yourself, it should be straightforward to understand. The first thing that should grab your attention is that we are storing information into a variable called \texttt{current}, while what we are measuring is actually a voltage. We should transform the voltage measured to a current. Following Ohm's law, we can divide the voltage by the resistance used in our experiment. We can try to do that:
-
-\begin{minted}{python}
- resistance = ur('220ohm')
- voltage = daq.get_analog_value(0)
- current = voltage/resistance
-\end{minted}
-
-If you run the code above, you will get the following error:
+We can run the code above, but we will get the following error:
 
 \begin{minted}{python}
  [...]
  ValueError: Cannot operate with Quantity and Quantity of different registries.
 \end{minted}
 
-The error is very descriptive, but it is hard to understand what is really happening and how to solve it. What you have to remember is that the unit registry is a collection of rules that allow you to transform from one quantity to another. Pint is flexible enough to allow you to define your own rules, your own units. The problem is that you can't convert units across unit registries. So, it all comes down to using only one registry throughout all your program. In your code, if instead of importing pint and creating a new unit registry you do the following:
+The error is descriptive, but hard to understand if you are not aware of how Pint works. The unit registry is a collection of rules that allows us to transform from one quantity to another. But this rules belong to a unit registry. In principle, two distinct unit registries hold rules for different sets of units. This means that we can't convert units across unit registries. We need to use only one registry throughout the program. Right now, we are creating the registry in two different places: The device model and the example. 
 
-\begin{minted}{python}
- from PythonForTheLab.Model.DAQ.simple_daq import ur
-\end{minted}
-
-Then, you would be using the same unit registry that you defined in order to make the \texttt{get\_analog\_value} method work with units. Go ahead and try it. However, importing the unit registry from the DAQ model doesn't seem the most appropriate. In the previous chapter, we have seen how importing works in Python (section \ref{section:importing-python}). We have also seen that you can include code into the \texttt{\_\_init\_\_.py} files. Therefore, if we would include a unit registry into the init file of the PythonForTheLab folder, it would become very easy to import elsewhere. 
-
-Open the file \textbf{PythonForTheLab/\_\_init\_\_.py} and add the following code:
+Since units belong to the entire program, it could be a good idea to define the unit registry at the root. This means, creating it directly in the \textbf{\_\_init\_\_.py} file that we placed in the PythonForTheLab folder:
 
 \begin{minted}{python}
  import pint
@@ -257,7 +314,7 @@ Open the file \textbf{PythonForTheLab/\_\_init\_\_.py} and add the following cod
  ur = pint.UnitRegistry()
 \end{minted}
 
-Every time you would like to use units and the unit registry, you will be able to do the following:
+Every time we want to use units and the unit registry, we will be able to do the following:
 
 \begin{minted}{python}
  from PythonForTheLab import ur
@@ -267,21 +324,47 @@ Every time you would like to use units and the unit registry, you will be able t
 
 \exercise{Modify the example that we developed for testing the DAQ model so it uses the main unit registry, and see that it works as expected.}
 
-The DAQ model is almost complete, but there is still one detail missing. If you run the following code (assuming we are still building on top of the example script developed a bit earlier):
+After completing the exercises above, we should be able to run the example and get the values we wanted. Something that should grab your attention is that we are storing volts in a variable called \texttt{current} which is highly anti-intuitive. We can transform the voltage measured to a current provided that we know which resistance are we using. In most cases, the resistance has a value of $100\,\textrm{Ohm}$, so we can do the following:
 
 \begin{minted}{python}
- print(daq.idn())
+ resistance = ur('100ohm')
+ voltage = daq.get_analog_value(0)
+ current = voltage/resistance
 \end{minted}
 
-You will see that nothing happens. The \texttt{idn} method is not returning the serial number of the device. What should surprise you is that is not throwing an error either. Remember that we used the base DAQ class as the parent for the model. This means that the method is defined, but it doesn't do anything. It will be your task to solve this problem:
+\section{Appending to the PATH at runtime}\label{section:appending-path}
+In Section \ref{section:path} we have seen how to add the root folder of the project to the computer's PYTHONPATH. This allows Python to find our program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, it can also lead to unwanted results. For example, we may be over writing someting important if there is any name clash between the program we develop and some other library on the computer. 
 
-\exercise{Define a method called \texttt{idn} in the DAQ model in order to return the real serial number from the device.}
+Therefore, we can go a different route, and add the the folder to the path directly from within Python. This change will not be permanent, it will be in place only while the program runs, but no further. First, we need to learn how to identify the folder we want to add to the path. For this, Python offers a module called \texttt{os}. The code below looks cumbersome, but we will explain it after. This can be added at the begginig of the \textbf{test\_daq.py} file:
+
+\begin{minted}{python}
+import os
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+\end{minted} 
+
+First, \texttt{\_\_file\_\_} variable is a way of letting Python know we are interested in the current file, which in this case is \texttt{test\_daq.py}. If we go from inside to outside, we first get the absolute path to the file, this includes all the folders to get there. Then, we grab the directory that holds the file, which would be the \emph{Examples} folder. And then we grab the directory that contains the examples, which in our case is the root folder, or \texttt{base\_dir} as we called it. 
+
+Next, we need to add the \texttt{base\_dir} to the path, for this we will use another package called \texttt{sys}, which is a wrapping for the operating system. This means that this package will adapt according to which operating system we use to run the program. To add the folder, we only need to do the following:
+
+\begin{minted}{python}
+import sys
+
+sys.path.append(base_dir)
+\end{minted}
+
+And that is it. Doesn't matter if we modify the PYTHONPATH variable anymore, we can always run the \texttt{test\_daq.py} file. 
+
+\warning{Since appending to path only works while the program runs, if we try to run the different files independently, Python will not know where to find the modules. The test files we create in Examples are what are called entry points, and the program should be run directly from them}
+
+\section{Real World Example}\label{section:real-world-model}
+The usefulness of models at this stage may still be obscure. We may be tempted to define units and transformation in the controller itself. We know we are the only ones using it, just to do one experiment. This may be fine when you start, but at some point, hopefully, the code will keep growing because the experiment will keep progressing. At Python for the Lab, we have developed software for controlling a microscope using a camera. However, in the lab there were several different cameras available, some more expensive and powerful, but that were shared between people. 
+
+Therefore, having a flexible way of using different cameras for the same experiment became mandatory. Sometimes we would use a Hamamatsu, sometimes a Basler, sometimes a Photonics Science. However, each camera had an incredibily different way of working. First, Hamamatsu didn't provide any drivers written in Python. Photonics Science shared an internal tool they used, and Basler as an entire package called PyPylon to control their cameras. The controller layer therefore was not developed by us, but was given. 
+
+At the model level, however, we made it sure that all cameras would work in the same way. They all have the same method for setting the exposure, or changing the region of interest. Therefore, the only thing that we needed to change to perform an experiment with one or the other camera was changing what model we were importing. The rest of the code would stay the same. If you want to see the real code, you can head to the repository on \href{https://github.com/uetke/UUTrack/tree/master/UUTrack/Model/Cameras}{Github}\footnote{https://github.com/uetke/UUTrack}. 
 
 \section{Conclusions}\label{conclusions}
-This chapter is focused on showing you what does \emph{Model} mean in the {MVC} pattern when developing software for the lab. Of course, the examples proposed in this book are very simple and sometimes the gain is not going to be evident. However, as soon as you start building more complex applications, you will see the benefits of splitting the Model from the Controller and, later on, the View from the Model. 
+In this chapter we have seen what does \emph{Model} mean in the {MVC} pattern. We focus onto adding features to how the device works, such as switching off the outputs when we finalize using the device. We have also included real world units by using \textbf{Pint}, and learned some of its quircks regarding the unit registry. 
 
-You have built two classes, a base class that helps you keep track of the methods and properties that each device is going to have. The second class inherits from the base class. Right now, this could have been avoided because there is no benefit in having a base class. However, we will see in the following chapter that it can save you a lot of time, plus is a nice way of being organized with your code. Remember that most of the things that we teach in the book can be regarded as best practices. In the end, is up to you to decide how much you are willing to follow. 
-
-In this chapter, you have also started to use more complex options of classes in Python. If you manage to understand what is inheritance and how it can benefit your development, you are already a long way ahead. Object-oriented programming is a very broad topic that requires patience and practice to master, but it is nothing that can't be understood quickly with the proper examples. We are going to see more about inheritance and classes when we deal with the view. 
-
-This chapter has a lot of exercises for you to complete. If you get lost, or just don't want to code yourself, remember that the full program is available on \href{https://github.com/PFTL/SimpleDaq}{Github}\footnote{https://github.com/PFTL/SimpleDaq}.
+We have also covered how to append folders to the path through Python. This allows us to run all the import statements that we want, without having to manually alter the environment variables of the Operating System. This is very handy because on the one hand it runs unaltered in Linux, Windows, and Mac, on the other becasue we don't do any permanent changes to the configuration of the computer. It is a possibility that at some point we have two projects with the same name, because we use them for two different but very similar experiments, for example, but we want to be sure we are importing the correct one. 
