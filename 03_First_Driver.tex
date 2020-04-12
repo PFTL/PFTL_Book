@@ -538,7 +538,7 @@ With this simple code, we will switch on and off the LED 10 times, and we will p
 
 Before we can proceed, we must understand how to transform Analog signals to digital values and the opposite. 
 
-\subsection{Analog to Digital, Digital to Analog}
+\subsection{Analog to Digital, Digital to Analog}\label{subsection:digitazing}
 Almost every device that we find in the lab will transform a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you are interested in a voltage. Then, you need to transform the voltage (an analog signal) to something the computer can work with. This is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore you will have discrete steps in your data. 
 
 For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). This means that if the device gives us a value of $0$, we can transform it to $0\,\textrm{V}$. A value of $1023$ will correspond to $3.3\,\textrm{V}$ and there is a linear relationship with the values in between. 
