@@ -1,55 +1,9 @@
-\chapter{Layout of the Program}\label{layout-of-theprogram}
-
-\section{Objectives}
-In this chapter, you are going to learn how to lay out your program
-following a pattern that will make your code easier to understand, to
-maintain and to share. Normally, you should have defined the structure
-of the program before you start writing code. However, development is
-not always linear and projects that begin small end up controlling very
-complex experiments. Sometimes you can already know how the future
-looks, what experiments you may want to perform in a year from now or
-even more. In any case, building on top of a solid foundation allows you
-to be future proof.
-
-In this chapter, You will learn about some common design patterns and
-general ideas that are used in the long run. What you are going to learn
-in this chapter is a collection of best practices, which doesn't mean
-you have to follow them to the letter, but they are a very good starting
-point. You will learn about the {MVC} design pattern, which will allow
-you to separate different elements of your code into reusable
-containers. Moreover, you will create a specific folder structure that
-will enable the use of code shared by others. The {MVC} design pattern forms
-a layered structure, exactly in sync with the ideas that we have exposed
-when discussing the \emph{onion principle} for development.
+\chapter{Model-View-Controller for Science}\label{chapter:MVC}
 
 \section{Introduction}
-Computer programs are meant to be a solution to a more or less complex
-problem. It seems unlikely today that anybody would invert a matrix by
-hand or with a calculator. Nor to imagine that somebody would plot a
-complicated function with pen and paper. Several packages exist to solve
-those needs, from Python to Matlab to Origin. In the same fashion, the
-complexity of experiments is such that it is impossible to control all
-the needed variables by hand. Even in simpler experiments, there will
-always be a computer responsible for acquiring data, saving it, and many
-other things.
+Developing a computer program is much more than having few scripts that you can run when you need. A program should take care of a lot of concerns, such as the limits of the devices, should be flexible enough that enables you to change what measurements you are doing without spending months. More importantly, a program should be extensible in the long run, not just by yourself but also by future colleagues and, potentially, by anyone who find your program online. 
 
-Developing a computer program for controlling an experiment is not a
-trivial task. One has to consider the limits of the devices, acquisition
-rates, conditions for closing a shutter or switching off the power. On
-top of all that, one has to write programs that most likely are going to
-be used by others, and that can be developed further on by another
-person. It doesn't make sense to write software today that will be
-obsolete next week just because a few parameters of the
-experiment changed.
-
-To address these concerns, there are few techniques that a developer can
-follow in order to achieve a high degree of productivity and, at the
-same time, producing software that can be enhanced later on. The idea of
-establishing best practices is not increasing the burden of developing
-software, but to streamline the process. The cornerstone of every great
-program is to have a design pattern that can be followed by all the
-developers. Therefore, when developing software for controlling a setup
-we have to keep an eye on different considerations:
+Therefore, when we develop software, we want to keep in mind the following programmer's \emph{mantras}:
 
 \begin{itemize}
 \item What you develop should be readable by current and future colleagues
@@ -58,27 +12,26 @@ we have to keep an eye on different considerations:
 \item The code developed in one context has to be available in other contexts (i.e. in other experiments)
 \end{itemize}
 
-As you can see from the list above, it is very desirable to be able to
-reuse code, not only within the same lab with the same colleagues but
-also to use code that was developed in other institutions. On the other hand, you would like that your own code can be reused. This will help you save time when you move on to other projects, but it will also give you a specific place in a community, since you are giving something back. Reusing code is not only a matter of saving time, but it also empowers collaboration between different labs. Reusing code needs that some standards are specified, in such a way that another person can easily include the code in their projects. In the previous chapter, we started working in this direction when we defined a class for controlling the device and not a plain script.
+The first line does not pose a challend to be understood. When we talk about solutions developed by others, we mean that often times someone already wrote a driver for a device, or they wrote a measurement script. Therefore, it should be easy to get other's code and use them in our own projects. Exchanging devices is something that is not valued until it happens. In most labs there is always a legacy device that sooner or later will break down and will need to be replaced. Or you move to a different lab and need to continue with your experiments with different hardware. We will see strategies in the program to allow easy exchange of devices. Finally, when we talk about context, we mean that sometimes experiments are very different, but the logic behind is very similar. We are measuring the I-V curve of a diode, but it is, by no means, any different from doing a 1-D scan on a confocal microscope, or tuning the wavelength of a laser. 
 
-The problem with rules is that they are normally perceived as an obstacle in a developers roadmap. After a long time of trial and error, we have come up with some general rules that don't increase the overhead for a developer willing to find a solution to a specific problem. At the same time, the rules are such that when the program gains complexity it will allow different persons to collaborate seamlessly, and it will generate a base that can be continuously expanded over the long term. Moreover, the rules that we are going to discuss in this chapter were developed in such a way that the end program will be welcoming to new developers willing to contribute and to learn from the existing code. 
+The mantras are not rules. They are just points on which you have to reflect in order to realize whether you are departing from the path you wanted to follow when you started. In the following sections we are going to explore a design pattern for software that has many benefits when developing scientific software for controlling experiments, it is called \textbf{The Model-View-Controller for Science}
 
-\section{The MVC design pattern}\label{the-mvc-designpattern}
+\section{The MVCs design pattern}\label{section:MVC}
 \begin{center}
 \includegraphics{images/Chapter_04/MVCs.png}
 \end{center}
 
 A design pattern is nothing more than a set of rules that determine where different parts of the code are going to be placed and how are they going to interact with each other. One of such patterns is called the Model-View-Controller, or MVC for short. When you work with devices in the lab, there is an extra layer that most computer programs lack, which is the interaction with the real world through specific devices. That is why we decided to nickname the pattern MVCs, with the s for \emph{science}. Let's see what each component of the MVC is about. 
 
-A \emph{Controller} can also be called \emph{the driver}, which is responsible for communicating with the devices. It can be a Python class you developed yourself such as the one we did in the previous chapter, but it can also be a Python package developed by someone else. The latter scenario is the case in which manufacturers provide the drivers themselves, such as PyPylons from Basler, or the NI-DAQmx bindings for Python. The driver has to reflect the capabilities of the device, nothing less and nothing more. For example, if a device is able to acquire just a data point at a time, the
-driver shouldn't include a function for acquiring an array of data using a loop. We briefly discussed this in the previous chapter. Whatever belongs to the logic that a user imposes belongs to Model component. 
+A \emph{Controller} for our purposes can also be called \emph{a driver}, which is responsible for communicating with devices. It can be a Python class we developed ourself such as the one we did in the previous chapter, but it can also be a Python package developed by someone else. The latter scenario is the case when manufacturers provide the drivers themselves, such as PyPylons from Basler, or the NI-DAQmx bindings for Python. The driver has to reflect the capabilities of the device, nothing less and nothing more. For example, if a device is able to acquire just a data point at a time, the driver shouldn't include a function for acquiring an array of data using a loop. We briefly discussed this in the previous chapter. Whatever belongs to the logic that a user imposes belongs to Model component. 
 
-The \emph{Model} is where all the logic is defined. In the models, you are going to define how you are going to use a device for your own experiment. A clear example would be the introduction of units. The device from the previous chapter takes only integer values as inputs. If you would like to transform that input to voltages, you could do it in the model for the device. Moreover, one of the analog  inputs is measuring volts, but they can be translated to a current. This is very specific to our experiment and thus the option shouldn't be hardcoded in the driver, but it has to be an option in the model. The main advantage of splitting \emph{Controllers} and \emph{Models} is that it becomes simple to upgrade or replace a device. You will need to update the \emph{Model} in order to reflect the new options of the device, but the logic of the experiment is left intact. 
+The \emph{Model} is where all the logic is defined. In the models, we are going to define how we are going to use a device for our own experiment. A clear example would be the introduction of units. The device from the previous chapter takes only integer values as inputs. If we would like to transform that input to voltages, we could do it in the model for the device. Moreover, one of the analog  inputs is measuring a voltage, but it can be transformed to a current. This is very specific to our experiment and thus the option shouldn't be hardcoded in the driver. The place to include this information is the model. The main advantage of splitting \emph{Controllers} and \emph{Models} is that it becomes simple to upgrade or replace a device. You will need to update the \emph{Model} in order to reflect the new options of the device, but the logic of the experiment is left intact. 
 
-Splitting the Model from the Controller will look like extra work at the beginning without a clear gain. The main advantages appear when you are using a driver developed by someone else and when you know you will need to change the devices on your setup. In this book, we work only with one device and in a very simple experiment. Therefore, the advantages of the Model are not going to be evident to inexperienced developers. Once the program you are developing has enough mileage, you will see the payoff of having a clear structure. 
+There is a second type of model, which is the \emph{Experiment Model}, in which we link different devices in order to perform a measurement. Or we use a single device, but we add the features that an experiment needs, for example saving data, plotting, analysing, etc. With very simple examples, the boundary between the device model and the experiment model can be blurry, but when you are dealing with several devices or more complex flows, it becomes much clearer. At the end of the book we will give as a reference some projects we have worked on, that can be a good source of inspiration.
 
-The \emph{View} is the place where you can locate everything related to how you show data to the user, and how the user can change the parameters of the experiment. In practice, it is the collection of files that build up a Graphical User Interface ({GUI}). Within the {GUI} you will set, for example, the length and delay of the time trace you want to acquire. This information will be passed to the model to acquire the data. You can plot the results back to the user and save them to disk, etc. It is important to note that, in this case, the user interacts through the view with the model and never directly with the controller of a device. It is also important to keep in mind that all the logic of what you are developing should be implemented in the model. For example, if you save the data to files, the procedure to create new filenames should be specified in the Model and not in the View. 
+The \emph{View} is the place where you can locate everything related to how you show data to the user, and how the user can change the parameters of the experiment. In practice, it is the collection of files that build up a Graphical User Interface ({GUI}). Within the {GUI} you will set, for example, the start, stop, and step of the experiment. This information will be passed to the model to acquire the data. You can plot the results back to the user and save them to disk, etc. It is important to note that, in this case, the user interacts through the view with the model and never directly with the controller of a device. It is also important to keep in mind that all the logic of what you are developing should be implemented in the model. For example, if you save the data to files, the procedure to create new filenames should be specified in the Model and not in the View. 
+
+For our project, the Controller is what we discussed on Chapter \ref{chapter:first-driver}
 
 \warning{If you are new to developing code for the lab, it may seem that splitting \emph{Controller} and \emph{Model} is a waste of time. When
 you have only one device that you use for only one goal, it may very well be the case. However, when you wish to include code developed by
