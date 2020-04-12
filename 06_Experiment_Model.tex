@@ -14,6 +14,119 @@ In this chapter, we are going to add another layer to the onion. So far, we are 
 
 Writing an experiment model as a Python class has a twofold advantage. On the one hand, it is naturally going to lead to reproducible experiments. If you keep track of the parameters you use and do version control on the model, you can go back exactly to the same conditions in which you have performed a specific measurement. On the other hand, there is a more technical benefit in defining the experiment as a class. Once we are ready, the model is going to perform as the backend of our program, and it is going to be very easy to build a Graphical User Interface ({GUI}) on top of it.
 
+
+
+\subsection{The Configuration File}\label{subsection:configuration-file}
+Before we keep developing code, we need to stop for a second to think what do we want our program to do. We need to think about what inputs are needed for our program. For example, we know we need the port in which the device is connected. We also know that we need to define an output and input channel, a range for the scan, a delay between data points, etc. Before going into the details, let's see how to easily store all these parameters into a text file. 
+
+In the \emph{Config} folder, create a file called \textbf{experiment.yml}. This file will hold all the parameters of the experiment. We are going to use a format called {YAML}, which has a very simple structure, it looks like this:
+
+\begin{minted}{yaml}
+Experiment:
+  name: This is a test Experiment
+  range: [1, 10, 0.1]
+  list:
+   - first Element
+   - second Element
+\end{minted}
+
+{YAML} is very simple to read both by a person and by the computer. It has just a few rules, the most important one is that the indentation is done with \textbf{2} spaces. In the example above, there is a main element called \textbf{Experiment}, everything that is indented compared to that element will belong to it. Save the file and let's see how you can read it with Python. The library that we are going to use to read these files is called PyYAML which was installed in Chapter \ref{chapter:setting-up}. 
+
+\begin{minted}{python}
+import yaml
+
+with open('Config/experiment.yml', 'r') as f:
+    e = yaml.load(f)
+
+print(e['Experiment'])
+for k in e['Experiment']:
+    print(k)
+    print(e['Experiment'][k])
+    print(10*'-')
+\end{minted}
+
+We will discuss more about yaml files later on. For the time being it is important that you know how to start working with them. You first open the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is very handy for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is responsible for interpreting the information contained in the file. We store this information in a variable \mintinline{python}{e}, which is a dictionary. 
+
+The elements of dictionaries are addressed by keys. In the example above, there is a main key called \mintinline{python}{'Experiment'}, and the
+sub-keys \mintinline{python}{'name'}, \mintinline{python}{'range'} and \mintinline{python}{'list'}. If you want to use
+one of those elements, you can type \mintinline{python}{e['Experiment']['name']}, for example. The code above just prints out each element,
+separated by a horizontal line. Note that yaml imported the file directly as a dictionary but some of the elements are special. You can see that \texttt{'name'} is a string, but \texttt{'range'} and \texttt{'list'} are not. This will become very handy later on because YAML automatically detects what kind of information we are using. 
+
+\exercise{What type of variables has yaml generated for \texttt{'range'} and the \texttt{'list'}? (Remember that you can use \mintinline{python}{type(var)} to know the type of the variable.}
+
+\exercise{YAML also supports numeric information. Create a new element and assign it a value of \texttt{1} or \texttt{3.14}. What kind of variable has YAML created in such cases?}
+
+Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, you need to use the \mintinline{python}{yaml.dump} method. For example, you can define a dictionary with the following information
+
+\begin{minted}{python}
+d = {'Experiment': {
+    'name': 'Name of experiment',
+    'range': [1, 10],
+    'list': (1, 2, 3),}
+}
+\end{minted}
+
+If you want to save it to a file, we can do the following:
+
+\begin{minted}{python}
+with open('data.yml', 'w') as f:
+    f.write(yaml.dump(d, default_flow_style=False))
+\end{minted}
+
+Pay attention that in the code above, when you open the file, you are using the \mintinline{python}{'w'} option. This means that every time you run the code, you will overwrite the file and lose the previous contents. After running the code, open the file \textbf{data.yml} with a text editor and explore its contents. You will see that it is very similar to the one you created yourself earlier. One of the advantages of YAML is that the files are very easy to read. If you explore the contents of \textbf{data.yml} you know immediately what it contains.
+
+\exercise{Read back the contents of \textbf{data.yml} and check that they are the same you saved.}
+
+\exercise{Modify some of the values of \textbf{data.yml} directly with your text editor and see that those changes are reflected when you read again the file.}
+
+\exercise{Create a numpy array and store it using yaml. How does it look like in the file? What happens if you read it back?}
+
+\exercise{\textbf{Advanced}. Save a numpy array using yaml. Then activate a virtual environment in which PyYAML is available but not numpy. Try to load the contents of the file. What happens?}
+
+Now that you know how to work with YAML files, is time to start thinking about the experiment again. You need to stop and think about what do you need to know in order to perform an experiment. We are going to cover the details in the next chapter, but it is important that you really focus and try to do it on your own in order to understand how the config files can be of great help when you develop software for your lab. Try to complete the following exercise to the best of your possibilities.
+
+\exercise{Create an experiment.yml file in the \emph{Config} folder. Use what you have learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
+
+\subsection{Loading the Config file}\label{subsection:loading-the-config}
+In the previous sections, we have seen how you can store the parameters of your experiment into a file. We have also seen how you can use Python to load or save them. We need now to develop code that will allow us to read the configuration file whenever we are about to start an experiment. The first step when you want to add new functionality to your program is to decide where it should go. Reading a configuration file does not belong in the Controller because it is not a feature of any specific device. It could be added to the View, but for the time being the only interaction is going to be through the command line and not through any User Interface. 
+
+The appropriate place to develop a method to load the configuration file is in the Model sub-package. Loading the configuration file is something that belongs to the experiment itself and not to any specific device. Therefore, you will need to create a new folder, called \textbf{Experiment}. And since you are already at the task of creating folders, let's anticipate and create another folder called \textbf{DAQ}. In this way, you will have a folder to keep the models for the acquisition cards and for the experiments you are going to perform. The folder structure will look like this:
+
+\begin{minted}{text}
+├── Docs/
+├── Examples/
+│   └── Config/
+└── PythonForTheLab/
+    ├── Controller/
+    ├── Model/
+    │   ├── DAQ/
+    │   └── Experiment/    
+    └── View/
+\end{minted}
+
+In the Experiment folder, we are going to put all the code that will allow us to perform a measurement. As always, create empty \texttt{\_\_init\_\_.py} files in every new folder. Inside of \textbf{Experiment} create a file called \textbf{IV\_Curve.py}. We are going to see the details of the experimental model in Chapter \ref{chapter:experiment-model}, but for the time being we can work with the loading of the configuration file. Inside of \textbf{IV\_Curve.py}, you can create a function that will open the configuration file and return its contents organized as a dictionary. Something like this:
+
+\begin{minted}{python}
+ import yaml
+ 
+ def load_config(filename):
+     with open(filename, 'r') as f:
+         data = yaml.load(f)
+     return data
+\end{minted}
+
+We have just used the same code from the previous section but encapsulated in a function. The advantage of this is that now it is very easy to load the configuration file onto our program. Open a terminal and go to the root folder of the project. Start the Python interpreter and do the following:
+
+\begin{minted}{pycon}
+ >>> from Model.Experiment import IV_Curve
+ >>> params = IV_Curve.load_config('Examples/Config/experiment.yml')
+ >>> print(params)
+\end{minted}
+
+Now we have a consistent interface for loading the configuration file into our programs. This gives us a great deal of flexibility and makes the code nicely reusable and extendable. 
+
+\exercise{When the function \texttt{load\_config} loads the configuration from a file, verify that some important parameters are defined. For example, verify that there is a user associated with an experiment. If there is something missing, print an error message or raise an Exception.}
+
 \section{Starting the Experiment Class}\label{starting-the-experimentclass}
 In section \ref{subsection:loading-the-config}, we have started defining a class that was able to read from a configuration file. We are going to start building on top of it. If you didn't create any files yet, be sure to create a folder called \textbf{Experiment} inside of \textbf{Model}. In that file, create a filled called  \textbf{IV\_Curve.py}. Let's start by defining a class called \texttt{Experiment} with some attributes: 
 
