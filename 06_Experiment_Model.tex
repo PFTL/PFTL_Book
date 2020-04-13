@@ -1,11 +1,11 @@
 \chapter{Writing The Experiment Model}\label{chapter:experiment-model}
 
 \section{Introduction}
-In the \textbf{MVCs} design pattern, the \emph{Model} is where we should place the the logic and the decisions we make in order to perform a measurement. In the previous chapter we started specifying the logic of how we are going to use the DAQ device. We decided, for example, that the device should start and finish with the outputs set to $0\,\textrm{V}$, and that it should handle Pint units for setting and reading values. Even though it was a great start, there are still steps missing to perform a real experiment. 
+In the \textbf{MVCs} design pattern, the \emph{Model} is where we should place the the logic and the decisions we make in order to perform a measurement. In the previous chapter we started specifying the logic of how we are going to use the DAQ device. We decided, for example, that the device should start and finish with the outputs set to $0\,\textrm{V}$, and that it should handle Pint units for setting and reading values. Even though it was a great start, there are still steps missing to perform a real experiment.
 
 We are still missing, for example, the possibility to perform a scan in a given range of voltages, there is no way of saving data nor the parameters used to generate it. We can develop these tools in a script, and that is fine to get started. At some point, however, we want to be systematic, and we don't want to keep editing a script every time we must perform a measurement. We want the data to be consistently saved, or we want to enable other people to run their own experiments based on our routines.
 
-This is when the \emph{onion principle} starts making sense. We are slowly building in complexity, one layer at a time. We started with the driver, built some logic on top of it through a device model, and now we can keep growing the complexity by defining an Experiment model. There are many different steps needed in order to perform a reproducible measurement, and we will cover them one by one. One important aspect we missing, on top of the ones mentioned earlier is, for example, transforming the voltages we measure to a current, so we can give sense to the \textbf{I} on the I-V curve we are trying to measure. 
+This is when the \emph{onion principle} starts making sense. We are slowly building in complexity, one layer at a time. We started with the driver, built some logic on top of it through a device model, and now we can keep growing the complexity by defining an Experiment model. There are many different steps needed in order to perform a reproducible measurement, and we will cover them one by one. One important aspect we missing, on top of the ones mentioned earlier is, for example, transforming the voltages we measure to a current, so we can give sense to the \textbf{I} on the I-V curve we are trying to measure.
 
 \note{With a simple device and experiment such as the one we use in this book, sometimes is hard to put a limit on what should go in the device model and what into the experiment model. There are no strict rules, we should always reflect on what we believe will be useful on the long run. Once we are confortable working with classes in Python, splitting the code into reusable, smaller modules does not lead to much more typing.}
 
@@ -19,7 +19,7 @@ class Experiment:
     def __init__(self, config_file):
         pass
 
-    def load_config(self): 
+    def load_config(self):
         pass
 
     def load_daq(self):
@@ -27,24 +27,24 @@ class Experiment:
 
     def do_scan(self):
         pass
-        
+
     def save_data(self):
         pass
-        
+
     def finalize(self):
         pass
-            
+
 \end{minted}
 
-Most of the code should be self-explanatory, but some steps are worth mentioning. First, we include a \texttt{load\_config} method, which will rely on the \texttt{config\_file} we specify at the \texttt{\_\_init\_\_}. Having a separated config file will be useful not only to change parameters between measurements, but it will help us with our code. Especially when the number of things we need to remember grows, it is always handy to have a file where to look at how we named things. 
+Most of the code should be self-explanatory, but some steps are worth mentioning. First, we include a \texttt{load\_config} method, which will rely on the \texttt{config\_file} we specify at the \texttt{\_\_init\_\_}. Having a separated config file will be useful not only to change parameters between measurements, but it will help us with our code. Especially when the number of things we need to remember grows, it is always handy to have a file where to look at how we named things.
 
-We have also included a \texttt{load\_daq} method. So far, we have only one DAQ to use, but we go a bit ahead of time and assume that at some point there may be more than one and therefore we should have a way of loading one or the other. It can also be a case of premature optimization, in which we anticipate a future that never comes. Nevertheless, it is pedagogically useful to define it there. 
+We have also included a \texttt{load\_daq} method. So far, we have only one DAQ to use, but we go a bit ahead of time and assume that at some point there may be more than one and therefore we should have a way of loading one or the other. It can also be a case of premature optimization, in which we anticipate a future that never comes. Nevertheless, it is pedagogically useful to define it there.
 
 The rest of the methods may seem intuitive enough. If we are missing extra pieces, we can always come back and add them. Now it is time to start developing each one of the building blocks.
 
 \section{The Configuration File}\label{section:configuration-file}
 \subsection{Working with YAML files}\label{subsection:yaml-files}
-Before we keep developing code, we need to stop for a second to think what do we want our program to do. We need to think about what inputs are needed for our program. For example, we know we need the port in which the device is connected. We also know that we need to define an output and input channel, a range for the scan, a delay between data points, etc. Before going into the details, let's see how to easily store all these parameters into a text file. 
+Before we keep developing code, we need to stop for a second to think what do we want our program to do. We need to think about what inputs are needed for our program. For example, we know we need the port in which the device is connected. We also know that we need to define an output and input channel, a range for the scan, a delay between data points, etc. Before going into the details, let's see how to easily store all these parameters into a text file.
 
 In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. This file can be created with any text editor, the only difference is the extension \emph{yml}. This file will hold all the parameters of the experiment. We are going to use a format called {YAML}, which has a straightforward structure, it looks like this:
 
@@ -72,9 +72,9 @@ for k in e['Experiment']:
     print(10*'-')
 \end{minted}
 
-We begin by opening the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is very handy for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is then responsible for interpreting the information contained in the file. We store this information in a variable \texttt{e}, which turns out to be a dictionary. 
+We begin by opening the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is very handy for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is then responsible for interpreting the information contained in the file. We store this information in a variable \texttt{e}, which turns out to be a dictionary.
 
-The elements of dictionaries are addressed by keys. In the example above, there is a main key called \texttt{'Experiment'}, and the sub-keys \texttt{'name'}, \texttt{'range'} and \texttt{'list'}. If we want to use one of those elements, we can type \texttt{e['Experiment']['name']}, for example. The code prints out each element, separated by a horizontal line. Yaml imported the file directly as a dictionary but some of the elements are special. We can see that \texttt{'name'} is a string, but \texttt{'range'} and \texttt{'list'} are not. This will become very handy later on because YAML automatically detects what kind of information we are using. 
+The elements of dictionaries are addressed by keys. In the example above, there is a main key called \texttt{'Experiment'}, and the sub-keys \texttt{'name'}, \texttt{'range'} and \texttt{'list'}. If we want to use one of those elements, we can type \texttt{e['Experiment']['name']}, for example. The code prints out each element, separated by a horizontal line. Yaml imported the file directly as a dictionary but some of the elements are special. We can see that \texttt{'name'} is a string, but \texttt{'range'} and \texttt{'list'} are not. This will become very handy later on because YAML automatically detects what kind of information we are using.
 
 \exercise{What type of variables has yaml generated for \texttt{'range'} and the \texttt{'list'}? (Remember that you can use \texttt{type(var)} to know the type of the variable.}
 
@@ -97,7 +97,7 @@ with open('data.yml', 'w') as f:
     f.write(yaml.dump(d, default_flow_style=False))
 \end{minted}
 
-We are using the \texttt{'w'} option to open the file, which means that every time we run the code, we will overwrite the file and lose the previous contents. After running the code we can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one we created ourselves earlier. One of the advantages of the YAML format is that files are very easy to read, and don't require much typing. 
+We are using the \texttt{'w'} option to open the file, which means that every time we run the code, we will overwrite the file and lose the previous contents. After running the code we can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one we created ourselves earlier. One of the advantages of the YAML format is that files are very easy to read, and don't require much typing.
 
 \exercise{Read back the contents of \textbf{data.yml} and check that they are the same you saved.}
 
@@ -112,7 +112,7 @@ Now that we know how to work with YAML files, it is time to start thinking about
 \exercise{Create a new experiment.yml file in the \emph{Examples} folder. Use what you have learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
 
 \subsection{Loading the Config file}\label{subsection:loading-the-config}
-We have decided to use YAML files because of their simplicity, and because it is easy to map them to dictionaries in Python. The main advantage of having a separated config file is not only that it will allow us to run different measurements changing the parameters, but that it will also help us keep our code organized. This will become much clearer later in this chapter. 
+We have decided to use YAML files because of their simplicity, and because it is easy to map them to dictionaries in Python. The main advantage of having a separated config file is not only that it will allow us to run different measurements changing the parameters, but that it will also help us keep our code organized. This will become much clearer later in this chapter.
 
 First, we need to decide what are we going to include in the configuration file. The information is not static, it may very well happen that later we realize there is something important missing, and we added it, or something we thought was important is not necessary anymore. The idea is that every time we find ourselves making a decision about a value, that information should go to the config file. For example, if we need to decide in which port the DAQ is connected, that goes to the config file. We are going to use the \textbf{experiment.yml} file in the \emph{Examples} folder to store all this information. Below, we show how the config file could look like. We have included extra options that we haven't discussed yet, such as the user performing the experiment, which can be relevant for bookeeping:
 
@@ -136,13 +136,13 @@ Saving:
   filename: data.dat # Files won't be overwritten, but renamed as data_001.dat, etc.
 \end{minted}
 
-We haven't used a main key such as \emph{experiment} because it does not add anything, and forces us to type more. If for some reason we needed to store parameters for two different experiments on the same file, then we could add two top-level keys such as \texttt{Experiment\_1}, \texttt{Experiment\_2}. The parameters above are enough to get started, and then slowly keep adding or modifying when we need. There are some obvious omissions, meant to trigger dicsussions further down the road. If you have already spotted them, you have done a good job, but don't stress yourself if you haven't. 
+We haven't used a main key such as \emph{experiment} because it does not add anything, and forces us to type more. If for some reason we needed to store parameters for two different experiments on the same file, then we could add two top-level keys such as \texttt{Experiment\_1}, \texttt{Experiment\_2}. The parameters above are enough to get started, and then slowly keep adding or modifying when we need. There are some obvious omissions, meant to trigger dicsussions further down the road. If you have already spotted them, you have done a good job, but don't stress yourself if you haven't.
 
 We have to update the \texttt{Experiment} class to load the file. We are storing the filename within the class, so all our methods can be triggered without arguments. But this is just a choice we've made:
 
 \begin{minted}{python}
 import yaml
- 
+
 class Experiment:
     def __init__(self, config_file):
         self.config_file = config_file
@@ -169,9 +169,9 @@ experiment.load_config()
 print(experiment.config)
 \end{minted}
 
-We use the strategy explained in Section \ref{section:appending-path} in order to let Python know where to find our program. The rest is easy to understand, we start an experiment, load the config file and print the parameters that we have loaded. So far, we are not doing much, but it is a good start. 
+We use the strategy explained in Section \ref{section:appending-path} in order to let Python know where to find our program. The rest is easy to understand, we start an experiment, load the config file and print the parameters that we have loaded. So far, we are not doing much, but it is a good start.
 
-Now we have a consistent interface for loading the configuration file into our programs. This gives us a great deal of flexibility and makes the code nicely reusable and extendable. 
+Now we have a consistent interface for loading the configuration file into our programs. This gives us a great deal of flexibility and makes the code nicely reusable and extendable.
 
 \exercise{When the function \texttt{load\_config} loads the configuration from a file, verify that some important parameters are defined. For example, verify that there is a user associated with an experiment. If there is something missing, print an error message or raise an Exception.}
 
@@ -188,7 +188,7 @@ def load_daq(self):
     self.daq.initialize()
 \end{minted}
 
-The \texttt{load_daq} method uses the information stored in the configuration file in order to instantiate and initialize the daq model. Having a config file in YAML format makes it very easy to navigate and find where the information of the port for the daq was located. The main key is \texttt{DAQ}, and the sub-key is \texttt{port}. In this way, there are much fewer things we need to keep in our heads, we can always go back to the file and read what we need to know. We have also decided that we initialize the device right after loading it. This could have been a separated method, but at this stage and for this experiment, there is no real need. 
+The \texttt{load\_daq} method uses the information stored in the configuration file in order to instantiate and initialize the daq model. Having a config file in YAML format makes it very easy to navigate and find where the information of the port for the daq was located. The main key is \texttt{DAQ}, and the sub-key is \texttt{port}. In this way, there are much fewer things we need to keep in our heads, we can always go back to the file and read what we need to know. We have also decided that we initialize the device right after loading it. This could have been a separated method, but at this stage and for this experiment, there is no real need.
 
 Since we are taking care of loading and initializing the DAQ, we can also develop the finalize method, which takes just one line:
 
@@ -218,7 +218,7 @@ class AnalogDaq:
         return "Analog Daq"
 \end{minted}
 
-The method \texttt{\_\_str\_\_} is called a \emph{dunder} method, because it has the double underscore before and after. These are magic methods in classes that allow us to change the behavior in a much more lower level. The \emph{str} method is responsible for letting Python know how to transform an object to string. This happens, for example, when we use the \texttt{print} function. If we run the experiment again, we will see that the output is much nicer. 
+The method \texttt{\_\_str\_\_} is called a \emph{dunder} method, because it has the double underscore before and after. These are magic methods in classes that allow us to change the behavior in a much more lower level. The \emph{str} method is responsible for letting Python know how to transform an object to string. This happens, for example, when we use the \texttt{print} function. If we run the experiment again, we will see that the output is much nicer.
 
 \note{Adding a string representation to the classes we build is a nice addition but not mandatory. We should be careful not to derail on details that don't bring us closed to the goal of performing a measurement.}
 
@@ -232,27 +232,27 @@ def load_daq(self):
     if name == 'DummyDaq':
         from PythonForTheLab.Model.dummy_daq import DummyDaq
         self.daq = DummyDaq(port)
-        
+
     elif name == 'AnalogDaq':
         from PythonForTheLab.Model.analog_daq import AnalogDaq
         self.daq = AnalogDaq(port)
-        
+
     else:
         raise Exception('The daq specified is not yet supported')
-    
+
     self.daq.initialize()
 \end{minted}
 
-The \texttt{load\_daq} method is now much more powerful than before, and we are doing something that may seem strange at first sight. We are importing Python modules not at the top of the file, but deep inside a method. This is not standard and in some contexts it is discoursaged, but it is important to understand why we have decided to follow this approach. When working with real devices, it can happen that the models depend on drivers that are not installed on the computer. If we import the device model at the top of the experiment file, we may get an error because of a device we are actually not intending to use. 
+The \texttt{load\_daq} method is now much more powerful than before, and we are doing something that may seem strange at first sight. We are importing Python modules not at the top of the file, but deep inside a method. This is not standard and in some contexts it is discoursaged, but it is important to understand why we have decided to follow this approach. When working with real devices, it can happen that the models depend on drivers that are not installed on the computer. If we import the device model at the top of the experiment file, we may get an error because of a device we are actually not intending to use.
 
-On the other hand, this behavior is discouraged because if there is a problem in one of the modules being imported, we won't notice it until we are running the program, and that can make us lose time and, more importantly, data. For example, \texttt{AnalogDaq} depends on having a proper controller available. If we make the import at the top of the class, and the controller is not in place, we will get an error even before we instantiate the experiment class. If we plan to use only the dummy model, then we don't care about this. The balance between safety, best practices, and ease of development is sometimes hard to choose. What is important to remember is that Python is an incredibly flexible language. 
+On the other hand, this behavior is discouraged because if there is a problem in one of the modules being imported, we won't notice it until we are running the program, and that can make us lose time and, more importantly, data. For example, \texttt{AnalogDaq} depends on having a proper controller available. If we make the import at the top of the class, and the controller is not in place, we will get an error even before we instantiate the experiment class. If we plan to use only the dummy model, then we don't care about this. The balance between safety, best practices, and ease of development is sometimes hard to choose. What is important to remember is that Python is an incredibly flexible language.
 
-We have also included a final clause in our if-statement to raise an exception if the specified model is not one of the two we know how to work with. The advantage of working with models that specify the same API is that after we load and instantiate them, they both will work in the same way, therefore the rest of our code will be completely independent from which model we are using. 
+We have also included a final clause in our if-statement to raise an exception if the specified model is not one of the two we know how to work with. The advantage of working with models that specify the same API is that after we load and instantiate them, they both will work in the same way, therefore the rest of our code will be completely independent from which model we are using.
 
 \exercise{In Section \ref{section:pint} we included units for the \texttt{AnalaogDaq} class, but we didn't add units for the \texttt{DummyDaq}. This is an inconsistency, since both models will be generating different types of output. Update the dummy model to generate random values including units of volts.}
 
 \section{Doing a Scan}\label{section:doing-scan}
-The core of the experiment model is being able to perform a scan, changing the voltages on the output and reading the voltages in the input. This kind of measurement is very common in a lot of different experiments, not only in electronics. That is the reason we decided to call it \texttt{scan}, which is fairly general name. 
+The core of the experiment model is being able to perform a scan, changing the voltages on the output and reading the voltages in the input. This kind of measurement is very common in a lot of different experiments, not only in electronics. That is the reason we decided to call it \texttt{scan}, which is fairly general name.
 
 \exercise{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
@@ -280,7 +280,7 @@ If we explore the \texttt{scan\_range} variable, we will see that it includes th
 scan_range = np.arange(start.m_as('V'), stop.m_as('V')+step.m_as('V'), step.m_as('V'))
 \end{minted}
 
-But this has an associated risk. What happens if start is $0\,\textrm{V]$, stop is $3.3\,\textrm{V]$ and step is $0.5\,\textrm{V]$? The last value in the range would be higher than $3.3\,\textrm{V]$. This means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals. 
+But this has an associated risk. What happens if start is $0\,\textrm{V}$, stop is $3.3\,\textrm{V}$ and step is $0.5\,\textrm{V}$? The last value in the range would be higher than $3.3\,\textrm{V}$. This means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals.
 
 We could use numpy's \texttt{linspace}, which allows us to generate equally spaced values if we provide a start, stop and the number of points we want. This seems like a viable solution. We can do the following:
 
@@ -383,7 +383,7 @@ print(experiment.scan_data)
 experiment.finalize()
 \end{minted}
 
-Finally we can see the data we acquired after the scan runs. This would allow us to do plenty of things like saving, plotting, analysing, etc. But we should not go ahead of ourselves at this stage. We had layed out a plan for the Experiment class and we should follow it as much as we can. The strategy of adding \texttt{self.} before a variable is very helpful, and this is the real power of objects. The idea is that we should use objects when we need to maintain the \emph{state}. It is not just a function that runs and returns a value, but it is actually updating the \emph{state} of the experiment, or of the device, etc. 
+Finally we can see the data we acquired after the scan runs. This would allow us to do plenty of things like saving, plotting, analysing, etc. But we should not go ahead of ourselves at this stage. We had layed out a plan for the Experiment class and we should follow it as much as we can. The strategy of adding \texttt{self.} before a variable is very helpful, and this is the real power of objects. The idea is that we should use objects when we need to maintain the \emph{state}. It is not just a function that runs and returns a value, but it is actually updating the \emph{state} of the experiment, or of the device, etc.
 
 Now we can proceed further, to the last missing step: saving data.
 
@@ -394,16 +394,16 @@ After we perform a scan, we must save both the data and the \emph{metadata}. Wit
 def save_data(self):
 	data = np.vstack([self.scan_range, self.scan_data]).T
     header = "Scan range in 'V', Scan Data in 'V'"
-    filename = self.config['Saving']['filename']  
+    filename = self.config['Saving']['filename']
     np.savetxt(filename, data.m_as('V'), header=header)
 \end{minted}
 
 The method above works. We can go ahead and run the experiment and we will have a file with two columns (that is the reason for the \texttt{vstack} and the \texttt{.T}) and a header specifying that the data is in units of Volts. However, if we run the experiment for a second time, the data will get overwritten. Moreover, we are saving the data to the same folder where we run the experiment, and this is a very bad idea, we would like to save the data in a dedicated place. Therefore, we need to update the config file first, and then the saving method. The folder we are using for saving data is only an example and should be changed according to each one's needs:
 
-\begin{minted}{config}
+\begin{minted}{text}
 Saving:
   filename: data.dat # Files won't be overwritten, but renamed as data_001.dat, etc.
-  folder: /home/aquiles/Data 
+  folder: /home/aquiles/Data
 \end{minted}
 
 Something that is very useful when saving data is to organize it by dates. We can create folder with the date the experiment was run inside the \emph{Data} folder. First we will see snippets in order to understand what we need and then we will add the modifications to the method itself. To get the date of today as a string, we can combine the \texttt{datetime} package and the formatting of strings:
@@ -430,14 +430,14 @@ False
 True
 \end{minted}
 
-Using the package \texttt{os} allows us to take care of the common problems that appear when dealing with directories. For example, Linux uses \texttt{/} to separate the structure, while Windows uses \texttt{\\}. Also, it may happen that we define the folder with a trailing \texttt{/} or not. \texttt{os} takes care of all this complexity for us. We join the data folder and today's folder and check if it exists, if it doesn't, we create it. The \texttt{makedirs} will create also the parent directories missing. If the \emph{Data} folder does not exist, it would be created. 
+Using the package \texttt{os} allows us to take care of the common problems that appear when dealing with directories. For example, Linux uses \texttt{/} to separate the structure, while Windows uses \texttt{\\}. Also, it may happen that we define the folder with a trailing \texttt{/} or not. \texttt{os} takes care of all this complexity for us. We join the data folder and today's folder and check if it exists, if it doesn't, we create it. The \texttt{makedirs} will create also the parent directories missing. If the \emph{Data} folder does not exist, it would be created.
 
 Next, we have to be sure we will not overwrite the files when we save new scans. Ideally, we would like the files to look like \texttt{data\_001.dat}, \texttt{data\_002.dat}, etc. Using what we specified in the config file, we can achieve something like it:
 
 \begin{minted}{python}
 >>> filename = 'data.dat'
 >>> base_name = filename.split('.')[0]
->>> ext = filename.split('.')[-1] 
+>>> ext = filename.split('.')[-1]
 >>> i = 1
 >>> new_filename = f'{base_name}_{i:04d}.{ext}'
 >>> print(new_filename)
@@ -457,13 +457,13 @@ def save_data(self):
 	saving_folder = os.path.join(data_folder, today_folder)
 	if not os.path.isdir(saving_folder):
 	    os.makedirs(saving_folder)
-	
+
 	data = np.vstack([self.scan_range, self.scan_data]).T
     header = "Scan range in 'V', Scan Data in 'V'"
-    
+
     filename = self.config['Saving']['filename']
     base_name = filename.split('.')[0]
-    ext = filename.split('.')[-1] 
+    ext = filename.split('.')[-1]
     i = 1
     while os.path.isfile(os.path.join(saving_folder, f'{base_name}_{i:04d}.{ext}'):
         i += 1
@@ -474,7 +474,7 @@ def save_data(self):
         f.write(yaml.dump(self.config, default_flow_style=False))
 \end{minted}
 
-The \texttt{save\_data} method may be the most complex in the program, but it is also very powerful. We start with a base folder, and create a folder with the current date, with the format Year-Month-Day. We format the data to make it easy to store as two columns on a text file, and we also add a header to explain what are we storing. We extract the base part of the filename and the extention as two separate variables, and we format the the filename in such a way that it can have a number appended to it. The syntax \texttt{i:04d} is the secret to formating numbers with an appropriate number of $0$ in front. We use a while loop to increase the counter until the first file is available, and use that value to store the data. We also create another file, with the same number and a similar name, to store the metadata. In our case, the metadata is nothing more than the \texttt{config} dictionary. 
+The \texttt{save\_data} method may be the most complex in the program, but it is also very powerful. We start with a base folder, and create a folder with the current date, with the format Year-Month-Day. We format the data to make it easy to store as two columns on a text file, and we also add a header to explain what are we storing. We extract the base part of the filename and the extention as two separate variables, and we format the the filename in such a way that it can have a number appended to it. The syntax \texttt{i:04d} is the secret to formating numbers with an appropriate number of $0$ in front. We use a while loop to increase the counter until the first file is available, and use that value to store the data. We also create another file, with the same number and a similar name, to store the metadata. In our case, the metadata is nothing more than the \texttt{config} dictionary.
 
 \note{A very handy by product of saving the config as a YAML file is that we can use it as the config file for the next experiment. If at some point we want to repeat a measurement we did in the past, we just need to point the experiment to the config we saved from that date.}
 
@@ -499,15 +499,16 @@ experiment.save_data()
 experiment.finalize()
 \end{minted}
 
-Except for the part of appending the folder to the system path, we can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. Being able to reduce a complex problem to a relatively simple flow is thanks to the effort we put into defining the proper methods in the experiment and device models. 
- 
-\section{Conclusions}\label{experiment-model-conclusions}
-With this chapter, the core code for a functioning experiment is finished. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code such as doing a scan or saving data are in place, our running script just needs one line of code and the rest will automatically be taken care of. If you share the code with a colleague, for example, and you show them the \texttt{run\_experiment} script, they will be able to perform their own measurements in no time. 
+Except for the part of appending the folder to the system path, we can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. Being able to reduce a complex problem to a relatively simple flow is thanks to the effort we put into defining the proper methods in the experiment and device models.
 
-We left still some more things that should be done in our experiment. For example, we are still acquiring voltages instead of currents. We are not going to explicitly solve this problem because it is a very good exercise to start thinking by yourself:
+\section{Conclusions}\label{section:experiment-model-conclusions}
+With this chapter, the core code for a functioning experiment is finished. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code such as doing a scan or saving data are in place, our running script just needs one line of code and the rest will automatically be taken care of. If you share the code with a colleague, for example, and you show them the \texttt{run\_experiment} script, they will be able to perform their own measurements in no time.
 
-\exercise{Update the config file to include information on the resistance that we are using. With that value, update the do_scan method to acquire Amperes (or milliamperes) instead of volts. Finally, you will need to update the save method to accomodate for the changes, not only in the header but also in how we transform the arrays to unitless before saving them.}
+We left still some more things that should be done in our experiment. For example, we are still acquiring voltages instead of currents. We are not going to explicitly solve this problem because it is a very good exercise to start thinking by yourself
 
-Some other topics which are still relevant, and that we are going to cover on the next chapter include how to change the parameters of the scan directly from within the running script. This would allow us to, for example, scan the voltages with varying delays to understand if there is some form of hysteresis, or scans with increasing resolution around specific features. We have also neglected what would happen if someone forgets to load the config file or the daq before starting a scan, for example. 
+\exercise{Update the config file to include information on the resistance that we are using. With that value, update the \texttt{do\_scan} method to acquire amperes (or milliamperes) instead of volts. Finally, you will need to update the save method to accomodate for the changes, not only in the header but also in how we transform the arrays to unitless before saving them.}
 
-The final missing bit, is how to stop the experiment while it is running. If we see something is going wrong, there is no way of deciding to stop it without losing data. There are a lot of different approaches for solving this, but the one we are going to explore is based on \emph{Threads}, a very useful tool for developing acquisition software but that may have a somewhat high entry barrier for newcomers to Python. 
+Some other topics which are still relevant, and that we are going to cover on the next chapter include how to change the parameters of the scan directly from within the running script. This would allow us to, for example, scan the voltages with varying delays to understand if there is some form of hysteresis, or scans with increasing resolution around specific features. We have also neglected what would happen if someone forgets to load the config file or the daq before starting a scan, for example.
+
+The final missing bit, is how to stop the experiment while it is running. If we see something is going wrong, there is no way of deciding to stop it without losing data. There are a lot of different approaches for solving this, but the one we are going to explore is based on \emph{Threads}, a very useful tool for developing acquisition software but that may have a somewhat high entry barrier for newcomers to Python.
+
