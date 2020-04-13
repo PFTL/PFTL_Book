@@ -1,25 +1,52 @@
 \chapter{Writing The Experiment Model}\label{chapter:experiment-model}
 
-\section{Objectives}
-In the previous chapter, we have seen how to define a model for a device. Models specify the logic behind the use of a device. In the previous chapter, for example, we have implemented the use of units. The manual of the device specifies that values must be integers in a predetermined range, but working with volts is much handier for the purpose of the experiment we are performing. 
-
-However, models for devices alone are not sufficient to perform a complete measurement. For example, we are still missing a way to save data. We are also missing a way of transforming a voltage to a current, or the to perform a scan in a given range. In this chapter, we are going to see how to define a model for the entire experiment. The \emph{experiment model} will include all the steps that build a measurement.
-
 \section{Introduction}
-In the \textbf{MVCs} design pattern, the \emph{Model} is where all the logic and experimental decisions should be placed. In the previous chapter, for example, you have decided that you wanted to use voltage as the default units to handle inputs and outputs. However, this is not always the handiest. Imagine you use the same {DAQ} device connected to a piezo stage. Voltage is going to be translated to nanometers or microns, and the program should take it into account. In this book, measuring the IV curve of a diode requires you to measure the current passing through a diode, but the physical quantity that you are actually measuring is a voltage.
+In the \textbf{MVCs} design pattern, the \emph{Model} is where we should place the the logic and the decisions we make in order to perform a measurement. In the previous chapter we started specifying the logic of how we are going to use the DAQ device. We decided, for example, that the device should start and finish with the outputs set to $0\,\textrm{V}$, and that it should handle Pint units for setting and reading values. Even though it was a great start, there are still steps missing to perform a real experiment. 
 
-Following the \emph{onion principle}, it makes sense to define volts as the default units for the device, because it is what it outputs and what it measures. With a simple example such as the one in this book, it is hard to understand what are the limits for the models of devices and for the experiment. One of the parameters you can think of is about the future. Do you think that the model we have developed can be used by someone else in a different context? For example, if you were to start developing a program for a confocal microscope, would you be able to re-use the {PFTL DAQ} model? If the answer is yes, then it is a good start. The truth is that you can't really know what is going to be the future of your program in a year's time.
+We are still missing, for example, the possibility to perform a scan in a given range of voltages, there is no way of saving data nor the parameters used to generate it. We can develop these tools in a script, and that is fine to get started. At some point, however, we want to be systematic, and we don't want to keep editing a script every time we must perform a measurement. We want the data to be consistently saved, or we want to enable other people to run their own experiments based on our routines.
 
-In this chapter, we are going to add another layer to the onion. So far, we are able to set a and read a voltage with our DAQ device. However, we would like to perform a scan, specifying voltages for start, stop, and step, for example. A model for experiments will allow you to quickly develop the logic that drives a measurement. In a more complex scenario, you may want to switch-on a laser only if a shutter is closed, and then you would like to open the shutter before doing a measurement. In the example that concerns us, measuring the  I-V curve, we are going to deal with inputs and outputs of one device. But remember that in more complicated setups this will most likely not be the case.
+This is when the \emph{onion principle} starts making sense. We are slowly building in complexity, one layer at a time. We started with the driver, built some logic on top of it through a device model, and now we can keep growing the complexity by defining an Experiment model. There are many different steps needed in order to perform a reproducible measurement, and we will cover them one by one. One important aspect we missing, on top of the ones mentioned earlier is, for example, transforming the voltages we measure to a current, so we can give sense to the \textbf{I} on the I-V curve we are trying to measure. 
 
-Writing an experiment model as a Python class has a twofold advantage. On the one hand, it is naturally going to lead to reproducible experiments. If you keep track of the parameters you use and do version control on the model, you can go back exactly to the same conditions in which you have performed a specific measurement. On the other hand, there is a more technical benefit in defining the experiment as a class. Once we are ready, the model is going to perform as the backend of our program, and it is going to be very easy to build a Graphical User Interface ({GUI}) on top of it.
+\note{With a simple device and experiment such as the one we use in this book, sometimes is hard to put a limit on what should go in the device model and what into the experiment model. There are no strict rules, we should always reflect on what we believe will be useful on the long run. Once we are confortable working with classes in Python, splitting the code into reusable, smaller modules does not lead to much more typing.}
 
+There are two extra advantages of developing an experiment model which will become apparent only after working on these topics long engouh. On the one hand, the models are going to lead to reproducible experiments. If we keep track of the parameters we, we can go back exactly to the same conditions in which we have performed a specific measurement. On the other hand, once we are sure we can perform a measurement from the command line, running a script or within the Python interpreter, it is going to be very easy to build a Graphical User Interface ({GUI}) on top of it, but let's not get ahead of ourselves.
 
+\section{The Skeleton of an Experiment Model}\label{section:skeleton-experiment-model}
+Every time we want to start developing a model, it is handy to start from an empty skeleton. This will help us know what parts of the code need to be developed, what things we don't know how to do yet and need to learn. It also allows us to have a quick glimpse at how we expect our program to be used. We did it for the device model in the previous chapter, and we can do the same for the experiment in this chapter. First, we create a file called \textbf{experiment.py} inside the \emph{Model} folder, and then we think about the steps needed to perform a measurement:
 
-\subsection{The Configuration File}\label{subsection:configuration-file}
+\begin{minted}{python}
+class Experiment:
+    def __init__(self, config_file):
+        pass
+
+    def load_config(self): 
+        pass
+
+    def load_daq(self):
+        pass
+
+    def do_scan(self):
+        pass
+        
+    def save_data(self):
+        pass
+        
+    def finalize(self):
+        pass
+            
+\end{minted}
+
+Most of the code should be self-explanatory, but some steps are worth mentioning. First, we include a \texttt{load\_config} method, which will rely on the \texttt{config\_file} we specify at the \texttt{\_\_init\_\_}. Having a separated config file will be useful not only to change parameters between measurements, but it will help us with our code. Especially when the number of things we need to remember grows, it is always handy to have a file where to look at how we named things. 
+
+We have also included a \texttt{load\_daq} method. So far, we have only one DAQ to use, but we go a bit ahead of time and assume that at some point there may be more than one and therefore we should have a way of loading one or the other. It can also be a case of premature optimization, in which we anticipate a future that never comes. Nevertheless, it is pedagogically useful to define it there. 
+
+The rest of the methods may seem intuitive enough. If we are missing extra pieces, we can always come back and add them. Now it is time to start developing each one of the building blocks.
+
+\section{The Configuration File}\label{section:configuration-file}
+\subsection{Working with YAML files}\label{subsection:yaml-files}
 Before we keep developing code, we need to stop for a second to think what do we want our program to do. We need to think about what inputs are needed for our program. For example, we know we need the port in which the device is connected. We also know that we need to define an output and input channel, a range for the scan, a delay between data points, etc. Before going into the details, let's see how to easily store all these parameters into a text file. 
 
-In the \emph{Config} folder, create a file called \textbf{experiment.yml}. This file will hold all the parameters of the experiment. We are going to use a format called {YAML}, which has a very simple structure, it looks like this:
+In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. This file can be created with any text editor, the only difference is the extension \emph{yml}. This file will hold all the parameters of the experiment. We are going to use a format called {YAML}, which has a straightforward structure, it looks like this:
 
 \begin{minted}{yaml}
 Experiment:
@@ -30,13 +57,13 @@ Experiment:
    - second Element
 \end{minted}
 
-{YAML} is very simple to read both by a person and by the computer. It has just a few rules, the most important one is that the indentation is done with \textbf{2} spaces. In the example above, there is a main element called \textbf{Experiment}, everything that is indented compared to that element will belong to it. Save the file and let's see how you can read it with Python. The library that we are going to use to read these files is called PyYAML which was installed in Chapter \ref{chapter:setting-up}. 
+{YAML} is very simple to read both by a person and by the computer. It has just a few rules, the most important one is that the indentation is done with \textbf{2} spaces. In the example above, there is a main element called \textbf{Experiment}, everything that is indented compared to that element will belong to it. To read the file we are going to use a package called PyYAML, which was installed in Chapter \ref{chapter:setting-up}. We can create a file called \textbf{test\_yaml.py} also in the Examples folder to understand how to use these files:
 
 \begin{minted}{python}
 import yaml
 
-with open('Config/experiment.yml', 'r') as f:
-    e = yaml.load(f)
+with open('experiment.yml', 'r') as f:
+    e = yaml.load(f, Loader=yaml.FullLoader)
 
 print(e['Experiment'])
 for k in e['Experiment']:
@@ -45,18 +72,15 @@ for k in e['Experiment']:
     print(10*'-')
 \end{minted}
 
-We will discuss more about yaml files later on. For the time being it is important that you know how to start working with them. You first open the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is very handy for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is responsible for interpreting the information contained in the file. We store this information in a variable \mintinline{python}{e}, which is a dictionary. 
+We begin by opening the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is very handy for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is then responsible for interpreting the information contained in the file. We store this information in a variable \texttt{e}, which turns out to be a dictionary. 
 
-The elements of dictionaries are addressed by keys. In the example above, there is a main key called \mintinline{python}{'Experiment'}, and the
-sub-keys \mintinline{python}{'name'}, \mintinline{python}{'range'} and \mintinline{python}{'list'}. If you want to use
-one of those elements, you can type \mintinline{python}{e['Experiment']['name']}, for example. The code above just prints out each element,
-separated by a horizontal line. Note that yaml imported the file directly as a dictionary but some of the elements are special. You can see that \texttt{'name'} is a string, but \texttt{'range'} and \texttt{'list'} are not. This will become very handy later on because YAML automatically detects what kind of information we are using. 
+The elements of dictionaries are addressed by keys. In the example above, there is a main key called \texttt{'Experiment'}, and the sub-keys \texttt{'name'}, \texttt{'range'} and \texttt{'list'}. If we want to use one of those elements, we can type \texttt{e['Experiment']['name']}, for example. The code prints out each element, separated by a horizontal line. Yaml imported the file directly as a dictionary but some of the elements are special. We can see that \texttt{'name'} is a string, but \texttt{'range'} and \texttt{'list'} are not. This will become very handy later on because YAML automatically detects what kind of information we are using. 
 
-\exercise{What type of variables has yaml generated for \texttt{'range'} and the \texttt{'list'}? (Remember that you can use \mintinline{python}{type(var)} to know the type of the variable.}
+\exercise{What type of variables has yaml generated for \texttt{'range'} and the \texttt{'list'}? (Remember that you can use \texttt{type(var)} to know the type of the variable.}
 
 \exercise{YAML also supports numeric information. Create a new element and assign it a value of \texttt{1} or \texttt{3.14}. What kind of variable has YAML created in such cases?}
 
-Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, you need to use the \mintinline{python}{yaml.dump} method. For example, you can define a dictionary with the following information
+Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, we can use \texttt{yaml.dump} method to save it. For example, we can define a dictionary with the following information
 
 \begin{minted}{python}
 d = {'Experiment': {
@@ -66,14 +90,14 @@ d = {'Experiment': {
 }
 \end{minted}
 
-If you want to save it to a file, we can do the following:
+If we want to save it to a file, we can do the following:
 
 \begin{minted}{python}
 with open('data.yml', 'w') as f:
     f.write(yaml.dump(d, default_flow_style=False))
 \end{minted}
 
-Pay attention that in the code above, when you open the file, you are using the \mintinline{python}{'w'} option. This means that every time you run the code, you will overwrite the file and lose the previous contents. After running the code, open the file \textbf{data.yml} with a text editor and explore its contents. You will see that it is very similar to the one you created yourself earlier. One of the advantages of YAML is that the files are very easy to read. If you explore the contents of \textbf{data.yml} you know immediately what it contains.
+We are using the \texttt{'w'} option to open the file, which means that every time we run the code, we will overwrite the file and lose the previous contents. After running the code we can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one we created ourselves earlier. One of the advantages of the YAML format is that files are very easy to read, and don't require much typing. 
 
 \exercise{Read back the contents of \textbf{data.yml} and check that they are the same you saved.}
 
@@ -83,526 +107,407 @@ Pay attention that in the code above, when you open the file, you are using the 
 
 \exercise{\textbf{Advanced}. Save a numpy array using yaml. Then activate a virtual environment in which PyYAML is available but not numpy. Try to load the contents of the file. What happens?}
 
-Now that you know how to work with YAML files, is time to start thinking about the experiment again. You need to stop and think about what do you need to know in order to perform an experiment. We are going to cover the details in the next chapter, but it is important that you really focus and try to do it on your own in order to understand how the config files can be of great help when you develop software for your lab. Try to complete the following exercise to the best of your possibilities.
+Now that we know how to work with YAML files, it is time to start thinking about the experiment again. We need to stop and think about what do we need to know in order to perform an experiment.
 
-\exercise{Create an experiment.yml file in the \emph{Config} folder. Use what you have learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
+\exercise{Create a new experiment.yml file in the \emph{Examples} folder. Use what you have learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
 
 \subsection{Loading the Config file}\label{subsection:loading-the-config}
-In the previous sections, we have seen how you can store the parameters of your experiment into a file. We have also seen how you can use Python to load or save them. We need now to develop code that will allow us to read the configuration file whenever we are about to start an experiment. The first step when you want to add new functionality to your program is to decide where it should go. Reading a configuration file does not belong in the Controller because it is not a feature of any specific device. It could be added to the View, but for the time being the only interaction is going to be through the command line and not through any User Interface. 
+We have decided to use YAML files because of their simplicity, and because it is easy to map them to dictionaries in Python. The main advantage of having a separated config file is not only that it will allow us to run different measurements changing the parameters, but that it will also help us keep our code organized. This will become much clearer later in this chapter. 
 
-The appropriate place to develop a method to load the configuration file is in the Model sub-package. Loading the configuration file is something that belongs to the experiment itself and not to any specific device. Therefore, you will need to create a new folder, called \textbf{Experiment}. And since you are already at the task of creating folders, let's anticipate and create another folder called \textbf{DAQ}. In this way, you will have a folder to keep the models for the acquisition cards and for the experiments you are going to perform. The folder structure will look like this:
+First, we need to decide what are we going to include in the configuration file. The information is not static, it may very well happen that later we realize there is something important missing, and we added it, or something we thought was important is not necessary anymore. The idea is that every time we find ourselves making a decision about a value, that information should go to the config file. For example, if we need to decide in which port the DAQ is connected, that goes to the config file. We are going to use the \textbf{experiment.yml} file in the \emph{Examples} folder to store all this information. Below, we show how the config file could look like. We have included extra options that we haven't discussed yet, such as the user performing the experiment, which can be relevant for bookeeping:
 
 \begin{minted}{text}
-├── Docs/
-├── Examples/
-│   └── Config/
-└── PythonForTheLab/
-    ├── Controller/
-    ├── Model/
-    │   ├── DAQ/
-    │   └── Experiment/    
-    └── View/
+User:
+  name: Aquiles
+
+DAQ:
+  name: AnalogDaq
+  port: /dev/ttyACM0
+
+Scan:
+  start: 0V
+  stop: 3.2V
+  step: 400mV
+  channel_out: 0
+  channel_in: 0
+  delay: 100ms
+
+Saving:
+  filename: data.dat # Files won't be overwritten, but renamed as data_001.dat, etc.
 \end{minted}
 
-In the Experiment folder, we are going to put all the code that will allow us to perform a measurement. As always, create empty \texttt{\_\_init\_\_.py} files in every new folder. Inside of \textbf{Experiment} create a file called \textbf{IV\_Curve.py}. We are going to see the details of the experimental model in Chapter \ref{chapter:experiment-model}, but for the time being we can work with the loading of the configuration file. Inside of \textbf{IV\_Curve.py}, you can create a function that will open the configuration file and return its contents organized as a dictionary. Something like this:
+We haven't used a main key such as \emph{experiment} because it does not add anything, and forces us to type more. If for some reason we needed to store parameters for two different experiments on the same file, then we could add two top-level keys such as \texttt{Experiment\_1}, \texttt{Experiment\_2}. The parameters above are enough to get started, and then slowly keep adding or modifying when we need. There are some obvious omissions, meant to trigger dicsussions further down the road. If you have already spotted them, you have done a good job, but don't stress yourself if you haven't. 
+
+We have to update the \texttt{Experiment} class to load the file. We are storing the filename within the class, so all our methods can be triggered without arguments. But this is just a choice we've made:
 
 \begin{minted}{python}
- import yaml
+import yaml
  
- def load_config(filename):
-     with open(filename, 'r') as f:
-         data = yaml.load(f)
-     return data
+class Experiment:
+    def __init__(self, config_file):
+        self.config_file = config_file
+
+    def load_config(self):
+        with open(self.config_file, 'r') as f:
+            data = yaml.load(f)
+        self.config = data
 \end{minted}
 
-We have just used the same code from the previous section but encapsulated in a function. The advantage of this is that now it is very easy to load the configuration file onto our program. Open a terminal and go to the root folder of the project. Start the Python interpreter and do the following:
+We have used the same code we showed in the previous section but as part of a method. When we load the configuration file, it will be stored as an attribute of the Experiment class, called \texttt{self.config}. Now that the experiment is starting to have shape, we can create a file to show how to use it and check whether we are doing things properly. In the \emph{Examples} folder, we can create a file called \textbf{run\_experiment.py}, and add the following:
 
-\begin{minted}{pycon}
- >>> from Model.Experiment import IV_Curve
- >>> params = IV_Curve.load_config('Examples/Config/experiment.yml')
- >>> print(params)
+\begin{minted}{python}
+import sys
+import os
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(base_dir)
+
+from PythonForTheLab.model.experiment import Experiment
+
+experiment = Experiment('experiment.yml')
+experiment.load_config()
+print(experiment.config)
 \end{minted}
+
+We use the strategy explained in Section \ref{section:appending-path} in order to let Python know where to find our program. The rest is easy to understand, we start an experiment, load the config file and print the parameters that we have loaded. So far, we are not doing much, but it is a good start. 
 
 Now we have a consistent interface for loading the configuration file into our programs. This gives us a great deal of flexibility and makes the code nicely reusable and extendable. 
 
 \exercise{When the function \texttt{load\_config} loads the configuration from a file, verify that some important parameters are defined. For example, verify that there is a user associated with an experiment. If there is something missing, print an error message or raise an Exception.}
 
-\section{Starting the Experiment Class}\label{starting-the-experimentclass}
-In section \ref{subsection:loading-the-config}, we have started defining a class that was able to read from a configuration file. We are going to start building on top of it. If you didn't create any files yet, be sure to create a folder called \textbf{Experiment} inside of \textbf{Model}. In that file, create a filled called  \textbf{IV\_Curve.py}. Let's start by defining a class called \texttt{Experiment} with some attributes: 
+\section{Loading the DAQ}\label{section:loading-daq}
+To load the DAQ into our experiment, we can start with the simplest approach. We import the model for the daq, and we initialize it using the \texttt{load\_daq} method. We can update the experiment model, some parts of the code are omitted for brevity:
 
 \begin{minted}{python}
-class Experiment:
-    def __init__(self, user=None):
-        self.user = user
-        self.daq = None
-        self.properties = {}
-\end{minted}
-
-The class defines three attributes: a \mintinline{python}{user}, a \mintinline{python}{daq}, and \mintinline{python}{properties}. The user is set to \mintinline{python}{None} by default, but it is useful to keep track of who is running an experiment and saving its results. The \texttt{daq} attribute is where we are going to keep the DAQ model, and the \texttt{properties} are going to be a dictionary with all the parameters needed to perform a measurement. 
-
-\exercise{If you want to get the username of the user logged in on the computer, you can try the package \emph{getpass}, which you can test by running \mintinline{python}{getpass.getuser()}. Bear in mind that if several users share the same log-in, this approach is useless.}.
-
-It is important to show the kind of functionality we are after in order for you to have a clearer picture of what is missing. The idea is that to perform a measurement, you would write a short script like the one below:
-
-\begin{minted}{pycon}
->>> from Model.experiment import IVCurve
->>> exp = IVCurve(user='Me')
->>> exp.load_properties('Config/experiment.yml')
->>> exp.load_daq()
->>> exp.do_scan()
->>> exp.plot_results()
->>> exp.save_data()
->>> exp.save_meta_data() 
-\end{minted}
-
-We import the model of the experiment that we want to perform. Instantiate it with a specific user, in this case just \mintinline{python}{'Me'}. Then we specify the configuration file with the different parameters for the experiment and load it. We load the daq, based on what the configuration file specifies. To perform a scan, we simply execute \mintinline{python}{do_scan}. In principle, the model could have a quick way of plotting the data and, more importantly, to save the data and metadata needed to reproduce the measurement.
-
-One of the advantages of defining a class for a measurement is that you can also use it in other projects. For example, you could trigger a measurement from a Jupyter notebook and analyze the results directly within it. You can also trigger measurements remotely and you will be able to programmatically change the parameters that you used for a scan. Let's start simple and build on complexity.
-
-\exercise{Write a method for loading the properties from a {YAML} file. Remember that you have already done a version of this in the Lay Out chapter. Store the properties in a dictionary called \texttt{self.properties}}
-
-Once you have a method for loading a {YAML} configuration file, you will also know all the properties that are available
-to perform a measurement. It may be hard to understand at the beginning the usefulness of having a separated configuration file. When the program gets larger it is going to speed a lot the debugging and future improvements of your own code. In the following exercise you can already see that expanding the functionality of your program is relatively quick when the needed information is centralized: 
-
-\exercise{Write a \texttt{do\_scan} method that relies on the parameters stored at \texttt{self.properties} to perform a measurement. Assume that \texttt{self.daq} is the model for the daq we are going to use. Store the data of the measurement in an attribute of the experiment class, remember that stylistic rules say that you should add every new attribute to the \texttt{\_\_init\_\_} method of the class.}
-
-The two previous exercises are based on things that we have done more than once in the previous chapters. But in this chapter, we are systematizing all this information. Clear programs are great not only to yourself but also to other developers and users of your code. Moreover, once you start using the class in a real scenario, you will really appreciate the advantages of this approach.
-
-\exercise{Write a method for saving the metadata of your experiment, i.e., all the information stored in the \texttt{self.properties} dictionary. \textbf{TIP}: Where do you save the data? Perhaps you can add one more parameter to the original {YAML} file to specify the destination folder.}
-
-So far, you have developed the basic methods for performing an experiment and saving its data to a file. We are missing the crucial step of loading the {DAQ} model into the experiment model. There are two options to achieve it. The first one is that you manually import and initialize the {DAQ} and then you pass it to the experiment model. The second is to load the appropriate daq based on what is defined in the configuration file.
-
-The code for the first option would look like this:
-
-\begin{minted}{python}
-from PythonForTheLab.Model.DAQ.simple_daq import AnalogDaq
-from PythonForTheLab.Model.experiment import DaqControl
-
-daq = AnalogDaq()
-daq.initialize()
-
-config_file = 'Config/experiment.yml'
-
-e = DaqControl(user='me')
-e.load_config(config_file)
-e.load_daq(daq)
-\end{minted}
-
-While the code for the second option looks like this:
-
-\begin{minted}{python}
-from Model.experiment import DaqControl
-
-config_file = 'Config/experiment.yml'
-e = DaqControl(user='me')
-e.load_config(config_file)
-e.load_daq()
-\end{minted}
-
-The two approaches are very different and are worth discussing their advantages and disadvantages. In the first one, we are
-importing the daq, we initialize it, and then we add it to the experiment class through the method \texttt{load\_daq}. This approach is quick because the experiment model doesn't need to do much, just to accept the DAQ and store it within itself. If you want to use a different DAQ device, you would alter the code above, importing the proper model, etc. At first sight, this approach may seem simple enough, however, it will become harder when you are dealing with several devices which can be changed. Moreover, future users of your code need to be comfortable editing Python files. 
-
-The second approach involves loading a module based on information stored as a string on a file, which is slightly more complicated programmatically speaking. One of the advantages of this approach is that the information on the devices used is automatically saved as metadata. The other advantage is that we are really splitting the code itself from the peculiarities of our own experiment. This approach is also a good opportunity to learn a few new things about Python. 
-
-In the next sections, we are going to start with the first approach and then we are going to change the code to work as in the second approach. This is called refactoring the code. Therefore, we are going to see not only how to solve the specific problem of loading the DAQ to the program, but also how to organize the workflow in order to guarantee that changes are backward compatible, and therefore other users can keep working. 
-
-\subsection{Loading a DAQ}\label{loading-a-daq}
-We are going to start with the simplest approach, which consists of importing and initializing the daq outside of the experiment model and then loading it. The method \mintinline{python}{load_daq} will look like this:
-
-\begin{minted}{python}
-def load_daq(self, daq):
-    self.daq = daq
-    self.properties['Experiment']['DAQ']['name'] = str(self.daq)
-    self.properties['Experiment']['DAQ']['port'] = self.daq.port
-\end{minted}
-
-The code is straightforward. The \mintinline{python}{load_daq} method gets one
-argument, \texttt{daq}, which is in turn stored as the class attribute \mintinline{python}{self.daq}.
-You also update the \mintinline{python}{properties} dictionary to keep the name of
-the model which you are using. This is important if you want to be sure you are able to reproduce the experiment at a later stage. If you save the properties, there will be no doubts regarding which DAQ you used to measure. This approach holds for any device that you may want to use in the future. 
-
-There are, however, few things that need to be addressed. First, let's check what happens on the line which reads \mintinline{python}{str(self.daq)}. Remember, every time you see something with an unclear behaviour, you can always check what is going on by opening a terminal and starting Python. Then, we can do the following:
-
-\begin{minted}{python}
->>> from Model.daq import AnalogDaq
->>> daq = AnalogDaq(port=1)
->>> str(daq)
-'<analog_daq.AnalogDaq object at 0x7fe8c53c0c50>'
-\end{minted}
-
-The result of doing \mintinline{python}{str(daq)} may not be what you were expecting. It is, nonetheless, a good starting point because it allows you to identify which class you used. Fortunately, this can be improved. Open the file where you store the \mintinline{python}{AnalogDaq} class and add the following to it:
-
-\begin{minted}{python}
-def __str__(self):
-    return "AnalogDaq"
-\end{minted}
-
-If you repeat the steps above, you will see now that the output of doing \mintinline{python}{str(daq)} is exactly \mintinline{python}{"AnalogDaq"}. The
-\mintinline{python}{__str__} method of a class tells Python how to convert an object to a string. It is also responsible for the behaviour of \mintinline{python}{print(daq)}. Now you will have a nicely formatted string to store in your \mintinline{python}{properties} dictionary. Remember that if you assign the same output for the \mintinline{python}{__str__} method, to two different classes, you won't be able to distinguish which one you used. Therefore, deciding what to include in the string representation requires some thinking. You can also add something that identifies that specific DAQ such as its serial number or the port to which it is connected. 
-
-There is something else that is worth discussing at this stage. Remember that we are developing software that can be expanded by other people. In the approach above, we ask the user to supply an object, but you won't be certain whether it is the correct class. Every time there is user input, there is room for mistakes. Complex programs such as the one we are developing now have the extra problem that mistakes at the beginning may generate data loss much later. Imagine that the user supplies the wrong class for the \mintinline{python}{load_daq}, but the experiment doesn't use the DAQ until the very end, before saving the data generated by another device, such as a camera. The program would raise an exception and most likely crash before it was able to write the data to the hard drive. 
-
-Even if the example above can be a bit of an extreme, it can be wise to verify the user input, especially if it can alter the functioning of the program in some very wrong ways. If you think about what the {DAQ} Models have in common, you should realize that both of them are child classes of the DAQBase class. Therefore, if you want to know if you are dealing with the proper model, you should check whether the daq variable that \mintinline{python}{load_daq} is getting is actually derived from the base model. To achieve this, you will need to update the experiment model, pay attention to the first line, which should be at the top of the file:
-
-\begin{minted}{python}
-from PythonForTheLab.Model.daq.base import DAQBase
+from PythonForTheLab.Model.analog_daq import AnalogDaq
 
 [...]
 
-    def load_daq(self, daq):
-        if not isinstance(daq, DAQBase):
-            raise Exception('The DAQ Model specified should be a child of DAQ Base')
-    [...]
+def load_daq(self):
+    self.daq = AnalogDaq(self.config['DAQ']['port'])
+    self.daq.initialize()
 \end{minted}
 
-The \mintinline{python}{isinstance} function is very useful to check whether the object we are inspecting belongs to a special class, including parents. The function works also with default data types of Python, for example:
+The \texttt{load_daq} method uses the information stored in the configuration file in order to instantiate and initialize the daq model. Having a config file in YAML format makes it very easy to navigate and find where the information of the port for the daq was located. The main key is \texttt{DAQ}, and the sub-key is \texttt{port}. In this way, there are much fewer things we need to keep in our heads, we can always go back to the file and read what we need to know. We have also decided that we initialize the device right after loading it. This could have been a separated method, but at this stage and for this experiment, there is no real need. 
 
-\begin{minted}{pycon}
->>> a = 1
->>> isinstance(a, int)
-True
->>> isinstance(a, str)
-False
-\end{minted}
-
-Now we know that if the program is to continue, the user should have provided a model which inherits from the DAQBase class. This is one approach, which seems very adequate, but which may have some friction in the Python community. Many developers follow a pattern called duck typing. In a broad sense, it means that if a class behaves as expected, why would you care about what type of class it is? If someone develops a valid DAQ class, the only difference is that it does not inherit from DAQBase, is it correct to raise an exception? The discussion is not closed at all. You will find some people who are strong opponents of duck typing, others who are strong followers. Once you gain experience, you can make your own call. For the time being, our code is quite robust even if it could be at the expense of losing flexibility later on. 
-
-The first approach on how to load the daq model into the experiment is relatively easy and is a pattern that will be repeated also in other places. Whenever you need information from outside the class, in this case, the DAQ model, you can create a method which accepts that information and you store it as an attribute. This will make it available throughout your class, in any other method. 
-
-Let's see how the second approach would look like. The idea is that the experiment model will load a class based on what the {YAML} file specifies. In the first approach, you have updated the properties of the
-experiment model, adding an extra key called \mintinline{python}{DAQ}. Therefore, we can do the same in the {YAML} file \textbf{experiment.yml}:
+Since we are taking care of loading and initializing the DAQ, we can also develop the finalize method, which takes just one line:
 
 \begin{minted}{python}
-User: me
-DAQ:
-  name: DummyDaq
-  port: 0
+def finalize(self):
+    self.daq.finalize()
 \end{minted}
 
-Next time you use the method \mintinline{python}{load_config}, you will also have a key for the {DAQ}. Importing a module into Python can be done at any stage of the program, also within a function or class method. We can therefore do it within the \mintinline{python}{load_daq} method of the Experiment class. For the time being we have developed only one DAQ, AnalogDaq, but let's assume we have a second one available, called DummyDaq (which we will actually develop by the end of this chapter), the method for loading the daq would look like:
+We can update the \textbf{run\_experiment.py} file to reflect the additions we have just made to the Experiment:
 
 \begin{minted}{python}
-def load_daq(self, daq=None):
-    if daq is None:
-        try:
-            name = self.properties['Experiment']['DAQ']['name']
-            port = self.properties['Experiment']['DAQ']['port']
-        except KeyError:
-            raise Exception('You must either provide a daq or specify it in the configuration file')
-        if name == 'DummyDaq':
-            from PythonForTheLab.Model.daq import DummyDaq
-            self.daq = DummyDaq(port)
-        
-        elif self.properties['DAQ']['name'] == 'AnalogDaq':
-            from PythonForTheLab.Model.daq import AnalogDaq
-            self.daq = AnalogDaq(port)
-        
-        else:
-            raise Exception('The daq specified is not yet supported')
-    
-    else:
-        # Here goes the same code you had before
+[...]
+experiment.load_daq()
+print(experiment.daq)
+experiment.finalize()
 \end{minted}
 
-The first thing you have to notice is that we have added a default value for the \mintinline{python}{daq} argument, in this case \mintinline{python}{None}. Adding a default value allows you to use the
-method both as \mintinline{python}{load_daq()} and as \mintinline{python}{load_daq(daq)}. If you call the method without an argument, \mintinline{python}{if daq is None} will be \mintinline{python}{True}. The way of importing the different models is quite straightforward, you check the name specified in the config file and make the import. Pay attention to the fact that we added another fail-safe: if the user does not supply an initialized DAQ nor any DAQ information in the configuration file, we will raise an exception to inform it. You could argue that this approach is not very flexible. If you ever add a model for a new device, you need to manually add it to the experiment model. However, the simplicity outweighs the flexibility. 
-
-The method \mintinline{python}{load_daq} is compatible with our previous code. If the user does supply a DAQ, it will use that one instead of anything provided in the configuration file. This is called refactoring. We have changed our experiment model relatively a lot, but we added the possibility of using it as it was specified in the past. Adding default values when you add a new input to your methods or functions is an excellent way of keeping backward compatibility. The other way around is also important: when you want to remove input from a function, you can add a default value to the argument; in the function you check whether the user supplied a value or not and raise a warning saying that the input is deprecated. Bigger libraries, such as numpy, before eliminating variables or adding mandatory arguments to a function, normally release intermediate versions in which a warning appears. Smaller programs with a smaller user base tend to be sloppier in this regard, but that doesn't mean that you can't follow a neat approach from the beginning. 
-
-\exercise{Go ahead and trigger the exception by defining a name of the {DAQ} different from `DummyDaq' or `RealDaq'. What happens to the code after the exception? Does it get executed?}
-
-There is something else that is very easy to overlook. Imagine you run the experiment supplying the daq yourself, and then you save the properties dictionary in YAML format. The information contained will include the name of the DAQ and the port. If you use that file as a configuration file, the experiment model will be able to load the DAQ automatically, without you having to initialize it beforehand. This happens only because of the string representation of our model coincides with the options of the \mintinline{python}{load_daq}. This, however, is not mandatory. If you want to enforce it, you need to write very clear documentation, explaining it. You may also take a different approach. Since we are forcing all DAQs to be children of DAQBase, we can add the following to DAQBase:
+When we run the code above, we will see that the output of of \texttt{print(experiment.daq)} is not pretty and it is hard to understand. We can update the device model in order to make the string that appears on screen nicer. We edit the \textbf{analog\_daq.py} file to include the following method in the \texttt{AnalogDaq} class:
 
 \begin{minted}{python}
+[...]
+
+class AnalogDaq:
+[...]
+
     def __str__(self):
-        return self.__class__.__name__
+        return "Analog Daq"
 \end{minted}
 
-And then just remove the \mintinline{python}{__str__} method from AnalogDaq. What we have done is that by default the string representation of a class is the name of the class. This may not be wise in all contexts, but at least you get to see the power of inheritance and how to use some of the magic methods of Python. 
+The method \texttt{\_\_str\_\_} is called a \emph{dunder} method, because it has the double underscore before and after. These are magic methods in classes that allow us to change the behavior in a much more lower level. The \emph{str} method is responsible for letting Python know how to transform an object to string. This happens, for example, when we use the \texttt{print} function. If we run the experiment again, we will see that the output is much nicer. 
 
-\section{Defining a Scan}\label{defining-ascan}
-The goal that we were set to achieve at the beginning of the book is to measure the {IV} curve of a diode. Therefore, doing a scan means changing an analog voltage output in a controlled way and, at the same time, recording an analog input. This kind of measurement is very common in a lot of different experiments, not only in electronics.
+\note{Adding a string representation to the classes we build is a nice addition but not mandatory. We should be careful not to derail on details that don't bring us closed to the goal of performing a measurement.}
+
+\subsection{The Dummy DAQ}\label{subsection:loading-dummy-daq}
+In the previous chapter we took a small detour when we discussed the creation of a base class for the device models. In Section \ref{section:base-model} we discussed also about creating a dummy device, a fake model that outputs random numbers when requested. This means that we have two different DAQ devices we can use, one real and one fake. Therefore, we can improve the Experiment model to accomodate the possibility of using one or the other. We are going to follow a non-standard approach, which does not comply with the general principles of Python, but that it is nevertheless very handy. In the config file, we included the name of the DAQ, it is time to use this information. There will be two possibilities, either \texttt{AnalogDaq}, or \texttt{DummyDaq}:
+
+\begin{minted}{python}
+def load_daq(self):
+    name = self.config['DAQ']['name']
+    port = self.config['DAQ']['port']
+    if name == 'DummyDaq':
+        from PythonForTheLab.Model.dummy_daq import DummyDaq
+        self.daq = DummyDaq(port)
+        
+    elif name == 'AnalogDaq':
+        from PythonForTheLab.Model.analog_daq import AnalogDaq
+        self.daq = AnalogDaq(port)
+        
+    else:
+        raise Exception('The daq specified is not yet supported')
+    
+    self.daq.initialize()
+\end{minted}
+
+The \texttt{load\_daq} method is now much more powerful than before, and we are doing something that may seem strange at first sight. We are importing Python modules not at the top of the file, but deep inside a method. This is not standard and in some contexts it is discoursaged, but it is important to understand why we have decided to follow this approach. When working with real devices, it can happen that the models depend on drivers that are not installed on the computer. If we import the device model at the top of the experiment file, we may get an error because of a device we are actually not intending to use. 
+
+On the other hand, this behavior is discouraged because if there is a problem in one of the modules being imported, we won't notice it until we are running the program, and that can make us lose time and, more importantly, data. For example, \texttt{AnalogDaq} depends on having a proper controller available. If we make the import at the top of the class, and the controller is not in place, we will get an error even before we instantiate the experiment class. If we plan to use only the dummy model, then we don't care about this. The balance between safety, best practices, and ease of development is sometimes hard to choose. What is important to remember is that Python is an incredibly flexible language. 
+
+We have also included a final clause in our if-statement to raise an exception if the specified model is not one of the two we know how to work with. The advantage of working with models that specify the same API is that after we load and instantiate them, they both will work in the same way, therefore the rest of our code will be completely independent from which model we are using. 
+
+\exercise{In Section \ref{section:pint} we included units for the \texttt{AnalaogDaq} class, but we didn't add units for the \texttt{DummyDaq}. This is an inconsistency, since both models will be generating different types of output. Update the dummy model to generate random values including units of volts.}
+
+\section{Doing a Scan}\label{section:doing-scan}
+The core of the experiment model is being able to perform a scan, changing the voltages on the output and reading the voltages in the input. This kind of measurement is very common in a lot of different experiments, not only in electronics. That is the reason we decided to call it \texttt{scan}, which is fairly general name. 
 
 \exercise{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
-Performing a scan requires some parameters, that you should have defined in previous chapters. As a reminder, you can find them below:
-
-\begin{minted}{yaml}
-Scan:
-  channel_in: 2
-  channel_out: 1
-  start: 0.1V
-  stop: 0.7V
-  step: 0.1V
-  delay: 10ms
-\end{minted}
-
-\mintinline{python}{channel_in} and \mintinline{python}{channel_out} are the numbers of the channels on the DAQ needed for the scan, i.e., the analog in and the analog out. \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step} are the analog output parameters. Note that units are added, and we will see how to deal with them later. It is important to point out that they don't need to have the same unit but they have to be the same quantity. For example, you can mix \texttt{mV},  \texttt{nV},  \texttt{V}, etc. The delay means how often the output is going to change from one value to the next.
-
-The advantage of starting by defining the parameters in a {YAML} file is that now you know what parameters you have available and what are their names. The next step is to create the method for doing the scan. Remember that you have already done a scan in the previous chapters. If you dig up the code, you can adapt it in order to make it work as a method in the experiment class. The general idea is to
-generate an output and record an input within a \emph{for loop} with the range given by \mintinline{python}{start}, \mintinline{python}{stop} and \mintinline{python}{step}. You should have something like this:
+To perform a scan, we will use the parameters that we have defined in the \texttt{Scan} section of the config file. Since we already performed this type of measurement either from the command line or from example files, it is easy to adapt what we did to the method in the Experiment class:
 
 \begin{minted}{python}
-def do_scan(self):
-    scan_params = self.properties['Experiment']['Scan']
-    
-    start = scan_params['start']
-    stop = scan_params['stop']
-    step = scan_params['step']
-    channel_in = scan_params['channel_in']
-    channel_out = scan_params['channel_out']
-    delay = scan_params['delay']
-
-    num_points = int((start-stop)/step) + 1
-
-    self.scan_values = np.linspace(start, stop, num_points)
-
-    for value in self.scan_values:
-        self.daq.set_analog_value(port_out, value)
-        data = self.read_analog(port_in)
-        sleep(delay)
-\end{minted}
-
-The code is quite clear. The first step is to store the parameters of the scan into a variable called \mintinline{python}{scan_params}. This is only a way of shortening the amount of typing required later on. The loop is responsible for changing the output value and reading the analog input. Probably you have realized that there are some issues with the code above which we will need to solve, one by one.
-
-\exercise{In the loop, the variable \mintinline{python}{data} is being overwritten on every step. This is not what you want if you intend to do anything with it. Store the information into an array. The array should be an attribute of the class, i.e. it should be defined in the \mintinline{python}{__init__} method and you can refer to it as \mintinline{python}{self.scan_data}.}
-
-The advantage of having the data stored in an attribute is that it becomes available to other methods of the class and it is also accessible from outside of the object, for example if you would like to make plot. However, storing the data is only one of the concerns that need to be addressed. Another one is that the parameters you are using have units attached to them, and YAML is reading them as a string that needs to be transformed into quantities. 
-
-We have covered how to use units in Python when you have developed the first driver for the {PFTL} {DAQ}. You have to use the Unit Registry from a package called Pint. The code looked like this:
-
-\begin{minted}{pycon}
->>> from pint import UnitRegistry
->>> ur = UnitRegistry()
->>> var = ur.Quantity('5V')
-\end{minted}
-
-With this code, \emph{Pint} interprets a string, \mintinline{python}{'5V'} and transforms it into a quantity. You could add the same code at the beginning of the \emph{experiment} model, and transform the parameters when you use them, or you can have a more elegant approach. In the root of your project, the folder that contains the folders \emph{Model}, \emph{View} and \emph{Controller}, create a file called \textbf{\_\_init\_\_.py} and add the following code to it:
-
-\begin{minted}{python}
-from pint import UnitRegistry
-ureg = UnitRegistry()
-Q_ = ureg.Quantity
-\end{minted}
-
-At the top of the file where you define the experiment model, you can add:
-
-\begin{minted}{python}
-from PythonForTheLab import Q_
-\end{minted}
-
-And you can use \mintinline{python}{Q_} for transforming the parameters into quantities, simply doing \mintinline{python}{Q_(parameter)}.
-
-\exercise{Update the code to transform each one of the appropriate parameters to a Quantity. Remember that the port numbers are supposed to be integers, not quantities.}
-
-\exercise{Update the DAQ model to use {Q\_} instead of importing Pint and generating a unit registry in the model file.}
-
-\note{By defining \texttt{Q\_} at the root of the project, we are actually hiding a problem that you may encounter in other projects. The unit registry is a complex object, in which you specify how units relate to each other and it allows you to define your own units if needed. This means that different unit registries cannot be mixed together. If you define the unit registry in the experiment model and in the daq model, at some point you will see an exception warning you about mixing different unit registries. It is good practice to create only one unit registry per project.}
-
-Once you complete the exercise above, one of the problems was addressed. But if you try to run the program you will face other issues. First, we can check what happens with the number of points for the scan. We can test directly on the python console to see how Pint behaves:
-
-\begin{minted}{pycon}
->>> import pint
->>> ur = pint.UnitRegistry()
->>> Q_ = ur.Quantity
->>> start = Q_('0V')
->>> stop = Q_('1V')
->>> step = Q_('100mV')
->>> ((stop-start)/step)
-<Quantity(0.01, 'volt / millivolt')>
-\end{minted}
-
-You see that, if we divide two quantities, Pint does not immediately simplify the units, it just keeps the units of the numerator and the denominator almost intact. That is why you see volt/millivolt. You can try to change the units to, for example, \texttt{kV}, etc. and see what happens when you mix them. However, if we do the following:
-
-\begin{minted}{pycon}
->>> int((stop-start)/step)
-10
-\end{minted}
-
-When we apply \texttt{int} to a quantity, Pint automatically tries to transform the variable to a dimensionless quantity. This is exactly the case when we divide volts and millivolts. The same is valid if we use \texttt{float}, for example. However, if you use \texttt{int} to a Quantity with units, it will raise an exception. The number of points is not an issue for performing the scan. There is another parameter which we need to take care of. The \mintinline{python}{delay} has units of time, and the function \mintinline{python}{sleep} takes seconds as an argument. The easiest way to deal with it is to simply transform the delay to the units needed by the function:
-
-\begin{minted}{python}
-sleep(delay.m_as('s'))
-\end{minted}
-
-Which ensures that you use the delay magnitude expressed in seconds.  If you use milliseconds or hours for that matter, it will be translated into the proper number before the \mintinline{python}{sleep} function uses it. With these changes, your code is almost ready for performing a scan. 
-
-If you do a quick test, you will probably notice that everything is working as expected, and you may be tempted to step ahead. However, it is worth discussing how Pint and Numpy play along since it can give rise to a major bug in our program, which won't be evident until it is too late, i.e. after you have acquired data. We went very quickly from units to a numpy array using the function \mintinline{python}{linspace}. However, we never checked what that function is actually doing when the inputs have units. Paying attention to that crucial detail is what you gain with experience. Let's see with some quick examples what is going on:
-
-\begin{minted}{pycon}
->>> start = Q_('5V')
->>> stop = Q_('10V')
->>> num_points = 6
->>> np.linspace(start, stop, num_points)
-array([ 5.,  6.,  7.,  8.,  9., 10.])
-\end{minted}
-
-We see that the output array doesn't have units. That is not particularly bad, it is easy to add them later. But what happens if we mix different units?
-
-\begin{minted}{pycon}
->>> start = ur('5mV')
->>> np.linspace(start, stop, num_points)
-array([ 5.,  6.,  7.,  8.,  9., 10.])
-\end{minted}
-
-What you see in the examples above is that Pint stripped the units from the quantities and just used their magnitude. This is a huge problem for our program because it means units are not being used at all. If, at some point, a user mixes units for start and stop, our program will behave in a completely unintended way. These kind of bugs are very hard to find and to solve because the only indication of something going badly is when we look at the data and we realize that something is incredibly off. The number of points is correct, but the values used for the output are not. This will make it incredibly hard to trace back the errors because you will notice that something is not wrong only when you are analysing the data. 
-
-A way around this problem is to select the units we want to work with before using \texttt{linspace}. There is no problem with this approach, because in any case the DAQ model will take care of translating the units before sending the command to the device. We can to the following:
-
-\begin{minted}{python}
-def do_scan(self):
-    [...]
-    start = start.to('V')
-    stop = stop.to('V')
-    scan = np.linspace(start, stop, num_points) * Q_('V')
-\end{minted}
-
-We force \texttt{start} and \texttt{stop} to be in volts. Of course this works only when we are scanning a voltage and thus it will not work if you are scanning distances, for example. When we use \texttt{linspace}, we will have a Numpy array, and we can add units by multiplying it with a quantity. You can test whether this works or not:
-
-\begin{minted}{pycon}
->>> start = Q_('1mV')
->>> stop = Q_('1V')
->>> num_points = 10
->>> start = start.to('V')
->>> stop = stop.to('V')
->>> scan = np.linspace(start, stop, num_points) * Q_('V')
->>> scan[0]
-<Quantity(0.001, 'volt')>
-\end{minted}
-
-\subsection{Linspace or Arage}
-When we develop software, there are so many details that we need to take into account that it is possible to miss some of the important ones. In this section, we have been using \texttt{linspace} to define the scan points. However, this function takes the number of points in a given range, while we are using the step size in the config file. What happens if, for example, the step gives a non-integer number of points? We can test it out:
-
-\begin{minted}{pycon}
->>> start = 0
->>> stop = 10
->>> step = .3
->>> num_points = int((stop-start)/step)+1
->>> np.linspace(start, stop, num_points)
-array([ 0.        ,  0.3030303 ,  0.60606061,  0.90909091,  1.21212121,
+from PythonForTheLab import ur
 [...]
+
+def do_scan(self):
+    start = ur(self.config['Scan']['start'])
+    stop = ur(self.config['Scan']['stop'])
+    step = ur(self.config['Scan']['step'])
 \end{minted}
 
-In the output of the code above, you see that the step is not exactly \texttt{0.3} but a bit more. A possible solution to this problem is to use \texttt{arange} instead of \texttt{linspace}. If you check the documentation you will see that it fits the decisions we have made:
-
-\begin{quote}
- numpy.arange([start, ]stop, [step, ]dtype=None)¶
-
-    Return evenly spaced values within a given interval.
-
-    Values are generated within the half-open interval [start, stop) (in other words, the interval including start but excluding stop). For integer arguments the function is equivalent to the Python built-in range function, but returns an ndarray rather than a list.
-
-    When using a non-integer step, such as 0.1, the results will often not be consistent. It is better to use numpy.linspace for these cases.
-\end{quote}
-
-If we quickly try it out:
-
-\begin{minted}{pycon}
->>> np.arange(start, stop, step)
-array([0. , 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1, 2.4, 2.7, 3. , 3.3, 3.6,
-       3.9, 4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6. , 6.3, 6.6, 6.9, 7.2, 7.5,
-       7.8, 8.1, 8.4, 8.7, 9. , 9.3, 9.6, 9.9])
-\end{minted}
-
-We see that now the size of the step is what we specified, and thus, it looks like a neat idea to change linspace and start using arange. However, if we go back to the previous case, which gives an integer number of points:
-
-\begin{minted}{pycon}
->>> step = 1
->>> np.arange(start, stop, step)
-array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-\end{minted}
-
-And we see that the last point is missing, values should have gone all the way to 10. This is in the documentation, where you read that the output is given in the half-open interval [start, stop). We may be tempted to force \texttt{arange} to include the last step, for example:
-
-\begin{minted}{pycon}
->>> np.arange(start, stop+step, step)
-array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10])
-\end{minted}
-
-But again, if we go back to the non-integer number of points:
-
-\begin{minted}{pycon}
->>> np.arange(start, stop+step, step)
-array([ 0. ,  0.3,  0.6,  0.9,  1.2,  1.5,  1.8,  2.1,  2.4,  2.7,  3. ,
-        3.3,  3.6,  3.9,  4.2,  4.5,  4.8,  5.1,  5.4,  5.7,  6. ,  6.3,
-        6.6,  6.9,  7.2,  7.5,  7.8,  8.1,  8.4,  8.7,  9. ,  9.3,  9.6,
-        9.9, 10.2])
-\end{minted}
-
-You can see now that the last value is beyond the range we set.
-
-You can think about including more elaborated solutions. For example checking whether the last step falls out or in the range, etc. However, the main reflection of this section is that there is no unique way of solving this problem. If we use \texttt{linspace}, we are sure we are within the specified range, but the step may not be what we specified. If we use \texttt{arange}, we can be sure about the step size, but the limits are not clear. 
-
-When these issues arise, you have to consider what do you want to define as \textit{expected behavior}. Is missing the last point of a scan acceptable? Is having a different step size acceptable? You can also redefine the configuration file in order to include number of steps and not step size. But in that case, you loose track of whether the real step size is beyond the resolution of your devices. The choice is ultimately yours, while you are consistent in your code, you know your results will also be consistent. 
-
-In the rest of the book, we will keep using \texttt{linspace} for defining scans.
-
-
-\section{Dummy DAQ}\label{dummy-daq}
-The previous sections have been focused on developing a model for interacting with the real device that drives the experiment. However, when you develop software for the lab, sometimes you would like to test your program without having a device connected to the computer. It can be a safety precaution or simply because you are not working on the lab computer. To achieve this, you can define a fake model which generates fake data. We like calling fake devices of \textbf{dummy} devices. You can also refer to them as \textit{simulated} devices. 
-
-In our program, created a dummy daq is relatively easy. Create a new file \textbf{dummy\_daq.py} in the folder \textbf{Model}. Add the following code to the file:
+After the first few lines, we need to stop and think. After we introduced units to our model we didn't really try to perform a scan, and therefore we need to see how Pint works. We know start, stop, and step all have units of volts or related. However, if we try to use the start, stop, and step values as they are, we will fail. Nore the Python \texttt{range} function, nor numpy's \texttt{arange} know how to deal with quantities. However, Pint allows us to transform a quantity to a plain number in given units, by using the \texttt{m\_as} method. Therefore, if we want to have a range of values over which to perform the scan, we can do this:
 
 \begin{minted}{python}
-from PythonForTheLab.Model.daq import DAQBase
-
-class DummyDaq(DAQBase):
-    serial_number = '1234ABC'
-    def idn(self):
-        return self.serial_number
+scan_range = np.arange(start.m_as('V'), stop.m_as('V'), step.m_as('V'))
 \end{minted}
 
-You start by importing the base class \mintinline{python}{DAQBase}, as you did for the \emph{real model}, but you don't need the controller since you are not going to communicate with any device. The class defines a fake serial, just to be able to return it as if it was the real device. Since we are inheriting from DAQBase, the DummyDaq class will pass the check of the \mintinline{python}{load_daq} method in the experiment. Now you have to think about what do you actually expect from a fake device. Since you are developing a dummy {DAQ}, you don't need to do anything when setting a value to an output, but you do need to generate a value when you read back. And you need to use the proper units as well. It can look something like this:
+If we explore the \texttt{scan\_range} variable, we will see that it includes the numbers starting with \texttt{start}, going in increments of \texttt{step}, but it does not include the \texttt{stop} value. This is not a bug, but just how \texttt{arange} works. The documentation clearly states that arange generates values in the semi-open interval $[\textrm{start}, \textrm{stop})$. If we want to include the last point or not, is debatable. On possible strategy would be to do this:
 
 \begin{minted}{python}
-import numpy as np
-from PythonForTheLab import Q_
-from .base import DAQBase
-
-
-class DummyDaq(DAQBase):
-    serial_number = '1234ABC'
-    
-    def __init__(self):
-        super().__init__()
-    
-    def idn(self):
-        return self.serial_number
-    
-    def get_analog_value(self, channel):
-        return np.random.random(1)*Q_('V')
-
+scan_range = np.arange(start.m_as('V'), stop.m_as('V')+step.m_as('V'), step.m_as('V'))
 \end{minted}
 
-The \mintinline{python}{idn} is quite clear, it just returns the serial number that was defined beforehand. The \mintinline{python}{get_analog_value} accepts a channel as a parameter, even if it doesn't use it, you need to keep the compatibility with what was already defined. The value that is returned is a random number with volts as units. Remember that the random generator outputs values only between 0 and 1. You can try to run the test, but using this DummyDaq instead. Open the file \textbf{test\_daq.py}, and replace the line:
+But this has an associated risk. What happens if start is $0\,\textrm{V]$, stop is $3.3\,\textrm{V]$ and step is $0.5\,\textrm{V]$? The last value in the range would be higher than $3.3\,\textrm{V]$. This means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals. 
+
+We could use numpy's \texttt{linspace}, which allows us to generate equally spaced values if we provide a start, stop and the number of points we want. This seems like a viable solution. We can do the following:
 
 \begin{minted}{python}
-# from analog_daq import AnalogDaq
-from dummy_daq import DummyDaq as AnalogDaq
+num_points = int((stop.m_as('V')-start.m_as('V'))/step.m_as('V'))+1
+scan_range = np.linspace(start.m_as('V'), stop.m_as('V'), num_points)
 \end{minted}
 
-And run \textbf{test\_daq.py}. You will see that an error appears because we are using the \mintinline{python}{initialize} method in the test, but it is not defined within the class. This happened because we included \mintinline{python}{initialize} in the \mintinline{python}{AnalogDaq} but we never added it to the DAQBase. Now you see the power that comes with been organized and systematic. Keeping track of the methods in a base class allows you not to make the same mistakes. Moreover, it would have allowed you to run the test without issues.
+We added a \texttt{+1} to the number of points to accomodate the last value. For example, if we wanted all the integer numbers from 0 to 10, we should use 11 data points. Again, this works fine if the number of points is an integer value, but as soon as the step we specified does not divide the interval in an integer number of points, we would have a problem. With the same values used before, we would get a scan range like this:
 
-\exercise{Add an \texttt{initialize} method into the base class.}
+\begin{minted}{python}
+array([0.  , 0.55, 1.1 , 1.65, 2.2 , 2.75, 3.3 ])
+\end{minted}
 
-If you run the test after completing the exercise, you will see that there are no errors appearing, even if you don't modify the dummy class. Now you see that you can exchange the models in a relatively simple way, and the script that is responsible for measuring works without problems. Of course, this is a simple example, where you exchange a real device for a dummy one, but if you would have two different devices, exchanging them would have been just as simple and the measurement would have been performed regardless of which device you are using.
+Which is obviously not spaced by $0.5\,\textrm{V}$, but it respects the start and stop values. The last option to which we can resource is to change the config file. We thought that defining the step was a good idea, but perhaps it is a better idea to use the number of steps we want in our scan instead of the step size. Therefore, we have to update \textbf{experiment.yml} to include the number of steps and not the step size:
 
-\exercise{Make the \mintinline{python}{get_analog_value} return the value of a sine function and not just a random value.}
+\begin{minted}{text}
+Scan:
+  channel_in: 0
+  channel_out: 0
+  start: 0V
+  stop: 3.3V
+  num_steps: 100
+  delay: 100ms
+\end{minted}
 
+Before we proceed with the experiment class, we see that the array that numpy generates has no units, and this makes sense because we stripped the units from the parameters of the scan. But this can be easily solved by multiplying the array with the proper units, like the code below shows:
+
+\begin{minted}{python}
+from time import sleep
+[...]
+
+def do_scan(self):
+    start = ur(self.config['Scan']['start']).m_as('V')
+    stop = ur(self.config['Scan']['stop']).m_as('V')
+    num_steps = int(self.config['Scan']['num_steps'])
+    delay = ur(self.config['Scan']['num_steps'])
+    scan_range = np.linspace(start, stop, num_steps) * ur('V')
+    scan_data = np.zeros(num_steps)
+    i = 0
+    for volt in scan_range:
+        self.daq.set_analog_value(self.config['Scan']['channel_out'], volt)
+        measured_voltage = self.daq.get_analog_input(self.config['Scan']['channel_in'])
+        scan_data[i] = measured_voltage
+        i += 1
+        sleep(delay.m_as('s'))
+\end{minted}
+
+The \texttt{do\_scan} method is very complete now. We use the number of steps specified in the config file, we are also using the delay and therefore we import \texttt{sleep} at the top of the file. Then we go through all the voltages. We also defined a variable called \texttt{scan\_data} to hold the values as we measure them. This is a big achievement, that needs to be reflected on the file we were using for testing the Experiment class. We can update \textbf{run\_experiment.py}:
+
+\begin{minted}{python}
+[...]
+experiment.do_scan()
+experiment.finalize()
+\end{minted}
+
+When we run the experiment, we will encounter a problem:
+
+\begin{minted}{python}
+...
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: setting an array element with a sequence.
+\end{minted}
+
+This is because of how Pint and numpy work together. We can't simply put into a numpy array a quantity. However, solving this problem is very straightforward. In the same way we defined the \texttt{scan\_range} as an array with units, we can define \texttt{scan\_data} to also include units:
+
+\begin{minted}{python}
+scan_data = np.zeros(num_steps) * ur('V')
+\end{minted}
+
+And we can go ahead now and run the experiment without errors. After we do the scan we can finalize the experiment, but there is no way for us to actually look at the data that we acquired. To make the data available to the outside world, or to other methods in the same class, we can define attributes instead of just variables that get destroyed when the method finishes. The \texttt{do\_scan} method can then look like this:
+
+\begin{minted}{python}
+def do_scan(self):
+    start = ur(self.config['Scan']['start']).m_as('V')
+    stop = ur(self.config['Scan']['stop']).m_as('V')
+    num_steps = int(self.config['Scan']['num_steps'])
+    delay = ur(self.config['Scan']['num_steps'])
+    self.scan_range = np.linspace(start, stop, num_steps) * ur('V')
+    self.scan_data = np.zeros(num_steps) * ur('V')
+    i = 0
+    for volt in self.scan_range:
+        self.daq.set_analog_value(self.config['Scan']['channel_out'], volt)
+        measured_voltage = self.daq.get_analog_input(self.config['Scan']['channel_in'])
+        self.scan_data[i] = measured_voltage
+        i += 1
+        sleep(delay.m_as('s'))
+\end{minted}
+
+We altered both \texttt{scan\_range} and \texttt{scan\_data}, so we can now go back to the \textbf{run\_experiment.py} file and print the values we acquired:
+
+\begin{minted}{python}
+[...]
+
+experiment.do_scan()
+print(experiment.scan_range)
+print(experiment.scan_data)
+experiment.finalize()
+\end{minted}
+
+Finally we can see the data we acquired after the scan runs. This would allow us to do plenty of things like saving, plotting, analysing, etc. But we should not go ahead of ourselves at this stage. We had layed out a plan for the Experiment class and we should follow it as much as we can. The strategy of adding \texttt{self.} before a variable is very helpful, and this is the real power of objects. The idea is that we should use objects when we need to maintain the \emph{state}. It is not just a function that runs and returns a value, but it is actually updating the \emph{state} of the experiment, or of the device, etc. 
+
+Now we can proceed further, to the last missing step: saving data.
+
+\section{Saving Data to a File}\label{section:saving-data}
+After we perform a scan, we must save both the data and the \emph{metadata}. With metadata we mean inforation on the parameters used to perform an experiment and that would allow us or anybody else to repeat the measurement. Let's start by the beginning, just saving data to a file, we are going to use the built-in functions of numpy for this, because we have to save two arrays: \texttt{scan\_data} and \texttt{scan\_range}. And since we already know that Pint and Numpy interact in special ways, we anticipate the errors that may appear:
+
+\begin{minted}{python}
+def save_data(self):
+	data = np.vstack([self.scan_range, self.scan_data]).T
+    header = "Scan range in 'V', Scan Data in 'V'"
+    filename = self.config['Saving']['filename']  
+    np.savetxt(filename, data.m_as('V'), header=header)
+\end{minted}
+
+The method above works. We can go ahead and run the experiment and we will have a file with two columns (that is the reason for the \texttt{vstack} and the \texttt{.T}) and a header specifying that the data is in units of Volts. However, if we run the experiment for a second time, the data will get overwritten. Moreover, we are saving the data to the same folder where we run the experiment, and this is a very bad idea, we would like to save the data in a dedicated place. Therefore, we need to update the config file first, and then the saving method. The folder we are using for saving data is only an example and should be changed according to each one's needs:
+
+\begin{minted}{config}
+Saving:
+  filename: data.dat # Files won't be overwritten, but renamed as data_001.dat, etc.
+  folder: /home/aquiles/Data 
+\end{minted}
+
+Something that is very useful when saving data is to organize it by dates. We can create folder with the date the experiment was run inside the \emph{Data} folder. First we will see snippets in order to understand what we need and then we will add the modifications to the method itself. To get the date of today as a string, we can combine the \texttt{datetime} package and the formatting of strings:
+
+\begin{minted}{pycon}
+>>> from datetime import datetime
+>>> print(datetime.today()
+2020-04-13 12:22:34.895038
+>>> print(f'{datetime.today():%Y-%M-%d}')
+2020-04-13
+\end{minted}
+
+The first part is there, we know how to get the folder name based on todays date. Now we have to create the folder if it does not exist:
+
+\begin{minted}{pycon}
+>>> import os
+>>> data_folder = '/home/aquiles/Data'
+>>> today_folder = f'{datetime.today():%Y-%M-%d}'
+>>> saving_folder = os.path.join(data_folder, today_folder)
+>>> os.path.isdir(saving_folder)
+False
+>>> os.makedirs(saving_folder)
+>>> os.path.isdir(saving_folder)
+True
+\end{minted}
+
+Using the package \texttt{os} allows us to take care of the common problems that appear when dealing with directories. For example, Linux uses \texttt{/} to separate the structure, while Windows uses \texttt{\\}. Also, it may happen that we define the folder with a trailing \texttt{/} or not. \texttt{os} takes care of all this complexity for us. We join the data folder and today's folder and check if it exists, if it doesn't, we create it. The \texttt{makedirs} will create also the parent directories missing. If the \emph{Data} folder does not exist, it would be created. 
+
+Next, we have to be sure we will not overwrite the files when we save new scans. Ideally, we would like the files to look like \texttt{data\_001.dat}, \texttt{data\_002.dat}, etc. Using what we specified in the config file, we can achieve something like it:
+
+\begin{minted}{python}
+>>> filename = 'data.dat'
+>>> base_name = filename.split('.')[0]
+>>> ext = filename.split('.')[-1] 
+>>> i = 1
+>>> new_filename = f'{base_name}_{i:04d}.{ext}'
+>>> print(new_filename)
+data_0001.dat
+\end{minted}
+
+It seems like a lot of work just to format the name, but once we have it, we can use it in all our experiments. We only need to know which is the first available name and save data there. We are now ready to save the data, and also the metadata:
+
+\begin{minted}{python}
+import os
+from datetime import datetime
+[...]
+
+def save_data(self):
+	data_folder = self.config['Saving']['folder']
+	today_folder = f'{datetime.today():%Y-%M-%d}'
+	saving_folder = os.path.join(data_folder, today_folder)
+	if not os.path.isdir(saving_folder):
+	    os.makedirs(saving_folder)
+	
+	data = np.vstack([self.scan_range, self.scan_data]).T
+    header = "Scan range in 'V', Scan Data in 'V'"
+    
+    filename = self.config['Saving']['filename']
+    base_name = filename.split('.')[0]
+    ext = filename.split('.')[-1] 
+    i = 1
+    while os.path.isfile(os.path.join(saving_folder, f'{base_name}_{i:04d}.{ext}'):
+        i += 1
+    data_file = os.path.join(saving_folder, f'{base_name}_{i:04d}.{ext}'
+    metadata_file = os.path.join(saving_folder, f'{base_name}_{i:04d}_metadata.yml'
+    np.savetxt(data_file, data.m_as('V'), header=header)
+    with open(metadata_file, 'w') as f:
+        f.write(yaml.dump(self.config, default_flow_style=False))
+\end{minted}
+
+The \texttt{save\_data} method may be the most complex in the program, but it is also very powerful. We start with a base folder, and create a folder with the current date, with the format Year-Month-Day. We format the data to make it easy to store as two columns on a text file, and we also add a header to explain what are we storing. We extract the base part of the filename and the extention as two separate variables, and we format the the filename in such a way that it can have a number appended to it. The syntax \texttt{i:04d} is the secret to formating numbers with an appropriate number of $0$ in front. We use a while loop to increase the counter until the first file is available, and use that value to store the data. We also create another file, with the same number and a similar name, to store the metadata. In our case, the metadata is nothing more than the \texttt{config} dictionary. 
+
+\note{A very handy by product of saving the config as a YAML file is that we can use it as the config file for the next experiment. If at some point we want to repeat a measurement we did in the past, we just need to point the experiment to the config we saved from that date.}
+
+We can update the \textbf{run\_experiment.py} file, and perform a complete measurement:
+
+\begin{minted}{python}
+import sys
+import os
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(base_dir)
+
+from PythonForTheLab.model.experiment import Experiment
+
+experiment = Experiment('experiment.yml')
+experiment.load_config()
+
+experiment.load_daq()
+
+experiment.do_scan()
+experiment.save_data()
+experiment.finalize()
+\end{minted}
+
+Except for the part of appending the folder to the system path, we can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. Being able to reduce a complex problem to a relatively simple flow is thanks to the effort we put into defining the proper methods in the experiment and device models. 
+ 
 \section{Conclusions}\label{experiment-model-conclusions}
-With this chapter, the core code for a functioning experiment is finished. We went from the development of a driver for a device to split the code into controllers and models. Defining a scan as we did in this chapter was so simple because of all the previous preparation. Of course, there are things that we can do better but what we have achieved so far is functioning and quite useful.
+With this chapter, the core code for a functioning experiment is finished. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code such as doing a scan or saving data are in place, our running script just needs one line of code and the rest will automatically be taken care of. If you share the code with a colleague, for example, and you show them the \texttt{run\_experiment} script, they will be able to perform their own measurements in no time. 
 
-When you develop your own program, it can be wise to start with the experiment model. Once you establish the steps of a measurement it will become clear what you need to develop in order to achieve it. Starting by outlining the experiment model is a good way of being focused on a clear objective. If you are developing a driver, or a model, without knowing to what end, you may end up creating methods and options that you don't really need.
+We left still some more things that should be done in our experiment. For example, we are still acquiring voltages instead of currents. We are not going to explicitly solve this problem because it is a very good exercise to start thinking by yourself:
 
-In this chapter, you also start to realize that if you plan to open your code to others, not just as developers, but as users, you will need to verify the input that they supply. For example, you have learned how to verify that the {DAQ} model is actually what you want. Following that idea, there are several improvements to your code, for example, you can check if the units of the parameters used are correct. It is not the same trying to apply $5\,\textrm{V}$ to an analog output than $5,\textrm{nm}$. 
+\exercise{Update the config file to include information on the resistance that we are using. With that value, update the do_scan method to acquire Amperes (or milliamperes) instead of volts. Finally, you will need to update the save method to accomodate for the changes, not only in the header but also in how we transform the arrays to unitless before saving them.}
 
-\section{Extras: Defining a Monitor}\label{extras-defining-amonitor}
-The principal objective of this book is to show you how to build software in order to measure the I-V curve of a diode. However, there are some other options that you can add to the program, such as continuous monitoring of a signal. In a lot of experiments, measuring a signal is all you need, especially in the phase of setting up. Imagine that you are monitoring a temperature, perhaps you need to wait until it reaches a certain value, or you monitor the signal generated by a photodiode in order to align a laser.
+Some other topics which are still relevant, and that we are going to cover on the next chapter include how to change the parameters of the scan directly from within the running script. This would allow us to, for example, scan the voltages with varying delays to understand if there is some form of hysteresis, or scans with increasing resolution around specific features. We have also neglected what would happen if someone forgets to load the config file or the daq before starting a scan, for example. 
 
-Monitoring a signal is somehow simpler than performing a scan because you have fewer options. The parameters that you need are the channel to monitor, the total time, and time resolution of the monitor. The total time means for how long do you want to acquire a signal before it starts overwriting the information, and the time resolution defines the time interval between consecutive acquisitions. The main difficulty with a monitor is that the loop should be infinite and you should be able to stop it somehow. We will see those topics in the next chapter, for the time
-being, you can complete these exercises:
-
-\exercise{Add one more block in the {YAML} file with the parameters that you need to monitor a signal}
-
-\exercise{Define a new method, called \mintinline{python}{monitor_signal} which uses the parameters defined in the previous exercise to continuously acquire a value. If you want to test how the monitor works, you can make the loop stop after a certain amount of time, for example using the module \mintinline{python}{time.time()}.\\ 
-\textbf{{HINT}}: You should define a numpy array where to store the data. In order to move all the values one step to the left (or right), you can use \mintinline{python}{np.roll}. It is always a good exercise to look up the documentation online to understand how Numpy functions work.}
+The final missing bit, is how to stop the experiment while it is running. If we see something is going wrong, there is no way of deciding to stop it without losing data. There are a lot of different approaches for solving this, but the one we are going to explore is based on \emph{Threads}, a very useful tool for developing acquisition software but that may have a somewhat high entry barrier for newcomers to Python. 
