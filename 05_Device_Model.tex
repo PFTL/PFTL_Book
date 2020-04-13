@@ -112,7 +112,7 @@ class DAQBase:
 
 This class doesn't do anything by itself, it is only the schematics of what a model should contain. The \texttt{pass} that was added after every definition takes care of functions in which nothing happens. We can see that we specify also the arguments that each method will take, the initialize takes a port, setting a value takes channel and value and so forth. In programming, this is also called an API, or Application Programming Interface. The base class defines the interface that all the DAQ models will use. There will be an initialize method, a get and set analog and a finalize. Just by looking at this very simple example, we already know how things are going to work and what do we need to do to make them work. 
 
-As an example, let's create a dummy DAQ that is able to generate random values when requested, and since it is not going to be connected to any real device, it will not do anything else. We can add the following code to \textbf{dummy\_daq.py} in the Models folder:
+As an example, let's create a dummy DAQ that is able to generate random values when requested, and since it is not going to be connected to any real device, it will not do anything else. We can add the following code to \textbf{dummy\_daq.py} in the Model folder:
 
 \begin{minted}{python}
 from random import random
