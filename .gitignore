@@ -8,6 +8,8 @@ _minted-index/
 *.out
 *.kate-swp
 .kile/
+.idea/
 *.kilepr
 *.pdf_tex
 *checkpoints/
+out/
