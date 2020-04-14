@@ -1,207 +1,97 @@
 \chapter{Run an experiment}\label{chapter:run-experiment}
 
-\section{Objectives}
-In this chapter, you are going to learn how to run a complete measurement. You have developed all the code you need to acquire data, but you need
-to put everything together and make it work. For example, we are not saving The data yet. This chapter is also the opportunity to wrap up all what you have achieved so far and to be sure that all the classes, packages and configuration files are where
-they are supposed to be.
-
-Once you finish this chapter, you will have working knowledge on how to start controlling your own experiments in the lab. Of course, you will
-need to adapt the concepts explained in the book to the devices and settings that you have, but the foundations are strong enough to build
-reliable and expandable software.
 
 \section{Introduction}
-The contents of this chapter are going to become ubiquitous in almost all your lab experiments. Most likely a big part of your job is to either repeat measurements in order to improve your statistics or to change some parameters in order to find correlations in your data. A smart way of doing both tasks is through a computer with the appropriate devices hooked to it and with the appropriate software to control them.
+In the previous chapter, we have seen how to develop an experiment model and how to use it from a simple script. In this chapter we are going to explore how to bring it to the next level. So far we can run the experiment only with the parameters specified on the config file, but we are not limited to them. Moreover, once the scan starts, there is no way of stopping it unless we completely stop the program. That leads to missing data and is not particularly helpful.
 
-Up to now, we have been developing a package for controlling devices. Now it is time to use it. It is a good idea to separate the files that build up the package from the ones that show a specific way of using the program. That is why we have created a separate folder for \emph{Examples}. But this is not enough, when you run the experiment and save the data, for example, you will need to do it in a different location. This will prevent polluting the base code and will allow you to separate the settings from different users working on the same computer.
+Following the \emph{Onion Principle}, it is now time to bring the experiment model to the next level.
 
-Remember that in order to be able to reproduce results of your experiments, it is important to keep track of the parameters used to
-perform a measurement, also known as metadata. Through this chapter, you are going to learn some ideas on how to use {YAML} files to store this information together with the data of a measurement. Moreover, you will learn how you can extend the Experiment model without writing new methods.
 
-\section{The Layout of the Project}\label{the-layout-of-theproject}
-In the previous chapters, we have developed a lot of code, and it may have ended up in the wrong location. It is important, therefore, to recap  how the structure of the package looks like:
-
-\begin{minted}{text}
-ROOT
-├── Examples
-│   └── Config
-│       └── experiment.yml
-└── PythonForTheLab
-    ├── Controller
-    │   ├── __init__.py
-    │   └── simple_daq.py
-    ├── __init__.py
-    ├── Model
-    │   ├── daq
-    │   │   ├── analog_daq.py
-    │   │   ├── base.py
-    │   │   ├── dummy_daq.py
-    │   │   └── __init__.py
-    │   ├── experiment
-    │   │   ├── __init__.py
-    │   │   └── IV_measurement.py
-    │   └── __init__.py
-    └── View
-\end{minted}
-
-It is strongly recommended that you copy the structure of the project. This will allow you to follow the code without having to adapt all the import statements. Pay attention to the fact that every folder has its own \emph{\_\_init\_\_.py} file, which we have discussed earlier, and in some cases we have used it to define useful components, such as \texttt{Q\_}. If you see something that you can't understand, you can always refer to the repository on Github\footnote{https://github.com/PFTL/SimpleDaq}.
-
-There is a topic that normally generates headaches with newcomers to Python: how importing works. Imagine that we would like to use the \texttt{DummyDaq} model. We can be tempted to do the following: 
-
-\begin{minted}{pycon}
->>> from Model.daq.dummy_daq import DummyDaq
-\end{minted}
-
-which will work only if we have started the Python interpreter inside the PythonForTheLab folder. When you import, Python will try to find what you want to load in a very specific order and in very special folders. If we are inside the Examples folder, for example, how can Python know that it is supposed to go one level up and into PythonForTheLab to find the \emph{Model} module? 
-
-There are different ways of solving this problem. The easiest is to always start Python in the root folder. In that case, we will be able to import whatever module we are interested like this:
-
-\begin{minted}{pycon}
->>> from PythonForTheLab import Q_
->>> from PythonForTheLab.Model.daq.dummy_daq import DummyDaq
-\end{minted}
-
-This also means that if you have a script in the Examples folder, you would run it like this:
-
-\begin{minted}{bash}
-python Examples/my_script.py
-\end{minted}
-
-This works, but it is not very handy. At some point you would like to run a script which is in a different place in your computer, or you would like to be able to build on the PythonForTheLab package. This is all possible, but it is very dependent on the operating system which you are using. You can refer to section \ref{section:importing-python}, in which we discussed how to add folders to the Python path. If you are using an IDE such as Pycharm or Visual Studio Code, these steps are taken care for you, provided that you trigger your program from within the editor. 
-
-A more elegant solution will be discussed at the end of the book, when we develop a \texttt{setup.py} script that will allow us to install our package in the environment in which we work and not worrying about paths, etc. After you have added the folder the {PATH} in your computer, you can start working in any folder that you wish. The files that we are going to create from now on in this chapter are not going to be part of the main package, the recommendation is to work inside the \emph{Examples} folder, but you are free to choose. 
-
-\section{Running an Experiment}\label{running-anexperiment}
-We have the configuration file defined from the previous chapter. Therefore, we can start using the experiment model right away. We can start by creating a file in the \emph{Examples} folder, let's call it \textbf{start\_cli.py}, and add the following:
+\section{Running an Experiment}\label{section:running-nexperiment}
+In the previous chapter we have seen that an experiment can be run from a simple script in which each of the steps needed are triggered one after the other. We called that script \textbf{run\_experiment.py} and had the following code (skipping some less relevant lines):
 
 \begin{minted}{python}
-from PythonForTheLab.Model import Experiment
+    from PythonForTheLab.model.experiment import Experiment
 
-e = Experiment()
-e.load_config('Config/experiment.yml')
-e.load_daq()
+    experiment = Experiment('experiment.yml')
+    experiment.load_config()
+
+    experiment.load_daq()
+
+    experiment.do_scan()
+    experiment.save_data()
+    experiment.finalize()
 \end{minted}
 
-Remember to change the path to the {YAML} file with the configuration for your experiment. The advantage of this approach is that you could have several configuration files for different experiments and you load the one you want. For example, you may want to do a coarse scan just to check everything is well connected, or you may want to decrease the delay, etc. 
-
-\exercise{You already know how to trigger a scan with the default parameters specified in the configuration file. Perform a measurement and print the data to screen.}
-
-If you use the experiment model as is, and you trigger the \mintinline{python}{do_scan} method, you will notice several things. The first is that you don't know if the program is running or not. When you are facing this situation, the easiest solution is to use some \mintinline{python}{print} statements in order to know where you are at. For example, you can add 
-\begin{minted}{python}
-print('Starting scan...')
-\end{minted} 
-Right before the scan starts, and you can do the same right after it finished. This, at least, will allow you to see something happening on the screen. You could also think about using print statements in the experiment model, so you can see what values are being passed to the DAQ device. This all seems reasonable at the beginning, but be careful. Printing to screen is a quick way of distracting users with too much input. Imagine you are scanning 1 million points and you get a message for each one of them. Moreover, we are going to improve on this later in this chapter. 
-
-The other thing that perhaps you have realized is that if you want to stop the scan, you have to interrupt the execution of the program, which leads to unexpected results. For example, you are going to lose the acquired data, and the DAQ will be left in a state which may not be safe. Finally, you probably realized that the program blocks the execution of any other code while the scan is running. If you want to plot the progress, you will have to wait until it is finished. We are going to solve all of this. However, there is something important to point out first.
-
-Once you instantiate the Experiment class and load the config file, you will have a dictionary located at \mintinline{python}{e.properties} with all the information contained in \textbf{experiment.yml}. Those parameters are used by the \mintinline{python}{do_scan} method, but nothing prevents you from changing them before doing it. For example, you can add the following to the code:
+This is relatively straightforward, but not the only thing that can be done with the experiment. We can access the attributes of the experiment class while we permorming a measurement. For example, we could show the data once the scan is completed:
 
 \begin{minted}{python}
-e.properties['Experiment']['Scan']['start'] = '0.5V'
-e.properties['Experiment']['Scan']['step'] = '500mV'
-e.do_scan()
+    experiment.do_scan()
+    print(experiment.scan_data)
 \end{minted}
 
-When the scan is performed, the parameters that are going to be used are the ones just defined, and not the ones in the {YAML} file. This is very handy because you could even wrap the code in order to study the dependence of the results with some parameters which perhaps you didn't think of before. For example, imagine that you want to see if the {IV} curve depends on the step size or the delay between points. You could do the following:
+But we could also change the parameters of the scan after loading the config file. Sharing information with classes in Python is always two ways: we can read from them, but we can also write to them. Let's see what happens when we change the \texttt{config} attribute of the experiment before triggering the scan. We can do something like the following:
 
 \begin{minted}{python}
-for delay in range(10, 100):
-    d = delay*Q_('ms')
-    e.properties['Experiment']['Scan']['delay'] = d
-    e.do_scan()
+    [...]
+
+    experiment.config['Scan']['num_steps'] = 5
+    experiment.do_scan()
+    experiment.save_data()
+    experiment.config['Scan']['num_steps'] = 10
+    experiment.do_scan()
+    experiment.save_data()
+    experiment.finalize()
 \end{minted}
 
-You can see that by having a model class for the experiment, the biggest work was already resolved. There are some details that you will have to address, for example, how to save the data, but they are normally simple to resolve. Also, you have to remember that the scan is happening with parameters not defined in the {YAML} file. In order to maintain the idea of doing reproducible research, you should always save the parameters you used as part of the results.
+Any of the values stored in the \texttt{config} of the experiment can be changed at any time. It can be changed from a script, it could be changed from the running script. We are not limited to running the experiment from a script, we can also run it from the Python interpreter. The steps would be the same. For people familiar with Jupyter notebooks, for example, the experiments can be run directly from within them. There are some extra benefits of using notebooks, such as the possibility of documenting the work, but we leave the discussion for the Advanced Python for the Lab book.
 
-\section{Plot results and save data}\label{plot-results-and-savedata}
-We know how to perform one or several measurements, but now we need to do something with the data we have just acquired. First, we are going to plot it and then we are going to save it to a text file.
+\note{Running from the Python interpreter is normally cumbersome. There is another version of the interpreter called \textbf{bpython} which has auto-complete functions, as well as it allows you to edit code before running it. We don't encourage people to run experiments from the interpreter, but some times it is the handiest solution to change values when desired.}
 
-For plotting we are going to use a library called \href{http://www.pyqtgraph.org/}{PyQtGraph} which was developed mainly to generate fast data visualizations. Exactly what we need when we are dealing with experiments. If you are familiar with any other plotting libraries such as matplotlib, feel more than free to adapt the code to use them. The examples in this section are based on PyQtGraph because it is the library that we are going to use while building a {GUI}. The first thing you have to do is to import the library and make a plot of the data.
+In the code above, we have changed the value of the number of steps before triggering a scan. First we have set it to 5 steps and then to 10 steps. We can check the metadata and we will see that this information was actually saved. If we open the data file, we would also see a different number of data points. This flow proposes very interesting possibilities. For example, if we would like to see if there is any form of hysteresis on the measurements, we could vary the delay between data points.
+
+\exercise{Write a for-loop that changes the delay between data points after each scan. Remember to save the data in order to explore the differences}
+
+If we start developing complex logic in the running script, it is fair to wonder if it is better putting all that logic into the experiment class. As always, when we do things only once, knowing they'll be one-off tasks, then it is quicker to run from a script. If, however, that one-off becomes an essential part of our experiments, or we believe that others could benefit from doing the same measurement, then we should implement the code in the class. As always, common sense is the best ally for a scientific developer.
+
+One of the important things to note is that when we work with units, we leave the values as string, and only transform them to real quantities when we need them. If we explore the \texttt{do_scan} method, we would see that we start by running the parameters through the unit registry. This means that if we want to change the values of, for example, the start, stop, or delay we only need to change a string:
 
 \begin{minted}{python}
-import pyqtgraph as pg
-
-pg.plot(e.scan_values, e.scan_data)
+    experiment.config['Scan']['start'] = '2.2V'
+    experiment.config['Scan']['delay'] = '200ms'
 \end{minted}
 
-It is a super simple example but it works. You are using the data stored directly within the class. If you called the data differently, adapt the code so you can use it. At this point, you should see the curve of your results appearing. If you want to add labels and a title to the plot, you can do the following:
+\section{Plotting Scan Data}\label{section:plotting}
+We have seen how to perform a measurement, how to change the parameters of the scan without changing the config file, and how to save data. However, we are not doing anything with the data after we save it. Being able to see what we are doing through a plot seems a very nice addition to our work flow. For plotting we are going to use a library called \href{http://www.pyqtgraph.org/}{PyQtGraph} which was developed mainly to generate fast data visualizations. Exactly what we need when we are dealing with experiments. Normally, people a bit more familiar with Python get acquainted with matplotlib, which is a great tool for paper-ready plots, but a bit slow for real-time visualization. In any case, at this stage we don't care about speed, therefore if you more confident with another tool, feel more free to adapt the code to use them. In any case, PyQtGraph will come back later, when we build the user interface.
+
+Making a simple plot with PyQtGraph is very easy. We can add the following after we perform the scan, in the \textbf{run\_experiment.py} script file:
 
 \begin{minted}{python}
-PlotWidget = pg.plot(title="Plotting I vs V")
-PlotWidget.setLabel('bottom', 'Channel: {}'.format(
-    e.properties['Scan']['channel_out']), units="V")
-    
-PlotWidget.setLabel('left', 'Channel: {}'.format(
-    e.properties['Scan']['channel_in']), units="V")
-    
-PlotWidget.plot(e.scan_values, e.scan_data)
+    import pyqtgraph as pg
+
+    [...]
+
+    pg.plot(experiment.scan_range, experiment.scan_data)
 \end{minted}
 
-There is no much complexity at this point; once you have the data the number of things you can do is endless. You can fit a model, repeat a new scan with parameters based on your results, etc. However, saving the data is crucial if you are intending to use it in a publication or if you want to do a better analysis at a later stage. To save the data, we can do the following:
+It is simple, but it works. PyQtGraph also gives us some mouse interactions out of the box. We can drag the image, we can zoom in and out with the mouse wheel, we can also transform the scale of the axes by right-clicking. We can make the plot a bit better looking by adding labels and a title:
 
 \begin{minted}{python}
-from datetime import datetime
-
-filename = "Data_scan_{:03}.dat"
-
-header = "# Data saved by Python For The Lab\n"
-header += "# Creation date: {:%Y-%m-%d %H:%M:%S}\n".format(
-    datetime.now())
-
-header += "# Number of lines: {}\n".format(len(e.scan_values))
-header += "##################################\n"
+    PlotWidget = pg.plot(title="Plotting I vs V")
+    PlotWidget.setLabel('bottom', f'Channel: {experiment.config['Scan']['channel_out']}', units="V")
+    PlotWidget.setLabel('left', f'Channel: {experiment.config['Scan']['channel_in']}', units="V")
+    PlotWidget.plot(experiment.scan_values, experiment.scan_data)
 \end{minted}
 
-First, you define the \texttt{filename} in such a way that we can add numbers to it. The \texttt{\{:03\}} means that there are going to be 3 spaces for the number, therefore the filename will look like \textbf{Data\_scan\_001.dat}, \textbf{Data\_scan\_002.dat}, etc. You can try it if you do something like \mintinline{python}{print(filename.format(34))}. Later we define the header of the file. The header has to describe what is stored in the file. We have added a title, the creation date, and the number of points we have acquired. The creation date is essential for keeping a tidy record because it will allow us to match the data with whatever we have written in the lab journal. The number of lines is a bit old-fashioned; it is very useful when you are reading line by line and you need to stop right at the last line before an error occurs. Note that at the end of each line there is a \mintinline{python}{\n} in order to force a new line after each statement.
+Plotting with PyQtGraph is relatively simple. However, we can only plot data after the scan is finished. The \texttt{do\_scan} method takes relatively long to complete. When a method, or a function, work in this way, they are called blocking functions. The program can't continue until they finish. If we would like to monitor the progress of the experiment while running, we need to find a way of making the scan in a non-blocking way.
 
-Now we have to be sure that we are not overriding a previous file with the new one. We need to check if the file exists, like this:
+\section{Running the scan in a nonblocking way}\label{section:nonblocking}
 
-\begin{minted}{python}
-import os
-os.path.exists(filename.format(0))
-\end{minted}
+Methods or functions like \texttt{do_scan} take a long time to run. Imagine if we would be acquiring a movie for one hour, the function would take one hour to complete. If we would be running a very complex simulation or data analysis process, functions can also take very long to complete. However, both scenarios are different from each other. Sometimes functions take long to execute because they are computationally expensive. They need a lot of cycles of the processor in order to finish. Sometimes they take long to execute because the process is slow. For instance, when we do a scan, most of the time the program is waiting in a \texttt{python}{sleep}, or is waiting for the device to output a value. Waiting is not computationally expensive, which means that our computer computer is capable of performing other tasks at the same time if we let it.
 
-The command will return \mintinline{python}{True} if the file \mintinline{python}{Data_scan_000.dat} exists or \mintinline{python}{False} if not.
+Python has different options for achieving what we are after, but the one that gives best results, not only in terms of power, but also in terms of simplicity to implement is the \emph{multithreading} module, which we will explore in the next section.
 
-\exercise{Check what is the smallest number for which a file doesn't exist. \emph{Hint}: the \mintinline{python}{while} loop is your best friend in this case.}
-
-Once we know which number is available for saving our file, you will just write the data. Assuming that the number for the file is
-\mintinline{python}{i}:
-
-\begin{minted}{python}
-with open(filename.format(i), 'w') as f:
-    f.write(header)
-    for i in range(len(e.scan_values)):
-        line = "{:4.4f}, {:4.4f}\n".format(
-                e.scan_values[i], e.scan_data[i])
-        f.write(line)
-\end{minted}
-
-As you can see, the header is written in just one go. Thanks to the \mintinline{python}{\n} characters that were appended to every line it is going to be correctly displayed if you open the file with any text editor. The saving of the data itself happens in a for loop, that covers every data point acquired. The format specifies that data is going to be saved with a precision of 4 decimal points. If you want to read about the possible formats, you can check \href{https://pyformat.info/}{PyFormat} or the \href{https://docs.python.org/3.6/library/stdtypes.html\#str.format}{Python Documentation}. Go ahead and open the file to see how does the final version look like.
-
-
-If you are confident with the results, you can add this procedure as a method in the experiment model. You can also add a parameter to the yaml file for specifying the name of the files that you are producing. Remember, if you change the code and a new parameter is needed, you have to update the file in the \emph{Examples} folder to reflect it. If you fail to do so, you will be solving a lot of issues every time someone wants to start a new experiment.
-
-\section{Running the scan in a nonblocking way}\label{running-the-scan-in-a-nonblockingway}
-
-When a function takes long to execute, such as the case fo the
-\mintinline{python}{do_scan}, it is said that the function is blocking the rest of
-the program. Sometimes the functions take long to execute because they
-are computationally expensive, sometimes they take longer to execute
-because the process is slow. For instance, when you do a scan, the
-majority of the time the program is waiting in a \mintinline{python}{sleep} before
-changing the value and reading again. Waiting is not computationally
-expensive and therefore your computer is capable of performing other
-tasks at the same time.
-
-The idea of what you want to achieve is that the long function, in this
-case, \mintinline{python}{do_scan} should run in the background while the rest of
-the program is able to do some other things. For example, you can plot
-the results while you are acquiring them, or you wish to stop the scan
-without killing the program. Python offers a very interesting package
-called \mintinline{python}{threading}, which will allow you to do exactly what you
-are looking for.
-
-\section{Threads in Python}\label{threads-inpython}
+\subsection{Threads in Python}\label{subsection:multithreading}
 You can think about threads as different lines of execution. A Thread
 would be similar to opening different terminals and running Python in
 each one of them. The advantage is that since you are running all your
@@ -209,30 +99,30 @@ threads in the same Python interpreter, you can easily exchange
 information within them. Let's see first a simple example of a function that takes long to execute:
 
 \begin{minted}{python}
-import threading
-from time import sleep
+    import threading
+    from time import sleep
 
-def func(steps):
+    def func(steps):
     for i in range(steps):
-        sleep(1)
-        print('Step: {}'.format(i))
+    sleep(1)
+    print('Step: {}'.format(i))
 
-t = threading.Thread(target=func, args=(3, ))
-print('Here')
-t.start()
-sleep(2)
-print('There')
+    t = threading.Thread(target=func, args=(3, ))
+    print('Here')
+    t.start()
+    sleep(2)
+    print('There')
 \end{minted}
 
 If you run the code above, you should see the following output:
 
 \begin{minted}{text}
-Here
-Step: 0
-Step: 1
-There
-Step: 2
-Step: 3
+    Here
+    Step: 0
+    Step: 1
+    There
+    Step: 2
+    Step: 3
 \end{minted}
 
 What is happening is very interesting. If you run the function
@@ -267,26 +157,27 @@ assign names to them:
 Python
 
 \begin{minted}{python}
-def func(steps):
+    def func(steps):
     print(threading.currentThread().getName(), 'Starting')
     for i in range(steps):
-        sleep(1)
-        print('Step: {}'.format(i))
+    sleep(1)
+    print('Step: {}'.format(i))
     print(threading.currentThread().getName(), 'Finishing')
 
 
-first_t = threading.Thread(name='First Thread', 
-                        target=func, args=(3, ))
-second_t = threading.Thread(name='Second Thread', 
-                        target=func, args=(3, ))
-print('Here')
-first_t.start()
-second_t.start()
-sleep(2)
-print('There')
+    first_t = threading.Thread(name='First Thread',
+    target=func, args=(3, ))
+    second_t = threading.Thread(name='Second Thread',
+    target=func, args=(3, ))
+    print('Here')
+    first_t.start()
+    second_t.start()
+    sleep(2)
+    print('There')
 \end{minted}
 
 Go ahead and run the script to see what happens.
+
 
 \section{Threads for the experiment model}\label{threads-for-the-experimentmodel}
 
@@ -295,7 +186,7 @@ learned by executing the \mintinline{python}{do_scan} method in its own thread.
 Since the method doesn't take any arguments, the line should look like:
 
 \begin{minted}{python}
-t = threading.Thread(target=e.do_scan)
+    t = threading.Thread(target=e.do_scan)
 \end{minted}
 
 While the scan is running in the background, you can do other things in
@@ -305,25 +196,25 @@ therefore you will need to update the plot within a loop. One possible
 way of doing it is like this:
 
 \begin{minted}{python}
-import threading
-import pyqtgraph as pg
-from time import sleep
-from PythonForTheLab.Model import Experiment
+    import threading
+    import pyqtgraph as pg
+    from time import sleep
+    from PythonForTheLab.Model import Experiment
 
-e = Experiment()
-e.load_config('config.yml')
-e.load_daq()
-t = threading.Thread(target=e.do_scan)
-t.start()
+    e = Experiment()
+    e.load_config('config.yml')
+    e.load_daq()
+    t = threading.Thread(target=e.do_scan)
+    t.start()
 
-PlotWidget = pg.plot(title="Plotting I vs V")
-PlotWidget.setLabel('bottom', 'Port: {}'.format(
-        e.properties['Scan']['port_out']), units="V")
-PlotWidget.setLabel('left', 'Port: {}'.format(
-        e.properties['Scan']['port_in']), units="V")
-PlotWidget.plot(e.xdata_scan, e.ydata_scan)
+    PlotWidget = pg.plot(title="Plotting I vs V")
+    PlotWidget.setLabel('bottom', 'Port: {}'.format(
+    e.properties['Scan']['port_out']), units="V")
+    PlotWidget.setLabel('left', 'Port: {}'.format(
+    e.properties['Scan']['port_in']), units="V")
+    PlotWidget.plot(e.xdata_scan, e.ydata_scan)
 
-while t.isAlive():
+    while t.isAlive():
     PlotWidget.plot(e.xdata_scan, e.ydata_scan, clear=True)
     pg.QtGui.QApplication.processEvents()
     sleep(1)
@@ -348,7 +239,7 @@ For example, you can add the following code to the \mintinline{python}{do_scan}
 method of the experiment model:
 
 \begin{minted}{python}
-if self.stop_scan:
+    if self.stop_scan:
     break
 \end{minted}
 
@@ -362,12 +253,12 @@ won't be able to run another one. The \mintinline{python}{do_scan} method will l
 like this:
 
 \begin{minted}{python}
-def do_scan(self):
+    def do_scan(self):
     self.stop_scan = False
     [...]
     for value in scan:
-        if self.stop_scan:
-            break
+    if self.stop_scan:
+    break
     [...]
 \end{minted}
 
@@ -387,11 +278,11 @@ other. To wait for a thread to finish you can use the method
 \mintinline{python}{join()}, like this:
 
 \begin{minted}{python}
-t = threading.Thread(target=e.do_scan)
-t.start()
-print('Thread Running')
-t.join()
-print('Thread Stopped')
+    t = threading.Thread(target=e.do_scan)
+    t.start()
+    print('Thread Running')
+    t.join()
+    print('Thread Stopped')
 \end{minted}
 
 In this example, \mintinline{python}{Thread Stopped} will appear only after the
@@ -404,15 +295,16 @@ very hard to debug. It is very hard to transmit all the different things
 that can happen once a different person starts using your software.
 
 \exercise{Add an extra property to the experiment model called
-\mintinline{python}{scan_is_running}. Set it to \mintinline{python}{True} when the scan runs
-and \mintinline{python}{False} when the scan stops. Use it to avoid two scans to run
-simultaneously.}
+    \mintinline{python}{scan_is_running}. Set it to \mintinline{python}{True} when the scan runs
+    and \mintinline{python}{False} when the scan stops. Use it to avoid two scans to run
+    simultaneously.}
 
 Threads work also in Jupyter notebooks. If you start a thread in a cell,
 you will see that it immediately releases the interpreter. You can move
 to a different thread and keep working, updating a plot, etc. Whenever
 you want to stop the scan, you can do it as before, changing the value
 of the \mintinline{python}{stop_scan} property.
+
 
 \section{Word of Caution with Threads}\label{word-of-caution-withthreads}
 
@@ -449,6 +341,7 @@ limitations of the techniques that you use and the degree of
 applicability that they have. If you want to develop code that runs in
 parallel, you can look at libraries such as \emph{mpi} or
 \emph{multiprocessing}.
+
 
 \section{Conclusions}\label{conclusions}
 This is a chapter where you can see how all your previous work plays out
