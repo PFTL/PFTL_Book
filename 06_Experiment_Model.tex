@@ -360,7 +360,7 @@ def do_scan(self):
     start = ur(self.config['Scan']['start']).m_as('V')
     stop = ur(self.config['Scan']['stop']).m_as('V')
     num_steps = int(self.config['Scan']['num_steps'])
-    delay = ur(self.config['Scan']['num_steps'])
+    delay = ur(self.config['Scan']['delay'])
     self.scan_range = np.linspace(start, stop, num_steps) * ur('V')
     self.scan_data = np.zeros(num_steps) * ur('V')
     i = 0
