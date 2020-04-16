@@ -1,11 +1,14 @@
 \documentclass[10pt]{book}
-%\usepackage[top=3cm,bottom=2cm,left=2.0cm,right=2.0cm,headsep=10pt]{geometry}
-\usepackage{geometry}
-\geometry{papersize={150mm, 230mm}}
-%% We decrease the margins slightly from the default (scale = 0.7).
-%\geometry{hscale=0.75,vscale=0.8}
+\usepackage[top=3cm,bottom=2cm,left=2cm,right=2cm,headsep=10pt]{geometry}
+\geometry{
+    papersize={155.57mm, 234.95mm},
+    layoutsize={152.4mm, 228.61mm},
+    layoutoffset = {1.58mm,1.58mm},
+    bindingoffset = -1.27mm,
+    showcrop,
+}
 
-
+\usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{xcolor} % Required for specifying colors by name
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
@@ -42,21 +45,21 @@ ItalicFont = libertinussans-italic,
 \setminted[]{bgcolor=bg}
 
 \newenvironment{warning}[1]{%
-\begin{tcolorbox}[width=\textwidth,colframe={warncolor}, colback=red!5!white, title={Warning}, outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={warncolor}, colback=red!5!white, title={Warning}, outer arc=2mm]
     {#1}
-\end{tcolorbox}
+    \end{tcolorbox}
 }
 
 \newenvironment{note}[1]{%
-\begin{tcolorbox}[width=\textwidth,colframe={notecolor}, colback=blue!5!white, title={Note}, outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={notecolor}, colback=blue!5!white, title={Note}, outer arc=2mm]
     {#1}
-\end{tcolorbox}
+    \end{tcolorbox}
 }
 
 \newenvironment{exercise}[1]{%
-\begin{tcolorbox}[width=\textwidth,colframe={exertitle}, colback={exer}, title={Exercise},outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={exertitle}, colback={exer}, title={Exercise},outer arc=2mm]
     {#1}
-\end{tcolorbox}
+    \end{tcolorbox}
 }
 
 \newenvironment{py}[1]{\mintinline{python}{#1}}
@@ -64,31 +67,30 @@ ItalicFont = libertinussans-italic,
 \title{Python For The Lab}
 \author{Aquiles Carattino}
 
-
 \begin{document}
-\frontmatter
+    \frontmatter
 
-\includepdf[pages=-]{cover-pftl.pdf}
+%    \includepdf[pages=-]{cover-pftl.pdf}
 
-\include{00_title}
+    \include{00_title}
 
-\newpage
-\tableofcontents
-\mainmatter
-\include{01_Introduction}
-\include{02_Setting_Up}
-\include{03_First_Driver}
-\include{04_MVCs}
-\include{05_Device_Model}
-\include{06_Experiment_Model}
-\include{07_Run_Experiment}
-\include{08_Build_Gui}
-\include{09_User_Input_And_Plots}
-\begin{appendices}
-\appendixpage
-\include{documentation_daq}
-\include{review_basic_operations}
-\include{class_python}
-\end{appendices}
+    \newpage
+    \tableofcontents
+    \mainmatter
+    \include{01_Introduction}
+    \include{02_Setting_Up}
+    \include{03_First_Driver}
+    \include{04_MVCs}
+    \include{05_Device_Model}
+    \include{06_Experiment_Model}
+    \include{07_Run_Experiment}
+    \include{08_Build_Gui}
+    \include{09_User_Input_And_Plots}
+    \begin{appendices}
+        \appendixpage
+        \include{documentation_daq}
+        \include{review_basic_operations}
+        \include{class_python}
+    \end{appendices}
 
 \end{document}
