@@ -1,73 +1,15 @@
-\chapter[A GUI for the Experiment]{Building a Graphical User Interface for the Experiment}\label{chapter:gui}
-
-\section{Objectives}
-Building {GUI}'s is a very rewarding experience because you will really
-see the outcome of your program. It is much more impressive to show someone a beautiful window with a couple of buttons than hundreds of
-lines of code. When you develop a working User Interface, you will
-really have the feeling of delivering an end-product. A window pops up,
-an error message appears, an experiment is performed. In this chapter,
-you will learn the steps needed for designing a window and plotting the
-data acquired by a device. The chapter involves some design, some coding
-and a lot of thinking. It is strongly advised to drive inspiration from
-the examples in case you get stuck for too long in one of the exercises.
+\chapter{Getting Started with Graphical User Interfaces}\label{chapter:gui}
 
 \section{Introduction}
-Building GUIs may seem more complicated than what it really is. It is,
-of course, not an easy task but once you get the fundamentals you will
-see that, as with any other skill, it is possible to learn. Most
-experiments can be performed right from the command line, as you have
-seen in the previous examples. You can have a great level of control
-running a Python script, or import your models into a Jupyter notebook.
-However, in some cases, it can be very handy to control the parameters
-of an experiment and to monitor the output in a window
-especially designed.
+Building User Interfaces may seem more complicated than what it really is. Once you get the fundamentals you will see that it is possible to put something toghether very quickly, especially if we have already some code to relate to. In the previous chapter we saw that we can control an experiment from the command line. It is possible to ask ourselves why going through the trouble of a user interface. In some cases, it can be very not only handy to control the parameters of an experiment and to monitor the output in a window  especially designed, but it can become necessary to monitor the progress in real time to make decisions while the experiment runs.
 
-There are several options for building GUIs with Python. For example, in
-the previous chapter, you have already seen how to plot the data while
-the experiment is running. It is a bit rudimentary but it is indeed a
-\emph{user interface}. In this chapter, we are going to focus on one
-particular library for building interfaces called \textbf{Qt}. Qt was
-developed as an application framework that allows developers to build
-apps that look native in different systems without changes to the code.
-This means that if you develop an application and run it on Windows it
-will look like a Windows program, but the exact same application will
-look like a Linux program if you run it on such a computer.
+There are several options for building GUIs with Python. And in the community, there is no clear consensus on what is the best path to follow. For scientific applications, however, the only library which is powerful enough to achieve what we want to achieve is called \textbf{Qt}. Qt was developed as an application framework that allows developers to build apps that look native in different systems without changes to the code. Qt itself is a Finnish company with a long trajectory. It was part of Nokia for a while and now they are publicly traded in the Helsinki exchange. This means that Qt is going to be around for a long time.
 
-Moreover, Qt comes with a lot of interesting features to connect
-different parts of your code. For example, when moving a slider in the
-{UI}, the value of a parameter in your experiment model should change.
-Qt also provides the tools you need to create all the elements that a
-program needs, from menus to buttons and the flexibility to define your
-own elements, such as a plot. Qt was not developed with Python in mind,
-but fortunately, some projects have advanced a lot in making it
-compatible. There are mainly two, called
-\href{https://riverbankcomputing.com/software/pyqt/intro}{PyQt} and
-\href{https://wiki.qt.io/PySide}{PySide}. The difference between them is
-the license under which they are released. If licenses are a concern for
-you, for example, because you are developing commercial software, you
-should definitely check their differences. In the case of this book, we
-are going to use PyQt5 because the programs we are developing have no
-commercial interests.
+In this chapter we are going to give the first steps for building a user interface using Qt, and the Python wrapper called \emph{PyQt}, that we installed in Chapter~\ref{chapter:setting-up}. At Python for the Lab we have traditionally adopted PyQt, but in the past years, Qt itself took over the project called PySide, which is another wrapper for Qt. They are licensed under diferent open-source terms, and both are excellent. However, the structure of the PySide2 package is different from the PyQt package and, for consistency, we will keep using PyQt.
 
-You have to be aware that the current version of Qt is \textbf{Qt5}, and
-therefore the examples in this and the next chapter are based on
-\textbf{PyQt5}. However, up to some years ago, the most spread version
-was \textbf{Qt4}. There is no backward compatibility between them,
-meaning that code that worked with \textbf{PyQt4} not necessarily will
-work with \textbf{PyQt5}. It is very important that you don't mix both
-libraries. If there are applications on the computer where you are
-developing the code that depends on \emph{PyQt4}, it is very important
-to isolate your development with a Virtual Environment, as explained in
-Chapter 02.
+\note{If you are planning to release commercial software, or if you are packaging Qt, PyQt or PySide2 into your application, you should definitely explore the different licensing options avialable.}
 
-In this chapter, you will find some design and some coding. Up to now,
-it was simple to include the code in the book for you to see, however,
-design files are not \emph{copy/pasteable}. All the design files are
-available for you to download from the Github Repository.
-
-\hypertarget{simple-window-and-buttons}{}
-\section{Simple window and buttons}\label{simple-window-andbuttons}
-
+\section{Simple Window and Buttons}\label{section:simple-window-andbuttons}
 Now it is finally time to start using the empty folder from the M
 \textbf{V} C design pattern: the \textbf{View}. The folder will be a
 python module, and thus it needs a \mintinline{python}{__init__.py} file, like
@@ -317,9 +259,9 @@ the following the to \mintinline{python}{MainWindow} class:
 \begin{minted}{python}
 self.startButton = QtWidgets.QPushButton('&Start')
 self.stopButton = QtWidgets.QPushButton('S&top')
-self.buttonBox.addButton(self.startButton, 
+self.buttonBox.addButton(self.startButton,
             QtWidgets.QDialogButtonBox.ActionRole)
-self.buttonBox.addButton(self.stopButton, 
+self.buttonBox.addButton(self.stopButton,
             QtWidgets.QDialogButtonBox.ActionRole)
 \end{minted}
 
@@ -438,7 +380,7 @@ class ScanWindow(QtGui.QMainWindow):
     def __init__(self, experiment=None, parent=None):
         super().__init__(parent)
         self.experiment = experiment
-    
+
     [...]
 \end{minted}
 
