@@ -61,7 +61,7 @@ One of the important things to note is that when we work with units, we leave th
     experiment.config['Scan']['delay'] = '200ms'
 \end{minted}
 
-\section{Plotting Scan Data}\label{section:plotting}
+\section{Plotting Scan Data}\label{sec:basic-plotting}
 We have seen how to perform a measurement, how to change the parameters of the scan without changing the config file, and how to save data. However, we are not doing anything with the data after we save it. Being able to see what we are doing through a plot seems a very nice addition to our work flow. For plotting we are going to use a library called \href{http://www.pyqtgraph.org/}{PyQtGraph} which was developed mainly to generate fast data visualizations. Exactly what we need when we are dealing with experiments. Normally, people a bit more familiar with Python get acquainted with matplotlib, which is a great tool for paper-ready plots, but a bit slow for real-time visualization. In any case, at this stage we don't care about speed, therefore if you more confident with another tool, feel more free to adapt the code to use them. In any case, PyQtGraph will come back later, when we build the user interface.
 
 Making a simple plot with PyQtGraph is very easy. We can add the following after we perform the scan, in the \textbf{run\_experiment.py} script file:
