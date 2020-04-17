@@ -392,7 +392,7 @@ After we perform a scan, we must save both the data and the \emph{metadata}. Wit
 
 \begin{minted}{python}
 def save_data(self):
-	data = np.vstack([self.scan_range, self.scan_data]).T
+    data = np.vstack([self.scan_range, self.scan_data]).T
     header = "Scan range in 'V', Scan Data in 'V'"
     filename = self.config['Saving']['filename']
     np.savetxt(filename, data.m_as('V'), header=header)
@@ -452,13 +452,13 @@ from datetime import datetime
 [...]
 
 def save_data(self):
-	data_folder = self.config['Saving']['folder']
-	today_folder = f'{datetime.today():%Y-%M-%d}'
-	saving_folder = os.path.join(data_folder, today_folder)
-	if not os.path.isdir(saving_folder):
-	    os.makedirs(saving_folder)
+    data_folder = self.config['Saving']['folder']
+    today_folder = f'{datetime.today():%Y-%M-%d}'
+    saving_folder = os.path.join(data_folder, today_folder)
+    if not os.path.isdir(saving_folder):
+        os.makedirs(saving_folder)
 
-	data = np.vstack([self.scan_range, self.scan_data]).T
+    data = np.vstack([self.scan_range, self.scan_data]).T
     header = "Scan range in 'V', Scan Data in 'V'"
 
     filename = self.config['Saving']['filename']
