@@ -26,7 +26,7 @@ BoldFont = libertinussans-bold,
 ItalicFont = libertinussans-italic,
 ]{libertinussans-regular}
 
-\setmonofont[Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
+\setmonofont[Scale=MatchLowercase, Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
 
 \usepackage{pdfpages}
 \usepackage{polyglossia}
@@ -40,8 +40,8 @@ ItalicFont = libertinussans-italic,
 
 \usepackage[utf8]{inputenc}
 
-\usepackage[cache=false]{minted}
-\setminted{breaklines, fontsize=\footnotesize}
+\usepackage{minted}
+\setminted{breaklines, autogobble, fontsize=\footnotesize}
 \setminted[]{bgcolor=bg}
 
 \newenvironment{warning}[1]{%
