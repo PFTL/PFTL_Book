@@ -7,7 +7,7 @@ There is no magical recipe to teach exactly how to develop models for devices. E
 
 \warning{It is impossible to overestimate the importance of reading the manuals of your devices. Hardware in the lab is not the same as consumer hardware. Things can break, signals may not make sense. Be always sure to understand the limits under which each component operates.}
 
-\section{Device Model}\label{section:device-model}
+\section{Device Model}\label{sec:device-model}
 The first step when defining a model for a device is to think how do we want to interact with that piece of hardware. Of course, we would like to initialize the device, set a voltage, read a voltage and finalize the device. But we don't want to just repeat what the controller can do. When we initialize or finalize the device, we want to be sure the output voltages are set at $0\,\textrm{V}$. This ensures that no current will be flowing through the LED unless we explicitly want it. We also want to be able to use values in volts when setting an output, and getting values in volts when reading a voltage.
 
 We can develop a skeleton of the model, using empty methods, to have an idea of what we need to develop and the arguemtns and outputs of each method. Let's start by creating a file \textbf{analog\_daq.py} in the \emph{Model} folder, we can then add the following code:
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     daq.finalize()
 \end{minted}
 
-The last missing bits are the methods for getting and setting a voltage. What we are going to do in these steps was discussed on Section \ref{subsection:digitazing}. To set a voltage, we first need to transform a voltage in the range $0-3.3$ to an integer in the range $0-4095$ and then we apply it:
+The last missing bits are the methods for getting and setting a voltage. What we are going to do in these steps was discussed on Section~\ref{subsection:digitazing}. To set a voltage, we first need to transform a voltage in the range $0-3.3$ to an integer in the range $0-4095$ and then we apply it:
 
 \begin{minted}{python}
     def set_voltage(self, channel, volts):
@@ -87,7 +87,7 @@ And we can do the same for the get method:
 
 And that is all what is needed. We can now run the code and see that we are actually reading voltages and setting voltages. Because of how the experiment works, the values we get at the analog input are going to be very small, in the order of few tens of millivolts, but enough to be detected by the {PFTL DAQ}.
 
-\section{Base Model}\label{section:base-model}
+\section{Base Model}\label{sec:base-model}
 In this book we are working with only one device, and therefore we are using only one model. But if we want to make our program compatible with more devices, we will need to start developing models for each new device. Since we have one model, it would look reasonable to copy it and adapt the methods based on what the new drivers allow us to do. Another option is to create a base class which will be inherited by all the models. In this way, we know that all the methods are defined, perhaps they don't do anything, but at least they are there.
 
 What we will do in this section is not a requirement to keep going, but is important to show the pattern, because sooner or later when the program grows, it will be a very useful approach. Create a file called \textbf{base\_daq.py} inside the Controller folder, we can add the following code to it:
@@ -140,7 +140,7 @@ Of course, when we set a voltage, initialize, or finalize the model nothing actu
 
 \exercise{Update the real model to inherit from the base class}
 
-\section{Adding real units to the code}\label{section:pint}
+\section{Adding real units to the code}\label{sec:pint}
 The model for the {PFTL DAQ} device is working great, but it has one problem. It allows us to set the output in volts and reads a value in volts. But if we ever make the mistake of supplying the value in millivolts, the program won't work as expected. In real cases, it is very hard to remember the units that every method should take. Sometimes you have very different outputs and inputs with each one taking different units. Imagine you want to make a periodic signal, perhaps the device asks for the frequency, perhaps for the period.
 
 In Python we can overcome the limitations of working with plain numbers by using a package called \emph{Pint}, that allows us to work with \emph{real} units. Let's quickly see how Pint can be used with a simple example:
@@ -180,7 +180,7 @@ Even if the numeric value of \texttt{b} and \texttt{c} is different, they are st
 78.74015748031496 inch / second
 \end{minted}
 
-So far we have always been transforming between units of the same type, i.e. a length in meters to a length in inches, etc. But Pint can also handle combined units such as what happens with voltage, current and resistance:
+So far we have always been transforming between units of the same type, i.e.\ a length in meters to a length in inches, etc. But Pint can also handle combined units such as what happens with voltage, current and resistance:
 
 \begin{minted}{pycon}
 >>> current = 5*ur('A')
@@ -230,6 +230,7 @@ We transform the value to volts and get only the magnitude. Then we transform th
 
 We should also update the method for getting a voltage in order to return a voltage and not a plain number. The code below only shows the parts that have changed or added, not the entire class:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
 import pint
 
@@ -272,9 +273,10 @@ if __name__ == "__main__":
 
 If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite. You can check the \href{http://articles.latimes.com/1999/oct/01/news/mn-17288}{news article}\footnote{http://articles.latimes.com/1999/oct/01/news/mn-17288} with the story of how the Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
 
-\section{Testing the DAQ Model}
+\section{Testing the DAQ Model}\label{sec:testing-the-daq-model}
 At this point, we have a very functional program. We are able to handle units, we have split the logic of the units from the driver, meaning that we can easily share our code with colleagues or the rest of the world. It is time to test our program. On of the reasons we created the Examples folder was to be able to add extra python files that don't belong to our core program. In the Examples folder, create a file called \textbf{test\_daq.py}, and we can start using the model to do some measurements:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
 import numpy as np
 import pint
@@ -299,6 +301,7 @@ print(current)
 
 We can run the code above, but we will get the following error:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
  [...]
  ValueError: Cannot operate with Quantity and Quantity of different registries.
@@ -332,8 +335,8 @@ After completing the exercises above, we should be able to run the example and g
  current = voltage/resistance
 \end{minted}
 
-\section{Appending to the PATH at runtime}\label{section:appending-path}
-In Section \ref{section:path} we have seen how to add the root folder of the project to the computer's PYTHONPATH. This allows Python to find our program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, it can also lead to unwanted results. For example, we may be over writing someting important if there is any name clash between the program we develop and some other library on the computer.
+\section{Appending to the PATH at runtime}\label{sec:appending-path}
+In Section~\ref{sec:path} we have seen how to add the root folder of the project to the computer's PYTHONPATH. This allows Python to find our program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, it can also lead to unwanted results. For example, we may be over writing someting important if there is any name clash between the program we develop and some other library on the computer.
 
 Therefore, we can go a different route, and add the the folder to the path directly from within Python. This change will not be permanent, it will be in place only while the program runs, but no further. First, we need to learn how to identify the folder we want to add to the path. For this, Python offers a module called \texttt{os}. The code below looks cumbersome, but we will explain it after. This can be added at the begginig of the \textbf{test\_daq.py} file:
 

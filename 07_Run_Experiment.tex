@@ -7,7 +7,7 @@ In the previous chapter, we have seen how to develop an experiment model and how
 Following the \emph{Onion Principle}, it is now time to bring the experiment model to the next level.
 
 
-\section{Running an Experiment}\label{section:running-nexperiment}
+\section{Running an Experiment}\label{sec:running-experiment}
 In the previous chapter we have seen that an experiment can be run from a simple script in which each of the steps needed are triggered one after the other. We called that script \textbf{run\_experiment.py} and had the following code (skipping some less relevant lines):
 
 \begin{minted}{python}
@@ -23,7 +23,7 @@ In the previous chapter we have seen that an experiment can be run from a simple
     experiment.finalize()
 \end{minted}
 
-This is relatively straightforward, but not the only thing that can be done with the experiment. We can access the attributes of the experiment class while we permorming a measurement. For example, we could show the data once the scan is completed:
+This is relatively straightforward, but not the only thing that can be done with the experiment. We can access the attributes of the experiment class while we performing a measurement. For example, we could show the data once the scan is completed:
 
 \begin{minted}{python}
     experiment.do_scan()
@@ -32,6 +32,7 @@ This is relatively straightforward, but not the only thing that can be done with
 
 But we could also change the parameters of the scan after loading the config file. Sharing information with classes in Python is always two ways: we can read from them, but we can also write to them. Let's see what happens when we change the \texttt{config} attribute of the experiment before triggering the scan. We can do something like the following:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
     [...]
 
