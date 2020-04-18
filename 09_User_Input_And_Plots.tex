@@ -1,1250 +1,301 @@
-\chapter{User Input and Making Plots}\label{chapter:user-input}
+\chapter{User Input and Designing}\label{ch:user-input-designer}
 
-You will start by designing a simple window with two buttons, one to
-start and the other to stop a scan. You will also add a line where you
-can see if the scan is running or not. The first step is to open the
-program \textbf{Qt Designer}, which was installed in Chapter 02. The
-program will welcome you with a window like the one below:
+
+\section{Introducion}\label{sec:user-input-introduction}
+We started building a GUI by programming every aspect of the interface. We built a \texttt{MainWindow} class, added some buttons and a plot. A logical next step would be to add a way to change the parameters that build up the scan. We would like to be able to change the \texttt{start}, \texttt{stop}, and \texttt{num\_points} values directly from the user interface and not from a config file that gets read only at the beginning.
+
+We could continue adding elements to the program as we did in the previous chapter, but that is time consuming. In this chapter we are going to introduce a program called \textbf{Qt Designer}, that is targeted precisely at speeding up the design of user interfaces. We will see not only how to make the program better looking, we are also going to see what happens when we let users input data, what problems may arise, and we will leave show the way for keep improving based on what we will achieve by the end of the chapter.
+
+\section{Getting Started with Qt Designer}\label{sec:getting-started-with-qt-designer}
+We explained how to install Qt Designer in Section~\ref{sec:install-qt-designer}. Different operating systems and different Python versions will have a slightly different way of opening the program.
+
+If you are using \textbf{Anaconda on Windows} you only have to open the start menu and type \textit{Designer}, press \texttt{}enter once it finds it. \textbf{Anaconda on Linux} is similar, open a terminal, either from the base environment or the environment used for this book, type \texttt{designer}, press enter and a window should open.
+
+If you are using \textbf{plain Python on Windows}, and you installed \texttt{pyqt5-tools}, you only need to start the \emph{Command Prompt}, activate the environment where you work, type \texttt{designer.exe}, and press enter. If you are using \textbf{plain Python on Linux}, you installed the designer as part of the package \texttt{qttools5-dev-tools}. In this case the designer is an actual application that you can find within the installed apps in your distribution.
+
+Designer will welcome us with a screen like the one below. In between the template/forms options we can already see two familiar options: Widget and Main Window.
 
 \begin{center}
-    \includegraphics[width=.6\textwidth]{images/qt_designer_welcome.png}
+    \includegraphics[width=.5\textwidth]{images/Chapter_09/01_Designer_Welcome.png}
 \end{center}
 
-Since you are creating your first window, you have to select \emph{Main
-Window} as displayed. Don't worry too much about the technicalities at
-this stage, it is important that you start going and you will slowly get
-the concepts later on. The only important thing to know now is that in
-Qt, \emph{widgets} are the building blocks of any user interface. A
-button is going to be a widget, a plot, slider, etc. are all widgets Now
-you can start playing around with the designer, and familiarize yourself
-with it.
+We will start by recreating the window we developed in the previous chapter. We start by selecting \textbf{Main Window} and clicking create. The Designer opens the working area with an empty main window. That space will be our canvas to start adding elements. In the previous chapter, we created a central widget explicitly. The Designer already did this for us, we can see it on the object inspector at the right sidebar:
 
-\exercise{Generate a window that looks like the image.
-    \begin{center}
-        \includegraphics[width=.6\textwidth]{images/main_window.png}
-    \end{center}}
+\begin{center}
+    \includegraphics[width=.5\textwidth]{images/Chapter_09/02_central_widget.png}
+\end{center}
 
+Note that the Designer named the central widget \texttt{centralWidget} instead of \texttt{central\_widget}. Naming classes, variables, methods and functions is completely free in Python, but there are some conventions that make code easier to understand at first sight. One is naming classes with the Camel Case convention, such as \texttt{MainWindow}, and attributes in lower-case with words separated by underscores. We can change the name of the central widget by clicking on it and changing the \texttt{objectName} name property:
 
-If you look closely, you will notice a menu as well, at the top, called
-\emph{File}. For the time being it is optional, but you will need the
-menu later on. The designer has a lot of options that can be useful, for
-example specifying the layout. The layout is a way in which objects are
-going to be arranged in the window; a vertical layout means that
-different objects are going to be stacked one under the other. You can
-also find a horizontal layout, a grid layout, and a form layout. Feel
-free to explore how they behave. Remember that you can nest them for
-enhanced flexibility. It is also possible to work without layouts,
-specifying the exact position and size of each widget in the window. As
-you can see, Qt doesn't impose design restrictions, it is really up to
-you to decide what and how to build things.
+\begin{center}
+    \includegraphics[width=.5\textwidth]{images/Chapter_09/03_central_widget_name.png}
+\end{center}
 
-\exercise{Nest a horizontal layout (for the buttons) within a vertical layout that
-later on will hold the plot of the data.
-    \begin{center}
-        \includegraphics[width=.6\textwidth]{images/nested_layouts.png}
-    \end{center}}
+Now we have the central widget with the same name we used in our Python class. We can add the buttons widget by dragging and dropping an empty widget to the window, that can be found in the containers group of elements. After we add the widget, we can also see it appears in the object inspector on the right sidebar. We can change its name to \texttt{button\_widgets}.
 
-\exercise{Improve the window to look like the image. This is going to be the entry
-point for your program, and from here you are going to configure and
-trigger scans.
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/04_empty_widget.png}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/04_empty_widget_structure.png}
+\end{minipage}
 
-    \begin{center}
-        \includegraphics[width=.6\textwidth]{images/scan_window.png}
-    \end{center}}
+To add the start and stop buttons, we can just drag and drop two \texttt{QPushButton}s to the window. We have to be sure we drop them inside the buttons widget we created earlier. To change the text that appears on the button, we can double click on it and edit the text. We can make one button with the text \emph{Start}, and the other with the text \emph{Stop}. The text on the button is not the name of it. We must change the name of the buttons and to repeat the same structure of the previous chapter we are going to call them \texttt{start\_button} and \texttt{stop\_button}. The window and the structure should look like this:
 
-At this point, you have an idea of what can be done with Qt Designer,
-but what you need to learn now is how to give different functionalities
-to the different widgets on the screen. There is, however, something
-important to pay attention when dealing with the designer. The names
-that you assign to each widget is going to be the way to identify it
-also within Python. However, it is very complicated to find out the name
-you gave to each element from the designer file, it is much easier and
-faster doing it directly from within the program itself. Since now you
-will be dealing with files coming from two different sources, i.e.,
-Python files generated in an editor and designer files, it is very
-important that the naming conventions are consistent. If you are in
-doubt, or you see some bugs that you find to resolve, you can always
-download the files from the
-\href{https://github.com/PFTL/SimpleDaq/tree/master/PythonForTheLab/View/GUI}{Github
-repository}.
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/05_main_window_buttons.png}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/05_main_window_structure.png}
+\end{minipage}
 
-\note{If you look for documentation online on how to use PyQt in your
-applications, you most likely will find that you should compile the
-    \mintinline{python}{uic} designer files into a python file, that you can import as
-    any other module. This step is not at all necessary and will just add
-    more difficulty to an already complicated process. Rendering the uic
-    file directly in your code is much simpler, faster and more robust in
-    the long term.}
+\note{Explaining how to use a designing program through screen captures requires a lot of patience from the reader. We try to highlight the checkpoints that allow to compare what the reader does with what is expected to have. Practice with a critical view is the best that can be done at this stage.}
 
-The best idea is to start simple. You are going to write a script that
-can generate and open an empty window. First, create a file called
-\textbf{simple\_open\_window.py} within the \textbf{Examples} folder and
-add the following to it:
+We have a window with the buttons, but we are missing the layout to make it look as good as we had in the previous chapter. The Designer has a toolbar dedicated exclusively to the layouts, you can find it at the top of the main window space, it looks like this:
 
+\begin{center}
+    \includegraphics[width=.4\textwidth]{images/Chapter_09/06_layouts.png}
+\end{center}
+
+To apply a layout to a widget, we can click first on the widget inside the Object Inspector, and then click on the desired layout. We can apply a vertical layout to the \texttt{central\_widget} and a horizontal layout to the \texttt{button\_widgets}. When we apply a layout to widgets, this will be reflected as a different icon on the Object Inspector.
+
+\begin{center}
+    \includegraphics[width=.4\textwidth]{images/Chapter_09/07_widgets_with_layouts.png}
+\end{center}
+
+We are ready to save the window. Let's create a new folder called \textbf{GUI} inside the \emph{View} folder, and we can call the file \texttt{main\_window.ui}. Once we save the designer file, we are ready to go back to Python to use this window. We can go back to \textbf{main\_window.py}, and we can start editing the \texttt{MainWindow} class. Since some of the elements are now defined directly on the designer file, we will remove them from the class:
+
+%! Suppress = Ellipsis
 \begin{minted}{python}
-    import sys
-
-    from PyQt5.QtWidgets import QApplication, QMainWindow
-
-    app = QApplication(sys.argv)
-    m = QMainWindow()
-    m.show()
-    app.exit(app.exec_())
-\end{minted}
-
-If you run this script, you will see a window popping up in all its
-splendor. Let's see what is actually happening line by line. The
-\mintinline{python}{sys} module is responsible for everything that involves the
-operating system, as you shall see later. Then you import two modules
-from the PyQt5 library. You have to understand that in PyQt everything
-always starts with a \mintinline{python}{QApplication}. You have to start an
-application before you can open a window or create widgets. You also
-import \mintinline{python}{QMainWindow} which is the widget that is going to hold
-all the design elements needed for an application.
-
-Every PyQt program will start in the same way. First, you define the
-\mintinline{python}{app} using the module \mintinline{python}{QApplication}. Pay attention to
-the fact that it takes one argument, in this case, \mintinline{python}{sys.argv},
-which is a list of the commands passed when executing the script from
-the command line. For example, if you run the script as
-\mintinline{bash}{python script.py -option test}, you will have a list in
-\mintinline{python}{sys.argv} stating that the \emph{option} you used is
-\emph{test}. PyQt allows you to specify some parameters, such as the
-style of the app. However, even if you are not going to use them, you
-have to specify an argument, and better be consistent throughout
-different programs.
-
-In the next couple of lines, you create a \mintinline{python}{QMainWindow}, which is
-also what you have done in the Designer. You can already start seeing
-that there are two ways to achieve the same results, one is
-programmatically, writing the code to generate Qt windows and the other
-is graphical, with programs such as Qt Designer. After you've created
-the \emph{Main Window}, you need to make it appear with the
-\mintinline{python}{show()} command. If you have ever used \emph{Matplotlib} you can
-see the similarities.
-
-Finally, you have run the \mintinline{python}{app}. Check that you do it in a nested
-way, you call \mintinline{python}{app.exit} and as an argument, you use
-\mintinline{python}{app.exec_()}. An App in PyQt can be thought of as an infinite
-loop that will keep every piece of the Qt program running. Normal Python
-scripts exit when they are done, but a {GUI} needs to run until you stop
-it. This is what \mintinline{python}{app.exec_()} does. By passing it as an
-argument to \mintinline{python}{app.exit} you can be sure that for whatever reason
-the execution is interrupted, the application process will be stopped.
-It is a safe way of terminating an application, which can be very
-important if you are running large projects.
-
-Of course, a simple, empty window, is not what you are after. What is
-important to note is that if you run the same script on different
-computers, the outcome will be slightly different. The look and feel of
-every window will match with your operating system, this is one of the
-many advantages of using Qt. A good way of expanding the code is by
-including the file that you have developed with the designer.
-
-\begin{minted}{python}
-    import sys
     import os
-
-    from PyQt5.QtWidgets import QApplication, QMainWindow
     from PyQt5 import uic
-
-    app = QApplication(sys.argv)
-    m = QMainWindow()
-    file_dir = '/home/user/programs/PythonForTheLab/PythonForTheLab/View'
-    uic.loadUi(os.path.join(file_dir, 'GUI/scan_window.ui'), m)
-    m.show()
-    app.exit(app.exec_())
-\end{minted}
-
-The core of the script is the same as before, the new lines are for
-establishing the path of the \emph{View} folder and to load the design
-file. You will see a better way of doing this in the program, but for
-the time being it works well. Go ahead and run the script. You will see
-that the window is displaying the design that you had generated. You
-should be proud of yourself. There is a good chance that this is the
-first time that you actually have an application written from scratch by
-yourself and running on your own computer.
-
-
-\section{Adding buttons and interaction}\label{adding-buttons-andinteraction}
-Now you have a window that may look great but it is not doing anything.
-You need to start building your code in order to allow actions to be
-triggered by pressing a button, for example. But for having code that
-is reusable and expandable, you have to rewrite your previous example.
-You will need to define a new class that inherits from
-\mintinline{python}{QMainWindow} and that allows you to personalize it as much as
-you want. You have to create a new file within the \textbf{View} folder
-and call it \textbf{scan\_window.py}. You can adapt the previous example
-like this:
-
-\begin{minted}{python}
-    from PyQt5 import QtWidgets, uic
-
-    class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
-    super().__init__(parent)
-
-    p = os.path.dirname(__file__)
-    uic.loadUi(os.path.join(p, 'GUI/scan_window.ui'), self)
-
-    if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    m = MainWindow()
-    m.show()
-    app.exit(app.exec_())
-\end{minted}
-
-As you can see, the code after \mintinline{python}{if __name__} is almost the
-same than what you have done before. If you execute the file, you will
-notice that the window is opened with the design. Going back to the new
-class you have defined, you can see that it inherits from the
-\mintinline{python}{QMainWindow} class, because what you are developing is the main
-window of your program. The \mintinline{python}{__init__} method should always
-take one argument called \mintinline{python}{parent} because it is used by Qt to
-keep track of the relationship between widgets. When you use the
-\mintinline{python}{super()} to initialize the parent class, you need to pass the
-same parent.
-
-You can see that the way to import the designer file is slightly
-modified. Since you need to perform a relative import, the first step is
-to establish the location of the current file, and that is what you do
-when you call the \mintinline{python}{__file__} property. Next, you append the
-path to the \emph{ui} file to the location of the
-\textbf{scan\_window.py} file and load it, as what you have done before.
-When you want to import files within Python, you have to specify
-precisely where they are located. Working with relative imports is not
-always safe with Python, especially for larger projects. Sometimes to
-root folder is not the folder that contains the file, but the folder
-from which you trigger the program. That is why it is always safer to
-use absolute paths for imports and not just relative ones.
-
-Once you have a subclass of \mintinline{python}{QMainWindow}, you will have complete
-control over what happens in the window, where the user is clicking, you
-will also be able to add new elements, to update them, etc. The advantage of defining a new class is that you can reuse it in different
-projects and that it can be easily embedded into larger programs. For
-the time being, you only want to do a scan, but it can be that tomorrow
-the scan is only a part in a larger series of experiments and the main
-window becomes just one more window.
-
-One of the building blocks of any app is buttons. However, if you
-downloaded the example design file from the Github repository, you will
-notice that there are no buttons in it, just a container called
-\mintinline{python}{buttonBox}. First, you will learn how to add elements to the
-{GUI} directly from the Python code, then you are going to learn how to
-trigger actions when a button is pressed. The logic behind Qt elements
-is that first, you initialize them, then you add them to the position
-where you desire and then you program how they are going to behave.
-Let's first create two buttons, one start, and one stop. You should add
-the following the to \mintinline{python}{MainWindow} class:
-
-\begin{minted}{python}
-    self.startButton = QtWidgets.QPushButton('&Start')
-    self.stopButton = QtWidgets.QPushButton('S&top')
-    self.buttonBox.addButton(self.startButton,
-    QtWidgets.QDialogButtonBox.ActionRole)
-    self.buttonBox.addButton(self.stopButton,
-    QtWidgets.QDialogButtonBox.ActionRole)
-\end{minted}
-
-The string specified when declaring the buttons is the text that will
-appear in them. Adding an \mintinline{python}{\&} before a letter is just for
-enabling the user to quickly reach the button by pressing Alt+S or Alt+T.
-The next couple of lines are for adding the buttons to the
-\mintinline{python}{buttonBox}. You can add the buttons to any layout that you have
-specified within the designer. The main difference is that the method
-you have to use is \mintinline{python}{addWidget} and takes only one argument, the
-widget (in this case the button) that you wish to add.
-
-\exercise{Create a designer file with different layouts and add buttons to each,
-in order to see how they behave.}
-
-Now that the buttons are ready in the {GUI}, let's start with a very
-simple idea: printing to the terminal \mintinline{text}{'Button Pressed'} when a button
-is pressed. To achieve this, you have to understand one of the most
-powerful components of Qt programming: \textbf{Signals}. A signal is
-what enables you to capture an event and trigger an action. You can hook
-those signals to one or more functions (also called \emph{Slots}) and Qt
-will take care of executing them when appropriate. If you remember, the
-\mintinline{python}{QApplication} can be regarded as an infinite loop, taking care
-of the behavior of the applications, including the connection between
-\emph{Signals} and \emph{Slots}.
-
-In Qt, there are a lot of different signals that get fired at very
-precise moments. For example, when you click with the mouse on a button
-it will generate a specific signal. But it is not the only one. Moving
-the mouse, releasing a button, hovering over an element, the list goes
-on and on. You can even trigger your own signals with your own
-conditions, for example when the user presses a specific combination of
-keys while moving the mouse. But before getting too complicated, let's
-just start adding some action when clicking the \mintinline{python}{startButton}.
-Update the Main Window class with the following line of code and
-function:
-
-\begin{minted}{python}
-    class MainWindow(QtGui.QMainWindow):
-    def __init__(self, parent=None):
     [...]
 
-    self.startButton.clicked.connect(self.button_clicked)
+    class MainWindow(QMainWindow):
+        def __init__(self, experiment=None):
+            super().__init__()
 
-    def button_clicked(self):
-    print('Clicked')
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            ui_file = os.path.join(base_dir, 'GUI', 'main_window.ui')
+            uic.loadUi(ui_file, self)
 
+            self.experiment = experiment
+
+            self.plot_widget = pg.PlotWidget()
+            self.plot = self.plot_widget.plot([0], [0])
+            layout = self.central_widget.layout()
+            layout.addWidget(self.plot_widget)
     [...]
 \end{minted}
 
-If you just run the file and click on the start button, you will see
-that there is a message being printed to the terminal. What is happening
-is that the \mintinline{python}{startButton} has a \mintinline{python}{signal} called
-\mintinline{python}{clicked} and you have connected that signal to the method
-\mintinline{python}{button_clicked}. Bear in mind that you don't put the
-\mintinline{python}{()} when you connect the signal, you are interested in just the
-method. \mintinline{python}{button_clicked} is very simple, it only prints to
-screen a message when it is executed. This example looks a bit basic,
-but if you have been following all the way, you can realize that
-triggering a scan is just calling the proper \mintinline{python}{Experiment} method.
+Besides the new imports, the fundamental change to the \texttt{MainWindow} class is that we load the file using \texttt{uic.loadUi}. When we try to import files in Python, we always have to be careful with determining the path from which we are importing. We already encountered the syntax of \texttt{dirname} when we were adding the root folder to the path in Section~\ref{sec:appending-path}. The idea is the same, but we are interested in the folder where the current Python file is located.
 
-\exercise{There are other signals for a \mintinline{python}{QPushButton}, for example
-    \mintinline{python}{released} and \mintinline{python}{pressed}. Hook them up to your own methods
-    and play around. When is the \mintinline{python}{released} signal triggered? And the
-    \mintinline{python}{pressed}?}
+The command \texttt{uic.loadUi} takes two arguments, the first is the file we want to load and the second the object to which it will be applied. We use the \texttt{self} to indicate that we want the layout to be applied to the entire \texttt{MainWindow}. If we develop a more modular program, such as defining individual widgets, we could apply the Designer file just to the widget we are interested in.
 
-If you want to know which signals are available and which method does
-every QtWidget possess, you can refer to the
-\href{http://doc.qt.io/qt-5/qtwidgets-module.html}{Qt documentation}. It
-is the official documentation and therefore the syntax is for C++, but
-you can easily adapt it to Python, especially if you follow the examples
-outlined in this book.
+The rest of the window stays the same, we only removed the definition of \texttt{central\_widget} and the buttons. Since we have the layout of the central widget specified in the designer, we need to access it to be able to append the plot widget. This is what this line is doing:
 
+\mint{python}{layout = self.central_widget.layout()}
 
-\section{Hooking the Experiment to the GUI}\label{hooking-the-experiment-to-the-gui}
-It is time to start interacting with your device straight from the
-{GUI}. Create a new file called \textbf{start\_gui.py} in the
-\textbf{Examples} folder just next to \textbf{start\_cli.py}. You will
-put together everything what you already know. The idea behind having a
-class for the experiment is that you can instantiate and pass it to the
-{GUI} as arguments to the different windows. For example, this is how
-the \textbf{start\_gui.py} will look like:
+We can go ahead and run the program and we will see that the window appears as it did before, without changes, even though we are now pulling the elements from the Designer file.
 
-\begin{minted}{python}
-    import sys
-    from PyQt5.QtWidgets import QApplication
+\subsection{Compiling or not Compiling ui files}\label{subsec:compiling-or-not-compiling-ui-files}
+Most tutorials online add one step after creating the Designer's file. They normally suggest transforming the \texttt{.ui} files into a \texttt{.py} file. There is a program able to do it for us, that can be triggered from the command line:
 
-    from PythonForTheLab.Model import Experiment
-    from PythonForTheLab.View.scan_window import ScanWindow
-
-    e = Experiment()
-    e.load_config('Config/experiment.yml')
-    e.load_daq()
-
-    ap = QApplication(sys.argv)
-    m = ScanWindow(e)
-    m.show()
-    ap.exit(ap.exec_())
+\begin{minted}{bash}
+    pyuic5 main_window.ui -o compiled_window.py
 \end{minted}
 
-This example is exactly a merge of both previous examples, the
-\emph{CLI}, and the \emph{GUI}. Pay special attention to the
-highlighted line. You are passing the experiment class to the
-\mintinline{python}{ScanWindow}, but \mintinline{python}{ScanWinow} class does not take
-arguments other than its parent. If you run that file now it will give
-an error, however, feel free to go ahead and try, you will see that the
-error is very descriptive. Note also that you are passing the Experiment
-already instantiated, with the configuration and the daq loaded. It is a
-matter of convenience, and not of necessity. You will see later that
-those two actions can also be triggered from within the {GUI}.
+We can explore both files and see the differences. If we open the \emph{ui} file with a text editor we will find out it is plain text and formatted following a standard called \emph{XML}, or extended markup language. This format is very similar to how websites are built, \emph{HTML} stands for hypter text markup language. Going through the file, we will find the place where we defined the buttons, surrounded by some more information, such as the layout, and the text of the button.
 
-In order to accept the experiment as an argument, you need to update the
-code of the \mintinline{python}{ScanWindow} class.
+If we open the generated Python file, we will find exactly the same information, but formatted in the same way we have done it in the previous chapter. We can go to the declaration of the start button and we will find a line almost identical to the one we used in the previous chapter
 
-\begin{minted}{python}
-    class ScanWindow(QtGui.QMainWindow):
-    def __init__(self, experiment=None, parent=None):
-    super().__init__(parent)
-    self.experiment = experiment
+\mint{python}{self.start_button = QtWidgets.QPushButton(self.button_widget)}
 
-    [...]
-\end{minted}
+The question is whether we \textbf{need} to compile the \emph{ui} files to Python files or not. Qt was developed with C++ programmers in mind, and for a C++ program it is very important to have each variable defined, with a specific type before compiling the code. Qt offers a program, \texttt{uic} to transform \emph{ui} files to \emph{C++} compatible files. Most Python tutorials built on that experience and kept the recommendation. But for Python this step is not necessary at all.
 
-Note that you have specified a default value for the experiment
-variable: \mintinline{python}{None}. This trick is very important when you are
-refactoring a class or a function. Imagine you have a large project and
-you are using the \mintinline{python}{ScanWindow} in different locations, or even
-more importantly, your package is used by someone else. If you just add
-the experiment as an argument, what will happen is that any piece of
-code that looks like \mintinline{python}{ScanWindow()} will throw an error. This
-implies changing the code in every line that has used the class. If you
-add a default value, you guarantee that older code is still compatible.
-For larger changes, however, this may not be sustainable.
+There is one caveat, though. If we don't transform the file to a Python file, editors won't be able to know which attributes are available on the windows and widgets. The editor won't have any idea whether there is a \texttt{start\_button} or not defined. This means that to be sure, we should keep opening the designer program and see how we named the buttons and elements. But this is the only drawback that non-compiling has.
 
-\warning{It is not possible to maintain backward compatibility always. In the
-example that you are developing, the experiment is going to become a
-very important piece. Older code that doesn't supply an experiment
-object will eventually lead to something broken downstream.}
+In our experience, being able to modify the designer files and see the changes as soon as we restart the program outweights the problems of not being able to auto-complete. If we are systematic with the naming conventions, we won't face many issues. And if we do encounter issues with attributes not defined, we know that the root of the problem is probably that we used one name in the Designer and a different one in Python.
 
-\exercise{Now the experiment class is stored as \mintinline{python}{self.experiment}; can you
-replace the method \mintinline{python}{clicked} in order to print the \mintinline{python}{idn}
-    of the daq card?}
+\section{Adding User Input}\label{sec:adding-user-input}
+\begin{center}
+    \includegraphics[width=.5\textwidth]{images/Chapter_09/08_final_window_example.png}
+\end{center}
 
-\exercise{Replace the behavior of the start button. Trigger a scan with the
-parameters already stored in the experiment. What happens to the {GUI}
-    if you do so? \textbf{warning}: I suggest you use parameters in the
-    {YAML} file that makes your total scanning time relatively short.}
+It is time to bring our program to the next level, by adding the possibility of entering the values of the scan before triggering it. The goal is to have a window that looks like the image above. We structured the window in three rows, one for selecting the range of the scan and the channel, one for the input and delay between points and finally the buttons. Below it, we will append the plot, as we have done before.
 
+First, we will start by designing the window. We will not cover every single detail as we did in the previous section, because it would become too cumbersome to follow, therefore we leave to the discretion of the reader whether they want to try it by themselves, or get the designer file from the online repository. The easiest way to reproduce the window is by looking at the structure we should obtain after placing all the elements:
 
-\section{Threads to the Rescue}\label{threads-to-therescue}
-If you have finished the last exercise, you probably noticed that while
-the scan is running your {GUI} freezes. Depending on your operating
-system and the time it takes the scan to run, you will get a
-notification saying that your app does not answer and you will be asked
-if you would like to terminate it. It means that you need to find a way
-to prevent long-running tasks from interrupting the main loop of our
-Application. After all, you don't see Firefox freezing every time a page
-takes a bit longer to load, or your photo editing software when it
-exports the pictures with a new resolution.
+\begin{center}
+    \includegraphics[width=.5\textwidth]{images/Chapter_09/09_final_window_structure.png}
+\end{center}
 
-The way in which Python programs can handle this is with the use of
-threads. When you run a script, everything is going to happen from top
-to bottom, one line at a time. If a function takes too long to execute
-it will be halted there. Remember that taking too long doesn't mean it
-is computer intensive work. For example, you can be waiting for user
-input, or perhaps you want to trigger something every 10 minutes and you
-put a \mintinline{python}{sleep} statement. Threads are a way of handling this
-behavior, by allowing several processes to run simultaneously. In our
-case, we want our scan experiment to run in a thread separated from the
-thread in which the main {GUI} is running.
+The central widget and the buttons are there, as always, bu we added two more widgets now, they are of a special type called \texttt{QGroupBox}, meant exactly for grouping elements together. They also have a title, that appear at the top left, and become very handy to quickly understand what needs to be edited. To handle input from the user, we chose \texttt{QLineEdit} widgets. These widgets allow the user to input any type of text, exactly as we need.
 
-\note{If you finished the last chapter, you have already learned how to work
-with threads in Python. Working with threads in Qt follows basically the
-same principles, but with the added benefits of signals and slots. It
-is, normally, a good idea not to mix Python threads and Qt threads
-when possible.}
+The rest of the elements are to give consistency to the user experience. Before each line edit, we included a label, to show what information is supposed to go in each box. In the bottom group, we also used a \texttt{Spacer}, to push the elements to the left. If we don't do this, the boxes for editing would take the entire space and wouldn't look nice. It is, however, a purely aesthetic decision.
 
-Working with threads in Qt is relatively easy, especially thanks to
-\emph{Signals}. First, you need to create is a new class that you are
-going to call \mintinline{python}{WorkerThread}. Workers are going to run whatever
-method you give them to run but will do so in a separate thread. You
-should create a new file in the \textbf{View} folder and call it
-\textbf{general\_worker.py}. The idea of calling it \emph{general} is
-because it will run any function you want. Worker threads can also be
-specialized, meaning that they will take care, for example, of the
-acquisition of a camera, the input from a user, etc.
+The most important thing to pay attention are the names of each input line, because they are going to be fundamental for the Python code. What we normally use is a distinctive name followed by the type of element we are dealing with. That is why have the \texttt{start\_button}, but also the \texttt{stop\_line}, \texttt{delay\_label}, etc. In this way we can avoid confusion between the starting value of the scan and the button that is supposed to trigger it.
+
+\warning{Consistency with the names is very important. An incredibly common bug is to change the names and then use the wrong value for the experiment. If we were to swap the in and out channels, the error may go unnoticed until we use two different values. By that point, it will be very hard to understand if the problem is within the program or within the experiment.}
+
+After improving the window design, we can run again the program and we will see that the window has a different aspect, with inputs, labels and groups. However, they can't do much yet. If we trigger a scan, the plot will update, but it will always be with the values set in the config file. First, let's learn how to populate the different elements with the values we start when we load the config file. We must edit the \texttt{\_\_init\_\_} of the \texttt{MainWindow} class to take care of the values:
 
 \begin{minted}{python}
-    from PyQt5 import QtCore
-
-    class WorkThread(QtCore.QThread):
-    def __init__(self, function, *args, **kwargs):
-    super().__init__()
-    self.function = function
-    self.args = args
-    self.kwargs = kwargs
-
-    def __del__(self):
-    self.wait()
-
-    def run(self):
-    self.function(*self.args,**self.kwargs)
-    return
+    self.start_line.setText(self.experiment.config['Scan']['start'])
+    self.stop_line.setText(self.experiment.config['Scan']['stop'])
+    self.num_steps_line.setText(str(self.experiment.config['Scan']['num_steps']))
 \end{minted}
 
-When working with Qt threads, you need to reimplement some important
-methods and that is why this class may look particularly complicated.
-You start by creating a new class called \mintinline{python}{WorkerThread} that
-inherits the QThread class. The \mintinline{python}{__init__} method takes one
-required argument, called \mintinline{python}{function}, which is the function that
-the thread is going to execute. \mintinline{python}{*args} and \mintinline{python}{**kwargs} is
-just a way of accepting any number of variables. You don't know exactly
-how many arguments the function is going to take since it can
-\emph{a-priori} be any function. You store all the information as
-properties of the class (\mintinline{python}{self.function}, etc.). The
-\mintinline{python}{__del__} method is there just to be sure that the Thread is
-properly closed if you decide to stop it before it finishes running.
+The \texttt{QLineEdit} objects have a method called \texttt{setText} that allows us to change what is displayed. For the start and stop values there are no problems, because their values are already strings (remember they include the units), but the number of steps is an integer. PyQt is a very thin wrapper and won't try to convert a number to a string, we need to force it ourselves, adding the \texttt{str} function.
 
-The important part of the code is the \mintinline{python}{run} method. This method
-is going to be called from the main part of the code when we want to
-execute it. In this specific case, you just execute the function that
-you passed at the beginning while instantiating the class. Notice that
-you are passing to the function the same arguments that the
-\mintinline{python}{__init__} took, namely \mintinline{python}{*args} and \mintinline{python}{**kwargs}.
-Once the class is ready, it is time to see how to use it from the main
-code. If you go back to the \textbf{scan\_window.py}, you will need to
-update the code to run the thread properly. If you finished the last
-section's exercise, you should have ended up with code like this:
+\exercise{We have shown how to add the values of start, stop, and number of steps, but we are still missing the input and output channels, and the delay between points. Add them following the example above.}
 
-\begin{minted}{python}
-    def button_clicked(self):
-    self.experiment.do_scan()
-\end{minted}
-
-Since you are trying to do proper coding, you need to update the names
-of the methods for them to make sense. For example, you can have a new
-method called \mintinline{python}{start_scan} that will look like this:
+We know how to set the values to the lines, we can change them, but the we still use the ones defined in the config file. We already saw in Section~\ref{sec:running-experiment} that thanks to our strategy of having a robust experiment class, we can change the values of the parameters after the experiment was defined. We can do the same within the user interface. Let's improve the \texttt{start\_scan} method of the \texttt{MainWindow}:
 
 \begin{minted}{python}
     def start_scan(self):
-    self.worker_thread = WorkThread(self.experiment.do_scan)
-    self.worker_thread.finished.connect(self.worker_thread.deleteLater)
-    self.worker_thread.start()
+        start = self.start_line.text()
+        stop = self.stop_line.text()
+        num_steps = int(self.num_steps_line.text())
+
+        self.experiment.config['Scan'].update(
+            {'start': start,
+             'stop': stop,
+             'num_steps': num_steps}
+        )
+        self.experiment.start_scan()
 \end{minted}
 
-Remember to update the code where you are connecting the signal
-\mintinline{python}{clicked} of the start button to the method. First, note that you
-created a \mintinline{python}{worker_thread} as a property of the
-\mintinline{python}{ScanWindow} but was not defined within the \mintinline{python}{__init__}
-method, which is violating some design principles but you can still deal
-with it. The only argument that you are passing to the thread is the
-function that you want to execute, in this case, \mintinline{python}{do_scan}. Pay
-attention to the fact that you are passing the function without
-\mintinline{python}{()}. If you add the \mintinline{python}{()} you would pass the result of the
-function and thus you will have to wait until it finishes for creating
-the \mintinline{python}{worker\_thread}. Then you connect the signal
-\mintinline{python}{finished} from \mintinline{python}{worker_thread} to one of its own
-methods. It can be slightly convoluted, but this will ensure that when
-the thread finishes it is going to be cleared. If you run the same
-program for months you really don't want to start accumulating in memory
-millions of garbage threads. Finally, you \mintinline{python}{start} the thread. Pay
-special attention to the fact that you don't use the \mintinline{python}{run} method
-explicitly. You can go ahead and run the program again. Is it still
-freezing when you perform a scan?
+In exactly the same way we used \texttt{setText} to set the text on the QLineEdit objects, we can use \texttt{text()} to retrieve what is written. For start and stop there are no problems, but for the number of steps we need to have an integer, not a string. Once we got the values, we update the \texttt{experiment.config}, specifically the group of properties that belong to \texttt{Scan}. Using \texttt{update} on a dictionary is a shorter way of doing:
 
-\exercise{You have only the start button working. Hook the stop button to a new
-method \mintinline{python}{stop_scan}. To stop the execution of a thread you have
-to use the \mintinline{python}{quit()} method, for example:
-    \mintinline{python}{self.worker_thread.quit()}.}
+\begin{minted}{python}
+    self.experiment.config['Scan']['start'] = start
+    self.experiment.config['Scan']['stop'] = stop
+    self.experiment.config['Scan']['num_steps'] = num_steps
+\end{minted}
 
-\exercise{Thanks to what you have developed in the previous chapter, you can also
-stop the scan by changing the value of a property. Update the
-    \mintinline{python}{ScanWindow} to use it.}
+It is important to remember that in the experiment, when we trigger the \texttt{start\_scan}, the model will take care of creating the scan range directly from the values stored in the config dictionary. If we supply values without units, the experiment will complain.
 
-\exercise{How can you prevent the program from trying to stop a thread that is not
-actually running? A great idea would be to add a property called
-    \mintinline{python}{self.scan\_running} and set it to \mintinline{python}{False} in the
-    \mintinline{python}{__init__}, set to \mintinline{python}{True} when you start the scan and
-    back to \mintinline{python}{False} when the scan ends. Try to implement this in your
-    code.}
+\exercise{Test the limits of the user interface. What happens if you use a number of steps that is not an integer? What happens if you submit a start or stop value in units other than Volts? What happens if you leave one of the options empty?}
 
-\exercise{Prevent the user from triggering two scans at the same time, for
-example, you can disable the start button by using the method
-    \mintinline{python}{setEnabled(False)} or \mintinline{python}{setEnabled(True)}}
+\exercise{Following the example above, add the same behavior for the delay, channel in and channel out values.}
 
+We are now at a stage where we can control our experiment from the user interface. We can change the parameters for the scan, start and stop at will. At this stage we should feel very proud of ourselves. It is also a good time to reflect, because things change very quickly, new elements appear on the window but we put very little effort in making everything work together.
 
-\section{Conclusions}\label{conclusions}
-This chapter may have been one of the more interesting and compelling
-chapters in the book. You have built a user interface and you have
-hooked an experiment to it. The {GUI} is far from complete, but
-nevertheless, it is a great achievement what you have developed so far.
-With what you have done here you can already do plenty of things if you
-are creative enough. You can have a user interface for triggering
-actions on your computer, in your experiment, etc. The options are
-endless and you are only halfway through, so imagine what is going to
-happen next.
+One of the values of separating in Model/View/Controller is that, normally, most of our work should be placed in the models. And models are the most pure-python modules in our program. Once we overcome the initial shock of working with more complex patterns, such as classes and threads, the rest is very straightforward. We loop through values, we save data. Most likely it is the kind of things we were already doing when analysing data.
 
-\subsection{A Word on Qt}\label{a-word-onqt}
-Qt was developed for C++ programmers and was later ported to Python.
-This means that a lot of the documentation and examples that you can
-find around are for another language and thus you will need to translate
-it into Python. If there is something you can't understand and there are
-no obvious answers online, ask in
-\href{https://forum.pythonforthelab.com}{Python For The Lab}, the community over there is very helpful and knowledgeable.
+Once the experiment model is ready, plugging the view on top of it does not require too much effort. How to design the experiment model in such a way that allows us such degree of independence, is a skill that can be acquired over time, with critical thinking, and patience. For most programs, when developing the \emph{View}, we would face the problem of something missing in the experiment model. Perhaps a threashold value, or a variable that let's us know something is running. We should always refrain the temptation of complicating the view and we should always favor putting all that effort into the models.
 
-When developing programs, normally you read code from top to bottom, one
-line at a time. This is also what computers do when interpreting or
-compiling programs. When you start dealing with \emph{user interfaces}
-it becomes almost impossible to read code from top to bottom. For
-example, you never know when a user will trigger an action, stop it, in
-which order, etc. That is why the last exercise of the previous example
-is very important. You should anticipate, at least to a certain extent,
-the mistakes that a user can commit.
+It's only the long run experience the one that will congratulate us on a job well done in the past.
 
-Of course, there are also limits to how much you can anticipate. When
-developing programs for the lab, normally you assume that the users of
-your code are going to be aware of what they are doing and how the
-experiment is designed. However, more often than what you think,
-mistakes happen. Perhaps even yourself forget about a detail, or you are
-in a hurry to acquire the last few data points. Therefore, thinking
-ahead about common mistakes and displaying appropriate messages can save
-you and the users of your program a lot of time later on.
+\section{Validating User Input}\label{sec:validating-user-input}
+We, as consumers of computer software, are used to a lot of interactions and visual cues when working with a user interface. This makes us expect the same kind of behavior in the programs we develop ourselves. One of the things we can notice in our program is that if we try to trigger a scan while the first one is running, a message will be printed to the terminal, but if we are not paying attention to it, we will miss it and wonder why the scan is not being triggered.
 
-Getting to understand how Qt works and how you can do different things
-with it is a lengthy process. Every app that you see, not only on your
-computer but also on your mobile phone or embedded platform such as
-smart watches or thermostats can be built using Qt. It is completely up
-to you to put a limit on what you need to learn in order to perform an
-experiment. Do you want to make the interface prettier with icons? Do
-you want to verify the user input and display warning messages? Do you
-want to stream a camera signal? All those are possibilities few keyboard
-strokes away, but they are of course much more involved than what you
-have developed until now.
-
-\subsection{A Word on Signals}\label{a-word-onsignals}
-Working with \emph{Signals} is incredibly handy, and once you get used
-to them you will want them to be available everywhere, especially when
-you are doing some threading in Python. However, signals make your code
-harder to follow for beginners. You connect your signal once and you
-forget about it. Every time a signal is fired, something will be
-triggered, such as a method or a function. Checking what is called and
-which arguments are being passed becomes more complicated. Even the best
-IDEs available for Python won't be able to track what is really
-happening in your code.
-
-If you are developing code that you expect others to understand, you
-should either provide all the documentation they need or limit the number of nonordinary packages that you are employing. For example, if
-the users of your code are used to analyzing data, you can count on them
-knowing \emph{numpy} and \emph{matplotlib}, but most certainly they are
-not aware of \emph{PyQt} and its special models such as \emph{signals}
-and \emph{slots}. If you are building code for others, be sure you use
-libraries common to them when possible, or document your progress to
-make it understandable.
-
-
-\section{Objectives}
-In this chapter you are going to see how you can process user input for
-changing the parameters of your scan and how to plot the results while
-they are being generated. Dealing with user input can lead to unexpected
-errors that are sometimes hard to anticipate. Plotting the data while it
-is being acquired is a great feature, especially when you want to make
-quick decisions before an entire scan is done.
-
-\section{Introduction}
-In the previous chapter you have already seen how to handle some user
-input: you have a start and a stop button able to trigger the scan. It
-is useful, but it doesn't really allow you to change the parameters of
-the scan. When you want to take input from a user, you will have to deal
-with the validation of the values. More often than not, a user will
-mistake the input port with the voltage range, or they will forget what
-the \mintinline{python}{delay} does. Sadly, this user can very well be yourself in
-the future.
-
-Incorrect input data from a user can not only lead to the wrong
-experiment, but it can also mean a big problem in your setup. Imagine that
-you set a voltage to a value higher than what your device can handle. Or
-you set a piezo stage to a position that will break your sample (a very,
-very common issue in microscopes). To avoid these issues, the program
-has to check that the input makes sense before being passed to a device,
-and this is called data validation.
-
-Having a {GUI} that allows you to change the parameters of an experiment
-is very handy. Much more so is to add the possibility to monitor a
-signal while the experiment is running. Plotting in real time is not
-hard but it can be computationally expensive, depending on how many data
-points are you willing to show and how often do you want to update the
-plot. In this chapter, you will learn how to develop a program that
-takes into account these issues.
-
-If you have experience analyzing data with Python, most likely you have
-come across \emph{Matplotlib}, a great library for generating very
-professional plots. Even if it is a great tool for making
-figures, it is not the proper tool for real-time visualization. Updating
-Matplotlib plots is an intensive task for the computer and therefore it
-is not going to allow you to update the plots as often as you would
-like. That is why, for data visualization, you are going to use another,
-perhaps a lesser-known library, called
-\href{http://www.pyqtgraph.org/}{PyQtGraph} which integrates everything
-that you need for plotting within user interfaces.
-
-\section{Getting User Input}\label{getting-userinput}
+One possible solution would be to gray out the \emph{Start} button, to prevent the user from triggering a second scan. The question is how can we achieve that behavior. If we look in the designer, every widget that we add has a list of properties that we can change, including shape, color, text, etc. In the case of the buttons, there is an option called \texttt{enabled}:
 
 \begin{center}
-\includegraphics[width=.6\textwidth]{images/scan_window.png}
+    \includegraphics[width=.4\linewidth]{images/Chapter_09/10_enabled_button.png}
 \end{center}
 
-In your {GUI}, you have added some parameters that the user can modify
-before triggering a scan, namely, those are the output port, the start,
-stop, and the step of the voltage, the input port, and the delay between
-measurements. You need to read the values and update them into the
-experiment class before triggering the \mintinline{python}{do_scan} method. If you
-remember from the command line example, updating the values of the scan
-is as easy as doing
-\mint{python}|experiment.properties['Scan']['start'] = new_start|
-In the {GUI} it is going to be the same principle. If you want to read
-from a \mintinline{python}{QLineEdit} (the name of the widget that holds the
-information) you just need to do the following:
+If we remove the tick mark from the option, the button gets grayed out, and we won't be able to click it. We must learn how to change the enabled status from our program, not from the Designer. For this, we must read the documentation provided by Qt. If we search online for \texttt{QPushButton}, normally the first result would be the one available at \texttt{doc.qt.io}, the official documentation. We only need to be sure we are looking at the Qt5 documentation and not at the Qt4. The page is long and if we look for \texttt{enabled} we won't find anything. This is not a very auspicious start.
 
+If we scroll to the top of the page, we will see that Qt informs us the parent class of QPushButton: QAbstractButton. Remember that when working with objects, there is always a possibility that methods and attributes are defined in the parent class, not in the class we are actually using. We can follow the link, but there won't be any information on enabling or not, but if we go one level above, to the \texttt{QWidget} documentation, we find what we were looking for:
+
+\begin{center}
+    \includegraphics[width=.4\linewidth]{images/Chapter_09/11_Qt_Docs_inheritance.png}
+\end{center}
+
+To change the status of the button, we must use the \texttt{setEnabled()} method that is defined in the base \texttt{QWidget} class. On the one hand, we can notice that all widgets can be enabled or disabled. In some cases the change will be visible, in others it won't be. We can also see that the Designer was already letting us know that the documentation was available as part of QWidget instead of QPushButton, just look at how properties are organized:
+
+\begin{center}
+    \includegraphics[width=.4\linewidth]{images/Chapter_09/12_Designer_object_inheritance.png}
+\end{center}
+
+Next time we want to learn how to do something, we know the best is to start by the designer and see if the options are available. If we find it, we must pay attention to the base class that defines the behavior and then we can go looking for the documentation. Navigating the Qt Docs takes a bit of getting used to, but once we understand how the information is organized, it becomes very easy to follow it.
+
+Back to the task at hand, we must disable the button when the scan starts running. One option would be to disable it right when we trigger the scan:
+
+%! Suppress = Ellipsis
 \begin{minted}{python}
-self.outPortLine.text()
-\end{minted}
-
-This command will give us access to whatever is written in the
-\mintinline{python}{outPortLine}. Bear in mind that you can not only read from the
-line, you can also set the text that you want to display, like this:
-
-\begin{minted}{python}
-self.outPortLine.setText("Text to display")
-\end{minted}
-
-\exercise{Now that you know how to read and set the values of a
-\mintinline{python}{QLineEdit}, update the \mintinline{python}{__init__} method of the
-\mintinline{python}{ScanWindow} in order to set the initial values of the scan,
-which are available within
-\mintinline{python}{experiment.properties['Scan']}.}
-
-To allow the user to change the parameters, you need to read them and
-update the experiment class. By now you should have a broad idea on how
-to achieve this, but it is important to point out that the experiment
-class relies on receiving values with units, not just numbers in the
-appropriate parameters. In the chapter when you defined the experiment
-class you also impose some restrictions on how the parameters should be
-defined. If you go back to the class, you will see that the
-\mintinline{python}{do_scan} method transforms strings into quantities. Therefore,
-the parameters for the scan should be strings with the appropriate
-units, and the experiment class will take care of the conversion.
-
-\begin{minted}{python}
-self.experiment.properties['Scan'].update({
-        'port_out': int(self.outPortLine.text()),
-        'start': self.outStartLine.text(),
-        'stop': self.outStopLine.text(),
-        'step': self.outStepLine.text(),
-        'port_in': int(self.inPortLine.text()),
-        'delay': self.inDelayLine.text(),
-     })
-\end{minted}
-
-Note that you are using a special method of dictionaries called
-\mintinline{python}{update}, that allows you to update a dictionary with the values
-given by another dictionary. If it is unclear to you how does it work,
-you should just practice with an easier example, a dictionary with just
-a handful of keys and values. Remember that the experiment class takes
-strings for the properties with units, but an integer for the ports,
-that is why we transform the input and output ports to \mintinline{python}{int}. It
-is as easy as that, few lines of code, little complication and now you
-are getting user input into consideration.
-
-When you start playing around with your program, and especially when you
-give it to other users to work with, a lot of problems are going to
-arise. One of the most common ones is people forgetting to put units
-into their values. You can build your entire software just with plain
-numbers, but in the long term, this is very unreliable. Soon enough you
-will forget if the numbers you were supposed to use were in centimeters,
-millimeters, etc. Go ahead and try to see what happens if you don't
-include units, or if you try to start the scan when some of the values
-are left blank.
-
-Validating user input is a complicated task; at some point, especially
-for software that is supposed to be used by smart people with good
-intentions, you have just to let it be. For example, you can check that
-the output port is a valid option if you have only two outputs it should
-be either 1 or 2. But you should also check that the values in every
-option are the ones that the device can handle, etc. And then, imagine
-they are wrong, what do you do? Do you create a new window with an error
-message? It is up to you and your use case to judge how much involvement
-is needed.
-
-\exercise{To validate user input, you can also use signals. \mintinline{python}{QLineEdit} has
-a signal called \mintinline{python}{editingFinished}, that is triggered whenever you
-stop writing and move away from the line. Hook that signal from whatever
-input you like to a new method that will verify that the values are
-correct (for example, that the output port is either 1 or 2). If the
-input is not valid, disable the \mintinline{python}{startButton} by doing
-\mintinline{python}{self.startButton.setEnabled(False)}, or the opposite if the
-value is correct.}
-
-\section{Plotting the results}\label{plotting-theresults}
-Plotting the results while you are acquiring the data is the last step
-to have a fully functional program for performing experiments. You may
-remember (or you should refresh it if you don't) that the
-\mintinline{python}{do_scan} accumulates the data in a variable called
-\mintinline{python}{ydata_scan}. It means that each data point is available as soon
-as it is acquired. This is true for your very simple daq device, but it
-may not be exactly true for more complex acquisition cards. Anyways,
-let's see how to plot.
-
-You may remember the PyQtGraph module that you used for plotting some
-data while we were looking at running the experiment from within the
-command line. You are also going to use it here, and then you are going
-to make a plot inside of the \mintinline{python}{ScanWindow}, let's see:
-
-\begin{minted}{python}
-import pyqtgraph as pg
-
-[...]
-
-class ScanWindow(QtGui.QMainWindow):
-    def __init__(self, experiment, parent=None):
-        super().__init__(parent)
-
+    def start_scan(self):
+        self.start_button.setEnabled(False)
         [...]
-
-        self.main_plot = pg.PlotWidget()
-        layout = self.centralwidget.layout()
-        layout.addWidget(self.main_plot)
-        self.ydata = np.zeros(0)
-        self.xdata = np.zeros(0)
-        self.p = self.main_plot.plot(self.xdata, self.ydata)
 \end{minted}
 
-If you remember from a couple of chapters before, when plotting data you
-were also defining a \mintinline{python}{PlotWidget}, but at the time you had no
-user interface around it. In the previous chapter, you have seen that
-the building blocks of Qt are called Widgets, and in the snippet above
-you see that everything is coming in place together. The first step is
-to create the widget you want to use, in this case, it is called
-\mintinline{python}{self.main_plot}. Once you have the widget, you need to add it
-to the window. In the previous chapter, you have added buttons to a
-\mintinline{python}{ButtonBox}, but the plot should be added to the layout of the
-window. At this point is where some explanations regarding Qt are
-in order.
+This seems like a very valid idea until we use it for the first time. Once the scan starts, the button will be grayed out, but there is no place where the button can be enabled back. This is a very common pattern with user interfaces. There are different ways of tackle the problem, but the more straightforward one is using the timer we already have in place to update the plot.
 
-When you define windows in Qt Designer, some important things are
-happening under the hood. For example, when you define a
-\mintinline{python}{QMainWindow}, you should also define the central widget of it,
-which is like letting the window know which widget is the most important
-one. In the designer, this happens by default and perhaps you don't even
-notice that as soon as you create a window, there is also an empty
-\mintinline{python}{centralwidget} into which you put all the elements. When you use
-Python, you can reference the central widget by
-\mintinline{python}{self.centralwidget}. In the \mintinline{python}{ScanWindow} the
-\mintinline{python}{centralwidget} has a vertical layout associated with it, and
-that you can use by calling the method \mintinline{python}{layout()}. Note that not
-all widgets have a default layout defined, sometimes it can even happen
-that the layout is a part of the widget, such as any other button,
-line, etc.
-
-Once you have access to the layout, you add the plot widget to it.
-Because the \mintinline{python}{centralwidget} has a default vertical layout, the
-plot will be appended at the bottom. If it would have been a horizontal
-layout, it would have been appended to the right, etc. Qt is very
-flexible when it comes to specifying where and how widgets look like.
-Remember that everything that you have defined in the Designer can be
-later changed programmatically. Normally, it is better to have a good
-starting point and change the look of your window as little as possible.
-After you have added the plot to the layout, you can initialize it with
-empty data. In this case, you use two zeros and plot them. If you
-remember from a couple of chapters earlier, the output of the
-\mintinline{python}{plot} method will allow you to personalize the plot, adding
-labels, units or new data. That is why you store it as \mintinline{python}{self.p}.
-You can go ahead now and run the program, you should see a black plot
-within your window. Well done!
-
-There is only one more detail to mention, mainly for people who are
-going to work with complex plots and fast refresh rates. The
-\mintinline{python}{plot} method in PyQtGraph triggers a lot of actions under the
-hood that will be responsible for drawing the lines of your plot. It is,
-therefore, an \emph{expensive} function to run, and it is not
-recommended to do it repeatedly. Therefore, you can plot empty data, or
-as in this case just one point with coordinates (0,0) and later you
-update the contents of your plot, without recreating it. Of course, you
-can avoid taking things for granted and try to plot over and over again
-and see if this discussion was a
-\href{http://wiki.c2.com/?PrematureOptimization}{Premature
-Optimization}.
-
-\exercise{If you followed the previous chapters, you should have used PyQtGraph to
-plot the results of your scan from within the command line. Use the same
-examples to set X and Y labels for the plot.}
-
-The previous exercise is a just a trick for you to think ahead. With
-what you have done so far, you cannot set the axis, because you don't
-know which port you are going to scan and which one you are going to
-read. You need to wait until the user decides to trigger a scan to
-update the labels of the plot. So, let's first solve this problem. The method you would like to update is \mintinline{python}{start_scan}. To add the
-proper labels to the plot, you can do the following:
+Instead of just plotting data, we can use the same timer to update the different elements of the user interface. For example, we would like to let the user start the scan only if there is no scan running, and we want to let them stop the scan only if there is one scan running. Let's start by defining a new method in the main window:
 
 \begin{minted}{python}
-xlabel = self.experiment.properties['Scan']['port_out']
-units = self.experiment.properties['Scan']['start'].u
-ylabel = self.experiment.properties['Scan']['port_in']
-
-self.main_plot.setLabel('bottom', 'Port: {}'.format(xlabel),
-                    units=units)
-self.main_plot.setLabel('left', 'Port: {}'.format(ylabel), units='V')
+    def update_gui(self):
+        if self.experiment.is_running:
+            self.start_button.setEnabled(False)
+            self.stop_button.setEnabled(True)
+        else:
+            self.start_button.setEnabled(True)
+            self.stop_button.setEnabled(True)
 \end{minted}
 
-Remember to set the labels only after you have updated the properties of
-the experiment in the method. If you do it the other way around, you
-will be using the old values. You are very close to having a fully
-working {GUI}, but you are just missing one last thing. If you trigger
-the scan now, you will have nicely set up the labels, but you are not
-plotting the data yet. If you followed the example on how to update the
-plot when working from the command line, you will see that updating the
-{GUI} is just slightly adapting the code.
-
-\subsection{Words of caution when refreshing GUIs}\label{words-of-caution-when-refreshingguis}
-When dealing with GUIs and experiments you have to take into
-consideration several properties, not only of the experiment but also of
-your own computer. Computer screens normally refresh at a maximum rate
-of 60 frames per second (fps). However, your eyes most likely will not
-be able to tell the difference beyond 30fps. 30fps is equivalent to
-updating every 33ms, while many experiments can acquire data at much
-higher rates than that. Even 60fps, which are equivalent to a refreshing
-time of 16ms, can be longer than what your experiment is handling. It is
-important therefore to decouple the experiment refresh rate from the
-update process. If you try to update your plots at higher frame rates,
-depending on the complexity of your data, at some point the {GUI} will
-start lagging behind.
-
-The same discussion can be given with the number of pixels that you are
-displaying. Imagine you acquire a signal with a time resolution of 1
-second over an hour. You will end up with 3600 data points. A 4K display
-has roughly 4000 horizontal pixels. This means that you have almost as
-many data points as total pixels on the screen. If you plot your data,
-for example, in a window that takes half the screen size, you are going
-to lose information. When you try to plot more data points that pixels,
-the plotting library will take care of the reduction. This adds to the
-computational cost of plotting, plus you are going to miss the fine
-resolution you were after. When dealing with GUIs at some point you have
-to ask yourself what is the point of acquiring with a resolution that
-you are not able to see.
-
-This discussion, by no means, implies that your acquisition cannot be
-faster or with a higher resolution. For example, you can acquire data
-with a fast {CCD} at a thousand frames per second. However, if you display
-all the frames to the user or only one in every 30, the user will not be
-able to tell any difference. While you display a subset of the data, you
-can save the rest for later analysis. Confocal images, for example, are
-built by scanning the position of the sample (or of the beam) and can
-generate images with many more pixels than cameras and than screens. You
-can decide to plot only a region of the data or decide how to smooth it
-in order to preserve the features that you are after.
-
-\subsection{Decoupling acquisition and refreshing}\label{decoupling-acquisition-andrefreshing}
-Enough of a theoretical discussion, now it is time to implement in your
-code the decoupling between the acquisition and the update of the plot.
-You need to define a refreshing time somewhere, and since it is a parameter
-that you may be interested in changing you can add it to a configuration
-file. In the \mintinline{python}{YAML} file where you defined the experiment, you
-can add a \mintinline{python}{refresh_time} option. If you have downloaded the
-{YAML} file from the repository, you may have already this parameter
-present. So far, the {GUI} is able to trigger a scan in a separate
-thread, you need to add another method that updates the plot
-periodically. If you want to trigger a periodic action in Qt, you can
-use a widget called \mintinline{python}{QTimer}. This widget will emit a signal
-periodically, after a defined period of time. This signal can be hooked
-to any method or function, as you have seen in the previous chapter with
-buttons. You have to start by creating the timer within the
-\mintinline{python}{__init__} method:
+The method \texttt{update\_gui} is easy to follow, if the scan is running we gray out one button but not the other and viceversa. We only need to be sure this method is run periodically. Since we already have a timer for updating the plot, we can use it to update the GUI as well:
 
 \begin{minted}{python}
-self.update_timer = QtCore.QTimer()
-self.update_timer.timeout.connect(self.update_scan)
+    def __init__(self, experiment=None):
+        self.timer.timeout.connect(self.update_gui)
 \end{minted}
 
-In the code above, you can see that the time was not set yet and the timer was not started. You have just created the timer and hooked its
-signal \mintinline{python}{timeout} to a method called \mintinline{python}{update_scan} that
-still has to be defined. Before going to that method, you also have to
-update the \mintinline{python}{start_scan} method to trigger the update\_timer with
-the proper delay time. You can add the following at the end of
-the method:
+With this simple approach, we will be checking every few milliseconds whether the scan is running or not, and we will set the buttons accordingly. There is also a risk with this approach. If we decide to show information on the Main Window that implies reading a value from the device, we will be polling it several times per second, regardless of whether the value changed or not. If we update values stored in an object, such as the Experiment model, there is nothing to loose, but if we stretch this pattern too far, we may encounter issues and our program could become inefficient.
 
-\begin{minted}{python}
-refresh_time = Q_(self.experiment.properties['Scan']['refresh_time'])
-self.update_timer.start(refresh_time.m_as('ms'))
-\end{minted}
+We have generated the most basic of the possibilities, disabling a button to prevent the user from triggering a second scan if there is one already running. There are many more possibilities. What happens if, for example, the user enters a value outside the range of possibilities, such as a start without volts, or negative, or beyond $3.3\,\textrm{V}$. We can use the \texttt{update\_gui} to monitor the values entered and run them through some checks. If they pass, then we leave them as they are, if they don't then we change the line to red and disable the start button.
 
-The method to trigger the timer is \mintinline{python}{start} and takes only one
-argument: the delay time in milliseconds. This is one of the advantages
-of using quantities in python, you can forget about the details of every
-method you use. You convert the value given from the experiment class
-into \mintinline{python}{ms}, in the same way in which you have converted a time to
-seconds in order to use it with the Python \mintinline{python}{sleep} function.
-Sometimes you can pass a Quantity to a method, but it is not safe to
-assume that the method will know how to handle them. Every time you can,
-you should explicitly do it as above. The missing piece of code is the
-method to update the plot while the experiment is running. Remember that
-the scan has its own thread, but the values are stored in the
-experiment class, which is accessible from the main thread. The
-\mintinline{python}{update_scan} method will look like this:
+All these are possibilities that we will start considering as soon as we start developing user interfaces. However, every thing we do has ramifications, such as what we saw when we disabled the start button on our first attempt. Our general approach is not to complicate the user interface beyond what is needed. If we have proper drivers and proper models in place, at least our devices are safe. If we find ourselves or a user of our software making the same mistakes over and over again, we can then optimize the flow to prevent it from happening again.
 
-\begin{minted}{python}
-def update_scan(self):
-    self.xdata = self.experiment.xdata_scan
-    self.ydata = self.experiment.ydata_scan
+\subsection{Saving Data with a Shortcut}\label{subsec:saving-data-with-a-shortcut}
+The only missing important feature of our user interface is the ability to save data. We could implement a button for this, but we can also look into another important feature of Qt: \textbf{actions}. We saw that a central tool when developing with Qt are signals, such as the ones emitted by a button, a timer, etc. Signals are associated with widgets of some sort. There is another range which are not associated with widgets, but that can be triggered at the user command.
 
-    self.p.setData(self.xdata, self.ydata)
+In the Designer, we can add a \texttt{File} menu, by double clicking the top bar of the main window, where it says \texttt{Type Here}, and inside the File menu, we can create a \texttt{Save} option. As soon as we create the Save, the Designer will also show an \emph{Action} defined. We can find the action listed at the bottom of the right sidebar, as we show on the image below. Note that the name assigned by default is \texttt{actionSave}.
 
-    if not self.experiment.running_scan:
-        self.stop_scan()
-\end{minted}
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/13_menu_file.png}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/Chapter_09/13_action_save.png}
+\end{minipage}
 
-First, you get the data from the experiment and copy it to class
-variables. Doing this is not mandatory, because it is only duplicating
-the information, but it is a strategy that can be very useful when you
-are getting data from a buffer. Buffers have a limited amount of memory
-and you empty them by reading the available values. In this case, it
-would mean that the data is not being stored in the experiment class,
-but directly in the user interface class. It is important to note the
-highlighted line. You are not using the \mintinline{python}{plot} method again, you
-are just updating the data from the plot. This is much more efficient,
-as was discussed earlier.
+If we pay attention to what appears on that square, we see that there is also the possibility of defining a shortcut. We can go ahead, double-cliking on it will open a small configuration window in which we can add a shortcut, such as Ctrl+S. Just clicking on the shortcut edit line and then pressing a combination of keys will do it. After saving, we can run the program again and we will have a File menu with a Save option, and the shortcut will be written next to it, so there are no possible confusions.
 
-\exercise{Change the \mintinline{python}{setData} method for
-\mintinline{python}{self.main_plot.plot(...)}. Is the difference between one and
-the other appreciable?}
+We need to connect the \texttt{actionSave} to the method in our experiment for saving data. Because of how we structured the code, this now becomes almost trivial, in the \texttt{\_\_init\_\_} of the \texttt{MainWindow} we just add the following:
 
-Note that at the end of the \mintinline{python}{update_scan} method, you are also
-checking if the experiment is actually running or not. If the scan has
-finished, then you are going to trigger the \mintinline{python}{stop_scan} method.
-You need to do this to enable the user to trigger a new scan. Remember
-that you are checking the value of \mintinline{python}{experiment.running_scan}
-periodically. Once the scan is over, you also want to keep refreshing
-the plot with the same data. Therefore, you will need to update the
-\mintinline{python}{stop_scan} method to stop the timer:
+\mint{python}{self.actionSave.triggered.connect(self.experiment.save_data)}
 
-\begin{minted}{python}
-self.update_timer.stop()
-\end{minted}
+We can use signals to trigger methods in other objects, not only in the window itself. When the experiment gets more complex, it can be very helpful to just trigger the model to do something than first defining a method on the window to then trigger the model. If we run the program again, we can save the data either by going to File/Save, or by pressing Ctrl+S. Go ahead and check the folder you specified in the config file, and you will see the data appearing there.
 
-\section{Saving Data}\label{savingdata}
-What you have now is a fully functional scan program, but there is an
-important feature missing. If you trigger a scan, you will have the data
-confined to your own program and you will not be able to analyze it
-afterward. When you triggered a scan from the command line, you have
-also saved the data to a file, and you should be able to do the same
-from within the {GUI}.
+\note{Adding shortcuts for actions can be a good idea but it also has risks. Shortcuts are hard to document, and some shortcuts are so common that is better not to re define them. We could have used Ctrl+S to Start the scan. But then, we need to stop it and choose Ctrl+X, because it is right below. To save, we need to choose another shortcut, and choose Ctrl+Q because it is on top of the S. All these shortcuts are normally used for something else, like saving, cutting and closing a window. We are free to use them as we wish, but over usage leads to a perilous path.}
 
-\exercise{Add a button to the {GUI} that says \mintinline{text}{Save Data}. Connect the button to
-a new method that saves the data to a file, in a similar way to what was
-done through the command line in a previous chapter.}
+Of course, we may be tempted to open a pop-up dialog to ask for the folder where to save data. But again, this has a complex set of possibilities. If we open a pop-up every time we want to save data, it becomes annoying, especially if we save data often. If we show it only the first time, then we won't be able to change later on, wondering why we showed it on the first place. This means we need to establish two behaviors: \emph{save} and \emph{save as}. We won't show how to do it here, but we will leave it as an exercise:
 
-\begin{center}
-\includegraphics[width=0.6\textwidth]{images/save_menu.png}
-\end{center}
+\exercise{Qt bundles a \texttt{QFileDialog} widget, which allows the user to select a folder in the computer or create a new one. It can be used like this: \py{folder = QFileDialog.getExistingDirectory(self, 'Choose Folder')}. Create a new action in the Designer to select the folder, and a new method in the main window to handle the selection of a directory to save the data.}
 
-If you grabbed the \textbf{scan\_window.ui} from the
-\href{https://github.com/PFTL/SimpleDaq/tree/master/PythonForTheLab/View/GUI}{Github
-repository} you probably found that there is a menu at the top, called
-\mintinline{python}{File} with a \mintinline{python}{Save} option. Having a File menu is the
-normal behavior of most programs in most systems, making it an intuitive
-place to find such an option. Working with the Menu is almost as easy as
-working with a button, you just need to connect the appropriate signal
-to the appropriate method in the class. If you open the design file in
-the Qt Designer, you will find an element called \mintinline{python}{action_Save}
-that appears as a \mintinline{python}{QtAction} instead of a button. Details are not
-important, you should just know that inside of menus you will find
-actions and not buttons. However, for the purposes of the program, they
-work in pretty much the same way. You have to update the
-\mintinline{python}{__init__} method to hook the proper signal:
+\section{Conclusions}\label{sec:conclusions}
+This is a chapter of great joy. It is the conclusion of a great journey, from developing a driver, to creating models to abstract the behavior we expect both of the device and of the measurement we want to do, and finally to develop a user interface that works and looks nice.
 
-\begin{minted}{python}
-self.action_Save.triggered.connect(self.save_data)
-\end{minted}
+This chapter focused on learning how to use the Qt Designer, a great tool to speed up the development of user interfaces. We covered the basic tools and patterns that one can expect to find in most user interfaces for scientific experiments. Qt, however, is a massive library that allows to build almost anything, from the interface you see in some Mercedes cars to coffee vending machines, to programs running right now on your computer or mobile phone.
 
-\begin{center}
-\includegraphics[width=0.6\textwidth]{images/save_shortcut.png}
-\end{center}
+We have merely scratched the surface of what Qt offers. For scientific applications, however, we don't need to go much deeper. We are normally fine with simple styling of the objects and a simple menu structure. We can change font-sizes, colors, roundness of edges. We can make floating menus that open by right clicking on an image, and many more things. But we always have to draw a line between how much effort and time we are dedicating to making a program look better and how much time are we dedicating to running an experiment.
 
-As easy as that. If you followed the previous exercise, you should have
-already defined a method for saving data, so you can just use it. As an
-extra, bear in mind two more things. When you define the name for the
-menus and the actions you are going to place inside, you can use the
-special character \mintinline{python}{&} to make it possible to select that menu by
-pressing Alt plus the letter the immediately follows. Therefore, if you
-call the menu \mintinline{python}{&File}, when you press Alt+F the menu will be
-opened. The same with the action, that is called \mintinline{python}{&Save}.
-Therefore, Alt+F opens the File menu, and if you press S it will save
-the data. This is handy to go quickly through more complex menus without
-using the mouse. You can also define a shortcut for your action, and you
-do so directly from within the designer, as is shown in the image.
-Whenever you press Ctrl+S you are going to save the data.
+\section{Where to Next}\label{sec:where-to-next}
+If you reached this point, it means that you have kickstarted your career as a Scientific Python Developer, hurrah!. What we have covered in this book is only the beginning. Devices can be much more sophisticated than a simple DAQ, the data we display may need to be analysed before plotting, or the memory on our computer may not be enough to hold one complete measurement.
 
-Saving data as you have done up to now is handy but lacks some
-functionality. For example, you are never asking the user where to save
-the data. If you are the only user of your program and you have a folder
-where you store all the data, it is a safe bet to default to that
-folder. If you are planning to have more users, it is imperative that
-you give the users the option to choose. Fortunately, it is incredibly
-easy, you can do so with only one line of code:
+Our advise during the workshops is that you should work on what you have learned for at least 6 months. Trying to develop solutions for the tools you already have at hand, such as an Oscilloscope, or your own data acquisition card. In this book we have guided you, we have prevented you from falling in some errors. The reality is that you won't master any technique until you try by yourself, fail by yourself, and solve a problem by yourself.
 
-\begin{minted}{python}
-self.directory = str(QtWidgets.QFileDialog.getExistingDirectory(
-                    self, "Select Directory", self.directory))
-\end{minted}
+In order to accompany you in this process, we have built a forum, available at https://forum.pythonforthelab.com. You can ask any question related to programming, work in the lab, or Python. If you have any comments, suggestions, compliments, critiques to send us, you can do it directly to me, at aquiles@pythonforthelab.com. I always want to read how is your path going, what topics are making you struggle.
 
-This will open a dialog where the user can select the directory where to
-save the data. For it to work, remember to initialize the variable
-\mintinline{python}{self.directory} within the \mintinline{python}{__init__} method. If you
-initialize it to an existing directory (for example
-\mintinline{python}{C:\textbackslash{}\textbackslash{}Data}), the dialog will start
-in that specific place, perhaps saving some searching time to the user.
-If not, just initialize it to \mintinline{python}{None} and the dialog will start in
-your current directory. Now that you have a directory, don't forget to
-use what you have already learned, i.e., don't forget to use
-\mintinline{python}{os.path.join}. Also, next time you save data, you will start in
-the same directory than last time (\mintinline{python}{self.directory}).
-
-\exercise{Now every time the user wants to save data, a dialog appears asking for
-the directory. Find a way to ask for the directory only once and assume
-that the next time the file will be saved in the same directory.}
-
-It is also important to be able to add elements to the menu from Python.
-Sometimes you are using a designer file that you don't want to modify,
-because it is shared amongst different developers, but you still want to
-personalize your own program. Following the examples below, you will be
-able to create a new menu called \mintinline{python}{Scan}, next to the
-\mintinline{python}{File} menu, with two actions, one for starting and one for
-stopping a scan. First, you can create a new menu by doing to following:
-
-\begin{minted}{python}
-menubar = self.menuBar()
-self.scanMenu = menubar.addMenu('&Scan')
-\end{minted}
-
-The first line is responsible for addressing the menu bar of the main
-window. It follows the same pattern as for when you used the layout of
-the central widget. The second line adds a new menu to the menu bar,
-called \mintinline{python}{scanMenu} and will display the text \mintinline{python}{Scan}. Again,
-the \mintinline{python}{&S} means that you will be able to open the menu by
-pressing Alt+S. Next, you have to define the proper actions to add to
-the menu:
-
-\begin{minted}{python}
-self.start_scan_action = QtWidgets.QAction("Start Scan", self)
-self.start_scan_action.setShortcut('Ctrl+Shift+S')
-self.start_scan_action.setStatusTip('Start the scan')
-self.start_scan_action.triggered.connect(self.start_scan)
-\end{minted}
-
-In the first line, you create the action and you set its name to \mintinline{python}{'Start
-Scan'}. The \mintinline{python}{self} is to explicitly set the parent for the
-action, in your case it is the \mintinline{python}{ScanWindow}. Then you set the
-shortcut for the action, in this case, Ctrl+Shift+S. The status tip is
-something you haven't use so far, but it will help the user to
-understand what will happen if the action is triggered. If you look in
-your program, you will see that the message is being displayed at the
-bottom of the screen. The last line connects what happens when the
-action is triggered, in your case, a scan is started. The only missing
-thing is to add the action to the menu, like this:
-
-\begin{minted}{python}
-self.scanMenu.addAction(self.start_scan_action)
-\end{minted}
-
-\warning{Adding keyboard shortcuts is a great way of shortening both the
-development time and the interaction with the interface. It is much
-faster pressing Ctrl+S than going with the mouse to the menu, etc.
-However, it is important to document every shortcut that you add to your
-program. Some are intuitive and the user may try them without thinking,
-like the saving. However, imagine that you create a shortcut Alt+S to
-start a scan, Alt+F to stop it, etc. You should seriously consider
-adding a separate text file to your project describing the
-available shortcuts.}
-
-Adding elements to the menu is very handy because it allows you to add a
-lot of functionality without cluttering the user interface. Menus can
-also be nested, you could have added the scan menu to the file menu, for
-example. Now that you are able to start the scan, you should also be
-able to stop it.
-
-\exercise{Add a new entry to the menu that allows the user to stop the scan. Pay
-attention to the shortcut that you specify.}
-
-For simple programs, you can still work with buttons on the screen. For
-more complex programs, you may need to have a clear interface, perhaps
-just plotting data and extra options in the menu, that doesn't get in
-the way.
-
-\section{Quitting the program}\label{quitting-theprogram}
-Your program is very functional, you can acquire and save data, you
-check that the user does not trigger more than one scan at a time.
-However, there is a very important piece missing. When the user quits
-the program, the communication with the device is suddenly interrupted,
-which is not the desired behavior. To prevent this, you can add an extra
-method for quitting. You only need to overwrite a method inherited from
-\mintinline{python}{QMainWindow}:
-
-\begin{minted}{python}
-def closeEvent(self, event):
-    super().closeEvent(event)
-\end{minted}
-
-In this case, nothing is happening because you are just relaying the
-method to the parent class' method. However, you can add any code you
-want to execute before calling \mintinline{python}{super().closeEvent}. For example,
-you could finalize the communication with the device:
-
-\begin{minted}{python}
-def closeEvent(self, event):
-    print('Closing the window')
-    super().closeEvent(event)
-\end{minted}
-
-At this point is where you realize that you haven't developed a way of
-finishing the communication with the device from the experiment class
-nor from the model. However, the driver indeed has a \mintinline{python}{finalize}
-method. Suddenly, you realize that you missed an important feature
-upstream. You should be aware that in the design pattern that you are
-using, from the View you should interact only with the experiment model,
-and not directly with the driver. Therefore, to add this new
-functionality you need to solve the following exercises in order:
-
-\exercise{Add a method \mintinline{python}{finalize} to the base {DAQ} model.}
-
-\exercise{Reimplement the method \mintinline{python}{finalize} in the \mintinline{python}{AnalogDaq}
-model, using the finalize method from the driver.}
-
-\exercise{Create a method in the experiment model that handles what happens when
-the experiment is over. For example, communication with the {DAQ}
-should be ended with the \mintinline{python}{finalize} method. Perhaps you want to
-add something else, such as forcing the save of the parameter metadata
-or the data itself.}
-
-\exercise{Update the method \mintinline{python}{closeEvent} in the \mintinline{python}{ScanWindow} in
-order to use the finalizing method of your experiment class.}
-
-\section{Conclusions}\label{conclusions}
-This is the most rewarding chapter of the book and, alas, the last one.
-You have made the jump from a working {GUI} to a usable interface. It is
-very important to point out that many of the things you have developed
-in this chapter were so easy because of how you structured the different
-classes in the previous chapter. For example, the method
-\mintinline{python}{do\_scan} in the experiment class was developed in such a way
-that it makes it very easy to add and trigger it from the {GUI}.
-
-If you start a project from scratch, you will be tempted to skip some
-steps in order to have results faster. Trying to reach your objectives
-earlier is very valid, and there are many scenarios where there will be
-no further development of your code. In those cases, take the shortcut
-and deliver results as fast as you can. However, sometimes you know you
-are building something to last. In those cases do not jump ahead. Take
-the time you need to reflect on how do you see the future of the code
-you are writing. There are going to be different things to polish here
-and there, but if the basis is well developed, you are going to save a
-lot of time when trying to add new functionalities.
-
-In the case of code that you thought it was never going to grow and
-suddenly you start using it very often, don't be afraid of doing a
-refactoring and transforming older scripts into classes, modules, etc.
-Remember always a general rule of thumb: if you are copy/pasting lines
-of code more than twice, then you should have done something
-differently. You could have written a function that takes care of your
-process, or a class, etc.
-
-In this chapter, you have achieved something that very few people can
-say they can do. You have built an interface for a real-world
-experiment. You can acquire a signal, change the output, change the
-input, change the ranges. You can also save the data and the metadata.
-However, there is still much more that can be improved and developed. Of
-course, in the real world, once you have a working application, you can
-add new options when the need arises or when you have some free time.
-
-\section{Where to go next}\label{where-to-gonext}
-At this point, you have acquired a lot of knowledge that you can put
-into action. The first logical step is to test what you have learned
-from your own experiment. You can go through the steps of the book,
-adapting each piece of code to your needs. Don't be afraid of reusing
-the pieces of code such as windows and models that can be useful for
-your project.
-
-If you are willing to continue expanding the options of the {GUI} that
-you have just built, here are some ideas. First, you can build a monitor
-for the signal. A monitor is a plot that constantly updates the value
-measured, while the x-axis shows the time. You should configure some
-parameters, such as the refresh rate, the delay between acquisitions,
-and the total time to acquire the signal. You can also create a new
-window that holds all the configuration parameters present in the {YAML}
-file. For example, the current {GUI} doesn't allow you to change the
-current user.
-
-If you are interested in a more fundamental project, you can think about
-how to deal with sensors connected to a {DAQ}. There is a common
-pattern, in which a voltage is converted into another quantity. For
-example, an analog output connected to a piezo stage would transform
-voltages into distances. In the example built in this book, you are
-measuring a voltage, which can be converted to a current if you know the
-resistance connected. Dealing with calibrations, sensors, and actuators
-can be achieved through new yaml files and models for the experiment.
-
-Of course, there are many more topics that can be useful for different
-researchers. If you have any suggestions, doubts or have found mistakes
-please contact us, we are always eager to hear from our readers.
+If you are interested in a follow-up to this book, covering more advanced topics, please drop me a line. I am always seeking new ideas, topics, challenges, not only to produce content, but to learn myself. I do a periodic braindump of what I learn on the website pythonforthelab.com, but most of the time is not organized as this book is. If some things grab your attention, you can always leave a comment to let us know.
