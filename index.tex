@@ -18,6 +18,12 @@
 \definecolor{notecolor}{RGB}{100, 149, 237}
 \definecolor{warncolor}{RGB}{255, 59, 0}
 \definecolor{warntitle}{RGB}{255, 59, 0}
+
+\definecolor{pftl-red}{RGB}{204, 24, 30}
+\definecolor{pftl-blue}{RGB}{39, 147, 232}
+\definecolor{pftl-green}{RGB}{85, 153, 0}
+\definecolor{pftl-dark}{RGB}{102, 102, 102}
+\definecolor{pftl-light}{RGB}{241, 241, 241}
 \usepackage{hyperref}
 \usepackage{fontspec}
 
@@ -42,22 +48,22 @@ ItalicFont = libertinussans-italic,
 
 \usepackage{minted}
 \setminted{breaklines, autogobble, fontsize=\footnotesize}
-\setminted[]{bgcolor=bg}
+\setminted[]{bgcolor=pftl-light}
 
 \newenvironment{warning}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={warncolor}, colback=red!5!white, title={Warning}, outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
     {#1}
     \end{tcolorbox}
 }
 
 \newenvironment{note}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={notecolor}, colback=blue!5!white, title={Note}, outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
     {#1}
     \end{tcolorbox}
 }
 
 \newenvironment{exercise}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={exertitle}, colback={exer}, title={Exercise},outer arc=2mm]
+    \begin{tcolorbox}[width=\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
     {#1}
     \end{tcolorbox}
 }
