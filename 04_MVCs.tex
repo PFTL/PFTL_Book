@@ -190,7 +190,7 @@ ModuleNotFoundError: No module named 'controller'
 
 Python searches for packages in specific locations, and once it finds one, it stops searching. \emph{Numpy} is located in one of the folders that python will use, but Python is not aware of our package yet. One of the ways in which we can let Python know where our package is located is by adding the folder to a system variable called \emph{PYTHONPATH}.
 
-On Windows, we can follow the steps explained on Section \ref{section:path-windows}, when we were dealing with the details of adding environment variables after installing Python. The only difference is that we should use the variable PYTHONPATH instead of just PATH. On Linux, it is enough to run the following command:
+On Windows, we can follow the steps explained on Section \ref{subsec:path-windows}, when we were dealing with the details of adding environment variables after installing Python. The only difference is that we should use the variable PYTHONPATH instead of just PATH. On Linux, it is enough to run the following command:
 
 \begin{minted}{bash}
 $ export PYTHONPATH=$PYTHONPATH":/path/to/PFTL"
