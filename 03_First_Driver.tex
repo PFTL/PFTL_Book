@@ -1,31 +1,31 @@
 \chapter{Writing the First Driver}\label{chapter:first-driver}
 \section{Objectives}
-Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only their behavior is different (you can't compare a camera to an oscilloscope) but they also communicate in different ways with the computer. In this chapter,
-we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and from that experience build a reusable class that you can share with other developers.
+Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only is their behavior different (you can't compare a camera to an oscilloscope), but they also communicate in different ways with the computer. In this chapter,
+we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and, from that experience, build a reusable class that you can share with other developers.
 
 \section{Introduction}
-Devices can be split into different categories depending on how they communicate with a computer. One of the most common ways to communicate is through the exchange of text messages. The idea is that the user sends a specific command, i.e. a message, and the device answers with specific information, another message. Sometimes there is no answer, it is just a command to perform an action such as auto setting, switching off, etc. Sometimes the answer is what we were looking for.
+We can split devices into different categories depending on how they communicate with a computer. One of the most common ways to communicate is through the exchange of text messages. The idea is that the user sends a specific command, i.e., a message, and the device answers with specific information, another message. Sometimes there is no answer because it is just a command to perform an action such as an auto setting or switching off. Sometimes the message we get back contains the information we requested.
 
-To have an idea of how commands look like, you can check the manuals of devices such as oscilloscopes or function generators. Both Tektronics\footnote{You can check the manual of an oscilloscope here: https://www.tek.com/oscilloscope/tds1000-manual} and Agilent have very complete sets of instructions. If you search through their websites, you will find plenty of examples. A command that you can send to a device may look like this:
+To have an idea of how commands look like, you can check the manuals of devices such as oscilloscopes or function generators. Both Tektronics\footnote{You can check the manual of an oscilloscope here: https://www.tek.com/oscilloscope/tds1000-manual} and Agilent have complete sets of instructions. If you search through their websites, you find plenty of examples. A command that you can send to a device may look like this:
 
 \begin{minted}{bash}
  *IDN?
 \end{minted}
 
-which is asking the device to identify itself. An answer to that request would look like \texttt{Oscilloscope ID\#\#\#\#\#\#}. In this chapter, we are going to see how you can exchange messages with devices using Python.
+Which is asking the device to identify itself. An answer to that request would look like \texttt{Oscilloscope ID\#\#\#\#\#\#}. In this chapter, we are going to see how you can exchange messages with devices using Python.
 
-The devices which communicate with the computer in this way are called \textbf{message-based} devices. Some devices that belong to this category are oscilloscopes, lasers, function generators, lock-ins, and many more. The {PFTL DAQ} device that was developed to work with this book also enters into this category. If you got the book online and not as part of a workshop, you can build your device or contact us and we may be able to offer you one already programmed\footnote{courses@pythonforthelab.com}.
+The devices that exchange information with the computer in this way are called \textbf{message-based} devices. Some of this type of device are oscilloscopes, lasers, function generators, lock-ins, and many more. The {PFTL DAQ} device to work with this book also enters into this category. If you got the book online and not as part of a workshop, you can build your device or contact us, and we may be able to offer you one already programmed\footnote{courses@pythonforthelab.com}.
 
 \note{There is an entire world of devices that do not communicate through messages, such as cameras, fast data acquisition cards, motorized mirrors and stages, and more. They depend on specific drivers and are harder to work with at this stage. If you are already confident programming message-based devices and need to move to non-message based ones, you can check the Advanced Python for the Lab materials.}
 
-Remember that \textit{message-based} refers only to how the information is exchanged with the computer, and not to the actual connection with the device. A message-based device can be connected via RS-232, USB, GPIB, TCP/IP, etc. Be aware, however, that it is not a reciprocal relation: not all devices connected through RS-232, USB, etc. are message-based. If you want to be sure, check the manual of the device and see how it is controlled. In this chapter, we are going to build a driver for a message based device.
+Remember, \textit{message-based} refers only to how the device exchanges information with the computer, and not to the actual connection between them. It is possible to connect a message-based device via RS-232, USB, GPIB, or TCP/IP. Be aware, however, that it is not a reciprocal relation: not all devices connected through RS-232 or USB are message-based. If you want to be sure, check the manual of the device and see how it is controlled. In this chapter, we are going to build a driver for a message based device.
 
 \subsection{Scope of the Chapter}
-In the introduction of the book, we have discussed that the objective of the project you are building through this book, is to be able to acquire the I-V curve of a diode. You need, therefore, to set an analog output (the V) and read an analog input (the I) with the device. In this chapter, you
-will learn everything you need to perform your first measurement. However, keep in mind the onion principle which tells you that you should always be prepared to expand your code later on if the need arises.
+In the introduction, we discussed that the objective is to acquire the I-V curve of a diode. You need, therefore, to set an analog output (the V) and read an analog input (the I) with the device. In this chapter, we focus
+on everything we need to perform our first measurement. However, keep in mind the onion principle, which tells you that you should always be prepared to expand your code later on if the need arises.
 
 \section{Communicating with the Device}\label{message-basedevices}
-To communicate with the {PFTL DAQ}\footnote{PFTL is the shorthand notation for Python For the Lab} device, we are going to use a package called \texttt{PySerial}, which you should have already installed if you followed chapter \ref{ch:setting-up}. The first thing we can do is to list all the devices connected to the computer to identify the one we are interested in. Plug your device via the USB port of your computer. The {PFTL DAQ} device needs to be connected through the micro USB port which is closest to the power jack, also known as \emph{programming port}. Then, the following command in a terminal (be sure you are within the environment in which you have installed the required packages):
+To communicate with the {PFTL DAQ}\footnote{PFTL is the shorthand notation for Python For the Lab} device, we are going to use a package called \texttt{PySerial}, which you should have already installed if you followed chapter \ref{ch:setting-up}. The first thing we can do is to list all the devices connected to the computer to identify the one in which we are interested. Plug your device via the USB port of your computer. We need to connect the {PFTL DAQ} device through the micro USB port closest to the power jack, also known as \emph{programming port}. Then, the following command in a terminal (be sure you are within the environment in which you have installed the required packages):
 
 \begin{minted}{bash}
 python -m serial.tools.list_ports
@@ -33,7 +33,7 @@ python -m serial.tools.list_ports
 
 \note{From now on, instead of telling you to open a terminal to run a command, if you see code which starts with a \texttt{\$} symbol, it means that you should run it in the terminal}
 
-Depending on your operating system the output you'll see will be slightly different. If you are on Windows, you will get something like this:
+Depending on the operating system, the output can be slightly different. On Windows, we get something like this:
 
 \begin{minted}{bash}
 COM3
@@ -45,7 +45,7 @@ While if you are on Linux you will see something like this:
 /dev/ttyACM0
 \end{minted}
 
-The most important thing is to remember the number at the end. If you happen to see more than one device listed (this is very common on Mac), unplug the {PFTL DAQ}, run the command to list the ports again, note which ones appear. Plug it back and list the devices. The new one will be the device you are interested in.
+The most important thing is to remember the number at the end. If you happen to see more than one device listed (this is very common on Mac), unplug the {PFTL DAQ}, run the command to list the ports again, note which ones appear. Plug it back and list the devices. The new one is the device in which we are interested.
 
 Now is time to start working with the device. Start Python by running:
 
@@ -59,7 +59,7 @@ And then we can start working directly from the command line. First, we are goin
 >>> import serial
 \end{minted}
 
-\note{In the same way that we explained earlier that everything prepended with a \$ sign should be run in a terminal, everything prepended by \texttt{>>>} is meant to be run within a Python interpreter, as we are doing here. Note that you should not type the \texttt{>>>}}
+\note{Earlier we explained that we must run in a terminal everything prepended with a \$. Lines prepended by \texttt{>>>} are lines that run in a Python interpreter. Note that there is no need to type the \texttt{>>>}}
 
 And then we can open the communication with the device. Bear in mind that you must change the port number by the one you got earlier:
 
@@ -67,7 +67,7 @@ And then we can open the communication with the device. Bear in mind that you mu
 >>> device = serial.Serial('/dev/ttyACM0') # <---- CHANGE THE PORT!
 \end{minted}
 
-Now we are ready to get started exchanging messages with the device. Before we discuss each line, let's see what you can do. Also, note that the lines without \texttt{>>>} are the output that the code generates and that gets printed to the screen.
+Now we are ready to get started exchanging messages with the device. Before we discuss each line, let's see what you can do. The lines without \texttt{>>>} are the output generated by the code.
 
 \begin{minted}{pycon}
 >>> device.write(b'IDN\n')
@@ -78,25 +78,25 @@ The answer is: b'General DAQ Device built by Uetke. v.1.2019\n'
 >>> device.close()
 \end{minted}
 
-Even if short, there are a lot of things going on in the code above. First, we import the \texttt{PySerial} package, noting that we are actually importing \texttt{serial} and not \texttt{PySerial}. Then we open the specific serial port that identifies the device. Bear in mind that serial devices can maintain only one connection at a time. If you try to run the line twice it will give you an error letting you know that the device is busy. This is important if, for example, you are running two programs at the same time. Or if you start Python from two different terminals.
+Even if short, many things are going on in the code above. First, we import the \texttt{PySerial} package, noting that we are actually importing \texttt{serial} and not \texttt{PySerial}. Then we open the specific serial port that identifies the device. Bear in mind that serial devices can maintain only one connection at a time. If you try to run the line twice, it gives you an error letting you know that the device is busy. It happens if, for example, we try to run two programs at the same time, or if we start Python from two different terminals.
 
-Once the connection is established, you send the \textbf{{IDN}} command to the device. But this is not as simple as that. First, there is a \mintinline{python}{\n} at the end. This is a special character known as \texttt{newline}. It is a way to tell the device that we are
-not going to send more information afterward. When a device is receiving a command it will read the input until it knows that no more data is arriving. Imagine that you are sending a value to a device, for example, you want to set the output wavelength of a laser to $1200\,\textrm{nm}$. The command could look like  \texttt{SET:WL:1200}, however, the device needs to know when it has received the last number. It is of course not the same to set the laser wavelength to $120\,\textrm{nm}$ than to $1200\,\textrm{nm}$.
+Once we established the connection, we send the \textbf{{IDN}} command to the device. There are some caveats in the process. First, the \mintinline{python}{\n} at the end, is a special character known as \texttt{newline}. It is a way to tell the device that we are
+not going to send more information afterward. When a device is receiving a command, it reads the input until it knows that no more data is arriving. If we were sending a value to a device such as a wavelength, the command could look like \texttt{SET:WL:1200}. However, the device needs to know when it has received the last number. It is not the same setting the laser wavelength to $120\,\textrm{nm}$ or to $1200\,\textrm{nm}$.
 
-The other which is special is the \mintinline{python}{b} before the string we are sending. Adding the \mintinline{python}{b} in front of a string is one of the ways of telling Python to encode a string to binary code. As you can imagine, devices don't understand what an \textit{A} is, they understand only about 1's and 0's. Therefore, you need to transform any string such as \mintinline{python}{'IDN'} to bytes before sending it to the device. If you are curious about this, there is a lengthier discussion at the end of the chapter, in section \ref{section:unicode}.
+The other particular detail is the \mintinline{python}{b} before the command string. Adding the \mintinline{python}{b} in front of a string is one way of telling Python to encode a string as a binary string. Devices don't understand what an \textit{A} is. The serial communication can only send a stream of 1's and 0's. Therefore, we need to transform any information we are trying to send, such as \mintinline{python}{'IDN'}, to bytes before we can send it to the device. We give a lengthier discussion about encoding strings and what it means at the end of the chapter, in section \ref{section:unicode}.
 
-After we write to the device, we get a \texttt{4} as output. This is the number of bytes we \mintinline{python}{\n} counts as only one in this case. To get the answer that the device is generating for us, you have to read from it, and we use the method \mintinline{python}{readline()} for this. Then we print the answer to the screen. You can see that the answer we get also has a \texttt{\\n} and a \texttt{b}. Finally, we close the connection to the device.
+After we write to the device, we get a \texttt{4} as output. It is the number of bytes we sent, taking into account that \mintinline{python}{\n} is only one byte because it is only one character. To get the answer that the device is generating for us, we have to read from it. We use the method \mintinline{python}{readline()} for this. Then we print the answer to the screen. The answer we get also has a \texttt{\\n} and a \texttt{b}. Finally, we close the connection to the device.
 
-We decided to use the \texttt{IDN} command because we knew it existed. But if you are starting with a new device it is always fundamental to start with the manual. Manuals are your best and, perhaps, the only friend when developing software for controlling instruments. The {PFTL DAQ} is no exception, the manual is part of the book, you can find it in chapter \ref{chapter:pftl-daq-manual}. It is a very simple manual, but with enough information to get started, and it follows similar conventions to those you can find on more complex devices.
+We decided to use the \texttt{IDN} command because we knew it existed. But if we are starting with a new device, it is always fundamental to start by reading the manual. Manuals are our best and, perhaps, the only friend we have when developing software for controlling instruments. The {PFTL DAQ} is no exception. The manual is part of the book, and we can find it in chapter \ref{chapter:pftl-daq-manual}. It is a simple manual, but with enough information to get started, and it follows similar conventions to those we can find on more complex devices.
 
-In the manual, the first thing you have to find is the line termination. We used the newline character because we knew it, but each device can specify something different. Some devices use the newline character as part of the commands you can send and therefore the line ending must be set to something else. Once you know how to terminate commands, you can go ahead and see the list of options. Many devices (but not all) follow a standard called \href{https://en.wikipedia.org/wiki/Standard_Commands_for_Programmable_Instruments}{SCPI}. If you check the manuals of different devices, you may notice that some structure in the commands is repeated.
+In the manual, the first thing we have to find is the line termination. We used the newline character because we knew it, but each device can specify something different. Some devices use the newline character as part of the commands you can send and specify that the line ending must be something else. Once we know how to terminate commands, we can go ahead and see the list of options.
 
-Devices which follow the SCPI standard are easy to exchange, because the commands for all oscilloscopes are the same, for all function generators are the same, etc.
+Many devices (but not all) follow a standard called \href{https://en.wikipedia.org/wiki/Standard_Commands_for_Programmable_Instruments}{SCPI}. The standard makes devices easy to exchange, because the commands for all oscilloscopes are the same, for all function generators are the same, and so forth. Moreover, the SCPI standard follows a structure that makes messages easy to understand and modular. A more powerful oscilloscope, for example, has commands not available to a more basic device, but the common features are controlled by the same messages.
 
-Now that you know how to get started with serial communication, it is time to move to more complex programs. Typing everything on the Python interpreter is not handy and takes a lot of time. So now we can start working with files.
+Now that we know how to get started with serial communication, it is time to move to more complex programs. Typing everything on the Python interpreter is not handy and takes much time. So now we can start working with files.
 
 \subsection{Organizing Files and Folders}
-When you start a project, it is always important to be organized. In the previous chapter you have set up an environment for developing your program, that is the first step to be organized. The second step is deciding where you are going to save the files you need to write your program. Our advice is to have a general folder and then one folder per project. You could have one folder called \texttt{Programs} and then you create an extra one called \texttt{PythonForTheLab} for what we are building in this book. We leave the decisions to you, but it is very important that from now on when we ask you to create a file you do it always in the same folder.
+When we start a new project, it is always a good idea to decide how we are going to organize the work. In the previous chapter, we have set up an environment for developing a program. That is the first step to be organized. The second step is deciding where we are going to save the files we need to write our program. The general advice is to have a folder for all the programs, for example, \texttt{Programs}. Inside, each project we work on has its folder, such as \texttt{PythonForTheLab}. Each person has their way of organizing themselves, but from now on, every time we talk about creating a file, we are referring to that base folder for the project.
 
 \section{Basic Python Script}
 The code we have developed above can also be written as a Python script, that we can run from the command line without the need to re-write everything. Create an empty file called \textbf{communicate\_with\_device.py}, and add the same code we had earlier to it:
@@ -119,11 +119,11 @@ Now we can run the file:
 $ python communicate_with_device.py
 \end{minted}
 
-\note{To be able to run the file, you need to be in the same folder where the file is located. To change the folder in the terminal, you can use \texttt{cd}}
+\note{To be able to run the file, you need to be in the same folder where the file is. To change the folder in the terminal, you can use \texttt{cd}}
 
 \textbf{What happens when you run the file?}
 
-The program hangs. No error appears on the screen, no IDN information is printed. This means the program is waiting for something to let it continue. To force the stop of the program, you can press Ctrl+C, and if this does not work on Windows, you can press Ctrl+Pause/Break. Now can see the easiest way to debug when such a situation appears.
+The program hangs, there is no error message and no IDN information printed to the screen. It means the program is waiting for something to let it continue. To force the stop of the program, you can press Ctrl+C, and if this does not work on Windows, you can press Ctrl+Pause/Break. Now can see the easiest way to debug when such a situation appears.
 
 We want to know first when the program hangs, and then we can see how to fix it. So we can edit the file and add some print statements to check until which point is running:
 
@@ -142,8 +142,7 @@ print(f'The answer is: {answer}')
 
 device.close()
 print('Device closed')
-\end{minted}
-
+\end{minted}n
 Run the script again. \textbf{Where is it hanging?} Surprisingly, it is hanging during the \texttt{readline} execution. Can you understand what is going on?
 
 There is something very different between writing on the Python interpreter and running a script: the time it takes to go from one line to the other. While you type, everything happens slowly, while when you run a script, everything is executed incredibly fast. Now, the \texttt{readline} is waiting to get some information from the device, but the devices are not generating it. This means that the problem should be earlier when we sent the \texttt{IDN} message. The command is not wrong in itself, but what is happening is that between opening the communication with the device and sending the first message, we give no space.
