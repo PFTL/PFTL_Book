@@ -143,9 +143,9 @@ print(f'The answer is: {answer}')
 device.close()
 print('Device closed')
 \end{minted}n
-Run the script again. \textbf{Where is it hanging?} Surprisingly, it is hanging during the \texttt{readline} execution. Can you understand what is going on?
+Rerun the script. \textbf{Where is it hanging?} Surprisingly, it is hanging during the \texttt{readline} execution. Can you understand what is going on?
 
-There is something very different between writing on the Python interpreter and running a script: the time it takes to go from one line to the other. While you type, everything happens slowly, while when you run a script, everything is executed incredibly fast. Now, the \texttt{readline} is waiting to get some information from the device, but the devices are not generating it. This means that the problem should be earlier when we sent the \texttt{IDN} message. The command is not wrong in itself, but what is happening is that between opening the communication with the device and sending the first message, we give no space.
+There is something very different between writing on the Python interpreter and running a script: the time it takes to go from one line to the other. While you type, everything happens slowly, while when you run a script, everything happens incredibly fast. Now, the \texttt{readline} is waiting to get some information from the device, but the devices are not generating it. It means that the problem should be earlier when we sent the \texttt{IDN} message. The command is not wrong in itself, but what is happening is that between opening the communication with the device and sending the first message, we give no space.
 
 When you establish communication with most devices, there is a small delay until you can start using it. In our case, we must add a delay between starting the communication and sending the first message. We can achieve this by doing the following:
 
@@ -163,10 +163,10 @@ device.close()
 print('Device closed')
 \end{minted}
 
-If you run the program again, you will notice that it takes a bit of time to run, but it will output the proper message. The \texttt{sleep} function makes the program wait for a given number of seconds (also fractions) before continuing. You can try lowering the number until you get the minimum possible value, but in normal cases, you start the communication only once, therefore waiting 1 second or .5 seconds won't have a great impact on the overall execution time.
+If you rerun the program, you can see that it takes a bit of time to run, but it outputs the proper message. The \texttt{sleep} function makes the program wait for a given number of seconds (also fractions) before continuing. You can try lowering the number until you get the minimum possible value. Still, in typical cases, you start the communication only once, therefore waiting 1 second or .5 seconds won't have a significant impact on the overall execution time.
 
 \subsubsection{Reading an Analog Value}
-Before we continue, it would be great to also read a value from the device, not just the serial information. If we refer again to the manual, we see that the way of getting an analog value is using the \texttt{IN} command. We can modify the code on our previous program to read a value with the device:
+Before we continue, it would be great to also read a value from the device, not just the serial number. If we refer again to the manual, we see that the way of getting an analog value is using the \texttt{IN} command. We can modify the code on our previous program to read a value with the device:
 
 \begin{minted}{python}
 import serial
@@ -186,7 +186,7 @@ device.close()
 print('Device closed')
 \end{minted}
 
-The value you are reading probably doesn't make much sense, especially if nothing is connected to the input number 0, it is just noise. But it is a very good first step, we can now read a value from the real world using the device. There are of course many things to address, and we will take care of them soon.
+The value you are reading doesn't make much sense, especially if there is nothing connected to the input number 0; it is just noise. But it is an excellent first step. We can acquire a value from the real world using the device. We take care of all the things that we need to address in the following chapters.
 
 \exercise{What happens if you use \mintinline{python}{read()} instead of \mintinline{python}{readline()}?}
 
@@ -197,17 +197,15 @@ The value you are reading probably doesn't make much sense, especially if nothin
 \exercise{What happens if you try to write to the device after you have closed it?}
 
 
-\note{\textbf{Important note about ports}: If you are using the old {RS}-232 (also simply known as \emph{serial}), the number refers to the physical
-number of the connection, on Windows, it will be something like {COM1}, on Linux and Mac, it will be something like /dev/ttyACM1. In modern computers, you will hardly find any {RS-232} connections, and most likely you are using a {USB} hub for them. This means that there is no physical connection
-straight from the device into the motherboard. The numbering can change if you plug/unplug the cables. The {PFTL} device, since it acts as a hub
-for a serial connection, can show the same behavior. If you plug/unplug the device while it is being used, most likely the port will change. The second time you run the program, you will need to update the information.}
+\note{\textbf{Important note about ports}: If you are using the old {RS}-232 (also simply known as \emph{serial}), the number refers to the physical number of the connection, on Windows, it is something like {COM1}, on Linux and Mac, it is something like /dev/ttyACM1. In modern computers, there are no {RS-232} connections, and most likely, we have to use a {USB} hub for them. It means that there is no physical connection
+straight from the device into the motherboard. The numbering can change if we plug/unplug the cables. The {PFTL DAQ} device, since it acts as a hub for a serial connection, can show the same behavior. If you plug/unplug the device while it is being used, the port we get the second time is likely different. The second time we run the program, we need to update the information.}
 
 \exercise{Read the manual of the {PFTL DAQ} and find a way to set an analog output to 1 Volt.}
 
 \section{Preparing the Experiment}
 Before moving forward with programming, it is time to set up the measurement we want to perform and discuss what we need to achieve it. This book revolves around the idea of measuring the I-V curve of a diode. If you are not too familiar with electronics, don't worry, it is not essential to follow the book, you can just copy the connections as shown below. If you are a bit more familiar with electronics, it is worth explaining what we are going to do.
 
-Diodes are elements that let current flow only in one direction, but their behavior is highly non-linear. The current flowing is not proportional to the voltage applied. We chose to use an LED for the experiments because it is easy to have visual feedback on what is going on. On the other hand, current can't be measured directly, first, it needs to be transformed into a voltage. If you are familiar with Ohm's law, you remember the relationship:
+Diodes are elements that let current flow only in one direction, but their behavior is highly non-linear. The current flowing is not proportional to the voltage applied. We chose to use an LED for the experiments because it is easy to have visual feedback on what is going on. On the other hand, we can't measure current directly. First, we need to transform it into a voltage. If you are familiar with Ohm's law, you remember the relationship:
 
 \begin{equation}
 V = I \cdot R
@@ -215,7 +213,7 @@ V = I \cdot R
 
 Voltage is current times resistance. Therefore, if we want to transform a current to a voltage, we just need to add a resistance to the circuit.
 
-To perform the experiment, we will need to apply a given voltage and read a given voltage. This is common to a wealth of experiments that can be performed, the underlying meaning is what matters.
+To perform the experiment, we need to apply a given voltage and read a  voltage. This pattern is common to a wealth of experiments. The underlying meaning is what matters.
 
 With the {PFTL DAQ} device, the connections that will allow us to apply a voltage and read a voltage are as follows:
 
@@ -224,17 +222,16 @@ With the {PFTL DAQ} device, the connections that will allow us to apply a voltag
 \caption{Schematic of the connections to perform the experiment}
 \end{figure}
 
-This is all you need to follow the rest of the book. The voltage will be applied to the LED through \texttt{DAC0}. The current will flow through the diode and the resistance. The voltage across the resistance is proportional to this current and will be acquired through the Analog In \texttt{A0} on the DAQ.
+Only three cables, an LED and a resistance, are all you need to follow the rest of the book. We apply the voltage to the LED through \texttt{DAC0}. The current flows through the diode and the resistance. The voltage that we acquire at the Analog In \texttt{A0} is proportional to the current flowing through the resistance.
 
-\exercise{Now that you have set up the experiment, know how to set and read values. Acquire the I-V curve of the diode. This is a difficult exercise, aimed at showing you that it doesn't take a long time to be able to achieve a very important goal.}
+\exercise{Now that you have set up the experiment know how to set and read values. Acquire the I-V curve of the diode. It is a challenging exercise, aimed at showing you that it doesn't take a long time to be able to achieve an essential goal.}
 
 \section{Going Higher Level}\label{section:going-higher-level}
-In the previous section, we have seen that for communication with a device there are a lot of steps that one needs to take into account, such as the
-line ending, adding the \texttt{b} in front for encoding, etc. This becomes very unhandy if the number of commands is large. The {PFTL DAQ} device is an exception because it is very limited, but there are a lot of possible improvements.
+We saw that communicating with a device implies taking into account parameters such as the line ending, or adding the \texttt{b} in front of messages for encoding. If the number of commands is large, it becomes very unhandy. The {PFTL DAQ} device is an exception because it is minimal, but there are still a lot of possible improvements.
 
-If you still remember the \emph{Onion Principle} (section \ref{section:onion-principle}), it is now the time to start applying it. If you completed the last exercise, probably you have written a lot of code to do the measurement. Perhaps you used a for loop, and acquired values in a sequence. However, if you want to change any of the parameters, you need to alter the code itself. This is not very sustainable for the future, especially if you are going to share the code with someone else.
+If you still remember the \emph{Onion Principle} (section \ref{section:onion-principle}), it is now the time to start applying it. If you completed the last exercise, you probably have written much code to do the measurement. Perhaps you used a for loop, and acquired values in a sequence. However, if you want to change any of the parameters, you need to alter the code itself. This approach is not very sustainable for the future, especially if you are going to share the code with someone else.
 
-Since we know how to communicate with the device, we can transform that knowledge into a reusable Python code by defining a class. Classes have the advantage of being easy to import into other projects, which are easy to document and to understand. Moreover, they are easy to expand later on. If you are not familiar with what classes are, check the appendix \ref{chapter:classes-in-python} for a quick overview. With a bit of patience and critical thinking, however, you will be able to follow the rest of the chapter and understand what is going on as you keep reading.
+Since we know how to communicate with the device, we can transform that knowledge into a reusable Python code by defining a class. Classes have the advantage of being easy to import into other projects, which are easy to document and to understand. Moreover, they are easy to expand later on. If you are not familiar with what classes are, check the appendix \ref{chapter:classes-in-python} for a quick overview. With a bit of patience and critical thinking, you can follow the rest of the chapter and understand what is going on as you keep reading.
 
 Create a new, empty file, called \textbf{pftl\_daq.py}, and write the following into it:
 
@@ -254,7 +251,7 @@ class Device:
 
 \end{minted}
 
-The code above shows you how to start a class for communicating with a device and get its serial number. However, if you run the file, nothing will happen. At the end of the file, add the following code:
+The code above shows you how to start a class for communicating with a device and get its serial number. However, if you run the file, nothing happens. At the end of the file, add the following code:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -262,22 +259,22 @@ serial_number = dev.idn()
 print(f'The device serial number is: {serial_number}')
 \end{minted}
 
-If we run the code again, we will get the serial number of the device. Let's go line by line to understand what is going on. First, we create a class, and we define what do we want to happen when we do \texttt{Device()}. In the \texttt{\_\_init\_\_} method we specify that the class needs a port, and we use that port to start the serial communication. The communication is stored within the class itself, as \texttt{self.rsc}, where \texttt{rsc} is just a shorthand notation for \textit{resource}. And then we sleep for one second to give time to the communication to be established.
+If we rerun the code, we get the serial number of the device. Let's go line by line to understand what is going on. First, we create a class, and we define what do we want to happen when we do \texttt{Device()}. In the \texttt{\_\_init\_\_} method, we specify that the class needs a port, and we use that port to start the serial communication. The serial communication is stored as \texttt{self.rsc} in the class itself, where \texttt{rsc} is just a shorthand notation for \textit{resource}. Then we sleep for one second to give time to the communication to be established.
 
-The second method, \texttt{idn} just repeats what we have done earlier: we write a command, we read the line and return the output. If we look at the few lines at the bottom of the file, we now see that way of working with this class is simpler. We just use \texttt{idn()} instead of having to write and read every time.
+The second method, \texttt{idn}, just repeats what we have done earlier: we write a command, we read the line and return the output. If we look at the few lines at the bottom of the file, we now see that way of working with this class is simpler. We just use \texttt{idn()} instead of having to write and read every time.
 
-\exercise{Once you read the serial number from the device, it will not change. Instead of just returning the value to the user, store it in the class in an attribute \mintinline{python}{self.serial_number}.}
+\exercise{Once you read the serial number from the device, it does not change. Instead of just returning the value to the user, store it in the class in an attribute \mintinline{python}{self.serial_number}.}
 
 \exercise{When you use the method \mintinline{python}{idn}, instead of writing to the device, check if the command was already used and return the value stored. This behavior is called caching, and is very useful not to overflow your devices with useless requests for data.}
 
 \subsubsection{Reading and Setting Values}
-We have just developed the most basic class, one that allows us to start the communication with the device and read its identification number. We can also write methods for reading an analog input or generating an output. The most important thing is to decide what argument each method needs. For example, reading a value only needs the channel that we want to read. Setting a value needs not only a channel but also the value itself. Also, reading a means that the method will return something. When you set an output, there is not much to return to the user.
+We have just developed the most basic class, one that allows us to start the communication with the device and read its identification number. We can also write methods for reading an analog input or generating an output. The most important thing is to decide what argument each method needs. For example, reading a value only needs the channel that we want to read. Setting a value needs not only a channel but also the value itself. Also, reading a means that the method returns something. When you set an output, there is not much to return to the user.
 
 \exercise{Write a method \mintinline{python}{get_analog_input} which takes two arguments: \mintinline{python}{self} and \mintinline{python}{channel} and which returns the value read from the specified channel.}
 
 \exercise{Write a method \mintinline{python}{set_analog_value} which takes three  arguments: \mintinline{python}{self}, \mintinline{python}{channel} and \mintinline{python}{value} and that sets the output value to the specified port.}
 
-Even though the exercises are important for you to start thinking by yourself, they have some caveats that are very hard to iron out if you don't have a bit of experience. First, let's look at the way of reading an analog input, we can try to develop a method that looks like this:
+Even though the exercises are important for you to start thinking by yourself, they have some caveats that are very hard to iron out if you don't have a bit of experience. First, let's look at the way of reading an analog input. We can try to develop a method that looks like this:
 
 \begin{minted}{python}
 def get_analog_input(self, channel):
@@ -345,13 +342,13 @@ volts = dev.get_analog_input(0)
 print(volts)
 \end{minted}
 
-The second time we read the analog input, we get the same value we passed to the analog output. It does not matter if it is $1000$ or $999$, it does not matter if the cables are connected or not. The value is always the same.
+The second time we read the analog input, we get the same value we passed to the analog output. It does not matter if it is $1000$ or $999$; it does not matter if the cables are connected or not. The value is always the same.
 
-\exercise{Explain why when getting the analog input we get the same value that was set earlier}
+\exercise{Explain why when getting the analog input we get the same value that we set earlier}
 
-This question is very tricky and requires that you go to read the manual of the device. If you see the documentation for the \texttt{OUT} command, you will see that it returns something: the same value that was passed to it. However, in our method, we are just writing to the device and not reading from it. This makes the message wait in the queue until next time we read from it, and this happens when we try to read an analog input.
+This question is very tricky and requires that we read the manual of the device. In the documentation for the \texttt{OUT} command, you can see that it returns something: the same value that was passed to it. However, in our method, we are just writing to the device and not reading from it. The message waits in the queue until next time we read from it, and this happens when we try to read an analog input.
 
-As you can see, the number of possible mistakes that we can do when developing this kind of programs is very large. And a lot of the mistakes will not generate an error, but can easily go unnoticed. When performing measurements, perhaps you don't realize the mistake on the \texttt{set\_analog\_output} until you are analyzing the data you acquired.
+As you can see, the number of possible mistakes that we can do when developing this kind of programs is huge. On top of that, many mistakes do not generate an error, and can easily go unnoticed. When performing measurements, perhaps you don't realize the mistake on the \texttt{set\_analog\_output} until you are analyzing the data you acquired.
 
 To solve the problem while setting the output, we just need to read from the device after setting the output:
 
@@ -363,7 +360,7 @@ def set_analog_output(self, channel, output_value):
     self.rsc.readline()
 \end{minted}
 
-We are not doing anything with the information we get, we just clear it from the device.
+We are not doing anything with the information we get. We just clear it from the device.
 
 \subsubsection{Proper Values Instead of Bytes}
 To have a bit more functional class, it would be great if we could get rid of the extra \texttt{b} and \texttt{\\n} that we get every time we use the \texttt{readline()} function. First, we need to transform bytes to strings. In the previous section we transformed strings to bytes by using \texttt{.encode('ascii')}, and to no surprise, if we want to transform bytes to a string, we can do the opposite, in the \texttt{idn} method, for example:
@@ -385,12 +382,12 @@ def idn(self):
     return answer
 \end{minted}
 
-Note that we have used \texttt{[...]} to hide the code that didn't change. Now you can go ahead and see that the output is properly formatted.
+Note that we have used \texttt{[...]} to hide the code that didn't change. Now you can go ahead and see that the output is formatted correctly.
 
 \exercise{By using what you've learned for the \texttt{idn} method, improve the \texttt{get\_analog\_input} method so that it returns an integer. \textbf{Hint:} To transform a string to an integer, you can use \texttt{int()}, for example: \texttt{int(\'12\')}.}
 
 \subsection{Abstracting Repetitive Patterns}
-When you start to develop programs there is a principle called \textbf{DRY}, which stands for \emph{don't repeat yourself}. Sometimes it is clear that code is repeating itself, for example, if we copy-pasted some lines. Sometimes, however, the repetition is not about code itself, but a pattern. {DRY} is not a matter of just typing fewer lines of code. It is a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. We would need to go through all your code to find out where the line ending is used and change it. If we would specify the line ending in only one location, changing it would require just to change one line.
+When you start to develop programs, there is a principle called \textbf{DRY}, which stands for \emph{don't repeat yourself}. Sometimes it is clear that code is repeating itself, for example, if we copy-pasted some lines. Sometimes, however, the repetition is not about code itself but a pattern. {DRY} is not a matter of just typing fewer lines of code. It is a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. We would need to go through all your code to find out where the line ending is used and change it. If we would specify the line ending in only one location, changing it would require just to change one line.
 
 First, we can specify the default parameters for our device. They will be all the constants that we need in order to communicate with it, such as line endings. We can define them just before the \mintinline{python}{__init__} method, like this:
 
@@ -407,9 +404,9 @@ class Device:
         [...]
 \end{minted}
 
-You can see that there is a lot of new information in the class. We have established a clear place where both the read and write line endings are specified (in principle they don't need to be the same), we also specify that we want to use ascii to encode the strings and that the baud rate is 9600. This value is the default of PySerial but it is worth making it explicit in case newer devices need a different option. We also specify timeouts, which are allowed by PySerial and would prevent the program from freezing if writing or reading takes too long.
+You can see that there is much new information in the class. We have established a clear place where both the read and write line endings are specified (in principle they don't need to be the same), we also specify that we want to use ascii to encode the strings and that the baud rate is 9600. This value is the default of PySerial, but it is worth making it explicit in case newer devices need a different option. We also specify timeouts, which are allowed by PySerial and would prevent the program from freezing if writing or reading takes too long.
 
-It is normally good practice to separate the instantiation of the class with the initialization of the communication. One thing is creating an object in Python, the other is to establish communication with a real device. Therefore, we can rewrite the class like this:
+It is normally good practice to separate the instantiation of the class with the initialization of the communication. One thing is creating an object in Python, and the other is to establish communication with a real device. Therefore, we can rewrite the class like this:
 
 \begin{minted}[highlightlines={9}]{python}
 def __init__(self, port):
@@ -424,8 +421,7 @@ def initialize(self):
     sleep(1)
 \end{minted}
 
-You can see that there are some major changes to the code, but the arguments of the \mintinline{python}{__init__} method are the same. We do this
-to ensure that if there is code already written, it will not fail because of a change in the number of arguments of a method. When we do this kind of change, it is called \emph{refactoring}. It is a complex topic, but one of the best strategies you can adopt is not to change the number of arguments functions take and the output should remain the same. In the class, the \mintinline{python}{__init__} definition looks the same, but its behavior is different. Now, it just stores the \mintinline{python}{port} as the attribute \mintinline{python}{self.port}. Therefore, to start the communication with the device, we will need to do \mintinline{python}{dev.initialize()}. You can also see that we have used almost all the settings from the \mintinline{python}{DEFAULTS} dictionary to start the serial communication.
+You can see that there are some major changes to the code, but the arguments of the \mintinline{python}{__init__} method are the same. In this way, code already written does not fail if we change the number of arguments of a method. When we do this kind of change, it is called \emph{refactoring}. It is a complex topic, but one of the best strategies you can adopt is not to change the number of arguments functions take, and the output should remain the same. In the class, the \mintinline{python}{__init__} definition looks the same, but its behavior is different. Now, it just stores the \mintinline{python}{port} as the attribute \mintinline{python}{self.port}. Therefore, to start the communication with the device, we need to do \mintinline{python}{dev.initialize()}. You can also see that we have used almost all the settings from the \mintinline{python}{DEFAULTS} dictionary to start the serial communication.
 
 After we do these changes, we should also update the code we use to test the device:
 
@@ -453,8 +449,8 @@ def query(self, message):
     return ans
 \end{minted}
 
-In this way, we take the message, append the proper termination and encodes it as specified in the \texttt{DEFAULTS}. Then, it writes the message to the
-device exactly as we did before. Then we read the line, we decode it using the defaults and strip the line ending. Now it is time to update the other methods of the class to use the \texttt{query} method we have just developed. Let's start with \texttt{idn}, which will now look like this:
+In this way, we take the message, append the proper termination, and encodes it as specified in the \texttt{DEFAULTS}. Then, it writes the message to the
+device exactly as we did before. Then we read the line, we decode it using the defaults and strip the line ending. Now it is time to update the other methods of the class to use the \texttt{query} method we have just developed. Let's start with \texttt{idn}, which now looks like this:
 
 \begin{minted}{python}
 def idn(self):
@@ -475,19 +471,19 @@ def set_analog_output(self, channel, output_value):
     self.query(message)
 \end{minted}
 
-For such a simple device, perhaps the advantages of abstracting patterns are not evident, but it is something that happens very often in larger programs, and being able to identify those patterns can make the difference between a successful program and something only one person can understand. Note that even if we have changed the methods for identifying, reading and setting analog values, there is no need to update the example code.
+For such a simple device, perhaps the advantages of abstracting patterns are not evident. It is something that happens very often in more extensive programs, and being able to identify those patterns can make the difference between a successful program and something only one person can understand. Note that even if we have changed the methods for identifying, reading, and setting analog values, there is no need to update the example code.
 
-It is important to see that the communication with the device is achieved through the resource \mintinline{python}{self.rsc} that is created with the method \mintinline{python}{initialize}. There is a common pitfall with this command. If we try to interact with the device before we initialize it, we would get an error like the following:
+It is important to see that we achieved the communication with the device through the resource \mintinline{python}{self.rsc} that is created with the method \mintinline{python}{initialize}. There is a common pitfall with this command. If we try to interact with the device before we initialize it, we get an error like the following:
 
 \begin{minted}{python}
 AttributeError: 'NoneType' object has no attribute 'write'
 \end{minted}
 
-We now remember why this happened, but it is very likely that in the future either we forget, or someone else is using our code and that error will be incredibly cryptical. Therefore, we suggest you do the following:
+We now remember why this happened, but it is very likely that in the future, either we forget or someone else is using our code, and the error message that appears is incredibly cryptical. Therefore, we suggest you do the following:
 
-\exercise{Improve the \texttt{query} method to check whether the communication with the device has been initialized. If it hasn't, you can print a message to the screen and prevent the rest of the program from running.}
+\exercise{Improve the \texttt{query} method to check whether the communication with the device has initialized. If it hasn't, you can print a message to the screen and prevent the rest of the program from running.}
 
-When we develop code, we must always keep an eye on two people: the future us and other users. It may seem obvious now that we will initialize the communication before attempting anything with the device, but in a month, or a year, when we dig up the code and try to do something new, we are going to be another person, and we won't have the same ideas in our mind as right now. Adding safeguards are, on one hand, a great way of preserving the integrity of your equipment, on the other, it cuts down the time it takes to find out what the error was.
+When we develop code, we must always keep an eye on two people: the future us and other users. It may seem obvious now that we initialize the communication before attempting anything with the device, but in a month, or a year, when we dig up the code and try to do something new, we are going to be another person. We won't have the same ideas in our mind as right now. Adding safeguards are, on the one hand, a great way of preserving the integrity of your equipment; on the other, it cuts down the time it takes to find out what the error was.
 
 There is only one last thing that we are missing. We have completely forgotten to add a proper way of closing the communication with the device. We can call that method \texttt{finalize}:
 
@@ -512,7 +508,7 @@ print(volts)
 dev.finalize()
 \end{minted}
 
-We may wonder why things work out fine even though we didn't have the \texttt{finalize} method in place. The answer is that PySerial is smart enough to close the communication with the device when it realizes it will no longer be used. This, however, is not always the case if the program crashes. Sometimes the communication stays open and the only way to regain control of the device is by manually shutting it off and on again. If this happens, we must always check whether the port changed.
+We may wonder why things work out fine even though we didn't have the \texttt{finalize} method in place. The answer is that PySerial is smart enough to close the communication with the device when it realizes we will no longer use it. However, it is not always the case if the program crashes. Sometimes the communication stays open, and the only way to regain control of the device is by manually shutting it off and on again. If this happens, we must always check whether the port changed.
 
 \section{Doing something in the \emph{Real World}}
 Until now, everything looked like a big exercise of programming but now it is time to start interacting with the real world. As we know from reading the manual, the {PFTL DAQ} device can generate analog outputs, and the values we can use go from $0$ to $4095$. We can expand slightly the code below the class in order to make the LED blink for a given number of times, and report the measured voltage when it is either on or off:
@@ -533,20 +529,20 @@ for i in range(10):
     sleep(.5)
 \end{minted}
 
-With this simple code, we will switch on and off the LED 10 times, and we will print to screen the values that we are reading when it is on or off. There are two things to note: first, we are switching it ON by using a value of $4000$. We have selected it because it is high enough to switch the LED on, but it has no units, it is not a voltage. The same with the value reported by the \texttt{get\_anlog\_input}, which is just an integer, but we have no idea, yet, of what it means.
+With this simple code, we can switch on and off the LED 10 times, and we print to screen the values that we are reading when it is on or off. There are two things to note: first, we are switching it ON by using a value of $4000$. We have selected it because it is high enough to switch the LED on, but it has no units, it is not a voltage. The same with the value reported by the \texttt{get\_anlog\_input}, which is just an integer, but we have no idea, yet, of what it means.
 
 Before we can proceed, we must understand how to transform Analog signals to digital values and the opposite.
 
 \subsection{Analog to Digital, Digital to Analog}\label{subsection:digitazing}
-Almost every device that we find in the lab will transform a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you are interested in a voltage. Then, you need to transform the voltage (an analog signal) to something the computer can work with. This is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore you will have discrete steps in your data.
+Almost every device that we find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you are interested in a voltage. Then, we need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore we have discrete steps in our data.
 
-For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). This means that if the device gives us a value of $0$, we can transform it to $0\,\textrm{V}$. A value of $1023$ will correspond to $3.3\,\textrm{V}$ and there is a linear relationship with the values in between.
+For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). It means that if the device gives us a value of $0$, we can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$, and there is a linear relationship with the values in between.
 
 \begin{center}
 \includegraphics[width=.6\textwidth]{images/Chapter_03/digitalization.png}
 \end{center}
 
-The figure above shows a detail of how the digitalization looks like for a range of voltages. You see the discrete steps that the digital value takes for different voltages. Digitizing signals is a very important topic for anybody working in the lab. There is a whole set of ramifications regarding visualization, data storage and more.
+The figure above shows a detail of how the digitalization looks like for a range of voltages. You see the discrete steps that the digital value takes for different voltages. Digitizing signals is a critical topic for anybody working in the lab. There is a whole set of ramifications regarding visualization, data storage, and more.
 
 Particularly, the {PFTL DAQ} has a different behavior for reading than for setting values. The output channels take $4095$ ($2^{12}-1$) different values, i.e. they work with 12 bits instead of 10. Knowing the number of bits, also allows us to calculate the minimum difference between two output values:
 
@@ -554,31 +550,31 @@ Particularly, the {PFTL DAQ} has a different behavior for reading than for setti
  \frac{3.3\,\textrm{V} - 0\,\textrm{V}}{4096} \approx 0.0008\,\textrm{V} = 0.8\,\textrm{mV}
 \end{equation}
 
-The equation above shows you how the resolution of your experiment is affected by the digitalization of the signals. You will not be able to create voltages with a difference between them below $0.8\,\textrm{mV}$, and you won't be able to detect changes below $3\,\textrm{mV}$. Later in the book, we will come back to this discussion when we need to decide some parameters for visualizing our data.
+The equation above shows how the resolution of the experiment is affected by the digitalization of the signals. We can't create voltages with a difference between them below $0.8\,\textrm{mV}$, and we are not able to detect changes below $3\,\textrm{mV}$. Later in the book, we come back to this discussion when we need to decide some parameters for visualizing our data.
 
-Digitizing is everywhere. Digital cameras have a certain \emph{bit depth}, which tells us which range of values they can cover or, in other words, their dynamic range. Oscilloscopes, function generators, acquisition cards, they all have a certain digital resolution. When planning experiments, we always need to keep an eye on these values to understand if the devices are appropriate for the measurement we want to perform.
+Digitizing is everywhere. Digital cameras have a certain \emph{bit depth}, which tells us which range of values they can cover or, in other words, their dynamic range. Oscilloscopes, function generators, acquisition cards, they all have a precise digital resolution. When planning experiments, we always need to keep an eye on these values to understand if the devices are appropriate for the measurement we want to perform.
 
 \exercise{We have used a for-loop to switch on and off the LED, and we have also displayed the voltage measured, but without units. Update the code so that instead of printing integers it prints the read value in volts.}
 
 \section{Doing an experiment}
-At this stage we can easily communicate with the device, we can set an output and measure a voltage. This means that we have developed everything that we needed to measure the current that goes through the LED. We only need to combine setting an analog output and then reading an analog input. Since we are going to develop this with a more consistent approach, later on, we will leave it as an exercise:
+At this stage, we can easily communicate with the device; we can set an output and measure a voltage. It means that we have developed everything that we needed to measure the current that goes through the LED. We only need to combine setting an analog output and then reading an analog input. Since we are going to develop this with a more consistent approach, we leave it as an exercise:
 
 \exercise{Write a method that allows you to linearly increase an analog output in a given range of values for a given step. \textbf{Hint:} the function \texttt{range} allows you to do this: \texttt{range(start, stop, step}. If you use this method, you should be able to see the LED switching gradually on.}
 
-\exercise{Improve the method so that we can read analog values and store them once the measurement is complete. Returning the values can be a good idea, so we can use them outside of the object itself.}
+\exercise{Improve the method so that we can read analog values and store them once the measurement is complete. Returning the values can be a good idea so that we can use them outside of the object itself.}
 
-\exercise{If you already have some experience with Python, you can also make a plot of the results. We will cover this topic, later on, so don't stress too much about it now.}
+\exercise{If you already have some experience with Python, you can also make a plot of the results. We cover this topic, later on, so don't stress too much about it now.}
 
-If you try to solve the exercises, you will see that by having classes, our code is very easy to use. It would be very easy to share with a colleague that has the same device, and they will be able to adapt and expand it according to their needs. We should also keep in mind that when working with devices, it may very well be that someone else has already developed a Python driver for it, and we can just use it. One of the keys to developing sustainable code is to compartmentalize different aspects of it. Don't mix the logic of a special experiment with the capabilities of a device, for example. This is exactly the topic of the following chapter.
+If you tried to solve the exercises, you probably noticed that by having classes, our code is straightforward to use. It would be simple to share it with a colleague that has the same device, and they can adapt and expand it according to their needs. We should also keep in mind that when working with devices, it may very well be that someone else has already developed a Python driver for it, and we can just use it. One of the keys to developing sustainable code is to compartmentalize different aspects of it. Don't mix the logic of a particular experiment with the capabilities of a device, for example, is precisely the topic of the following chapter.
 
-\textbf{Remember the Onion}: We have discussed in the Introduction, that we should always remember the onion principle when developing software. If we see the outcome of these last few exercises, we will notice that we are failing to follow the principle. We have added a lot of functionality to the driver class that does not reflect what the device itself can do. The {PFTL DAQ} doesn't have a way of linearly increasing an output, and we have achieved that extra behavior with a loop in a program. Therefore, the proper way of adding extra functionality would be by adding another layer to the program, as we will see in the next chapter.
+\textbf{Remember the Onion}: We have discussed in the Introduction, that we should always remember the onion principle when developing software. If we see the outcome of these last few exercises, we notice that we are failing to follow the principle. We have added much functionality to the driver class that does not reflect what the device itself can do. The {PFTL DAQ} doesn't have a way of linearly increasing an output, and we have achieved that new behavior with a loop in a program. Therefore, the proper way of adding extra functionality would be by adding another layer to the program, as we see in the next chapter.
 
-Before moving forward, it is also important to discuss other libraries that may come in handy. We are not the first ones who try to develop a driver for a device. The pattern of writing and reading, initializing, and many more that we haven't covered, were faced by a lot of developers before ourselves. This means that there are libraries already available that can speed up a lot the development of drivers. Let's see some of them.
+Before moving forward, it is also important to discuss other libraries that may come in handy. We are not the first ones who try to develop a driver for a device. The pattern of writing and reading, initializing, and many more that we haven't covered, were faced by many developers before ourselves. It means that there are libraries already available that can speed up a lot the development of drivers. Let's see some of them.
 
 \section{Using PyVISA}\label{section:pyvisa}
-Some decades ago, big manufacturers of measurement instruments sat together and developed a standard called \href{https://en.wikipedia.org/wiki/Virtual_instrument_software_architecture}{Virtual instrument software architecture}, or VISA for short. This standard allows communicating with devices independently from the communication channel selected, and from the backend chosen. Different companies have developed different backends, such as NI-VISA, or TekVISA, but they \emph{should} be interchangeable. The backends are normally hard to install and do not work on every operating system. But they do allow to switch from a device connected via Serial to a device connected via USB or GPIB without changing the code.
+Some decades ago, prominent manufacturers of measurement instruments sat together and developed a standard called \href{https://en.wikipedia.org/wiki/Virtual_instrument_software_architecture}{Virtual instrument software architecture}, or VISA for short. This standard allows communicating with devices independently from the communication channel selected, and from the backend chosen. Different companies have developed different backends, such as NI-VISA, or TekVISA, but they \emph{should} be interchangeable. The backends are generally hard to install and do not work on every operating system. But they do allow to switch from a device connected via Serial to a device connected via USB or GPIB without changing the code.
 
-To work with VISA instruments, there is a library available for Python called \texttt{pyvisa}. There is also a pure Python implementation of the VISA backend called \mintinline{python}{pyvisa-py} which is relatively stable even if it is still work in progress. It does not cover 100\% of the VISA standard, but for simple devices like the {PFTL DAQ} it should be more than enough. For complex projects, the solutions provided by bigger vendors such as Tektronix or National Instruments may be more appropriate. In the next few paragraphs, we will see how to get started with pyvisa-py, but it is not a requirement of the book. We decided to show it here to have it as a reference for other projects.
+To work with VISA instruments, we can use a library available for Python called \texttt{pyvisa}. There is also a pure Python implementation of the VISA backend called \mintinline{python}{pyvisa-py}, which is relatively stable even if it is still work in progress. It does not cover 100\% of the VISA standard, but for simple devices like the {PFTL DAQ} it should be more than enough. For complex projects, the solutions provided by vendors such as Tektronix or National Instruments may be more appropriate. In the next few paragraphs, we see how to get started with pyvisa-py, but it is not a requirement of the book. We decided to show it here to have it as a reference for other projects.
 
 First, we need to install \mintinline{python}{pyvisa}, which is a wrapper around the VISA standard. Either with pip:
 
@@ -592,7 +588,7 @@ Or with conda:
  conda install -c conda-forge pyvisa
 \end{minted}
 
-In case we don't have a VISA backend on our computer, we will need to install one, and the easiest is the python implementation:
+In case we don't have a VISA backend on our computer, we need to install one, and the easiest is the python implementation:
 
 \begin{minted}{bash}
  pip install pyvisa-py
@@ -604,7 +600,7 @@ or with conda:
  conda install -c conda-forge pyvisa-py
 \end{minted}
 
-There is also an interesting dependency, which is PySerial. Neither Pyvisa nor Pyvisa-py depend on PySerial. If we are going to communicate with serial devices, we should install that package ourselves (and the same is true for USB, GPIB, etc.) The documentation of pyvisa-py\footnote{https://pyvisa-py.readthedocs.io} has very useful information.
+There is also an interesting dependency missing: PySerial. Neither Pyvisa nor Pyvisa-py depend on PySerial. If we are going to communicate with serial devices, we should install that package ourselves (and the same is true for USB, GPIB, or any other communication standard.) The documentation of pyvisa-py\footnote{https://pyvisa-py.readthedocs.io} has handy information.
 
 To quickly see how to work with PyVISA, we can start in a python interpreter, before going to more complex code. VISA allows you to list your devices:
 
@@ -618,27 +614,27 @@ To quickly see how to work with PyVISA, we can start in a python interpreter, be
  'General DAQ Device built by Uetke. v.1.2017\n'
 \end{minted}
 
-We make explicit the backend we want to use by calling \texttt{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, we list all the devices connected to the computer. Bear in mind that this will depend on the other packages that you installed. For example, we have only PySerial, and therefore pyvisa-py will only list serial devices. You can install PyUSB to work with USB devices, etc. The rest of the code is very similar to what we have done before. Probably now you realize why we decided to call \emph{resource} the communication with the device.
+We make explicit the backend we want to use by calling \texttt{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, we list all the devices connected to the computer. Bear in mind that this depends on the other packages that we installed. For example, we have only PySerial, and therefore pyvisa-py only lists serial devices. We can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what we have done before. It becomes clear why we decided to call \emph{resource} the communication with the device.
 
-Pay attention to the \texttt{query} method that we use to get the serial number from the device. We didn't develop it. PyVISA already took care of defining query for us. Not only PyVISA takes care of the query method, but they have plenty of options that we can use, such as transforming the output according to some rules, establishing the write termination, etc. If we were to follow the pyVISA path, we can start by reading their documentation\footnote{https://pyvisa.readthedocs.io}.
+Pay attention to the \texttt{query} method that we use to get the serial number from the device. We didn't develop it. PyVISA already took care of defining query for us. Not only PyVISA takes care of the query method, but they have plenty of options that we can use, such as transforming the output according to some rules or establishing the write termination. If we were to follow the pyVISA path, we could start by reading their documentation\footnote{https://pyvisa.readthedocs.io}.
 
-\textbf{Why didn't we start with pyVISA?}. There are several reasons. One is pedagogical. It is better to start with as few dependencies as possible, so we can understand what is going on. Now that we know exactly what commands need to be sent, we are aware of the encoding and line termination. We are also aware of the fact that to read from the device, we first have to write something to it. Once you gain confidence with the topics covered in this chapter, you will be able to explore other solutions and alternatives. PyVISA is only the tip of the iceberg.
+\textbf{Why didn't we start with pyVISA?}. There are several reasons. One is pedagogical. It is better to start with as few dependencies as possible, so we can understand what is going on. We had to understand not only what commands are available, but we also had to be aware of the encoding and line termination. We made explicit the fact that to read from a device, we first have to write something to it. Once you gain confidence with the topics covered in this chapter, you can explore other solutions and alternatives. PyVISA is only the tip of the iceberg.
 
 \section{Introducing Lantz}\label{section:lantz}
-Defining a class for your device was a very big step in terms of usability. You can easily share your code with your colleagues and they can immediately start using what you have developed with really few extra lines of code. However, there are a lot of features that we may want but that they need to be developed. For example, imagine that we want to limit the number of times the output voltage can change, or we don't want to write to the device always the same value, the first time was enough.
+Defining a class for your device was a massive step in terms of usability. You can easily share your code with your colleagues, and they can immediately start using what you have developed with really few extra lines of code. However, there are many features that we may want but that someone needs to develop. For example, imagine that we want to limit the number of times the output voltage can change, or we don't want to write to the device always the same value, the first time was enough.
 
-We may want to establish some limits, for example, to the analog output values. Imagine that we have a device that can handle up to $2.5\,\textrm{V}$. If we set the analog output to $3\,\textrm{V}$ we would burn it. Fortunately, some packages were written especially to address this kind of problem. We are going to mention only one because it is a project with which we collaborate: \href{https://github.com/lantzproject/lantz}{Lantz}. You can install it by running:
+We may want to establish some limits, for example, to the analog output values. Imagine that we have a device that can handle up to $2.5\,\textrm{V}$. If we set the analog output to $3\,\textrm{V}$, we would burn it. Fortunately, there are some packages written especially to address this kind of problem. We are going to mention only one because it is a project with which we collaborate: \href{https://github.com/lantzproject/lantz}{Lantz}. You can install it by running:
 
 \begin{minted}{bash}
 pip install lantzdev
 \end{minted}
 
-\note{We introduce Lantz here for you to see that there is a lot of room for improvement. However, through this book, we are not going to use it, and
-that is why it was not a requirement when you were setting up the environment. Lantz is under development and therefore some of the fine-tuned options may not work properly on different platforms. Using Lantz also shifts a lot of the things you need to understand under-the-hood and it is not what we want for an introductory course. If you are interested in learning more about Lantz and other packages, you should check for the Advanced Python for the Lab book when you are finished with this one.}
+\note{We introduce Lantz here for you to see that there is much room for improvement. However, through this book, we are not going to use it, and
+that is why it was not a requirement when you were setting up the environment. Lantz is under development, and therefore some of the fine-tuned options may not work correctly on different platforms. Using Lantz also shifts a lot of the things you need to understand under-the-hood, and it is not what we want for an introductory course. If you are interested in learning more about Lantz and other packages, you should check for the Advanced Python for the Lab book when you finish with this one.}
 
-Lantz is a Python package that focuses exclusively on instrumentation. We suggest you check their documentation and tutorials since they can be very inspiring. Here we will just show you how to write your driver for the {PFTL DAQ} device using Lantz, and how to take advantage of some of its options. Lantz can do much more than what we show you here, but with these basics, you will be able to start in the proper direction. You will also notice that some of the decisions we made earlier were directly inspired by how Lantz works.
+Lantz is a Python package that focuses exclusively on instrumentation. We suggest you check their documentation and tutorials since they can be very inspiring. Here we just show you how to write your driver for the {PFTL DAQ} device using Lantz, and how to take advantage of some of its options. Lantz can do much more than what we show you here, but with these basics, you can start in the proper direction. You can also notice that some of the decisions we made earlier were directly inspired by how Lantz works.
 
-Let's first re-write our driver class to make it Lantz-compatible, we start by importing what we need and define some of the constants of our device. We will also add a simple method to get the identification of the device. Note that the first import is \texttt{MessageBasedDriver}, exactly what we have discussed at the beginning of the chapter.
+Let's first re-write our driver class to make it Lantz-compatible, we start by importing what we need and define some of the constants of our device. We also add a simple method to get the identification of the device. Note that the first import is \texttt{MessageBasedDriver}, precisely what we have discussed at the beginning of the chapter.
 
 \begin{minted}{python}
 from lantz.messagebased import MessageBasedDriver
@@ -660,13 +656,13 @@ if __name__ == "__main__":
     print(dev.idn)
 \end{minted}
 
-There are several things to point out in this example. First, we have to note that we are importing a very special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Our class \mintinline{python}{MyDevice} inherits from the \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as we will see later. The first thing we do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones we have defined for our driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, we can specify different defaults for the same device depending on the connection type. If we were using a {USB} connection, we would have used \texttt{USB}, or \texttt{GPIB} instead of, or in
+There are several things to point out in this example. First, we have to note that we are importing a special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Our class \mintinline{python}{MyDevice} inherits from the \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as we see later. The first thing we do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones we have defined for our driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, we can specify different defaults for the same device, depending on the connection type. If we were using a {USB} connection, we would have used \texttt{USB}, or \texttt{GPIB} instead of, or in
 addition to \texttt{ASRL}.
 
 The only method that we have included in the example is \mintinline{python}{idn} because, even if simple, it already shows some of the most interesting
-capabilities of Lantz. First, we can see that we have used \texttt{query} instead of \texttt{write} and \texttt{read}. Indeed, Lantz depends on pyVISA, so what is happening here is that under the hood, you are using the same command that we saw in the previous section. Bear in mind that the write and read termination are automatically used by Lantz.
+capabilities of Lantz. First, we can see that we have used \texttt{query} instead of \texttt{write} and \texttt{read}. Indeed, Lantz depends on pyVISA, so what is happening here is that under the hood, you are using the same command that we saw in the previous section. Bear in mind that Lantz automatically uses the write and read termination.
 
-An extra syntactic thing to note is the \texttt{@Feat()} before the function. It is a \texttt{decorator}, one of the most useful ways of systematically altering the behavior of functions without rewriting. Without entering too much into details, a decorator is a function that takes as an argument another function. In Lantz, when using a \texttt{Feat}, it will check the arguments that you are passing to the method before actually executing it. Another advantage is that you can treat the method as an attribute. For example, you will be able to do something like this \texttt{print(dev.idn)} instead of \texttt{print(dev.idn())} as we did in the previous section.
+An extra syntactic thing to note is the \texttt{@Feat()} before the function. It is a \texttt{decorator}, one of the most useful ways of systematically altering the behavior of functions without rewriting. Without entering too much into details, a decorator is a function that takes as an argument another function. In Lantz, when using a \texttt{Feat}, it checks the arguments that you are passing to the method before actually executing it. Another advantage is that you can treat the method as an attribute. For example, you can do something like this \texttt{print(dev.idn)} instead of \texttt{print(dev.idn())} as we did in the previous section.
 
 \exercise{Write another method for getting the value of an analog input. Remember that the function should take one argument: the channel.}
 
@@ -688,9 +684,9 @@ def set_output0(self, value):
     self.output0 = value
 \end{minted}
 
-What we have done may end up being a bit confusing for people working with Lantz and with instrumentation for the first time. When we use \texttt{Features} in Lantz, we have to split the methods in two: first a method for getting the value of a feature and then a method for setting the value. Since our device doesn't have a way of knowing the value that an output was set to, we have to trick it a bit. When we initialize the class, we will have an attribute called \texttt{output0}, with a \texttt{None} value. Every time we update the value of the output on channel 0, we are going to store the latest value in this variable.
+What we have done may end up being a bit confusing for people working with Lantz and with instrumentation for the first time. When we use \texttt{Features} in Lantz, we have to split the methods in two: first, a method for getting the value of a feature, and then a method for setting the value. We have to trick Lantz because our device doesn't have a way of knowing the value of an output. When we initialize the class, we create an attribute called \texttt{output0}, with a \texttt{None} value. Every time we update the value of the output on channel 0, we are going to store the latest value in this variable.
 
-The first method is for reading the value from the device, pretty much in the same way than with the \texttt{idn} method. The main difference here is that we are specifying some limits to the options, exactly as the manual specifies for the {PFTL DAQ} device. The method \texttt{set\_output0} returns the last value that has been set to the channel 0, or \texttt{None} if it has never been set to a value. When you use \texttt{@Feat} in Lantz, we are always forced to define the first method, also called a \texttt{getter}. This is why we have to trick Lantz and we couldn't simply define the \texttt{setter}. On the other hand, if the setter is not defined, it means that you have a read-only feature, such as with \texttt{idn}. The second method determines how to set the output and has no return value. The command is very similar to how the driver you developed earlier works. Once you instantiate the class, the two commands can be used like this:
+The first method reads the value, pretty much in the same way than with the \texttt{idn} method. The main difference here is that we are specifying some limits to the options, exactly as the manual specifies for the {PFTL DAQ} device. The method \texttt{set\_output0} returns the last value that has been set to the channel 0, or \texttt{None} if it has never been set to a value. The \texttt{@Feat} in Lantz, forces us to define the first method, also called a \texttt{getter}. It is the reason why we have to trick Lantz, and we couldn't simply define the \texttt{setter}. On the other hand, if the setter is not defined, it means that you have a read-only feature, such as with \texttt{idn}. The second method determines how to set the output and has no return value. The command is very similar to how the driver you developed earlier works. Once we instantiate the class, we can use the two commands like this:
 
 \begin{minted}{python}
 print(dev.set_output0)
@@ -698,9 +694,9 @@ dev.set_output0 = 500
 print(dev.set_output0)
 \end{minted}
 
-Even if the programming of the driver was slightly more involved, you can see that the results are very clear. A property of the real device appears also as a property of the Python object. Remember that when you execute \texttt{dev.set\_output0 = 500} you are changing an output in your device. The line looks very innocent, but it isn't. A lot of things are happening under the hood both in Python and on your device. I encourage you to see what happens if you try to set a value outside of the limits of the device, i.e., try something like \texttt{dev.set\_output0 = 5000}.
+Even if the programming of the driver is slightly more involved, we can see that the results are clear. A property of the real device also appears as a property of the Python object. Remember that when you execute \texttt{dev.set\_output0 = 500}, you are changing an output in your device. The line looks very innocent, but it isn't. Many things are happening under the hood both in Python and on your device. I encourage you to see what happens if you try to set a value outside of the limits of the device, i.e., try something like \texttt{dev.set\_output0 = 5000}.
 
-The method we developed works only with the analog output 0. This means that if we want to change the value of another channel, we will have to write a new method. This is both unhandy and starts to violate the law of the copy/paste. If we have a device with 64 different outputs it would become incredibly complicated to achieve a simple task. Fortunately, Lantz allows us to program such a feature:
+The method we developed works only with the analog output 0. It means that if we want to change the value of another channel, wet have to write a new method. It is both unhandy and starts to violate the law of the copy/paste. If we have a device with 64 different outputs, it becomes incredibly complicated to achieve a simple task. Fortunately, Lantz allows us to program such a feature:
 with not too much effort:
 
 \begin{minted}{python}
@@ -717,7 +713,7 @@ def output(self, key, value):
     self.write('OUT:CH{}:{}'.format(key, value))
 \end{minted}
 
-Because the {PFTL DAQ} device has only two outputs, we initialize a variable \texttt{output} with only two elements. The main difference here is that we don't use a \texttt{Feat} but a \texttt{DicFeat}, which will take two arguments instead of one: the channel number and the value. The \texttt{keys} are a list containing all the possible options for the channel. The values, such as before, are the limits of what We can send to the device. The last \texttt{1} is there just to make it explicit that we take values in steps of 1. We can use the code in this way:
+Because the {PFTL DAQ} device has only two outputs, we initialize a variable \texttt{output} with only two elements. The main difference here is that we don't use a \texttt{Feat} but a \texttt{DicFeat}, which ill take two arguments instead of one: the channel number and the value. The \texttt{keys} are a list containing all the possible options for the channel. The values, such as before, are the limits of what We can send to the device. The last \texttt{1} is there just to make it explicit that we take values in steps of 1. We can use the code in this way:
 
 \begin{minted}{python}
 dev.output[0] = 500
@@ -726,31 +722,31 @@ print(dev.output[0])
 print(dev.output[1])
 \end{minted}
 
-And now it makes much more sense and it is cleaner. We can also check what happens if we set a value outside of what we have established as limits. The examples above only scratch the surface of what Lantz can do. Sadly, at the moment of writing, the documentation for the latest version of Lantz is missing. The best starting point is the repository with the code: https://github.com/lantzproject.
+And now it makes much more sense, and it is cleaner than before. We can also check what happens if we set a value outside of what we have established as limits. The examples above only scratch the surface of what Lantz can do. Sadly, at the moment of writing, the documentation for the latest version of Lantz is missing. The best starting point is the repository with the code: https://github.com/lantzproject.
 
 With the examples above, there is a small step to understand how to solve the following:
 
 \exercise{Write a \texttt{@DictFeat} that reads a value of any given analog input channel.}
 
 \section{Conclusions}\label{section:conclusions}
-In this chapter, we have covered a lot of details regarding the communication with devices, how to start writing and reading from a device at a low level, straight from Python packages such as \emph{PySerial}. We have also seen that it is handy to develop classes and not only plain functions or scripts. We have briefly covered pyVISA and Lantz, two Python packages that allow you to build drivers in a systematic, clear and easy way. The rest of the book doesn't depend on them, but you must know of their existence.
+We have covered many details regarding the communication with devices. We have seen how to start writing and reading from a device at a low level, straight from Python packages such as \emph{PySerial}. We have also seen that it is handy to develop classes and not only plain functions or scripts. We have briefly covered pyVISA and Lantz, two Python packages that allow you to build drivers in a systematic, clear, and easy way. The rest of the book doesn't depend on them, but you must know of their existence.
 
-It is impossible in a book to cover all the possible scenarios that you are going to observe over time in the lab. You may have devices that communicate in different ways, you may have devices that are not messaged based, etc. The important point, not only in this chapter but also throughout the book, is that once you build a general framework in your mind, it is going to be much easier to find answers online and to adapt others' code.
+It is impossible in a book to cover all the possible scenarios that you are going to observe over time in the lab. You may have devices that communicate in different ways. You may have devices that are not message-based. The important point, not only in this chapter but also throughout the book, is that once you build a general framework in your mind, it is going to be much easier to find answers online and to adapt others' code.
 
-Remember, documentation is your best friend in the lab. You always have to start by checking the manual of the devices you are using. Sometimes some manufacturers already provide drivers for Python. Such is the case of National Instruments and Basler, but they are not the only ones. Checking the manuals is also crucial because you have to be careful with the limits of your devices. Not only to prevent damages to devices but also because if you employ an instrument outside of the range for which it was designed, you can start generating artifacts in your data. When in doubt, always check the documentation of the packages you are using. PySerial, PyVISA, PyUSB, Lantz, they are quite complex packages and they have many options. In their documentation pages, you can find a lot of information and examples. Moreover, you can also check how to communicate with the developers because they are very often able to give you a hand with your problems.
+Remember, documentation is your best friend in the lab. You always have to start by checking the manual of the devices you are using. Sometimes some manufacturers already provide drivers for Python. Such is the case of National Instruments and Basler, but they are not the only ones. Checking the manuals is also crucial because you have to be careful with the limits of your devices. Not only to prevent damages to devices but also because if you employ an instrument outside of the range for which it was designed, you can start generating artifacts in your data. When in doubt, always check the documentation of the packages you are using. PySerial, PyVISA, PyUSB, Lantz, they are quite complex packages, and they have many options. In their documentation pages, you can find a lot of information and examples. Moreover, you can also check how to communicate with the developers because they are very often able to give you a hand with your problems.
 
 \section{Addendum 1: Unicode Encoding}\label{section:unicode}
-We have seen in the previous sections that when you want to send a message to the device, you need to transform a string to binary. This is called encoding a string. Computers do not understand what is a letter, they just understand binary information, 1s and 0s. This means that if we want to display an \texttt{a}, or a \texttt{b}, we need to find a way of converting bytes into a character, or the other way around if we want to do something with that character.
+We have seen in the previous sections that when we want to send a message to the device, we need to transform a string to binary. This process is called encoding a string. Computers do not understand what a letter is, they just understand binary information, 1s and 0s. It means that if we want to display an \texttt{a}, or a \texttt{b}, we need to find a way of converting bytes into a character, or the other way around if we want to do something with that character.
 
-A standard that appeared several years ago is called ASCII. ASCII contemplates transforming 128 different characters to binary. Characters also include punctuation marks such as \texttt{.}, \texttt{!}, or \texttt{:}, and numbers. 128 is not a random number, it is $2^7$. For the English language, 128 characters are enough. But for languages such as Spanish, which have characters such as \texttt{ñ}, French with its different accents, and without even mentioning languages that use a non-Latin script, forced the appearance of new standards.
+A standard that appeared several years ago is called ASCII. ASCII contemplates transforming 128 different characters to binary. Characters also include punctuation marks such as \texttt{.}, \texttt{!}, or \texttt{:}, and numbers. 128 is not a random number, but it is $2^7$. For the English language, 128 characters are enough. But for languages such as Spanish, which have characters such as \texttt{ñ}, French with its different accents, and without even mentioning languages that use a non-Latin script, forced the appearance of new standards.
 
-Having more than one \textit{standard} is incompatible with the definition of a standard. Imagine that we write a text in French, using a special encoding, and then we share it with someone else. That other person does not know which encoding we used and decides to decode it using a Spanish standard. What will the output be? Very hard to know, and probably very hard to read by that person. This is without considering what would happen if someone writes in Thai and shares it with a Japanese, for example.
+Having more than one \textit{standard} is incompatible with the definition of a standard. Imagine that we write a text in French, using a particular encoding, and then we share it with someone else. That other person does not know which encoding we used and decides to decode it using a Spanish standard. What will the output be? Very hard to know, and probably very hard to read by that person. It is without considering what would happen if someone writes in Thai and shares it with a Japanese, for example.
 
-This still happens with some websites which handle special characters very poorly. Depending on how databases are configured, some characters which do not conform to the English script are just trimmed. This unbearable situation gave rise to a new encoding standard called, as the title of this section suggests: \textbf{Unicode}.
+It still happens with some websites which handle special characters very poorly. Depending on how people configure databases, some characters which do not conform to the English script are just trimmed. This unbearable situation gave rise to a new encoding standard called, as the title of this section suggests: \textbf{Unicode}.
 
-Unicode uses the same definition as ascii for the first 128 characters. This means that any ascii document will look the same if decoded with Unicode. The advantage is that Unicode defines the encoding for millions of extra characters. This includes all the modern scripts, but also ancient ones such as Egyptian hieroglyphs, allowing people to exchange information without problems. Unicode is also the standard for most emojis.
+Unicode uses the same definition as ascii for the first 128 characters. It means that any ascii document looks the same if decoded with Unicode. The advantage is that Unicode defines the encoding for millions of extra characters, including all the modern scripts, but also ancient ones such as Egyptian hieroglyphs. Unicode allows people to exchange information without problems.
 
-Thus, when we want to send a command to a device such as the {PFTL DAQ}, we need to determine how to encode it. Most devices work with ASCII values, but since they overlap with the Unicode standard, there will be no conflict. Sometimes devices manufactured outside of the US may also use characters beyond the first 128, and thus choosing Unicode over ascii is always an advantage. In Python, if we want to choose how to encode a string, we can do the following:
+Thus, when we want to send a command to a device such as the {PFTL DAQ}, we need to determine how to encode it. Most devices work with ASCII values, but since they overlap with the Unicode standard, there is no conflict. Sometimes devices manufactured outside of the US may also use characters beyond the first 128, and thus choosing Unicode over ascii is always an advantage. In Python, if we want to choose how to encode a string, we can do the following:
 
 \begin{minted}{python}
  var = 'This is a string'.encode('ascii')
@@ -758,9 +754,9 @@ Thus, when we want to send a command to a device such as the {PFTL DAQ}, we need
  var2 = 'This is a string with a special character ñ'.encode('utf-8')
 \end{minted}
 
-Utf-8 is the way of calling the 8-bit Unicode standard. The example above is quite self-explanatory. You may want to check what happens if on the last line you change \texttt{utf-8} by \texttt{ascii}. You can also see what happens if a string encoded as \texttt{utf-8} is decoded with \texttt{ascii}.
+Utf-8 is the way of calling the 8-bit Unicode standard. The example above is quite self-explanatory. You may want to check what happens if, on the last line, you change \texttt{utf-8} by \texttt{ascii}. You can also see what happens if you decode with \texttt{ascii} a string encoded as \texttt{utf-8}.
 
-One of the changes between Python 2 and Python 3 that generated some headaches to unaware developers was the out-of-the-box support for Unicode. In Python 3 you are free to use any utf-8 character not only in strings but also as variable names, while in Python 2 this is not the case. For example, this is valid in Python 3:
+One of the changes between Python 2 and Python 3 that generated some headaches to unaware developers was the out-of-the-box support for Unicode. In Python 3, you are free to use any utf-8 character not only in strings but also as variable names, while in Python 2, this is not the case. For example, this is valid in Python 3:
 
 \begin{minted}{python}
  var_ñ = 1
