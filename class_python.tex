@@ -111,7 +111,7 @@ me = Person('John Snow')
 print(me.get_name())
 \end{minted}
 
-When you do this, your previous code stops working, because now you have to set the \mintinline{python}{name} explicitly. If there is any other code that does \mintinline{python}{Person()} fails. The proper way of altering the functioning of a method is to add a default value in case no explicit value is passed. The  mintinline{python}{__init__} would become:
+When you do this, your previous code stops working, because now you have to set the \mintinline{python}{name} explicitly. If there is any other code that does \mintinline{python}{Person()} fails. The proper way of altering the functioning of a method is to add a default value in case no explicit value is passed. The \py{__init__} would become:
 
 \begin{minted}{python}
 def __init__(self, name=''):
