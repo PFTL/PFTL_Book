@@ -51,21 +51,28 @@ ItalicFont = libertinussans-italic,
 \setminted[]{bgcolor=pftl-light}
 
 \newenvironment{warning}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
-    {#1}
-    \end{tcolorbox}
+    \begin{center}
+        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
+        {#1}
+        \end{tcolorbox}
+    \end{center}
 }
 
 \newenvironment{note}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
-    {#1}
-    \end{tcolorbox}
+    \begin{center}
+        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
+        {#1}
+        \end{tcolorbox}
+
+    \end{center}
 }
 
 \newenvironment{exercise}[1]{%
-    \begin{tcolorbox}[width=\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
-    {#1}
-    \end{tcolorbox}
+    \begin{center}
+        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
+        {#1}
+        \end{tcolorbox}
+    \end{center}
 }
 
 \newenvironment{py}[1]{\mintinline{python}{#1}}
