@@ -1,4 +1,5 @@
-\chapter{Writing the First Driver}\label{chapter:first-driver}
+\chapter{Writing the First Driver}\label{ch:first-driver}
+
 \section{Objectives}
 Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only is their behavior different (you can't compare a camera to an oscilloscope), but they also communicate in different ways with the computer. In this chapter,
 we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and, from that experience, build a reusable class that you can share with other developers.
@@ -8,7 +9,7 @@ We can split devices into different categories depending on how they communicate
 
 To have an idea of how commands look like, you can check the manuals of devices such as oscilloscopes or function generators. Both Tektronics\footnote{You can check the manual of an oscilloscope here: https://www.tek.com/oscilloscope/tds1000-manual} and Agilent have complete sets of instructions. If you search through their websites, you find plenty of examples. A command that you can send to a device may look like this:
 
-\begin{minted}{bash}
+\begin{minted}{text}
  *IDN?
 \end{minted}
 
@@ -142,7 +143,8 @@ print(f'The answer is: {answer}')
 
 device.close()
 print('Device closed')
-\end{minted}n
+\end{minted}
+
 Rerun the script. \textbf{Where is it hanging?} Surprisingly, it is hanging during the \texttt{readline} execution. Can you understand what is going on?
 
 There is something very different between writing on the Python interpreter and running a script: the time it takes to go from one line to the other. While you type, everything happens slowly, while when you run a script, everything happens incredibly fast. Now, the \texttt{readline} is waiting to get some information from the device, but the devices are not generating it. It means that the problem should be earlier when we sent the \texttt{IDN} message. The command is not wrong in itself, but what is happening is that between opening the communication with the device and sending the first message, we give no space.
@@ -408,7 +410,7 @@ You can see that there is much new information in the class. We have established
 
 It is normally good practice to separate the instantiation of the class with the initialization of the communication. One thing is creating an object in Python, and the other is to establish communication with a real device. Therefore, we can rewrite the class like this:
 
-\begin{minted}[highlightlines={9}]{python}
+\begin{minted}{python}
 def __init__(self, port):
     self.port = port
     self.rsc = None
