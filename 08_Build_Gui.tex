@@ -2,17 +2,17 @@
 \chapter{Getting Started with Graphical User Interfaces}\label{ch:gui}
 
 \section{Introduction}\label{sec:gui-introduction}
-Building User Interfaces may seem more complicated than what it really is. Once you get the fundamentals you will see that it is possible to put something together very quickly, especially if we have already some code to relate to. In the previous chapter we saw that we can control an experiment from the command line. It is possible to ask ourselves why going through the trouble of a user interface. In some cases, it can be very not only handy to control the parameters of an experiment and to monitor the output in a window especially designed, but it can become necessary to monitor the progress in real time to make decisions while the experiment runs.
+Building User Interfaces may seem more complicated than what it is. Once you get the fundamentals, you can see that it is possible to put something together very quickly, especially if we already have some code to which to relate. In the previous chapter, we saw that we can control an experiment from the command line. It is possible to ask ourselves why going through the trouble of a user interface. In some cases, it can be very not only handy to control the parameters of an experiment and to monitor the output in a window especially designed, but it can become necessary to monitor the progress in real-time to make decisions while the experiment runs.
 
-There are several options for building GUIs with Python. And in the community, there is no clear consensus on what is the best path to follow. For scientific applications, however, the only library which is powerful enough to achieve what we want to achieve is called \textbf{Qt}. Qt was developed as an application framework that allows developers to build apps that look native in different systems without changes to the code. Qt itself is a Finnish company with a long trajectory. It was part of Nokia for a while and now they are publicly traded in the Helsinki exchange. This means that Qt is going to be around for a long time.
+There are several options for building GUIs with Python. And in the community, there is no clear consensus on what is the best path to follow. For scientific applications, however, the only library which is powerful enough to achieve what we want to achieve is called \textbf{Qt}. Qt was developed as an application framework that allows developers to build apps that look native in different systems without changes to the code. Qt itself is a Finnish company with a long trajectory. It was part of Nokia for a while, and now they are publicly traded in the Helsinki exchange. It means that Qt is going to be around for a long time.
 
-In this chapter we are going to give the first steps for building a user interface using Qt, and the Python wrapper called \emph{PyQt}, that we installed in Chapter~\ref{ch:setting-up}. At Python for the Lab we have traditionally adopted PyQt, but in the past years, Qt itself took over the project called PySide, which is another wrapper for Qt. They are licensed under diferent open-source terms, and both are excellent. However, the structure of the PySide2 package is different from the PyQt package and, for consistency, we will keep using PyQt.
+In this chapter, we are going to give the first steps for building a user interface using Qt, and the Python wrapper called \emph{PyQt}, that we installed in Chapter~\ref{ch:setting-up}. At Python, for the Lab, we have traditionally adopted PyQt, but in the past years, Qt itself took over the project called PySide, which is another wrapper for Qt. They are licensed under different open-source terms, and both are excellent. However, the structure of the PySide2 package is different from the PyQt package, and, for consistency, we keep using PyQt.
 
-\note{If you are planning to release commercial software, or if you are packaging Qt, PyQt or PySide2 into your application, you should definitely explore the different licensing options avialable.}
+\note{If you are planning to release commercial software, or if you are packaging Qt, PyQt or PySide2 into your application, you should explore the different licensing options available.}
 
 
 \section{Simple Window and Buttons}\label{sec:simple-window-andbuttons}
-Now it is finally time to start using the empty folder from the M-\textbf{V}-C design pattern: the \textbf{View}. We will start by learning how to create simple windows directly with Qt and will proceed all the way to a fully featured user interface for our experiment. We will start just with scripts and we will slowly grow in complexity.
+Now it is finally time to start using the empty folder from the M-\textbf{V}-C design pattern: the \textbf{View}. We start by learning how to create simple windows directly with Qt and proceed to a fully-featured user interface for our experiment. We start just with scripts, and we slowly grow in complexity.
 
 The best way to get started with Qt is with a quick example. We can create a new file, \textbf{simple\_window.py} in the \emph{Examples} folder, with this code:
 
@@ -25,19 +25,19 @@ The best way to get started with Qt is with a quick example. We can create a new
     app.exec()
 \end{minted}
 
-We will come back to the code above over and over again. At the beginning it is hard to remember, but once we do it often enough, it sticks. After importing, we create a \texttt{QApplication}, a \texttt{QMainWindow}, we show it, and we run the app. This code should produce a very simple window that looks like the image below:
+We will come back to the code above over and over again. In the beginning, it is hard to remember, but once we do it often enough, it sticks. After importing, we create a \texttt{QApplication}, a \texttt{QMainWindow}, we show it, and we run the app. This code should produce a very simple window that looks like the image below:
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/01_simple_window.png}
 \end{center}
 
-The style will match the operating system where it runs. It is a simple, empty window. However, we can already start understanding how Qt works. A user interface is a program that keeps running in a loop. When we click and drag to resize a window, for example, there is always a program responsible for knowing how to do it. In Qt this never ending loop is the \texttt{QApplication}. Whatever window we want to create needs to belong to an application, and that is why the first thing we did was defining \texttt{app}.
+The style matches the operating system where it runs. It is a simple, empty window. However, we can already start understanding how Qt works. A user interface is a program that keeps running in a loop. When we click and drag to resize a window, for example, there is always a program responsible for knowing how to do it. In Qt, this never-ending loop is the \texttt{QApplication}. Whatever window we want to create needs to belong to an application, and that is why the first thing we did was defining \texttt{app}.
 
-In the following line, we define a new object, called \texttt{win}, which is a \texttt{QMainWindow}. As the name suggests, main windows are the core of the user interface. From the main window we can open dialogs, other windows, etc. but the main window is central to our program. After creating it, we show it. The last line is where the application loop starts. The \texttt{app.exec()} command is blocking, therefore nothing that comes after will be executed until we finish with the user interface.
+In the following line, we define a new object, called \texttt{win}, which is a \texttt{QMainWindow}. As the name suggests, the main windows are the core of the user interface. From the main window, we can open dialogs, other windows, but the main window is central to our program. After creating it, we show it. The last line is where the application loop starts. The \texttt{app.exec()} command is blocking. Therefore nothing that comes after is executed until we finish with the user interface.
 
-\exercise{To understand a bit better what is going on with the user interface, you are encouraged to try different things. For example, what happens if you don't show the window, or add few print statements to see when they get executed. You can also try to define the window before the application, etc.}
+\exercise{To understand a bit better what is going on with the user interface, you are encouraged to try different things. For example, what happens if you don't show the window or add a few print statements to see when they get executed. You can also try to define the window before the application.}
 
-Having an empty window is not particularly useful, so we can start adding elements to it. First we can add a title to the window, this can be easily achieved like this:
+Having an empty window is not particularly useful, so we can start adding elements to it. First, we add a title to the window, like this:
 
 \begin{minted}{python}
     win.setWindowTitle('My First Window')
@@ -62,12 +62,12 @@ Which will produce a small window, like this:
     \includegraphics[width=.3\textwidth]{images/Chapter_08/02_simple_window_and_button.png}
 \end{center}
 
-Notice that when we defined the button, we added a second argument, \texttt{win}. Qt has a hierarchical structure, where each element is called a \emph{widget}. We have imported three widgets so far: the application, the window and the button. All widgets live inside the application loop, but the relationship between the button and the window has to be established. By passing the window as the second argument, we are explicitly saying that the button belongs to the window.
+Notice that when we defined the button, we added a second argument, \texttt{win}. Qt has a hierarchical structure, where each element is called a \emph{widget}. We have imported three widgets so far: the application, the window, and the button. All widgets live inside the application loop, but we have to establish the relationship between them. By passing the window as the second argument, we are explicitly saying that the button belongs to the window.
 
 \exercise{Remove the \texttt{win} from the definition of the button, and see what happens}
-\exercise{Alter the order, and make the button the parent of the main window, does this work?}
+\exercise{Alter the order and make the button the parent of the main window, does this work?}
 
-A big part of working with Qt is finding out how to relate different widgets to each other, how to position them, etc. \texttt{QMainWindows} are special, because they are meant to hold widgets within them. That is why they specify a method to determine which widget is the most important one for the window, or in Qt jargon, which widget is the central widget. We can explicitly declare it:
+A big part of working with Qt is finding out how to relate different widgets to each other, how to position them. \texttt{QMainWindows} are special because they must hold widgets within them. That is why they specify a method to determine which Widget is the most important for the window, or in Qt jargon, which Widget is the central Widget. We can explicitly declare it:
 
 \begin{minted}{python}
     button = QPushButton('Press Me')
@@ -80,7 +80,7 @@ We removed the \texttt{win} from the declaration of the button, but if it's ther
     \includegraphics[width=.3\textwidth]{images/Chapter_08/03_simple_window_and_central_widget.png}
 \end{center}
 
-You can try resizing the window, and you will see that the button scales. By declaring the button as the central widget of the window, we made the relationship even stronger. The last possibility which is worth mentioning before moving forward is that we can also show the button independently from the window, like this:
+You can try resizing the window, and you see that the button scales. By declaring the button as the central Widget of the window, we made the relationship even stronger. The last possibility which is worth mentioning before moving forward is that we can also show the button independently from the window, like this:
 
 \begin{minted}{python}
     win.setWindowTitle('My First Window')
@@ -89,21 +89,21 @@ You can try resizing the window, and you will see that the button scales. By dec
     button.show()
 \end{minted}
 
-In this case, the window and the button will be two independent components, like we show in the image below. For the program to finish we must close both the button and the window.
+In this case, the window and the button are two independent components, like we show in the image below. For the program to finish, we must close both the button and the window.
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/04_window_button_separated.png}
 \end{center}
 
-Qt offers a great deal of flexibility, which doesn't mean we need to actually use it. Having buttons floating around the screen does not sound like a good idea, but it is a possibility in case we ever need it.
+Qt offers a great deal of flexibility, which doesn't mean we need actually to use it. Having buttons floating around the screen does not sound like a good idea, but it is a possibility in case we ever need it.
 
-Now that we have a button on a window, we are craving for doing something with it.
+Now that we have a button on a window, we are craving to do something with it.
 
 
 \section{Signals and Slots}\label{sec:signals-slots}
-Qt offers a programming pattern known as \emph{Signals} and \emph{Slots}. The core idea is that different actions on a user interface trigger a signal. For example, moving the mouse over an element will trigger a signal. This signals is then caught by \emph{slots}, that will do something with the information provided. When we move the mouse over a button (this is also knowns as hovering), its background changes color. This is a clear example of the signal/slot paradigm.
+Qt offers a programming pattern known as \emph{Signals} and \emph{Slots}. The core idea is that different actions on a user interface trigger a signal. For example, moving the mouse over an element triggers a signal. This signal is then caught by \emph{slots}, which do something with the information provided. When we move the mouse over a button (this is also knowns as hovering), its background changes color. It is a clear example of the signal/slot paradigm.
 
-Every widget that we can place on screen has a myriad of signals. From interactions with the mouse, to changes in shape or size triggered by reshaping the window, to time-based signals. It does not mean we need to know them all, nor that we will use them all. But once we understand the pattern, we will know where to go and find what we are after. The button has one signal called, very eloquently, \texttt{clicked}. To use it, we must define a function that can get triggered every time it is needed, that will be our slot. We can expand our example code like this:
+Every Widget that we can place on screen has a myriad of signals. From interactions with the mouse to changes in shape or size triggered by reshaping the window, to time-based signals. It does not mean we need to know them all, nor that we use them all. But once we understand the pattern, we know where to go and find what we are after. The button has one signal called, very eloquently, \texttt{clicked}. To use it, we must define a function that can be called every time the signal fires. This function is the \emph{slot}. We can expand our example code like this:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -116,7 +116,7 @@ Every widget that we can place on screen has a myriad of signals. From interacti
     win.setCentralWidget(button)
 \end{minted}
 
-We can see that every time we click the button, a message will be printed to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. This is the same that we discussed in Section~\ref{subsection:multithreading} when discussing about multi-threading. We must use the function itself as a slot, and not the outcome of the function.
+We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. It is the same that we discussed in Section~\ref{subsection: multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
 
 \subsection{Start a Scan}\label{subsec:start-scan-gui}
 With what we have done so far, triggering a scan from the user interface becomes almost trivial. For the time being, we can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. We only need that when we press the button, a scan starts. We need to mix what we already have in \textbf{start\_experiment.py} with what we have done above. It can look like this:
@@ -144,31 +144,31 @@ With what we have done so far, triggering a scan from the user interface becomes
     experiment.finalize()
 \end{minted}
 
-The code above is really a merge between what we did in the previous chapter and in this one. We define the experiment as always, and the window and button as we have just learned. However, the line that does all the magic is this one:
+The code above is a merge between what we did in the previous chapter and this one. We define the experiment as always, and the window and button as we have just learned. However, the line that does all the magic is this one:
 
 \begin{minted}{python}
     button.clicked.connect(experiment.do_scan)
 \end{minted}
 
-We can try the program, when we click the button, a scan will start. However, there is something else happening. The window freezes, we are not able to reshape it, close it. In some cases, especially on Windows, the program will crash and we will get a message saying whether we want to report the issue.
+We can try the program. When we click the button, a scan starts. However, there is something else happening. The window freezes, we are not able to reshape it, close it. In some cases, especially on Windows, the program crashes, and we get a message saying whether we want to report the issue.
 
 \exercise{Can you guess why the window freezes?}
 
-When we were describing the flow of a Qt program, we talked about a loop that takes care of all the interactions with the program. However, if we trigger a scan using \texttt{do\_scan}, we are going to block that loop. Both Qt and Python are single-threaded applications by default, and when one blocks, the other will block as well. And by talking about single-threaded applications, we gave the hint to how this can be solved.
+When we described the flow of a Qt program, we talked about a loop taking care of the interactions within the program. However, if we trigger a scan using \texttt{do\_scan}, we are going to block that loop. Both Qt and Python are single-threaded applications by default, and when one blocks, the other blocks as well. And by talking about single-threaded applications, we gave a hint to how this can be solved.
 
-At the end of last chapter we developed a different method called \texttt{start\_scan} that will create a separate thread to hold the scanning, effectively releasing the main thread to do other tasks. We can change just one line of code and achieve a very different behavior:
+At the end of the last chapter, we developed a different method called \texttt{start\_scan} that creates a separate thread to hold the scanning, effectively releasing the main thread to do other tasks. We can change just one line of code and achieve a very different behavior:
 
 \begin{minted}{python}
     button.clicked.connect(experiment.start_scan)
 \end{minted}
 
-We have developed a somewhat functional program. We have a window with a button from which we can control our experiment. This is already quite a good achievement. We also got some extra features out of the box, such as preventing the user from triggering two scans at the same time.
+We have developed a somewhat functional program. We have a window with a button from which we can control our experiment. It is already quite an excellent achievement. We also got some extra features out of the box, such as preventing the user from triggering two scans at the same time.
 
-Sometimes, the easiness to develop this kind of solution misguides the readers. It was so easy to achieve what we achieved so far because we spent a lot of time and effort developing a proper \emph{experiment class}. The threading, the checks to prevent two scans, and some extra things that will keep appearing in this and next chapter are thanks to a well designed model.
+Sometimes, the easiness of developing this kind of solution misguides the readers. It was so easy to achieve what we achieved so far because we spent a lot of time and effort developing a proper \emph{experiment class}. The threading, the checks to prevent two scans, and some extra things that keep appearing in this and next chapter are thanks to a well-designed model.
 
 
 \section{Extending the Main Window}\label{sec:extending-main-window}
-We have seen how to get started by creating a main window and adding a button to it. However, we can also start seeing that if we try to add more elements, the code is going to become more and more convoluted. It would be a nice addition if the window we design here could be used for different purposes as well. As we have already seen many times, a good idea when we want to make blocks of code reusable, is to convert them into classes. Qt is ideally suited for this, because every Widget they provide is an object with a special inheritance tree.
+We have seen how to get started by creating the main window and adding a button to it. However, we can also start seeing that if we try to add more elements, the code is going to become more and more convoluted. It would be a nice addition if the window we design here could be used for different purposes as well. As we have already seen many times, a good idea when we want to make blocks of code reusable is to convert them into classes. Qt is ideally suited for this because every Widget they provide is an object with a special inheritance tree.
 
 In the folder \emph{View} we can create a file called \textbf{main\_window.py}, and we can add the following code:
 
@@ -195,18 +195,18 @@ with this one:
     win = MainWindow()
 \end{minted}
 
-We should also remember to change the imports at the top of the file by these ones:
+We should also remember to change the imports at the top of the file by these:
 
 \begin{minted}{python}
     from PyQt5.QtWidgets import QApplication
     from PythonForTheLab.View.main_window import MainWindow
 \end{minted}
 
-If we run the code, we will see that it behaves exactly as it was behaving previously. In our code, we create a new class called \texttt{MainWindow}, which in turn inherits from \texttt{QMainWindow}. It is always important to call \texttt{super()} because that will run the init method from the QMainWindow itself, setting up all the parameters, signals, properties, etc. that we need to generate a window. There is, however, a difference with a plan \texttt{QMainWindow}, we specify its title. Effectively, we have now extended the pure \texttt{QMainWindow} class to include a title by default.
+If we run the code, we see that it behaves as it was behaving previously. In our code, we create a new class called \texttt{MainWindow}, which in turn inherits from \texttt{QMainWindow}. It is always important to call \texttt{super()} because that runs the init method from the QMainWindow itself, setting up all the parameters, signals, properties that we need to generate a window. There is, however, a difference with a plan \texttt{QMainWindow}, we specify its title. Effectively, we have now extended the pure \texttt{QMainWindow} class to include a title by default.
 
-\note{It is a personal preference when I start developing a program that has only one main window to name it \texttt{MainWindow}, removing the preceding \texttt{Q}. This can lead to mistakes if we overlook the small differnece in both names. Depending on taste, an alternative is to call the windows by what they are supposed to do, such as \texttt{ScanWindow}. This will depend on the reader's preferences.}
+\note{It is a personal preference when I start developing a program that has only one main window to name it \texttt{MainWindow}, removing the preceding \texttt{Q}. It can lead to mistakes if we overlook the small difference in both names. Depending on taste, an alternative is to call the windows by what they are supposed to do, such as \texttt{ScanWindow}. It depends on the reader's preferences.}
 
-We can add the button as well, and the slot that will be called when the button is pressed, like this:
+We can add the button, and the slot, like this:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QMainWindow, QPushButton
@@ -225,9 +225,9 @@ class MainWindow(QMainWindow):
         print('Button Clicked')
 \end{minted}
 
-We can test this code again and see that we have once more what we had before. Every time we press on the button, a message will appear on the screen. We can also go one step further, and start thinking about how to work with the experiment itself. The window is not aware of any experiments but we would like to be able to trigger a scan if we press the button. Therefore, the experiment has to come from outside of the class and be stored within.
+We can test this code again and see that we have recovered what we had before. Every time we press on the button, a message appears on the screen. We can also go one step further and start thinking about how to work with the experiment itself. The window is not aware of any experiments, but we would like to be able to trigger a scan if we press the button. Therefore, the experiment has to come from outside of the class and be stored within.
 
-We have already done something like this. For example, when we developed the driver for the device in Section~\ref{section:going-higher-level}, we could send the information of the port where the device was connected to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{section:device-model}, and for the experiment model in Section~\ref{section:skeleton-experiment-model}. In all those cases we were using simple strings, but we are not limited to them. Arguments of a methods, or any function for the matter, can be complex objects as well.
+We have already done something like this. When we developed the driver in Section~\ref{section:going-higher-level}, we could send the port number to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{section:device-model}, and for the experiment model in Section~\ref{section:skeleton-experiment-model}. In all those cases, we were using simple strings, but we are not limited to them. Arguments of methods, or any function for the matter, can be complex objects as well.
 
 We can adapt the \texttt{MainWindow} to accept an experiment as argument, store it as an attribute and use it when we need to. The code would look like this:
 
@@ -244,7 +244,7 @@ We can adapt the \texttt{MainWindow} to accept an experiment as argument, store 
             print('Scan Started')
 \end{minted}
 
-The changes to the code were minimal, but very important. We have included \texttt{experiment=None} in the init. We have provided a default value for experiment, because this allows us to run the program even if we have no experiment defined. This is useful if we want to quickly test how the window looks like. However, as soon as we press the button the program will crash. We have to update the \textbf{start\_gui.py} script to accomodate for the changes:
+The changes to the code were minimal but significant. We have included \texttt{experiment=None} in the init. We have provided a default value for the experiment because this allows us to run the program even if we have no experiment defined. It is useful if we want to test how the window looks like quickly. However, as soon as we press the button, the program crashes. We have to update the \textbf{start\_gui.py} script to accommodate for the changes:
 
 \begin{minted}{python}
 experiment = Experiment()
@@ -259,10 +259,10 @@ app.exec()
 experiment.finalize()
 \end{minted}
 
-We pass \texttt{experiment} directly to the window, and it will take care of the rest. We can now safely trigger a scan from the user interface. What is important to note is that once we reach this step, all the rest will happen directly on the view. The script that we use to open the window will stay unaltered. Even in much more complex programs we use the exact same pattern\footnote{See, for example, how PyNTA starts its user interface: https://bit.ly/WindowExperiment}.
+We pass \texttt{experiment} directly to the window, and it takes care of the rest. We can now safely trigger a scan from the user interface. What is important to note is that once we reach this step, all the rest happens directly on the view. The script that we use to open the window stays unaltered. Even in much more complex programs, we use the same pattern\footnote{See, for example, how PyNTA starts its user interface: https://bit.ly/WindowExperiment}.
 
 \section{Adding Layouts}\label{sec:adding-layouts}
-So far our window holds only one button, and we set that button to be the central widget of the window. This makes it virtually impossible to add any other button or object. Therefore, it is time to start sophisticating our user interface\footnote{In this chapter we decided to go lower level, programming every feature, but in the next chapter we will see how to do it with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \texttt{QWidgets}, and Qt allows us to place widgets inside of widgets at our will. We also know that Main Windows require a central widget. Therefore, we can create a widget that will hold two buttons: start and stop, and that widget will be the central widget of the window. We will use this opportunity to clean up the names we have used, to make them more descriptive as well, it is important to pay attention to all the changes made:
+So far, our window holds only one button, and we set that button to be the central Widget of the window. This makes it virtually impossible to add any other button or object. Therefore, it is time to start sophisticating our user interface\footnote{In this chapter we decided to go lower level, programming every feature, but in the next chapter we will see how to do it with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \texttt{QWidgets}, and Qt allows us to place widgets inside of widgets at our will. We also know that Main Windows require a central widget. Therefore, we can create a widget that holds two buttons: start and stop, and that Widget is the central Widget of the window. We use this opportunity to clean up the names we have used, to make them more descriptive as well, it is important to pay attention to all the changes made:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget
@@ -293,11 +293,11 @@ If we run the program again, we will see a Window like the one below:
     \includegraphics[width=.3\textwidth]{images/Chapter_08/05_window_without_layout.png}
 \end{center}
 
-The stop button is visible, but not the start button. This happens because Qt has no way of knowing where we want to add the buttons, and place them in the same position. The one that gets added later is on top.
+The stop button is visible, but not the start button. It happens because Qt has no way of knowing where we want to add the buttons and place them in the same position. The one that gets added later is on top.
 
-\exercise{Change the order in which we define the buttons and see that one or the other gets on top. If the button that is below has a much longer text, you will be able to actually see it beneath the top one.}
+\exercise{Change the order in which we define the buttons and see that one or the other gets on top. If the button that is below has a much longer text, you can see it beneath the top one.}
 
-We could specify explicit coordinates for the positions of the buttons, but there is a much simpler approach using layouts. In Qt there are 4 basic layout types: Horizontal, Vertical, Grid, and Form. With the first two, each time we add a widget it will be added either below or to the right. With the grid layout we can control the position, width and height based on a grid we define. The form defines two columns, ideally to hold some labels and inputs. We will see more about layouts in the following chapter. For the time being, if we want to add two buttons, we can choose a horizontal layout. The code of the \texttt{MainWindow} will take few extra lines to set everything up properly:
+We could specify explicit coordinates for the positions of the buttons, but there is a much simpler approach using layouts. In Qt, there are 4 basic layout types: Horizontal, Vertical, Grid, and Form. With the first two, each time we add a widget, it is added either below or to the right. With the grid layout, we can control the position, width, and height based on a grid we define. The form defines two columns, ideally to hold some labels and inputs. We see more about layouts in the following chapter. For the time being, if we want to add two buttons, we can choose a horizontal layout. The code of the \texttt{MainWindow} takes a few extra lines to set everything up properly:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QHBoxLayout
@@ -318,14 +318,14 @@ In Qt, the horizontal layout is called \texttt{QHBoxLayout}, and we apply it to 
     \includegraphics[width=.3\textwidth]{images/Chapter_08/06_window_with_layout.png}
 \end{center}
 
-If we resize it, we will see that the buttons take the entire width, and they are always centered. This is already a good improvement compared to the simple window with which we started. Before we finish this section, there are two exercises that are a good way of practicing the skills acquired so far:
+If we resize it, we see that the buttons take the entire width, and they are always centered. It is already a good improvement compared to the simple window with which we started. Before we finish this section, these two exercises are a good way of practicing the skills acquired so far:
 
 \exercise{Change \texttt{QHBoxLayout} by \texttt{QVBoxLayout} to see the buttons stacked vertically.}
 
 \exercise{Connect the stop button to a method that stops the scan}
 
 \section{Plotting Data}\label{sec:plotting-data}
-We will finish this section by adding a plot of the data in real-time. We already did something similar in Section~\ref{sec:basic-plotting}. Parts of the code will actually be very similar. Our window slowly starts getting more complex, with more elements. So far, we have two buttons stacked horizontaly, but we would like to show the plot beneath the buttons, not next to them. One of the easiest solutions is to start stacking widgets, instead of making the \texttt{buttons\_widget} the central widget, we can make another one that will contain the buttons and the plot.
+We finish this section by adding a plot of the data in real-time. We already did something similar in Section~\ref{sec:basic-plotting}. Parts of the code are very similar. Our window slowly starts getting more complex, with more elements. So far, we have two buttons stacked horizontally, but we would like to show the plot beneath the buttons, not next to them. One of the most natural solutions is to start stacking widgets, instead of making the \texttt{buttons\_widget} the central Widget, we can make another one that contains the buttons and the plot.
 
 \begin{minted}{python}
 import pyqtgraph as pg
@@ -359,17 +359,17 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
 \end{minted}
 
-Some remarks about the code before we run it. We are using \texttt{()} for the import, because it makes it easier to stack the modules instead of having a very long line that becomes hard to read. In the window, we define three widgets now, \texttt{central\_widget}, \texttt{button\_widgets}, and \texttt{plot\_widget}. The plot widget is very similar to what we did in the previous chapter, the only difference is that we store separately the widget itself and the plot, and we will explain why later. We didn't touch the buttons, but instead of adding them as the central widget, we add them to a higher order widget. By stacking the buttons horizontally between themselves, but vertically to the plot, we get a window that looks like this:
+Some remarks about the code before we run it. We are using \texttt{()} for the import because it makes it easier to stack the modules instead of having a very long line that becomes hard to read. In the window, we define three widgets now, \texttt{central\_widget}, \texttt{button\_widgets}, and \texttt{plot\_widget}. The plot widget is very similar to what we did in the previous chapter. The only difference is that we store the Widget itself and the plot separately, and we explain why later. We didn't touch the buttons, but instead of adding them as the central Widget, we add them to a higher-order widget. By stacking the buttons horizontally between themselves, but vertically to the plot, we get a window that looks like this:
 
 \begin{center}
     \includegraphics[width=.4\textwidth]{images/Chapter_08/07_window_empty_plot.png}
 \end{center}
 
-We are halfway through with what we wanted. If we resize the window, the plot will change. The plot takes all the space available, even if we expand the window vertically, there will be no gray area around the buttons. This is one of the properties of widgets that can also be specified, how is the shape controlled by the surrounding elements.
+We are halfway through with what we wanted. If we resize the window, the plot changes, taking all the space available, even if we expand the window vertically, there is no gray area around the buttons. How the surrounding elements control the shape of a widget is one of the properties that can be specified.
 
-\note{We make several remarks about possibilities with Qt that we don't explore further. They are meant just to point out that every single thing that happens on a user interface was decided, and can be changed. Not only the aspect, such as colors, but also how different elements relate to each other and change shapes when the container window changes.}
+\note{We make several remarks about possibilities with Qt that we don't explore further. We just want to point out that every single thing that happens on a user interface was decided, and can be changed. Not only the aspect, such as colors but also how different elements relate to each other and change shapes when the container window changes.}
 
-To plot the data we acquire, we just need to update the plot periodically. Qt offers a special object called \texttt{QTimer}, that also specifies signals. With timers we can trigger periodic actions without interrupting the rest of program. We also need to develop a method that will be able to update the plot. The Main Window code will look like this:
+To plot the data we acquire, we just need to update the plot periodically. Qt offers a special object called \texttt{QTimer} that also specifies signals. With timers, we can trigger periodic actions without interrupting the rest of the program. We also need to develop a method that can update the plot. The Main Window code looks like this:
 
 \begin{minted}{python}
     from PyQt5.QtCore import QTimer
@@ -386,7 +386,7 @@ To plot the data we acquire, we just need to update the plot periodically. Qt of
             self.plot.setData(self.experiment.scan_range, self.experiment.scan_data)
 \end{minted}
 
-The timer is relatively easy to understand. It is an object that will trigger a signal, \texttt{timeout} periodically. We connect that signal to the method \texttt{update\_plot}. When we start the timer, we need to specify the time interval in milliseconds, therefore $50\,\textrm{ms}$ means a refresh rate of $20\,\textrm{Hz}$. The \texttt{update\_plot} method is different from what we did in the previous chapter. Instead of using \texttt{plot}, we are using \texttt{setData}. There are two reasons for it. First, if we use \texttt{plot()} we will create a new plot on top of the existing one. We wouldn't be refreshing the data, but drawing on top of it. After a while, especially if the parameters or results change, we would see several lines overlapping. The second reason is speed. \texttt{plot()} is a relatively slow method, because several things need to be set up, such as the axes, labels, ticks. By using \texttt{setData} PyQtGraph automatically reuses the elements available.
+The timer is relatively easy to understand. It is an object that triggers a signal, \texttt{timeout} periodically. We connect that signal to the method \texttt{update\_plot}. When we start the timer, we need to specify the time interval in milliseconds, therefore $50\,\textrm{ms}$ means a refresh rate of $20\,\textrm{Hz}$. The \texttt{update\_plot} method is different from what we did in the previous chapter. Instead of using \texttt{plot}, we are using \texttt{setData}. There are two reasons for it. First, if we use \texttt{plot()}, we create a new plot on top of the existing one. We wouldn't be refreshing the data but drawing on top of it. After a while, especially if the parameters or results change, we would see several lines overlapping. The second reason is speed. \texttt{plot()} is a relatively slow method because several things need to be set up, such as the axes, labels, ticks. By using \texttt{setData} PyQtGraph automatically reuses the elements available.
 
 However, if we try to run the code, we will get a problem:
 
@@ -394,11 +394,11 @@ However, if we try to run the code, we will get a problem:
     AttributeError: 'Experiment' object has no attribute 'scan_range'
 \end{minted}
 
-\exercise{Find out why are we getting this error even though we didn't find it when running a simpler script in the previous chapter}
+\exercise{Find out why are we getting this error even though we didn't find it when running a more straightforward script in the previous chapter}
 
-When the window starts, we automatically start the timer, which in turn will try to update the plot. However, the experiment class does not have any \texttt{scan\_range} nor \texttt{scan\_data} until the experiment starts running. A bypass to the problem would be to start the timer after we have started the scan, but this is very unreliable. Best-practices in Python indicate that attributes in classes should always be defined in the \texttt{\_\_init\_\_} method. This means that as soon as the object is created, the attributes will exist, even if with place-holder values.
+When the window starts, we automatically start the timer, which, in turn, tries to update the plot. However, the experiment class does not have any \texttt{scan\_range} nor \texttt{scan\_data} until the experiment starts running. A bypass to the problem would be to start the timer after we have started the scan, but this is very unreliable. Best-practices in Python indicate that we should always define attributes in classes in the \texttt{\_\_init\_\_} method. It means that as soon as we create the object, the attributes exist, even if with place-holder values.
 
-When we developed the \emph{Experiment class}, we completely neglected this practice, we added \texttt{self.} whenever we needed to have data available through the class and also from outside of it. We will leave the definition of most of the attributes to the reader, but we will show how to solve the problem with the scan. Going back to the experiment model, we need to add the following:
+When we developed the \emph{Experiment class}, we completely neglected this practice. We added \texttt{self.} whenever we needed to have data available through the class and also from outside of it. We leave the definition of most of the attributes to the reader, but we show how to solve the problem with the scan. Going back to the experiment model, we need to add the following:
 
 \begin{minted}{python}
     class Experiment:
@@ -408,28 +408,28 @@ When we developed the \emph{Experiment class}, we completely neglected this prac
             self.scan_data = np.array([0])  * Q_('V')
 \end{minted}
 
-We decided to define both attributes as numpy arrays holding only one value: $0\,\textrm{V}$. If we try to plot this results, we will get a single point at the origin. This may raise other questions, such as whether it is better to have a $0$ or a \texttt{None} value, because $0\,\textrm{V}$ could be a valid measured value. This is left to the sensitivity of the reader to judge what is best in their specific case. For our purposes, this is enough to get the window running and showing a plot of the data in real-time once the scan starts.
+We decided to define both attributes as numpy arrays holding only one value: $0\,\textrm{V}$. If we try to plot these results, we get a single point at the origin. It may raise other questions, such as whether it is better to have a $0$ or a \texttt{None} value, because $0\,\textrm{V}$ could be a valid measured value. It is left to the sensitivity of the reader to judge what is best in their specific case. For our purposes, this is enough to get the window running and showing a plot of the data in real-time once the scan starts.
 
-\exercise{Every attribute that is used through any class should be defined, if possible, in the init of that class. Go through all the models, and see whether there are attributes used but not defined at instantiation.}
+\exercise{Every attribute in any class should be defined in the init of that class. Go through all the models, and see whether there are attributes used but not defined at instantiation.}
 
 \subsection{Refresh Rate and Number of Data Points}\label{subsec:refresh-rate-and-number-of-data-points}
-When we follow the strategy of using a timer for refreshing the plot, we can be tempted to increase the refresh rate in order to make the animations more appealing, but we have to be careful with this. On the one hand, if we are generating data at, let's say, $1\,\textrm{Hz}$, doesn't matter how fast we refresh the plot, it won't change faster than once per second.
+When we follow the strategy of using a timer for refreshing the plot, we can be tempted to increase the refresh rate to make the animations more appealing, but we have to be careful with this. On the one hand, if we are generating data at, let's say, $1\,\textrm{Hz}$, doesn't matter how fast we refresh the plot, it won't change faster than once per second.
 
-Let's assume we are acquiring data much faster than once per second, perhaps at hundreds or thousands of new points per second. We have to consider how fast the screen of the computer can redraw the elements on it. Most screens work at $30\,\textrm{Hz}$, some may go to $60\,\textrm{Hz}$. Therefore, if we try to update the plot faster than that, we will just waste computer power on something the screen will never be able to show us.
+Let's assume we are acquiring data much faster than once per second, perhaps at hundreds or thousands of new points per second. We have to consider how fast the screen of the computer can redraw the elements on it. Most screens work at $30\,\textrm{Hz}$, some may go to $60\,\textrm{Hz}$. Therefore, if we try to update the plot faster than that, we just waste computer power on something that the screen never can show us.
 
-There is one extra limitation that are our own eyes. We can't process images faster than at 30fps. Already at $50\,\textrm{Hz}$ we don't see the lights in our room blinking. If we are not interested in video quality for the update of our plots, we can safely go down to $20\,\textrm{Hz}$ and the images will still look fluid.
+There is one additional limitation that is our own eyes. We can't process images faster than at 30fps. Already at $50\,\textrm{Hz}$, we don't see the lights in our room blinking. If we are not interested in video quality for the update of our plots, we can safely go down to $20\,\textrm{Hz}$, and the images still look fluid.
 
 \exercise{Instead of plotting data from the device, you can update the plot with points that oscillate in time and see up to which point the refresh rate affects the quality of what you are showing.}
 
-There is one more thing to consider beyond the refresh rate, which is the number of points we are plotting. Most screens have few thousand pixels in each direction. A very common resolution is $1920\times1440\,\textrm{pixels}$. If we acquire $10000$ data points and try to show them on the screen, they have to be reduced almost 5 times to fit the amount of pixels available on the screen. In this reduction process, many details can be lost. If we use downsampling, for example, and we are looking for a narrow peak, the chances of it appearing on the image can be very little.
+There is one more thing to consider beyond the refresh rate, which is the number of points we are plotting. Most screens have a few thousand pixels in each direction. A very common resolution is $1920\times1440\,\textrm{pixels}$. If we acquire $10000$ data points and try to show them on the screen, they have to be reduced almost 5 times to fit the number of pixels available on the screen. In this reduction process, we can lose many details. If we use downsampling, for example, and we are looking for a narrow peak, the chances of it appearing on the image can be very little.
 
-We have to be aware of the number of data pixels we try to show not only on user interfaces, but also when we are preparing plots for printing or inserting into a PDF. The number of dots a printer can generate is normally specified as dots per inch, or dpi. Even at $600\,\textrm{dpi}$, an image with a width of $8\,\textrm{cm}$ (standard 1-column figure on a paper) will have under 2000 dots in its horizontal direction. And, of course, a reader behind a computer screen will be limited to its pixels.
+We have to be aware of the number of data pixels that we try to show not only on user interfaces but also when we are preparing plots for printing or inserting into a PDF. The number of dots a printer can generate is normally specified as dots per inch, or dpi. Even at $600\,\textrm{dpi}$, an image with a width of $8\,\textrm{cm}$ (standard 1-column figure on a paper) will have under 2000 dots in its horizontal direction. And, of course, a reader behind a computer screen is limited to its pixels.
 
 \section{Conclusions}\label{sec:basic-gui-conclusions}
-In this chapter we have started building a user interface for the experiment. We explored how to get started with Qt, PyQt, how to use buttons to trigger actions using signals and slots. We also saw how to connect first a basic user interface to the experiment, and the advantage of having an experiment which already runs measurements in its own threads.
+In this chapter, we have started building a user interface for the experiment. We explored how to get started with Qt, PyQt, how to use buttons to trigger actions using signals and slots. We also saw how to connect a basic user interface to the experiment model. It showed us the advantages of having an experiment that already runs measurements in its threads.
 
-We also saw how to extend the basic building blocks of Qt, such as QMainWindow by subclassing it and adding the elements we needed. We saw how to build widgets with more widgets inside, how to lay them out on more complex patterns. Finally, we added simple plotting capabilities to the window, refreshing whatever data the experiment is acquiring in real time.
+We also saw how to extend the basic building blocks of Qt, such as QMainWindow, by subclassing it and adding the elements we needed. We saw how to build widgets with more widgets inside, how to lay them out on more complex patterns. Finally, we added simple plotting capabilities to the window, refreshing whatever data the experiment is acquiring in real-time.
 
-This chapter normally generates a lot of satisfaction for people who is developing user interfaces for the first time. On the other hand, we have done a lot of work and we got a window that does not look nearly as nice as the windows with which we are familiar from other programs. On the one hand, this helps us understand how much effort is put behind every window we see. On the other, it pushes us to go one step further.
+This chapter typically generates much satisfaction for people who are developing user interfaces for the first time. On the other hand, we have done much work, and we got a window that does not look nearly as nice as the windows with which we are familiar from other programs. On the one hand, this helps us understand how much effort is behind every window we see. On the other, it pushes us to go one step further.
 
-In the next chapter we will start seeing how to improve the design of our User Interfaces by using a program called Qt Designer.
+In the next chapter, we start seeing how to improve the design of our User Interfaces by using a program called Qt Designer.
