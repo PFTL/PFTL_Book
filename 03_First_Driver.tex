@@ -1,10 +1,10 @@
 \chapter{Writing the First Driver}\label{ch:first-driver}
 
-\section{Objectives}
+\section{Objectives}\label{sec:driver-objectives}
 Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only is their behavior different (you can't compare a camera to an oscilloscope), but they also communicate in different ways with the computer. In this chapter,
 we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and, from that experience, build a reusable class that you can share with other developers.
 
-\section{Introduction}
+\section{Introduction}\label{sec:driver-introduction}
 We can split devices into different categories depending on how they communicate with a computer. One of the most common ways to communicate is through the exchange of text messages. The idea is that the user sends a specific command, i.e., a message, and the device answers with specific information, another message. Sometimes there is no answer because it is just a command to perform an action such as an auto setting or switching off. Sometimes the message we get back contains the information we requested.
 
 To have an idea of how commands look like, you can check the manuals of devices such as oscilloscopes or function generators. Both Tektronics\footnote{You can check the manual of an oscilloscope here: https://www.tek.com/oscilloscope/tds1000-manual} and Agilent have complete sets of instructions. If you search through their websites, you find plenty of examples. A command that you can send to a device may look like this:
@@ -21,12 +21,12 @@ The devices that exchange information with the computer in this way are called \
 
 Remember, \textit{message-based} refers only to how the device exchanges information with the computer, and not to the actual connection between them. It is possible to connect a message-based device via RS-232, USB, GPIB, or TCP/IP. Be aware, however, that it is not a reciprocal relation: not all devices connected through RS-232 or USB are message-based. If you want to be sure, check the manual of the device and see how it is controlled. In this chapter, we are going to build a driver for a message based device.
 
-\subsection{Scope of the Chapter}
+\subsection{Scope of the Chapter}\label{subsec:scope-of-the-chapter}
 In the introduction, we discussed that the objective is to acquire the I-V curve of a diode. You need, therefore, to set an analog output (the V) and read an analog input (the I) with the device. In this chapter, we focus
 on everything we need to perform our first measurement. However, keep in mind the onion principle, which tells you that you should always be prepared to expand your code later on if the need arises.
 
-\section{Communicating with the Device}\label{message-basedevices}
-To communicate with the {PFTL DAQ}\footnote{PFTL is the shorthand notation for Python For the Lab} device, we are going to use a package called \texttt{PySerial}, which you should have already installed if you followed chapter \ref{ch:setting-up}. The first thing we can do is to list all the devices connected to the computer to identify the one in which we are interested. Plug your device via the USB port of your computer. We need to connect the {PFTL DAQ} device through the micro USB port closest to the power jack, also known as \emph{programming port}. Then, the following command in a terminal (be sure you are within the environment in which you have installed the required packages):
+\section{Communicating with the Device}\label{sec:message-basedevices}
+To communicate with the {PFTL DAQ}\footnote{PFTL is the shorthand notation for Python For the Lab} device, we are going to use a package called \texttt{PySerial}, which you should have already installed if you followed chapter~\ref{ch:setting-up}. The first thing we can do is to list all the devices connected to the computer to identify the one in which we are interested. Plug your device via the USB port of your computer. We need to connect the {PFTL DAQ} device through the micro USB port closest to the power jack, also known as \emph{programming port}. Then, the following command in a terminal (be sure you are within the environment in which you have installed the required packages):
 
 \begin{minted}{bash}
 python -m serial.tools.list_ports
@@ -75,7 +75,7 @@ Now we are ready to get started exchanging messages with the device. Before we d
 4
 >>> answer = device.readline()
 >>> print(f'The answer is: {answer}')
-The answer is: b'General DAQ Device built by Uetke. v.1.2019\n'
+The answer is: b'PFTL DAQ Device built by Python for the Lab v.1.2020\n'
 >>> device.close()
 \end{minted}
 
@@ -535,7 +535,7 @@ With this simple code, we can switch on and off the LED 10 times, and we print t
 
 Before we can proceed, we must understand how to transform Analog signals to digital values and the opposite.
 
-\subsection{Analog to Digital, Digital to Analog}\label{subsection:digitazing}
+\subsection{Analog to Digital, Digital to Analog}\label{subsec:digitizing}
 Almost every device that we find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you are interested in a voltage. Then, we need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore we have discrete steps in our data.
 
 For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). It means that if the device gives us a value of $0$, we can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$, and there is a linear relationship with the values in between.
@@ -613,7 +613,7 @@ To quickly see how to work with PyVISA, we can start in a python interpreter, be
  ('ASRL/dev/ttyACM0::INSTR',)
  >>> dev = rm.open_resource('ASRL/dev/ttyACM0::INSTR')
  >>> dev.query('IDN')
- 'General DAQ Device built by Uetke. v.1.2017\n'
+ 'PFTL DAQ Device built by Python for the Lab v.1.2020\n'
 \end{minted}
 
 We make explicit the backend we want to use by calling \texttt{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, we list all the devices connected to the computer. Bear in mind that this depends on the other packages that we installed. For example, we have only PySerial, and therefore pyvisa-py only lists serial devices. We can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what we have done before. It becomes clear why we decided to call \emph{resource} the communication with the device.
@@ -639,30 +639,32 @@ Lantz is a Python package that focuses exclusively on instrumentation. We sugges
 Let's first re-write our driver class to make it Lantz-compatible, we start by importing what we need and define some of the constants of our device. We also add a simple method to get the identification of the device. Note that the first import is \texttt{MessageBasedDriver}, precisely what we have discussed at the beginning of the chapter.
 
 \begin{minted}{python}
-from lantz.messagebased import MessageBasedDriver
-from lantz import Feat
+from time import sleep
+
+from lantz import MessageBasedDriver, Feat
+
 
 class MyDevice(MessageBasedDriver):
 
     DEFAULTS = {'ASRL': {'write_termination': '\n',
                         'read_termination': '\n',
-                        'encoding': 'ascii'
+                        'encoding': 'ascii',
                         }}
 
     @Feat()
     def idn(self):
         return self.query('IDN')
 
-if __name__ == "__main__":
-    dev = MyDevice.via_serial('/dev/ttyACM0')
-    print(dev.idn)
+
+dev = MyDevice.via_serial('/dev/ttyACM0')
+dev.initialize()
+sleep(1)
+print(dev.idn)
 \end{minted}
 
-There are several things to point out in this example. First, we have to note that we are importing a special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Our class \mintinline{python}{MyDevice} inherits from the \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as we see later. The first thing we do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones we have defined for our driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, we can specify different defaults for the same device, depending on the connection type. If we were using a {USB} connection, we would have used \texttt{USB}, or \texttt{GPIB} instead of, or in
-addition to \texttt{ASRL}.
+There are several things to point out in this example. First, we have to note that we are importing a special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Our class \mintinline{python}{MyDevice} inherits from the \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as we see later. The first thing we do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones we have defined for our driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, we can specify different defaults for the same device, depending on the connection type. If we were using a {USB} connection, we would have used \texttt{USB}, or \texttt{GPIB} instead of, or in addition to \texttt{ASRL}.
 
-The only method that we have included in the example is \mintinline{python}{idn} because, even if simple, it already shows some of the most interesting
-capabilities of Lantz. First, we can see that we have used \texttt{query} instead of \texttt{write} and \texttt{read}. Indeed, Lantz depends on pyVISA, so what is happening here is that under the hood, you are using the same command that we saw in the previous section. Bear in mind that Lantz automatically uses the write and read termination.
+The only method that we have included in the example is \mintinline{python}{idn} because, even if simple, it already shows some of the most interesting capabilities of Lantz. First, we can see that we have used \texttt{query} instead of \texttt{write} and \texttt{read}. Indeed, Lantz depends on pyVISA, so what is happening here is that under the hood, you are using the same command that we saw in the previous section. Bear in mind that Lantz automatically uses the write and read termination.
 
 An extra syntactic thing to note is the \texttt{@Feat()} before the function. It is a \texttt{decorator}, one of the most useful ways of systematically altering the behavior of functions without rewriting. Without entering too much into details, a decorator is a function that takes as an argument another function. In Lantz, when using a \texttt{Feat}, it checks the arguments that you are passing to the method before actually executing it. Another advantage is that you can treat the method as an attribute. For example, you can do something like this \texttt{print(dev.idn)} instead of \texttt{print(dev.idn())} as we did in the previous section.
 
@@ -698,21 +700,21 @@ print(dev.set_output0)
 
 Even if the programming of the driver is slightly more involved, we can see that the results are clear. A property of the real device also appears as a property of the Python object. Remember that when you execute \texttt{dev.set\_output0 = 500}, you are changing an output in your device. The line looks very innocent, but it isn't. Many things are happening under the hood both in Python and on your device. I encourage you to see what happens if you try to set a value outside of the limits of the device, i.e., try something like \texttt{dev.set\_output0 = 5000}.
 
-The method we developed works only with the analog output 0. It means that if we want to change the value of another channel, wet have to write a new method. It is both unhandy and starts to violate the law of the copy/paste. If we have a device with 64 different outputs, it becomes incredibly complicated to achieve a simple task. Fortunately, Lantz allows us to program such a feature:
-with not too much effort:
+The method we developed works only with the analog output 0. It means that if we want to change the value of another channel, wet have to write a new method. It is both unhandy and starts to violate the law of the copy/paste. If we have a device with 64 different outputs, it becomes incredibly complicated to achieve a simple task. Fortunately, Lantz allows us to program such a feature without too much effort:
 
 \begin{minted}{python}
-output = [None, None]
+_output = [None, None]
 
 [...]
 
-@DicFeat(keys=[0, 1], values=(0, 4095, 1))
+@DictFeat(keys=[0, 1], limits=(0, 4095, 1))
 def output(self, key):
-    return self.output[key]
+    return self._output[key]
 
 @output.setter
 def output(self, key, value):
-    self.write('OUT:CH{}:{}'.format(key, value))
+    self.write(f'OUT:CH{key}:{value}')
+    self._output[key] = value
 \end{minted}
 
 Because the {PFTL DAQ} device has only two outputs, we initialize a variable \texttt{output} with only two elements. The main difference here is that we don't use a \texttt{Feat} but a \texttt{DicFeat}, which ill take two arguments instead of one: the channel number and the value. The \texttt{keys} are a list containing all the possible options for the channel. The values, such as before, are the limits of what We can send to the device. The last \texttt{1} is there just to make it explicit that we take values in steps of 1. We can use the code in this way:

@@ -1,6 +1,6 @@
-\chapter{Model-View-Controller for Science}\label{chapter:mvcs}
+\chapter{Model-View-Controller for Science}\label{ch:mvcs}
 
-\section{Introduction}
+\section{Introduction}\label{sec:mvc-introduction}
 Developing a computer program is much more than having a few scripts that we can run when we need them. The software should take care of a lot of concerns, such as the limits of the devices, should be flexible enough that enables you to change what measurements you are doing without spending months. More importantly, a program should be extensible in the long run, not just by yourself but also by future colleagues and, potentially, by anyone who finds your application online.
 
 Therefore, when we develop software, we want to keep in mind the following programmer's \emph{mantras}:
@@ -16,7 +16,7 @@ The first line does not pose a challenge to be understood. When we talk about so
 
 The mantras are no rules. They are just points on which you have to reflect on realizing whether you are departing from the path you wanted to follow when you started. In the following sections, we are going to explore a design pattern for software that has many benefits when developing scientific software for controlling experiments. It is called \textbf{The Model-View-Controller for Science}
 
-\section{The MVCs design pattern}\label{section:MVC}
+\section{The MVCs design pattern}\label{sec:mvc}
 \begin{center}
 \includegraphics{images/Chapter_04/MVCs.png}
 \end{center}
@@ -33,13 +33,13 @@ There is a second type of model, which is the \emph{Experiment Model}, in which 
 
 The \emph{View} is the place where you can locate everything related to how you show data to the user and how the user can change the parameters of the experiment. In practice, it is the collection of files that build up a Graphical User Interface ({GUI}). Within the {GUI}, you set, for example, the start, stop, and step of the experiment. This information is passed to the model to acquire the data, save it, and plot it. We must note, however, that the user interacts through the View with the Model, but never directly with the Controller. It is also essential to keep in mind that we implement all the logic in the Model. For example, if we save the data to files, the procedure to create new filenames should be specified in the Model and not in the View.
 
-For our project, the controller is what we discussed on Chapter \ref{ch:first-driver}, the model for the device will be discussed on Chapter \ref{chapter:device-model}, the model for the experiment on Chapter \ref{chapter:experiment-model}, and the view will be discussed in Chapters \ref{ch:gui} and \ref{ch:user-input}. As you can see, there are still many things to cover in the book. It is important to be patient, because we are going to grow a solution slowly, based on need, and solving the mistakes that may appear as we go, and not just following a path blindly.
+For our project, the controller is what we discussed on Chapter~\ref{ch:first-driver}, the model for the device will be discussed on Chapter~\ref{ch:device-model}, the model for the experiment on Chapter~\ref{ch:experiment-model}, and the view will be discussed in Chapters~\ref{ch:gui} and~\ref{ch:user-input}. As you can see, there are still many things to cover in the book. It is important to be patient, because we are going to grow a solution slowly, based on need, and solving the mistakes that may appear as we go, and not just following a path blindly.
 
 \warning{For people who are new to developing code for the lab, it may be hard to understand why and how to split \emph{Controller} and \emph{Model}. When you have only one device that you use for only one goal, and that is as simple as the device we are using in this book, the differences between model and Controller are very thin. However, when you wish to include code developed by others or when you want to share your code, it is crucial to split the capabilities of your device from the logic of your experiment. If you don't do so, all your code is going to work when doing just one particular experiment.}
 
 The meaning of \emph{Model}, \emph{View} and \emph{Controller} changes depending on each developer or community. People developing a web application are not dealing with devices in the real world as developers in the lab do. Therefore, the {MVC} pattern definition can change from one field to another. The details are not that important; once we establish a structure, if we follow it, everyone else will be able to understand quickly what the code is doing and where. Once we understand what each different component is, we will very quickly understand where we need to change the code to solve a bug or add new functionality.
 
-\section{Structure of The Program}\label{section:structure-of-theprogram}
+\section{Structure of The Program}\label{sec:structure-of-theprogram}
 In the program we are developing in this book, we follow the MVC design pattern quite literally. This means that we have to create three folders called \emph{Model}, \emph{View} and \emph{Controller}. In the previous chapter, we have already developed the driver for the device. Go ahead and move the file \textbf{pftl\_daq.py} into the Controller folder.
 
 \exercise{Create a file \textbf{analog\_daq.py} in the Models. Inside the file, define a class called \mintinline{python}{AnalogDaq} what methods do you think that belongs to the device Model?}
@@ -48,13 +48,11 @@ In our definition of Model, it is vital to make a further distinction. On the on
 
 \exercise{Create a file in the Models folder, called \textbf{experiment.py}. Define a class called \mintinline{python}{Experiment} and add some methods that you think are going to be useful. You can, for example, add a method for switching on or off the {LED}. You can also add a method for doing a scan of an analog output signal. The methods can be empty, don't worry about making it work, but just about the layout. You have to start thinking about the parameters that you need and the order in which you can call every method. For example, to save the data, you need to specify a folder first.}
 
-The View folder is going to require a bit more of work than the other two. However, you can already start thinking about how the user is going
-to interact with your program. Most likely, you have thought that sometimes the {LED} will be plugged into the output channel number 1,
-sometimes to channel number 0. You don't want to change the code every time you change where you connected the LED. The same happens, for example, with the channel you want to monitor, or the time delay between steps. We include all this behavior in the View that we develop in the last chapters of the book.
+The View folder is going to require a bit more of work than the other two. However, you can already start thinking about how the user is going to interact with your program. Most likely, you have thought that sometimes the {LED} will be plugged into the output channel number 1, sometimes to channel number 0. You don't want to change the code every time you change where you connected the LED. The same happens, for example, with the channel you want to monitor, or the time delay between steps. We include all this behavior in the View that we develop in the last chapters of the book.
 
 Now that you have started to split the code into different folders and files, it is essential to discuss how you can make programs that use the code available in separate files. That is called \emph{importing} and is the focus of the next section.
 
-\section{Importing modules in Python}\label{section:importing-python}
+\section{Importing modules in Python}\label{sec:importing-python}
 In the previous chapter, we have already seen some lines that look like this:
 
 \begin{minted}{python}
@@ -143,9 +141,9 @@ if __name__ == '__main__':
 From the Terminal, we can just type \texttt{python Controller.dummy\_controller.py}. The output should be:
 
 \begin{minted}{bash}
-'This is the dummy Controller'
-'This is printed only from __main__'
-'This is a function in the dummy Controller'
+This is the dummy Controller
+This is printed only from __main__
+This is a function in the dummy Controller
 \end{minted}
 
 What we see is that the entire code got executed.
@@ -155,13 +153,13 @@ What we see is that the entire code got executed.
 Things are going to be different when we import the file. In the Python interpreter we can do the following:
 
 \begin{minted}{pycon}
->>> import dummy_controller
-"This is the dummy Controller"
+>>> from Controller import dummy_controller
+This is the dummy Controller
 >>> dummy_controller.dummy_example()
-"This is a function in the dummy Controller"
->>> from dummy_controller import dummy_example
+This is a function in the dummy Controller
+>>> from Controller.dummy_controller import dummy_example
 >>> dummy_example()
-"This is a function in the dummy Controller"
+This is a function in the dummy Controller
 \end{minted}
 
 First, we notice that the code at the end never gets executed. This means that the \texttt{if} statement is not \texttt{True}. This block is handy when we want to have code that works standalone (when we execute it directly, for example), but we don't want to execute those lines if we import it. In the case of the real Controller, we wanted to leave some examples at the end to show how we can use it, but when we are importing a class, we don't want it to start communicating with the device.
@@ -180,11 +178,11 @@ For Python to understand that a folder is a \emph{package}, we should add an emp
 
 The init files of packages allow us to specify more complex behaviors when importing, but that goes beyond the scope of this book. Going through other packages is an excellent way of understanding how developers have decided to structure their code.
 
-\section{The PATH variable}\label{section:path}
+\section{The PATH variable}\label{sec:path}
 There is still a huge difference between our code and the way a library, such as \emph{Numpy}, can be imported. \emph{Numpy} can be imported regardless of where we have started the Python interpreter. We can go to any folder in the Terminal, start Python and import numpy. However, we can import our package only if we are in its directory. If we are sitting on a different folder and try to import the Controller, we get an error like the following:
 
 \begin{minted}{pycon}
->>> from controller.pftl_daq import Device
+>>> from Controller.pftl_daq import Device
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 ModuleNotFoundError: No module named 'controller'
@@ -192,7 +190,7 @@ ModuleNotFoundError: No module named 'controller'
 
 Python searches for packages in specific locations, and once it finds one, it stops searching. \emph{Numpy} is located in one of the folders that Python uses, but Python is not aware of our package yet. One way to let Python know where our package is located, is by adding the folder to a system variable called \emph{PYTHONPATH}.
 
-On Windows, we can follow the steps explained in Section \ref{subsec:path-windows}, when we were dealing with the details of adding environment variables after installing Python. The only difference is that we should use the variable PYTHONPATH instead of just PATH. On Linux, it is enough to run the following command:
+On Windows, we can follow the steps explained in Section~\ref{subsec:path-windows}, when we were dealing with the details of adding environment variables after installing Python. The only difference is that we should use the variable PYTHONPATH instead of just PATH. On Linux, it is enough to run the following command:
 
 \begin{minted}{bash}
 $ export PYTHONPATH=$PYTHONPATH":/path/to/PFTL"
@@ -202,7 +200,7 @@ We have to change \texttt{/path/to/PFTL} with the full path to the folder where 
 
 If you are using an IDE to develop and run the code, you may have noticed that there is no need to add anything to the Python path. It is one of the advantages of using robust programs to develop software. They take care of many things for us. However, at some point, it is also essential to be able to run the program independently of the editor software.
 
-\section{The Final Layout}\label{section:final-layout}
+\section{The Final Layout}\label{sec:final-layout}
 At this stage, we should have a clear separation of the code into Model, Controller, and View. Most of them are, for the time being, empty folders. However, we are not limited to having only three folders in our project. Most likely, we want to provide some examples of how to use the code or some documentation.
 
 However, if we create extra folders next to the three main ones, the structure of the program starts to be polluted. It won't be clear what is part of the program, and what is a user-specific setting. Therefore, it is a common practice to make a folder to hold all the program and, next to it, we create an extra folder to contain non-essential elements. In our case, the folder structure would look like this:
@@ -213,7 +211,7 @@ However, if we create extra folders next to the three main ones, the structure o
 └── PythonForTheLab/
     ├── Controller/
     │   ├── __init__.py
-    │   └── pftl_daq.py
+    │   └── pftl_daq_01.py
     ├── Model/
     │   └── __init__.py
     ├── View/
@@ -229,7 +227,7 @@ There are three folders at the top level: \emph{Docs}, \emph{Examples} and \emph
 
 This code is clearer than importing the Controller directly, because it also allows us to, in principle, have different programs at the same time and import only the elements we need from each one. For example, we could have one big project with many devices and complex measurements, and a smaller program to do more specialized tasks that only require \emph{some} of the devices.
 
-\section{Conclusions}\label{section:layout-conclusions}
+\section{Conclusions}\label{sec:layout-conclusions}
 Following a pattern when programming makes the code much easier to understand, to maintain, and to explain to others. Patterns, however, are not set in stone. Sometimes there is no clear divide between what we should develop where. The important thing is to be consistent. For example, if at some point it is decided that controllers should handle real-world units, then all controllers should do it. If, on the other hand, we agreed that models should handle units, then all models should do it, regardless of what the specific controllers do.
 
 Following a pattern is useful not only when there are many developers involved in the same project, but also when the same person is working on different projects, or if they change labs, or experiments. As time passes, we start accumulating a collection of tools, and being able to transfer them from one experiment to another makes it much faster to have a measurement running without reinventing the wheel over and over again.

@@ -1,48 +1,47 @@
 \chapter{Run an experiment}\label{ch:run-experiment}
 
 
-\section{Introduction}
+\section{Introduction}\label{sec:run-experiment-introduction}
 In the previous chapter, we have seen how to develop an experiment model and how to use it from a simple script. In this chapter, we are going to explore how to bring it to the next level. So far, we can run the experiment only with the parameters specified on the config file, but we are not limited to them. Moreover, once the scan starts, there is no way of stopping it unless we completely stop the program. That leads to missing data and is not particularly helpful.
 
 Following the \emph{Onion Principle}, it is now time to bring the experiment model to the next level.
-
 
 \section{Running an Experiment}\label{sec:running-experiment}
 In the previous chapter, we have seen how to run an experiment from a script. Each of the steps needed is triggered one after the other. We called that script \textbf{run\_experiment.py} and had the following code (skipping some less relevant lines):
 
 \begin{minted}{python}
-    from PythonForTheLab.Model import Experiment
+from PythonForTheLab.Model import Experiment
 
-    experiment = Experiment('experiment.yml')
-    experiment.load_config()
+experiment = Experiment('experiment.yml')
+experiment.load_config()
 
-    experiment.load_daq()
+experiment.load_daq()
 
-    experiment.do_scan()
-    experiment.save_data()
-    experiment.finalize()
+experiment.do_scan()
+experiment.save_data()
+experiment.finalize()
 \end{minted}
 
 It is relatively straightforward, but not the only thing that we can do with the experiment. We can access the attributes of the experiment class while we are performing a measurement. For example, we could show the data once the scan finishes:
 
 \begin{minted}{python}
-    experiment.do_scan()
-    print(experiment.scan_data)
+experiment.do_scan()
+print(experiment.scan_data)
 \end{minted}
 
 But we could also change the parameters of the scan after loading the config file. Sharing information with classes in Python is always two ways: we can read from them, but we can also write to them. Let's see what happens when we change the \texttt{config} attribute of the experiment before triggering the scan. We can do something like the following:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
-    [...]
+[...]
 
-    experiment.config['Scan']['num_steps'] = 5
-    experiment.do_scan()
-    experiment.save_data()
-    experiment.config['Scan']['num_steps'] = 10
-    experiment.do_scan()
-    experiment.save_data()
-    experiment.finalize()
+experiment.config['Scan']['num_steps'] = 5
+experiment.do_scan()
+experiment.save_data()
+experiment.config['Scan']['num_steps'] = 10
+experiment.do_scan()
+experiment.save_data()
+experiment.finalize()
 \end{minted}
 
 We can change any of the values stored in the \texttt{config} of the experiment at any time. We can change them from the running script, for example. But we can also change them from the Python interpreter. For people familiar with Jupyter notebooks, for example, the experiments can be run directly from within them. There are some extra benefits of using notebooks, such as the possibility of documenting the work, but we leave the discussion for the Advanced Python for the Lab book.
@@ -67,59 +66,66 @@ We have learned how to do several things with the device, but we are not doing a
 
 Making a simple plot with PyQtGraph is very easy. We can add the following after we perform the scan, in the \textbf{run\_experiment.py} script file:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
-    import pyqtgraph as pg
+import pyqtgraph as pg
 
-    [...]
+[...]
 
-    pg.plot(experiment.scan_range, experiment.scan_data)
+pg.plot(experiment.scan_range, experiment.scan_data)
 \end{minted}
 
-It is simple, but it works. PyQtGraph also gives us some mouse interactions out of the box. We can drag the image, we can zoom in and out with the mouse wheel, we can also transform the scale of the axes by right-clicking. We can make the plot a bit better looking by adding labels and a title:
+The caveat with this solution is that we must run the program slightly differently:
+
+\begin{minted}{bash}
+python -i run_experiment.py
+\end{minted}
+
+We must append the \texttt{-i} or the plot will close right after it appears on screen. It is simple, but it works. PyQtGraph also gives us some mouse interactions out of the box. We can drag the image, we can zoom in and out with the mouse wheel, we can also transform the scale of the axes by right-clicking. We can make the plot a bit better looking by adding labels and a title:
 
 \begin{minted}{python}
-    PlotWidget = pg.plot(title="Plotting I vs V")
-    PlotWidget.setLabel('bottom', f'Channel: {experiment.config['Scan']['channel_out']}', units="V")
-    PlotWidget.setLabel('left', f'Channel: {experiment.config['Scan']['channel_in']}', units="V")
-    PlotWidget.plot(experiment.scan_values, experiment.scan_data)
+PlotWidget = pg.plot(title="Plotting I vs V")
+PlotWidget.setLabel('bottom', f"Channel: {experiment.config['Scan']['channel_out']}", units = "V")
+PlotWidget.setLabel('left', f"Channel: {experiment.config['Scan']['channel_in']}", units = "V")
+PlotWidget.plot(experiment.scan_range, experiment.scan_data)
 \end{minted}
 
 Plotting with PyQtGraph is relatively simple. However, we can only plot data after the scan finishes. The \texttt{do\_scan} method takes relatively long to complete. When a method, or a function, work in this way, they are called blocking functions. The program can't continue until they finish. If we would like to monitor the progress of the experiment while running, we need to find a way of making the scan in a non-blocking way.
 
-\section{Running the scan in a nonblocking way}\label{section:nonblocking}
+\section{Running the scan in a nonblocking way}\label{sec:nonblocking}
 Methods or functions like \texttt{do\_scan} take a long time to run. Imagine if we would like to acquire a movie for one hour, the function would take one hour to complete. If we would be running a very complex simulation or data analysis process, functions can also take very long to complete. However, both scenarios are different from each other. Sometimes functions take long to execute because they are computationally expensive. They need many cycles of the processor to finish. Sometimes they take longer to execute because the process is slow. When we do a scan, the program waits in a \texttt{python}{sleep} or waits for the device to read a signal. Waiting is not computationally expensive, which means that our computer can perform other tasks at the same time if we know how to do it.
 
 Python has different options for achieving what we are after. Still, the one that gives the best results, not only in terms of flexibility but also in terms of simplicity to implement, is the \emph{multithreading} module\footnote{Another library which is gaining popularity is AsyncIO. It is, however, harder to implement efficiently for our purposes}.
 
-\subsection{Threads in Python}\label{subsection:multithreading}
+\subsection{Threads in Python}\label{subsec:multithreading}
 All threads have two ends. A computer program always starts going through a thread in the same direction, until it reaches its end. Sometimes, along the thread, a task blocks the progress, and the program halts there for some time. What Python allows us to do is to start other threads at any point in time. The more threads we have, the more entangled the program would be. Python, however, does not run the threads at the same time. There is a tool called the Global Interpreter Lock (or GIL), which prevents two things to happen simultaneously.
 
 What Python does is run small pieces of each thread one after the other. Someone once compared it to a super-efficient secretary, who pushes jobs according to who has free time and who has tasks to perform. It means that two computations won't happen exactly at the same time, but if one thread is, for example, waiting on a \texttt{sleep}, Python can go and let another thread run. Whenever we start Python, we are starting a thread, also called \emph{main thread}, that lives through our program. From that thread we can start a second one, as we do in the code below:
 
 \begin{minted}{python}
-    import threading
-    from time import sleep
+import threading
+from time import sleep
 
-    def func(steps):
-        for i in range(steps):
-            sleep(1)
-            print('Step: {}'.format(i))
+def func(steps):
+    for i in range(steps):
+        sleep(1)
+        print('Step: {}'.format(i))
 
-    t = threading.Thread(target=func, args=(3, ))
-    print('Here')
-    t.start()
-    sleep(2)
-    print('There')
+t = threading.Thread(target=func, args=(3, ))
+print('Here')
+t.start()
+sleep(2)
+print('There')
 \end{minted}
 
 If we run it, we get the following output:
 
 \begin{minted}{text}
-    Here
-    Step: 0
-    Step: 1
-    There
-    Step: 2
+Here
+Step: 0
+Step: 1
+There
+Step: 2
 \end{minted}
 
 It is essential to understand what is happening in the code above, so we can go step by step, dissecting it. If we run the function \texttt{func} on its own, we see that the numbers appear one by one. We would also notice that while the function is running, nothing else would happen. However, in the code above, we can see a \texttt{'There'} printed in between the output of the function. It means that we managed to trigger the function, and it didn't stop the execution of the rest of the program.
@@ -133,22 +139,22 @@ Another common pitfall is forgetting the \texttt{start()}. When we create a new 
 We can also have several threads running the same function at the same time. In the example below you can see how easy it is:
 
 \begin{minted}{python}
-    first_t = threading.Thread(target=func, args=(3, ))
-    second_t = threading.Thread(target=func, args=(3, ))
-    print('Here')
-    first_t.start()
-    second_t.start()
-    sleep(1)
-    first_t.join()
-    second_t.join()
-    print('There')
+first_t = threading.Thread(target=func, args=(3, ))
+second_t = threading.Thread(target=func, args=(3, ))
+print('Here')
+first_t.start()
+second_t.start()
+sleep(1)
+first_t.join()
+second_t.join()
+print('There')
 \end{minted}
 
 Starting two threads is as simple as starting one. We have added one extra detail to our code, we have used \texttt{join()} to wait for the threads to complete. Now we can see that the program prints \texttt{'There'} after the function finishes. Using \texttt{join()} is usually a good idea in order not to finish the program and leave some orphaned threads.
 
 \note{The fact that things can happen more or less at the same time does not mean our code is running in parallel. Threads have been around for a very, very long time. Even in single-core computers, we were able to switch from one program to another. We could get e-mails while browsing the internet. It was the operating system taking care of executing bits of each program to keep them all up to date. Parallelizing means running computations at the same time. In multi-core processors like the ones available in most computers and cell phones today, we can split tasks and run them at the same time in different cores. For really running on different cores, Python offers the \emph{multiprocessing} package. However, multiprocessing is challenging. The Advanced Python for the Lab coves in detail how to leverage it for more extensive and more data-consuming experiments.}
 
-\section{Threads for the experiment model}\label{section:threads-experiment-model}
+\section{Threads for the experiment model}\label{sec:threads-experiment-model}
 We have seen how to run a straightforward function on a different thread. But we can also see that more complex functions do not present a challenge. Going back to the experiment model, we can already test what we have learned by running the \texttt{do\_scan} method on its thread. Since the method doesn't take any arguments, the code would simply look like this:
 
 \begin{minted}{python}
@@ -159,30 +165,31 @@ We have seen how to run a straightforward function on a different thread. But we
 While the scan is running in its thread, we can do other things in the main thread, such as plotting. We need to refresh the plot while the acquisition is happening, and therefore we need to update the plot within a loop. Combining what we have seen so far, we can update the \textbf{run\_experiment.py} file:
 
 \begin{minted}{python}
-    import threading
-    import pyqtgraph as pg
-    from time import sleep
-    from PythonForTheLab.Model import Experiment
+from time import sleep
+import pyqtgraph as pg
+import threading
+from PythonForTheLab.Model.experiment import Experiment
 
-    experiment = Experiment('experiment.yml')
-    experiment.load_config()
-    experiment.load_daq()
-    t = threading.Thread(target=experiment.do_scan)
-    t.start()
 
-    PlotWidget = pg.plot(title="Plotting I vs V")
-    PlotWidget.setLabel('bottom', f'Channel: {experiment.config['Scan']['channel_out']}', units="V")
-    PlotWidget.setLabel('left', f'Channel: {experiment.config['Scan']['channel_in']}', units="V")
+experiment = Experiment('experiment.yml')
+experiment.load_config()
+experiment.load_daq()
+t = threading.Thread(target=experiment.do_scan)
+t.start()
 
-    while t.isAlive():
-        PlotWidget.plot(experiment.scan_values, experiment.scan_data, clear=True)
-        pg.QtGui.QApplication.processEvents()
-        sleep(.1)
+PlotWidget = pg.plot(title="Plotting I vs V")
+PlotWidget.setLabel('bottom', f"Channel: {experiment.config['Scan']['channel_out']}", units = "V")
+PlotWidget.setLabel('left', f"Channel: {experiment.config['Scan']['channel_in']}", units = "V")
 
-    experiment.finalize()
+while t.is_alive():
+    PlotWidget.plot(experiment.scan_range, experiment.scan_data, clear=True)
+    pg.QtGui.QApplication.processEvents()
+    sleep(.1)
+
+experiment.finalize()
 \end{minted}
 
-The beginning of the code is the same. The only difference is that we trigger the scan inside its thread. After starting it, we create a plot exactly in the same way we did before. The important part is the \texttt{while} loop. First, we check whether the thread is still running with the \texttt{isAlive()} method. If the thread is not running, it means the scan has finished. Then, within the loop, we update the plot with the data available in the experiment class. It is crucial to note that even if the \texttt{do\_scan} method is running in a different thread, its data is accessible from the main thread. The extra line with the \texttt{QApplication} is necessary to make things work, but not important, and since we are not going to follow this approach, we do not discuss it further.
+The beginning of the code is the same. The only difference is that we trigger the scan inside its thread. After starting it, we create a plot exactly in the same way we did before. The important part is the \texttt{while} loop. First, we check whether the thread is still running with the \texttt{is_alive()} method. If the thread is not running, it means the scan has finished. Then, within the loop, we update the plot with the data available in the experiment class. It is crucial to note that even if the \texttt{do\_scan} method is running in a different thread, its data is accessible from the main thread. The extra line with the \texttt{QApplication} is necessary to make things work, but not important, and since we are not going to follow this approach, we do not discuss it further.
 
 Exchanging information between threads is a topic that we need to handle with care. Right now, we have two threads: the main thread, in which we define the experiment and the plot, and we have a child thread, in which the scan is happening. However, for a scan to happen, the thread needs to have a copy of the experiment itself. It turns out that it is not just a copy, but the experiment is the same object on both threads. That is why, if the child thread modifies the values of \texttt{scan\_data}, for example, the main thread can see them. But data is not the only thing shared. The experiment holds communication with the {PFTL DAQ} device. This communication is open from both the main and the child threads. Nothing prevents us from triggering two scans at the same time:
 
@@ -197,6 +204,7 @@ If we do something like this, we see the inherent problem of working with thread
 
 We are not going to enter into the details of all the possible solutions to prevent these problems from appearing. The threading package has many tools to make our programs \emph{thread-safe}. However, we also have to find a balance between how complex we want to make our solution and how much we can trust that we won't make these kinds of mistakes. We use a straightforward approach that prevents us from triggering a second scan if one is already running. That is a likely scenario if we don't realize a scan is taking place. The solution is relatively easy: when the scan is running, we set a variable to \texttt{True}. Every time we want to start a new scan, we check the variable and prevent the program from going further if a scan is already happening. We must edit the \texttt{Experiment} class:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
 class Experiment:
     def __init__(self, config_file):
@@ -220,6 +228,7 @@ We have removed all the code that didn't change to keep it shorter. It is very i
 
 There is only one extra feature that our \texttt{do\_scan} method is missing: the ability to stop whenever we want. We have seen that the main thread can read data stored in the experiment class even if a child thread generates this data. But also, the child thread can see the changes to the attributes of the experiment class. Therefore, we can use an attribute, similar to the \texttt{is\_running}, that signals that we want to stop the scan. We can modify the \texttt{do\_scan} again:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
     def do_scan(self):
         [...]
@@ -230,25 +239,27 @@ There is only one extra feature that our \texttt{do\_scan} method is missing: th
 \end{minted}
 When we start the scan, \texttt{keep\_running} is set to \texttt{True} because we want to keep running the scan. Then, in every iteration, we check whether this variable changed or not. If it is \texttt{False}, then the loop would stop. We can see how this would work in the \textbf{run\_experiment.py} script:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
-    [...]
-    scan1 = threading.Thread(target=experiment.do_scan)
-    scan1.start()
-    sleep(2)
-    experiment.keep_running = False
-    print('Experiment finished')
-    experiment.finalize()
+[...]
+scan1 = threading.Thread(target=experiment.do_scan)
+scan1.start()
+sleep(2)
+experiment.keep_running = False
+print('Experiment finished')
+experiment.finalize()
 \end{minted}
 
 The example is relatively straightforward. We start the scan, wait for two seconds, and then we stop it. It is not a particularly useful situation, but it is crucial for cases when we want to be in control and not lose data nor damage the equipment.
 
 \exercise{Use the input from the keyboard to stop the scan. The best approach is to wait while the thread is alive, such as we did for plotting. Then, you can use a try/except block, using the KeyboardInterrupt exception.}
 
-\section{Improving the Experiment Class}\label{section:improving-experiment}
+\section{Improving the Experiment Class}\label{sec:improving-experiment}
 Through the book, we have always come back to the \emph{Onion Principle}. Every time we find something that we believe can be useful in the future, we don't leave it as an example on a Python script, but we try to implement it in a robust way. It is what we did with threads. We have seen that we can run the scan without blocking the program. But to achieve it, we have to remember how to work with threads. A better idea would be to implement the threads directly in the Experiment class.
 
 In this case, we can write a new method that takes care of starting the scan in a separate thread and another method just for stopping. Having specific methods is a perfect way of not having to remember what attributes do what. Let's create the methods for starting and stopping the scan, directly on the Experiment class:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
     import threading
     [...]
@@ -264,31 +275,33 @@ In this case, we can write a new method that takes care of starting the scan in 
 And now we can update the \textbf{run\_experiment.py} script to make it look much better:
 
 \begin{minted}{python}
-    experiment.start_scan()
-    while experiment.is_running:
-        print('Experiment Running')
-    experiment.finalize()
+experiment.start_scan()
+while experiment.is_running:
+    print('Experiment Running')
+    sleep(1)
+experiment.finalize()
 \end{minted}
 
 This code is clean and easy to understand. One of the advantages is that it also gives us the freedom to decide whether we want to run the scan on its thread or not. There is only one more detail and is that if we finalize the experiment while the scan is running, then we may face some issues trying to read from a closed device. It is better to update the finalize method:
 
+%! Suppress = Ellipsis
 \begin{minted}{python}
     def finalize(self):
         print('Finalizing Experiment')
         self.stop_scan()
         while self.is_running:
-            time.sleep(.1)
+            sleep(.1)
         [...]
 \end{minted}
 
 We stop the scan, and then we wait until we are sure it has finished. It is important because the delay between data points may be significant, or because acquiring data takes long, such as what happens with long exposure times of cameras. Once we know the scan stopped, then we continue to close the communication.
 
-\subsection{Threads and Jupyter Notebooks}\label{subsection:Jupyter}
+\subsection{Threads and Jupyter Notebooks}\label{subsec:jupyter}
 Running experiments on Jupyter Notebooks can be a perfect solution to combine the generation of data, its documentation, and its analysis in only one tool. If appropriately used, Jupyter notebooks can be an excellent resource for the experimentalist. However, real-time plotting of data within notebooks is virtually impossible. Building interactive tools on top of a notebook are very complicated, and that is why we chose to follow a different path for the last chapters.
 
 However, for people who are already using Jupyter, it is worth mentioning that how we developed the Experiment and Device models makes them readily available to be incorporated into a notebook. Moreover, the use of threads directly built in the class allows us to run the scan in one cell and simultaneously plot the data on another cell. It can help prototype programs very quickly and can also be the starting point for plugging an experiment directly to the data analysis pipeline.
 
-\section{Conclusions}\label{section:conclusions-run-experiment}
+\section{Conclusions}\label{sec:conclusions-run-experiment}
 This chapter aims at polishing some of the details that we were missing to be able to perform a scan in a robust way. The most exciting aspect of the chapter is the inclusion of threads to be able to run a scan and still maintain control of the program. We quickly saw how to plot while the scan runs, and took a look at the problems that can appear when we run multiple threads. We explored some new strategies to prevent a second scan from starting, and for stopping the scan without the risk of losing data.
 
 Threads open a lot of different possibilities for Python developers, not only for lab applications. They are, however, a complex topic that we need to take seriously. The pattern we decided to follow in this chapter, exchanging information between main and child threads using attributes of a class is straightforward, but also prone to problems. We believe that in the context of controlling an experiment, there is rarely the need to go beyond what we have done. It does not mean that we shouldn't keep an eye in case problems arise.

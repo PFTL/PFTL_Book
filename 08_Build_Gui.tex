@@ -227,7 +227,7 @@ class MainWindow(QMainWindow):
 
 We can test this code again and see that we have recovered what we had before. Every time we press on the button, a message appears on the screen. We can also go one step further and start thinking about how to work with the experiment itself. The window is not aware of any experiments, but we would like to be able to trigger a scan if we press the button. Therefore, the experiment has to come from outside of the class and be stored within.
 
-We have already done something like this. When we developed the driver in Section~\ref{section:going-higher-level}, we could send the port number to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{section:device-model}, and for the experiment model in Section~\ref{section:skeleton-experiment-model}. In all those cases, we were using simple strings, but we are not limited to them. Arguments of methods, or any function for the matter, can be complex objects as well.
+We have already done something like this. When we developed the driver in Section~\ref{section:going-higher-level}, we could send the port number to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{section:device-model}, and for the experiment model in Section~\ref{sec:skeleton-experiment-model}. In all those cases, we were using simple strings, but we are not limited to them. Arguments of methods, or any function for the matter, can be complex objects as well.
 
 We can adapt the \texttt{MainWindow} to accept an experiment as argument, store it as an attribute and use it when we need to. The code would look like this:
 
