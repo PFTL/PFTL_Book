@@ -48,11 +48,11 @@ pyyaml                    5.3              py37h7b6447c_0
 yaml                      0.1.7                had09818_2
 \end{minted}
 
-I have just selected some of the packages as an example, but the output should be much longer. One of the good things about Anaconda is that it keeps track of not only the package and its version but also the build. The difference is that you may be using Anaconda on a computer with an Intel processor, or a Raspberry Pi with an ARM processor. In both cases, the version of, let's say, numpy may be the same, but they were compiled differently. Also, you could be using the same version of numpy but with a different version of Python, hence the \texttt{py37} that appears in the build numbers, allowing you to keep full track of what you are doing at every moment.
+I have just selected some of the packages as an example, but the output should be much longer. One of the good things about Anaconda is that it keeps track of not only the package and its version but also the build. The difference is that you may be using Anaconda on a computer with an Intel processor, or a Raspberry Pi with an ARM processor. In both cases, the version of, let's say, numpy may be the same, but they were compiled differently. Also, you could be using the same version of numpy but with a different version of Python, hence the \py{py37} that appears in the build numbers, allowing you to keep full track of what you are doing at every moment.
 
-The last two lines show you a package called \texttt{pyyaml} that depends on a library called \texttt{yaml}, and that we use later. With Anaconda, you can keep track of both separately, the Python package and the lower-level library that this package uses. If you come from Linux, this is not a great surprise, since this is what package managers do. If you come from Windows, however, this is something incredibly handy.
+The last two lines show you a package called \py{pyyaml} that depends on a library called \py{yaml}, and that we use later. With Anaconda, you can keep track of both separately, the Python package and the lower-level library that this package uses. If you come from Linux, this is not a great surprise, since this is what package managers do. If you come from Windows, however, this is something incredibly handy.
 
-Let's say we would like to install a package that is not yet available. A package that we use later in the book is called \texttt{PySerial}. Installing it becomes as easy as running the following command:
+Let's say we would like to install a package that is not yet available. A package that we use later in the book is called \py{PySerial}. Installing it becomes as easy as running the following command:
 
 \begin{minted}{bash}
 conda install pyserial
@@ -63,7 +63,7 @@ It outputs some information, such as the version and the build, and it asks us i
 But this is not all Anaconda allows us to. We can also separate environments based on your projects.
 
 \subsection{Conda Environments}\label{subsec:conda-environments}
-A conda environment is, in practical matters, a folder where all the packages that we need to run code are located, including also the underlying libraries. The environments are isolated from each other; therefore, if you update or delete a package on one, it does not affect the others. When you are working on different projects, perhaps one of them needs a specific version of a library, and you don't want to ruin the other projects. To create a new environment, you need to run the following command (change \texttt{myenv} by any name you want):
+A conda environment is, in practical matters, a folder where all the packages that we need to run code are located, including also the underlying libraries. The environments are isolated from each other; therefore, if you update or delete a package on one, it does not affect the others. When you are working on different projects, perhaps one of them needs a specific version of a library, and you don't want to ruin the other projects. To create a new environment, you need to run the following command (change \py{myenv} by any name you want):
 
 \begin{minted}{bash}
  conda create --name myenv
@@ -90,7 +90,7 @@ Now is time to install the packages we want, starting with Python itself:
  conda install python=3.7
 \end{minted}
 
-\infoInfo{Info}{The \texttt{3.7} that we added after Python specifies which version of Python we want to use. If you don't specify it, Anaconda installs the newest version, which at the time of writing is \texttt{3.8}. When Python updates, some libraries may not work correctly, or may not be available yet for that specific version. When selecting the Python version, be sure all your libraries are available.}
+\infoInfo{Python Versions}{The \py{3.7} that we added after Python specifies which version of Python we want to use. If you don't specify it, Anaconda installs the newest version, which at the time of writing is \py{3.8}. When Python updates, some libraries may not work correctly, or may not be available yet for that specific version. When selecting the Python version, be sure all your libraries are available.}
 
 After installing Python, you can start it by running:
 
@@ -130,13 +130,13 @@ conda install numpy pyserial pyyaml pyqt pyqtgraph
 
 Don't worry too much about these packages, since we are going to see one by one later on. If you run \mintinline{bash}{conda list}, you see that you got many more things installed. Each package depends either on other packages or libraries, and Anaconda took care of installing all of them for us. With a \mintinline{bash}{conda install} command, we can install packages that Anaconda itself maintains. Those are official packages that come with a \emph{certification} of quality. Many companies allow their employees to install only packages officially supported by Anaconda to avoid having malware installed within their network.
 
-To follow the book, we need one extra package called \texttt{Pint}. This package is not on the official conda repositories. To install packages that didn't make it to the official repository yet, we can use an unofficial repository called \texttt{conda forge}. Some packages that are not mature enough, or versions that are too new and not tested enough, are located in this repository. To install a package, we just need to run the following command:
+To follow the book, we need one extra package called \py{Pint}. This package is not on the official conda repositories. To install packages that didn't make it to the official repository yet, we can use an unofficial repository called \py{conda forge}. Some packages that are not mature enough, or versions that are too new and not tested enough, are located in this repository. To install a package, we just need to run the following command:
 
 \begin{minted}{bash}
   conda install -c conda-forge pint
 \end{minted}
 
-The \mintinline{bash}{-c conda-forge} specifies the \texttt{channel} from which we are installing the package. With this, we have completed installing all the packages we need to follow the rest of the book.
+The \mintinline{bash}{-c conda-forge} specifies the \py{channel} from which we are installing the package. With this, we have completed installing all the packages we need to follow the rest of the book.
 
 If you want to go outside of the environment, you can run:
 
@@ -154,13 +154,13 @@ conda create --name env python=3.7 numpy=1.18 pyserial
 The command above creates an environment using the specified versions of Python and Numpy while using the latest version of pyserial.
 
 \subsubsection{Remove an Environment}
-If you want to remove a conda environment called \texttt{env}, you can run the following command:
+If you want to remove a conda environment called \py{env}, you can run the following command:
 
 \begin{minted}{bash}
 conda remove --name env --all
 \end{minted}
 
-In practice, you also use the \texttt{remove} command to uninstall packages. When you do \texttt{remove --name env} means you want to remove a specific package from that environment, while the \texttt{--all} tells Anaconda to remove all the packages and the environment itself. Use with care, since we can't undo it.
+In practice, you also use the \py{remove} command to uninstall packages. When you do \py{remove --name env} means you want to remove a specific package from that environment, while the \py{--all} tells Anaconda to remove all the packages and the environment itself. Use with care, since we can't undo it.
 
 \section{Installing Pure Python}\label{sec:installing-pure-python}
 If instead of installing Anaconda, you prefer to install pure Python, the procedure is straightforward, it just varies slightly on different operating systems.
@@ -177,7 +177,7 @@ To test whether the installation of Python worked, you need to launch the Comman
 \includegraphics[width=.5\textwidth]{images/Chapter_02/CommandPrompt.png}
 \end{center}
 
-In the Command Prompt, you can do almost everything that you can do with the mouse on your computer. The command prompt starts in a specific folder on your computer, something similar to \texttt{C:\\Users\\User}. You can type \mintinline{bash}{dir}, and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command \mintinline{bash}{cd}. If you want to go one level up, you can type \mintinline{bash}{cd ..} if you want to enter into a folder, you type \mintinline{bash}{cd Folder} (where \textit{Folder} is the name of the folder you want to change to). It is out of the scope of this book to cover all the different possibilities that the Command Prompt offers, but you shouldn't have any problems finding help online. See the image below to get an idea of how things look like on Windows:
+In the Command Prompt, you can do almost everything that you can do with the mouse on your computer. The command prompt starts in a specific folder on your computer, something similar to \mintinline{PowerShell}{C:\Users\User}. You can type \mintinline{bash}{dir}, and press enter to get a list of all the files and folders within that directory. If you want to navigate through your computer, you can use the command \mintinline{bash}{cd}. If you want to go one level up, you can type \mintinline{bash}{cd ..} if you want to enter into a folder, you type \mintinline{bash}{cd Folder} (where \textit{Folder} is the name of the folder you want to change to). It is out of the scope of this book to cover all the different possibilities that the Command Prompt offers, but you shouldn't have any problems finding help online. See the image below to get an idea of how things look like on Windows:
 
 \begin{center}
 \includegraphics[width=.5\textwidth]{images/Chapter_02/CommandPrompt03.png}
@@ -215,8 +215,8 @@ Once you find the file python.exe, copy the full path of that directory, i.e.\ t
  \item Open the System Control Panel. How to open it is slightly dependant on your Windows version, but it should be Start/Settings/Control Panel/System
  \item Open the Advanced tab.
  \item Click the Environment Variables button.
- \item There is a section called System Variables, select Path, then click Edit. You'll see a list of folders, each one separated from the next one by a \texttt{;}.
- \item Add the folder where you found the python.exe file at the end of the list (don't forget the \texttt{;} to separate it from the previous entry).
+ \item There is a section called System Variables, select Path, then click Edit. You'll see a list of folders, each one separated from the next one by a \py{;}.
+ \item Add the folder where you found the python.exe file at the end of the list (don't forget the \py{;} to separate it from the previous entry).
  \item Click OK\@.
 \end{enumerate}
 
@@ -241,7 +241,7 @@ Each Linux distribution has a slightly different procedure to install Python, bu
 \subsection{Installing Python Packages}\label{subsec:installing-python-packages2}\label{subsec:installing-python-packages}
 One of the characteristics that make Python such a versatile language is the variety of packages that can be used in addition to the standard distribution. Python has a repository of applications called PyPI, with more than 100000 packages available. The easiest way to install and manage packages is through a command called \textbf{pip}. Pip fetches the needed packages from the repository and installs them for you. Pip is also capable of removing and upgrading packages. More importantly, Pip also handles dependencies, so you won't have to worry about them.
 
-Pip works both with Python 3 and Python 2. To avoid mistakes, you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, probably there are two commands, \texttt{pip2} and \texttt{3}. You should use the latter to install packages for Python 3. On Windows, you probably have to use \texttt{pip.exe} instead of just \texttt{pip}. If, for some reason it doesn't work, you need to follow the same procedure that we explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
+Pip works both with Python 3 and Python 2. To avoid mistakes, you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, probably there are two commands, \py{pip2} and \py{3}. You should use the latter to install packages for Python 3. On Windows, you probably have to use \mintinline{PowerShell}{pip.exe} instead of just \mintinline{bash}{pip}. If, for some reason it doesn't work, you need to follow the same procedure that we explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
 
 \tipsInfo{Info}{Since the moment in which Anaconda was born to nowadays, pip has gone through a very long road. Today, we can install complex packages such as numpy or PyQt directly. However, there is still some discussion regarding how much we can expect from pip at the moment of compiling programs or performing complex tasks.}
 
@@ -381,7 +381,7 @@ It tells you what program triggers when you run python3 on a terminal. Replace t
 mkvirtualenv Testing --python=/location/of/python3
 \end{minted}
 
-It creates a folder, usually \texttt{~/.virtualenvs/Testing}, with a copy of the Python interpreter and all the packages that you need, including pip. That folder is the place where new modules are installed. If everything went well, you see the \mintinline{bash}{(Testing)} string at the beginning of the line in the terminal. If you see it, you know that you are working within a Virtual Environment.
+It creates a folder, usually \mintinline{bash}{~/.virtualenvs/Testing}, with a copy of the Python interpreter and all the packages that you need, including pip. That folder is the place where new modules are installed. If everything went well, you see the \mintinline{bash}{(Testing)} string at the beginning of the line in the terminal. If you see it, you know that you are working within a Virtual Environment.
 
 To close the Virtual Environment you have to type:
 

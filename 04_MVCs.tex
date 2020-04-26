@@ -101,7 +101,7 @@ Now we have the controller available to use. We can do the following:
 >>> dev.initialize()
 \end{minted}
 
-However, there is something strange happening if we run the code above. As soon as we import \texttt{Device}, it starts communicating with the device, outputs the identification number, and switches on and off the LED. This behavior is, of course, something we don't want, and a very common pitfall for Python developers. Of course, we don't want to trigger a measurement just because we imported the module to our program.
+However, there is something strange happening if we run the code above. As soon as we import \py{Device}, it starts communicating with the device, outputs the identification number, and switches on and off the LED. This behavior is, of course, something we don't want, and a very common pitfall for Python developers. Of course, we don't want to trigger a measurement just because we imported the module to our program.
 
 To avoid running code when importing, we must change the file \textbf{pftl\_daq.py}. We can add one line of code at the end of the file, and some indentation, to make it look like this:
 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         sleep(.5)
 \end{minted}
 
-To see the changes, we first must close Python running the \texttt{exit()} command, and then opening it again. Python does not import twice the same modules, and therefore, it won't realize that the file with our Controller changed. After we restart Python, we can try again importing the Controller. Now things are going to look fine, and we can use the \texttt{Device} as we intended. We can leave the space at the bottom of files to hold examples of how to use the code above. If we ever find the Device around, and we don't remember what we were supposed to do with it, we can always go to the bottom of the file and see how it works.
+To see the changes, we first must close Python running the \py{exit()} command, and then opening it again. Python does not import twice the same modules, and therefore, it won't realize that the file with our Controller changed. After we restart Python, we can try again importing the Controller. Now things are going to look fine, and we can use the \py{Device} as we intended. We can leave the space at the bottom of files to hold examples of how to use the code above. If we ever find the Device around, and we don't remember what we were supposed to do with it, we can always go to the bottom of the file and see how it works.
 
 Every time we encounter a behavior which is not easy to understand, the best idea is to transform it into simpler components and explore them one by one. In this case, the importing process may be a bit confusing. To understand it a bit more about, especially how the \mintinline{python}{if __name__} works we can create a new file called \textbf{dummy\_controller.py} in the \emph{Controller} folder, with the following lines of code:
 
@@ -138,7 +138,7 @@ if __name__ == '__main__':
 
 \end{minted}
 
-From the Terminal, we can just type \texttt{python Controller.dummy\_controller.py}. The output should be:
+From the Terminal, we can just type \py{python Controller.dummy_controller.py}. The output should be:
 
 \begin{minted}{bash}
 This is the dummy Controller
@@ -162,15 +162,15 @@ This is a function in the dummy Controller
 This is a function in the dummy Controller
 \end{minted}
 
-First, we notice that the code at the end never gets executed. This means that the \texttt{if} statement is not \texttt{True}. This block is handy when we want to have code that works standalone (when we execute it directly, for example), but we don't want to execute those lines if we import it. In the case of the real Controller, we wanted to leave some examples at the end to show how we can use it, but when we are importing a class, we don't want it to start communicating with the device.
+First, we notice that the code at the end never gets executed. This means that the \py{if} statement is not \py{True}. This block is handy when we want to have code that works standalone (when we execute it directly, for example), but we don't want to execute those lines if we import it. In the case of the real Controller, we wanted to leave some examples at the end to show how we can use it, but when we are importing a class, we don't want it to start communicating with the device.
 
-We can also see that the line \texttt{"This is the dummy Controller"} appears only once. Python knows that we have already imported the module \textbf{dummy\_controller}, and it doesn't execute again the lines that we already imported. Therefore, we have to be aware that it is not a matter of using the \texttt{from} in the importing procedure. We can close Python, start it again and revert the order in which we import, and the print is still there the first time but not the second. It means that Python is smart when importing modules, and won't fetch the elements it already has available, even if we are importing in a slightly different way.
+We can also see that the line \py{"This is the dummy Controller"} appears only once. Python knows that we have already imported the module \textbf{dummy\_controller}, and it doesn't execute again the lines that we already imported. Therefore, we have to be aware that it is not a matter of using the \py{from} in the importing procedure. We can close Python, start it again and revert the order in which we import, and the print is still there the first time but not the second. It means that Python is smart when importing modules, and won't fetch the elements it already has available, even if we are importing in a slightly different way.
 
 \tipsInfo{Naming Conventions}{We should establish some naming conventions to avoid confusion later on. In Python, any file that defines variables, functions, or classes is called a \mintinline{python}{Module}. The folder that contains modules is called a \mintinline{python}{Package}.}
 
-Working with the imports in Python is sometimes easier than understanding them, especially when trying to pay attention to all the different definitions. The \href{https://docs.python.org/3.6/tutorial/modules.html}{Python Documentation} has an excellent chapter covering a lot of the ideas discussed. Many of the properties and behaviors can be learned by trial and error, though it can be very time consuming, and it may lead to unexpected errors.
+Working with the imports in Python is sometimes easier than understanding them, especially when trying to pay attention to all the different definitions. The Python Documentation\footnote{https://docs.python.org/3.6/tutorial/modules.html} has an excellent chapter covering a lot of the ideas discussed. Many of the properties and behaviors can be learned by trial and error, though it can be very time consuming, and it may lead to unexpected errors.
 
-There is one final remark that is worth mentioning about packages. Right now, we have three folders in our project: Model, View, and Controller. But what would happen if we add a new folder called, for example, \emph{serial}? Next time we try to do \texttt{import serial}, how would Python know if it is supposed to import the PySerial library or our package? It can also happen the other way around, perhaps we don't know there is something already called \emph{Controller} in Python, and we don't care about it, we want to import our modules.
+There is one final remark that is worth mentioning about packages. Right now, we have three folders in our project: Model, View, and Controller. But what would happen if we add a new folder called, for example, \emph{serial}? Next time we try to do \py{import serial}, how would Python know if it is supposed to import the PySerial library or our package? It can also happen the other way around, perhaps we don't know there is something already called \emph{Controller} in Python, and we don't care about it, we want to import our modules.
 
 For Python to understand that a folder is a \emph{package}, we should add an empty file called \textbf{\_\_init\_\_.py}. This file is the way of letting Python know that a folder is more than a plain directory, and thus it should be treated like that. Therefore, we must add the empty init files in the three folders we have created so far. If you are using a Python IDE, such as Pycharm, you notice that these files get created automatically if you chose 'new package' while trying to add a folder.
 
@@ -196,7 +196,7 @@ On Windows, we can follow the steps explained in Section~\ref{subsec:path-window
 $ export PYTHONPATH=$PYTHONPATH":/path/to/PFTL"
 \end{minted}
 
-We have to change \texttt{/path/to/PFTL} with the full path to the folder where we are keeping the code. After doing that, we can type \texttt{from Controller import *} wherever you are in your computer, and Python finds the appropriate folder. On Linux, the change is not permanent, and we need to rerun the line next time we start the Terminal. We can modify environment variables permanently, but this goes too much into the details of the operating systems.
+We have to change \py{/path/to/PFTL} with the full path to the folder where we are keeping the code. After doing that, we can type \py{from Controller import *} wherever you are in your computer, and Python finds the appropriate folder. On Linux, the change is not permanent, and we need to rerun the line next time we start the Terminal. We can modify environment variables permanently, but this goes too much into the details of the operating systems.
 
 If you are using an IDE to develop and run the code, you may have noticed that there is no need to add anything to the Python path. It is one of the advantages of using robust programs to develop software. They take care of many things for us. However, at some point, it is also essential to be able to run the program independently of the editor software.
 

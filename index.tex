@@ -1,4 +1,3 @@
-%! Suppress = MultipleIncludes
 \documentclass[a4paper, 12pt]{book}
 \usepackage[top=3cm,bottom=2cm,left=2cm,right=2cm,headsep=10pt]{geometry}
 %\geometry{
@@ -12,9 +11,7 @@
 \usepackage{fontawesome}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
-%\usepackage{xcolor} % Required for specifying colors by name
 
-\usepackage{hyperref}
 \usepackage{infoBulle}
 
 \setmainfont[Path = /usr/share/texlive/texmf-dist/fonts/opentype/public/libertinus/,
@@ -40,31 +37,6 @@ ItalicFont = libertinussans-italic,
 \setminted{breaklines, autogobble, fontsize=\footnotesize}
 \setminted[]{bgcolor=pftl-light}
 
-%\newenvironment{warning}[1]{%
-%    \begin{center}
-%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
-%        {#1}
-%        \end{tcolorbox}
-%    \end{center}
-%}
-%
-%\newenvironment{note}[1]{%
-%    \begin{center}
-%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
-%        {#1}
-%        \end{tcolorbox}
-%
-%    \end{center}
-%}
-%
-%\newenvironment{exercise}[1]{%
-%    \begin{center}
-%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
-%        {#1}
-%        \end{tcolorbox}
-%    \end{center}
-%}
-
 \newenvironment{py}[1]{\mintinline{python}{#1}}
 
 \title{Python For The Lab}
@@ -84,16 +56,16 @@ ItalicFont = libertinussans-italic,
     \include{02_Setting_Up}
     \include{03_First_Driver}
     \include{04_MVCs}
-%    \include{05_Device_Model}
-%    \include{06_Experiment_Model}
-%    \include{07_Run_Experiment}
-%    \include{08_Build_Gui}
-%    \include{09_User_Input_And_Plots}
-%    \begin{appendices}
-%        \appendixpage
-%        \include{documentation_daq}
-%        \include{review_basic_operations}
-%        \include{class_python}
-%    \end{appendices}
+    \include{05_Device_Model}
+    \include{06_Experiment_Model}
+    \include{07_Run_Experiment}
+    \include{08_Build_Gui}
+    \include{09_User_Input_And_Plots}
+    \begin{appendices}
+        \appendixpage
+        \include{documentation_daq}
+        \include{review_basic_operations}
+        \include{class_python}
+    \end{appendices}
 
 \end{document}

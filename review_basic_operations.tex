@@ -67,8 +67,7 @@ for i in range(len(a)):
 
 You can have lists with lists in them and many other combinations.
 
-\exercise{Make a list in which each element is a list. Nesting two \mintinline{pycon}{for}
-loops, display all the elements of all the lists.}
+\questionInfo{Exercise}{Make a list in which each element is a list. Nesting two \mintinline{pycon}{for} loops, display all the elements of all the lists.}
 
 Lists can also be iterated over with a much simpler syntax without the need for the index.
 
@@ -96,7 +95,7 @@ And you can make it even more complex, for example, if you want to get only the 
 a = [i for i in range(100) if i%2==0]
 \end{minted}
 
-\exercise{Given a list like: \mintinline{pycon}{b = [1, 2, 'a', 3, 4, 'b', 5, 'c', 'd']}, create another list with only the elements of type string.}
+\questionInfo{Exercise}{Given a list like: \mintinline{pycon}{b = [1, 2, 'a', 3, 4, 'b', 5, 'c', 'd']}, create another list with only the elements of type string.}
 
 Lists are a fundamental Python structure, and it is essential to keep them in mind to follow the syntax of some programs without getting lost.
 
@@ -157,10 +156,10 @@ a['fourth']
 
 If you pay attention, you see that not only the already existent values were updated, but a new one was created.
 
-\exercise{Given two dictionaries,
-\mint{python}|a = {'first': 1, 'second': 2, 'third': 3}|
+\questionInfo{Exercise}{Given two dictionaries,
+\mint{python}{a = {'first': 1, 'second': 2, 'third': 3}}
 and
-\mint{python}|b = {'fourth': 4, 'fifth': 5}|
+\mint{python}{b = {'fourth': 4, 'fifth': 5}}
 merge the second into the first one.}
 
 Of course, it is also possible to delete an element from a dictionary:
@@ -192,4 +191,4 @@ print(getsizeof(b))
 
 You should see that the size of \mintinline{pycon}{a} is \mintinline{pycon}{912\ bytes} while the size of the dictionary \mintinline{pycon}{b} is \mintinline{pycon}{4704\ bytes}. Even if you consider that the dictionary is storing not only the value but also the key, the ratio of memory usage of a dictionary to a list is more than twice.
 
-\exercise{Write a simple for-loop that prints the ratio of the memory usage of a list and a dictionary as a function of the length of each.}
+\questionInfo{Exercise}{Write a simple for-loop that prints the ratio of the memory usage of a list and a dictionary as a function of the length of each.}

@@ -122,7 +122,7 @@ def __init__(self, name=''):
 
 With this modification, if you don't explicitly specify a name when instantiating the class, it defaults to \py{''}, i.e., an empty string.
 
-\exercise{Improve the \mintinline{python}{get_name} method to print a warning message in case the name was not set}
+\questionInfo{Exercise}{Improve the \mintinline{python}{get_name} method to print a warning message in case the name was not set}
 
 \section{Defining class properties}\label{sec:defining-class-properties}
 So far, if you wanted to have properties available right after the instantiation of a class, you had to include them in the \py{__init__} method. However, this is not the only possibility. You can define properties that belong to the class itself. Doing it is as simple as declaring them before the \py{__init__} method. For example, we could do this:
@@ -219,7 +219,7 @@ class Teacher(Person):
 
 When you use \py{super()}, you are going to have access directly to the class from which you are inheriting. In the example above, you explicitly called the \py{__init__} method of the parent class. If you try again to run the method \py{me.get_name()}, you see that no error appears, but also that nothing appears on the screen. This is because you triggered the \py{super().__init__()} without any arguments, and therefore the name defaulted to the empty string.
 
-\exercise{Improve the \py{Teacher} class to be able to specify a name to it when instantiating, for example, you would like to do this: \mintinline{pycon}{Teacher('Red Sparrow', 'Math')}}
+\questionInfo{Exercise}{Improve the \py{Teacher} class to be able to specify a name to it when instantiating, for example, you would like to do this: \mintinline{pycon}{Teacher('Red Sparrow', 'Math')}}
 
 \section{Finer details of classes}\label{sec:finer-details-of-classes}
 With what you have learned up to here, you can achieve many things. It is just a matter of thinking about how to connect different methods when it is useful to inherit. Without a doubt, it helps you to understand the code developed by others. There are, however, some details that are worth mentioning, because you can improve how your classes look and behave.
