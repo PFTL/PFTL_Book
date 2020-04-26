@@ -1,0 +1,65 @@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																			   %
+%																			   %
+%								yMainColor									   %
+%																			   %
+%																			   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Copyright Yves Zumbach 2017
+%-------------------------------------------------------------------------------
+
+% This work is distributed under the LPPL
+%-------------------------------------------------------------------------------
+
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Yves Zumbach
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{yMainColor}[2017/02/17 The yMainColor package is merely a helper that ensure that the color 'mainColor' is defined, along with three variations of grey in a document, by Yves ZUMBACH]
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		Define mainColor
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{xcolor}
+\RequirePackage{xparse}
+
+\providecolor{mainColor}{RGB}{211, 47, 47}
+\providecolor{secondColor}{RGB}{142, 68, 173}
+
+\providecolor{lightGrey}{gray}{0.94}
+\providecolor{middleGrey}{gray}{.75}
+\providecolor{darkGrey}{gray}{.55}
+\colorlet{lightGray}{lightGrey}
+\colorlet{middleGray}{middleGrey}
+\colorlet{darkGray}{darkGrey}
+
+\providecolor{bg}{rgb}{0.95,0.95,0.95}
+\providecolor{ocre}{RGB}{52,177,201} % Define the orange color used for highlighting throughout the book
+\providecolor{exer}{HTML}{A5C5F5}
+\providecolor{exertitle}{RGB}{52,177,201}
+\providecolor{notecolor}{RGB}{100, 149, 237}
+\providecolor{warncolor}{RGB}{255, 59, 0}
+\providecolor{warntitle}{RGB}{255, 59, 0}
+
+\providecolor{pftl-red}{RGB}{204, 24, 30}
+\providecolor{pftl-blue}{RGB}{39, 147, 232}
+\providecolor{pftl-green}{RGB}{85, 153, 0}
+\providecolor{pftl-dark}{RGB}{102, 102, 102}
+\providecolor{pftl-light}{RGB}{241, 241, 241}
+\endinput
