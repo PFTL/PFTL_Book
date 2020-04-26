@@ -65,7 +65,7 @@ if __name__ == "__main__":
     daq.finalize()
 \end{minted}
 
-The last missing bits are the methods for getting and setting a voltage. What we do in these steps was discussed in Section~\ref{subsec:digitizing}. To set a voltage, we first need to transform a number in the range $0-3.3$ to an integer in the range $0-4095$ and then we apply it:
+The last missing bits are the methods for getting and setting a voltage. What we do in these steps was discussed in Section~\ref{subsec:adc-dca}. To set a voltage, we first need to transform a number in the range $0-3.3$ to an integer in the range $0-4095$ and then we apply it:
 
 \begin{minted}{python}
     def set_voltage(self, channel, volts):

@@ -1,5 +1,5 @@
 %! Suppress = Ellipsis
-\chapter{Getting Started with Graphical User Interfaces}\label{ch:gui}
+\chapter{Getting Started with Graphical User Interfaces}\label{ch:starting-gui}
 
 \section{Introduction}\label{sec:gui-introduction}
 Building User Interfaces may seem more complicated than what it is. Once you get the fundamentals, you can see that it is possible to put something together very quickly, especially if we already have some code to which to relate. In the previous chapter, we saw that we can control an experiment from the command line. It is possible to ask ourselves why going through the trouble of a user interface. In some cases, it can be very not only handy to control the parameters of an experiment and to monitor the output in a window especially designed, but it can become necessary to monitor the progress in real-time to make decisions while the experiment runs.
@@ -116,7 +116,7 @@ button.clicked.connect(button_clicked)
 win.setCentralWidget(button)
 \end{minted}
 
-We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. It is the same that we discussed in Section~\ref{subsection:multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
+We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. It is the same that we discussed in Section~\ref{subsec:multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
 
 \subsection{Start a Scan}\label{subsec:start-scan-gui}
 With what we have done so far, triggering a scan from the user interface becomes almost trivial. For the time being, we can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. We only need that when we press the button, a scan starts. We need to mix what we already have in \textbf{run\_experiment.py} with what we have done above. It can look like this:
@@ -227,7 +227,7 @@ class MainWindow(QMainWindow):
 
 We can test this code again and see that we have recovered what we had before. Every time we press on the button, a message appears on the screen. We can also go one step further and start thinking about how to work with the experiment itself. The window is not aware of any experiments, but we would like to be able to trigger a scan if we press the button. Therefore, the experiment has to come from outside of the class and be stored within.
 
-We have already done something like this. When we developed the driver in Section~\ref{section:going-higher-level}, we could send the port number to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{section:device-model}, and for the experiment model in Section~\ref{sec:skeleton-experiment-model}. In all those cases, we were using simple strings, but we are not limited to them. Arguments of methods, or any function for the matter, can be complex objects as well.
+We have already done something like this. When we developed the driver in Section~\ref{sec:going-higher-level}, we could send the port number to the class through the \texttt{\_\_init\_\_} method. We did the same for the device model in Section~\ref{sec:device-model}, and for the experiment model in Section~\ref{sec:skeleton-experiment-model}. In all those cases, we were using simple strings, but we are not limited to them. Arguments of methods, or any function for the matter, can be complex objects as well.
 
 We can adapt the \texttt{MainWindow} to accept an experiment as argument, store it as an attribute and use it when we need to. The code would look like this:
 

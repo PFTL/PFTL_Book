@@ -1,14 +1,15 @@
-\chapter{Review of Basic Operations with Python}\label{review-of-basic-operations-withpython}
+\chapter{Review of Basic Operations with Python}\label{ch:review-of-basic-operations-withpython}
 
-\section{Chapter Objectives}\label{chapterobjectives}
+\section{Chapter Objectives}\label{sec:chapterobjectives}
 
 The objective of \textbf{Python in the Lab} is to bring a developer from knowing the basics of programming to be able to develop software for controlling a complicated setup. However, not all programmers have the same background, and it is essential to establish a common ground from which to start.
 
 This chapter quickly reviews how to start Python and how to interact with it directly from the command line. It also reviews some common data structures, such as lists and dictionaries. It quickly goes through for loops and conditionals. If you are already familiar with these concepts, you can safely skip this chapter.
 
-\section{The Interpreter}\label{theinterpreter}
+\section{The Interpreter}\label{sec:theinterpreter}
 You can start Python from the command line by typing Python and pressing Enter. It should start the Python interpreter, and you should see something like this:
 
+%! Suppress = EnDash
 \begin{minted}{pycon}
 Python 3.6.3 (default, Oct  3 2017, 21:45:48)
 [GCC 7.2.0] on linux
@@ -25,7 +26,7 @@ You can type whatever you like into the interpreter. If it makes sense to Python
 
 The first line is what you type (therefore it has the \mintinline{pycon}{<<<} at the beginning), while the second line is the output Python gives you (in this case, as expected, \mintinline{pycon}{5}). You can go ahead and play with different operations. You can multiply, subtract, divide. Power of numbers can be achieved using \mintinline{pycon}{**}, for example, \mintinline{pycon}{2**.5} means the square root of 2.
 
-\section{Lists}\label{lists}
+\section{Lists}\label{sec:lists}
 From now on, the \mintinline{pycon}{<<<} is suppressed to make it easier for you to copy the code. Python can also be used to achieve much more complicated tasks and with many different types of variables. For example, you can have a list and iterate over every element of it:
 
 \begin{minted}{python}
@@ -99,7 +100,7 @@ a = [i for i in range(100) if i%2==0]
 
 Lists are a fundamental Python structure, and it is essential to keep them in mind to follow the syntax of some programs without getting lost.
 
-\section{Dictionaries}\label{dictionaries}
+\section{Dictionaries}\label{sec:dictionaries}
 Dictionaries are one of the most useful data structures of Python. They are somehow like lists, but instead of accessing them via a numerical index, they are accessed via a string identifier. For example, you can generate a dictionary and access its values by doing:
 
 \begin{minted}{python}

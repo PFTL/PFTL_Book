@@ -15,7 +15,7 @@ The first edition of this book included instructions for using exclusively plain
 \section{Installing Anaconda}\label{sec:installing-anaconda}
 To install Anaconda, you just need to head to the official website: anaconda.com. Go to the download section and select the installer of the newest version of Python. It usually auto-detects your operating system and offers you either a graphical installation (recommended) or a command-line one. If you are on Linux, you have to be careful whether you want the Anaconda Python to become your default Python installation. Typically, there won't be any issues; you just need to be aware of the fact that other programs that rely on Python use the Anaconda version and not the stock version.
 
-\note{Similar to the different distributions of Python, Anaconda also comes in two primary flavors: Anaconda and Miniconda. The main difference is that the latter bundles fewer programs and therefore is lighter to download. Unless you are very low in space on your computer or you have particular requirements, we strongly recommend downloading Anaconda.}
+\tipsInfo{Note}{Similar to the different distributions of Python, Anaconda also comes in two primary flavors: Anaconda and Miniconda. The main difference is that the latter bundles fewer programs and therefore is lighter to download. Unless you are very low in space on your computer or you have particular requirements, we strongly recommend downloading Anaconda.}
 
 \subsection{Using Anaconda}\label{subsec:using-anaconda}
 Even though Anaconda comes with a graphical interface to installing packages, throughout the book, we favor the command line because it is easier to transmit ideas with words. If you are on Windows, you need to start a program called \emph{Anaconda Prompt}, such as we show in the image below:
@@ -90,7 +90,7 @@ Now is time to install the packages we want, starting with Python itself:
  conda install python=3.7
 \end{minted}
 
-\note{The \texttt{3.7} that we added after Python specifies which version of Python we want to use. If you don't specify it, Anaconda installs the newest version, which at the time of writing is \texttt{3.8}. When Python updates, some libraries may not work correctly, or may not be available yet for that specific version. When selecting the Python version, be sure all your libraries are available.}
+\infoInfo{Info}{The \texttt{3.7} that we added after Python specifies which version of Python we want to use. If you don't specify it, Anaconda installs the newest version, which at the time of writing is \texttt{3.8}. When Python updates, some libraries may not work correctly, or may not be available yet for that specific version. When selecting the Python version, be sure all your libraries are available.}
 
 After installing Python, you can start it by running:
 
@@ -282,7 +282,7 @@ Fortunately, Python provides a great tool called Virtual Environment that gives 
 
 You can create isolated working environments for developing software for running specific programs or for performing tests. If you need to update or downgrade a library, you are going to do it within that specific Virtual Environment, and you are not going to alter the functioning of anything else on your computer. Acknowledging the advantages of a Virtual Environment comes with time; once you lose days or even weeks reinstalling packages because something went wrong and your experiment doesn't run anymore, you will understand it.
 
-\warning{Virtual Environments are excellent for isolating Python packages, but many packages rely on libraries installed on the operating system itself. If you need a higher degree of isolation and reproducibility, you should check Anaconda.}
+\criticalInfo{Warning}{Virtual Environments are excellent for isolating Python packages, but many packages rely on libraries installed on the operating system itself. If you need a higher degree of isolation and reproducibility, you should check Anaconda.}
 
 \subsubsection{Virtual Environment on Windows}
 Windows doesn't have the most user-friendly command line, and some of the tools you can use for Python are slightly trickier to install than on Linux or Mac. The steps below guide you through the installation and configuration. If something is failing, try to find help or examples online. There are a lot of great examples in StackOverflow.
