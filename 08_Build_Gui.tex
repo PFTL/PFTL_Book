@@ -107,24 +107,24 @@ Every Widget that we can place on screen has a myriad of signals. From interacti
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
-    def button_clicked():
+def button_clicked():
     print('Button Clicked')
 
-    [...]
-    button = QPushButton('Press Me')
-    button.clicked.connect(button_clicked)
-    win.setCentralWidget(button)
+[...]
+button = QPushButton('Press Me')
+button.clicked.connect(button_clicked)
+win.setCentralWidget(button)
 \end{minted}
 
-We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. It is the same that we discussed in Section~\ref{subsection: multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
+We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \texttt{button\_clicked} and not \texttt{button\_clicked()}. It is the same that we discussed in Section~\ref{subsection:multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
 
 \subsection{Start a Scan}\label{subsec:start-scan-gui}
-With what we have done so far, triggering a scan from the user interface becomes almost trivial. For the time being, we can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. We only need that when we press the button, a scan starts. We need to mix what we already have in \textbf{start\_experiment.py} with what we have done above. It can look like this:
+With what we have done so far, triggering a scan from the user interface becomes almost trivial. For the time being, we can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. We only need that when we press the button, a scan starts. We need to mix what we already have in \textbf{run\_experiment.py} with what we have done above. It can look like this:
 
 \begin{minted}{python}
     from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 
-    from PythonForTheLab.Model import Experiment
+    from PythonForTheLab.Model.experiment import Experiment
 
     experiment = Experiment('experiment.yml')
     experiment.load_config()
@@ -247,9 +247,9 @@ We can adapt the \texttt{MainWindow} to accept an experiment as argument, store 
 The changes to the code were minimal but significant. We have included \texttt{experiment=None} in the init. We have provided a default value for the experiment because this allows us to run the program even if we have no experiment defined. It is useful if we want to test how the window looks like quickly. However, as soon as we press the button, the program crashes. We have to update the \textbf{start\_gui.py} script to accommodate for the changes:
 
 \begin{minted}{python}
-experiment = Experiment()
-experiment.load_config('experiment.yml')
-experiment.initialize()
+experiment = Experiment('experiment.yml')
+experiment.load_config()
+experiment.load_daq()
 
 app = QApplication([])
 window = MainWindow(experiment)
@@ -346,7 +346,7 @@ class MainWindow(QMainWindow):
         self.start_button = QPushButton('Start')
         self.stop_button = QPushButton('Stop')
         self.plot_widget = pg.PlotWidget(title="Plotting I vs V")
-        self.plot = self.plot_widget([0], [0])
+        self.plot = self.plot_widget.plot([0], [0])
 
         layout = QHBoxLayout(self.button_widgets)
         layout.addWidget(self.start_button)
@@ -404,8 +404,8 @@ When we developed the \emph{Experiment class}, we completely neglected this prac
     class Experiment:
         def __init__(self, config_file):
             [...]
-            self.scan_range = np.array([0]) * Q_('V')
-            self.scan_data = np.array([0])  * Q_('V')
+            self.scan_range = np.array([0]) * ur('V')
+            self.scan_data = np.array([0])  * ur('V')
 \end{minted}
 
 We decided to define both attributes as numpy arrays holding only one value: $0\,\textrm{V}$. If we try to plot these results, we get a single point at the origin. It may raise other questions, such as whether it is better to have a $0$ or a \texttt{None} value, because $0\,\textrm{V}$ could be a valid measured value. It is left to the sensitivity of the reader to judge what is best in their specific case. For our purposes, this is enough to get the window running and showing a plot of the data in real-time once the scan starts.
