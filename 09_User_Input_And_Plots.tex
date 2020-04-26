@@ -238,7 +238,7 @@ Instead of just plotting data, we can use the same timer to update the different
             self.stop_button.setEnabled(True)
         else:
             self.start_button.setEnabled(True)
-            self.stop_button.setEnabled(True)
+            self.stop_button.setEnabled(False)
 \end{minted}
 
 The method \texttt{update\_gui} is easy to follow. If the scan is running, we gray out one button but not the other and vice-versa. We only need to be sure this method runs periodically. Since we already have a timer for updating the plot, we can use it to update the GUI as well:
