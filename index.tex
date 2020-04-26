@@ -40,30 +40,30 @@ ItalicFont = libertinussans-italic,
 \setminted{breaklines, autogobble, fontsize=\footnotesize}
 \setminted[]{bgcolor=pftl-light}
 
-\newenvironment{warning}[1]{%
-    \begin{center}
-        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
-        {#1}
-        \end{tcolorbox}
-    \end{center}
-}
-
-\newenvironment{note}[1]{%
-    \begin{center}
-        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
-        {#1}
-        \end{tcolorbox}
-
-    \end{center}
-}
-
-\newenvironment{exercise}[1]{%
-    \begin{center}
-        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
-        {#1}
-        \end{tcolorbox}
-    \end{center}
-}
+%\newenvironment{warning}[1]{%
+%    \begin{center}
+%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-red}, colback=pftl-red!5!white, title={Warning}, outer arc=2mm]
+%        {#1}
+%        \end{tcolorbox}
+%    \end{center}
+%}
+%
+%\newenvironment{note}[1]{%
+%    \begin{center}
+%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-blue}, colback=pftl-blue!5!white, title={Note}, outer arc=2mm]
+%        {#1}
+%        \end{tcolorbox}
+%
+%    \end{center}
+%}
+%
+%\newenvironment{exercise}[1]{%
+%    \begin{center}
+%        \begin{tcolorbox}[boxsep=8pt, width=.95\textwidth,colframe={pftl-green}, colback={pftl-light}, title={Exercise},outer arc=2mm]
+%        {#1}
+%        \end{tcolorbox}
+%    \end{center}
+%}
 
 \newenvironment{py}[1]{\mintinline{python}{#1}}
 
@@ -80,10 +80,10 @@ ItalicFont = libertinussans-italic,
     \newpage
     \tableofcontents
     \mainmatter
-%    \include{01_Introduction}
+    \include{01_Introduction}
     \include{02_Setting_Up}
-%    \include{03_First_Driver}
-%    \include{04_MVCs}
+    \include{03_First_Driver}
+    \include{04_MVCs}
 %    \include{05_Device_Model}
 %    \include{06_Experiment_Model}
 %    \include{07_Run_Experiment}

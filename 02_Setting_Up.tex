@@ -243,7 +243,7 @@ One of the characteristics that make Python such a versatile language is the var
 
 Pip works both with Python 3 and Python 2. To avoid mistakes, you have to be sure you are using the version of Pip that corresponds to the version of Python you want to use. If you are on Linux and you have both Python 2 and Python 3 installed, probably there are two commands, \texttt{pip2} and \texttt{3}. You should use the latter to install packages for Python 3. On Windows, you probably have to use \texttt{pip.exe} instead of just \texttt{pip}. If, for some reason it doesn't work, you need to follow the same procedure that we explained earlier to add python.exe to the PATH, but this time with the location of your pip.exe file.
 
-\note{Since the moment in which Anaconda was born to nowadays, pip has gone through a very long road. Today, we can install complex packages such as numpy or PyQt directly. However, there is still some discussion regarding how much we can expect from pip at the moment of compiling programs or performing complex tasks.}
+\tipsInfo{Info}{Since the moment in which Anaconda was born to nowadays, pip has gone through a very long road. Today, we can install complex packages such as numpy or PyQt directly. However, there is still some discussion regarding how much we can expect from pip at the moment of compiling programs or performing complex tasks.}
 
 Installing a package becomes very simple. If you would like to install a package such as numpy, you should just type:
 \begin{minted}{bash}
@@ -255,7 +255,7 @@ Windows users should instead type:
 pip.exe install numpy
 \end{minted}
 
-\note{Before installing the rest of the packages, I suggest you read the section on the Virtual Environment. It helps you keep clean and separated environments for your software development.}
+\warningInfo{Before Continuing}{Before installing the packages listed below, it is important to read the following section on the Virtual Environment. It helps keeping clean and separated environments for software development.}
 
 Pip automatically grabs the latest version of the package from the repository and installs it on your computer. To follow the book, you need to install the packages listed below:
 \begin{itemize}
@@ -330,9 +330,7 @@ It gives you a list of all the packages that you have installed within that work
 
 You can try to install the packages listed before, such as numpy, PyQt5,  and see that they get installed only within your Test environment. If you activate/deactivate the virtual environment, the packages you installed within it are not going to be available, and you can see this with \mintinline{bash}{pip freeze}
 
-\warning{If you are using Windows Power Shell instead of the Command Prompt, there are some things that you have to change.}
-
-If you are a Power Shell user, first, you should install another wrapper:
+\checkInfo{If you are using Windows Power Shell instead of the Command Prompt, there are some things that you have to change.}
 
 \begin{minted}{powershell}
 pip install virtualenvwrapper-powershell
@@ -347,6 +345,7 @@ Set-ExecutionPolicy RemoteSigned
 Follow the instructions that appear on the screen to allow the changes on your computer. It should allow the wrapper to work. You can repeat the same commands that we explained just before and see if you can create a virtual environment.
 
 If it still doesn't work, don't worry too much. Sometimes there is a problem with the wrapper, but you can still create a virtual environment by running:
+
 \begin{minted}{powershell}
 virtualenv.exe Testing --python=path\to\python\python.exe
 \end{minted}
@@ -450,4 +449,4 @@ Another very powerful IDE for Python is \textbf{Microsoft's Visual Studio}, whic
 
 There are other options around, such as Atom or Sublime. However, they don't specifically target Python as the previous two. Remember that always, the choice is yours. Editors should be a tool and not an obstacle. If you have never used an IDE before, I suggest you just install PyCharm. That is what we use during the workshops, and everyone has always been very pleased with it. If you already have an IDE or a workflow with which you are happy, then keep it. If at some point, it starts failing you, you can reevaluate the situation.
 
-\warning{Python is sensitive to the use of tabs and spaces. You shouldn't mix them. A standard is to use 4 spaces to indent your code. If you decide to go for a text editor, be sure to configure it such that it respects Python's stylistic choices. Notably, Notepad++ comes configured by default to use tabs instead of spaces, which is a problem if you ever copy-paste code from other sources.}
+\warningInfo{Tabs or Spaces}{Python is sensitive to the use of tabs and spaces. You shouldn't mix them. A standard is to use 4 spaces to indent your code. If you decide to go for a text editor, be sure to configure it such that it respects Python's stylistic choices. Notably, Notepad++ comes configured by default to use tabs instead of spaces, which is a problem if you ever copy-paste code from other sources.}
