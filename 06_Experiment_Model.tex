@@ -397,7 +397,7 @@ Finally, we can see the data we acquired after the scan runs. It would allow us 
 Now we can proceed further to the last missing step: saving data.
 
 \section{Saving Data to a File}\label{sec:saving-data}
-After we perform a scan, we must save both the data and the \emph{metadata}. With metadata we mean inforation on the parameters used to perform an experiment and that would allow us or anybody else to repeat the measurement. Let's start by the beginning, just saving data to a file, we are going to use the built-in functions of numpy for this, because we have to save two arrays: \py{scan_data} and \py{scan_range}. And since we already know that Pint and Numpy interact in special ways, we anticipate the errors that may appear:
+After we perform a scan, we must save both the data and the \emph{metadata}. With metadata we mean information on the parameters used to perform an experiment and that would allow us or anybody else to repeat the measurement. Let's start by the beginning, just saving data to a file, we are going to use the built-in functions of numpy for this, because we have to save two arrays: \py{scan_data} and \py{scan_range}. And since we already know that Pint and Numpy interact in special ways, we anticipate the errors that may appear:
 
 \begin{minted}{python}
 def save_data(self):
