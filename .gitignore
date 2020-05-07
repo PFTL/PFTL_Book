@@ -2,6 +2,7 @@
 *.backup
 *.log
 _minted-index/
+_minted-index_print/
 *.pdf
 *.zip
 *.toc
