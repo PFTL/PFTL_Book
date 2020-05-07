@@ -93,7 +93,7 @@ We decided to use the \py{IDN} command because we knew it existed. But if we are
 
 In the manual, the first thing we have to find is the line termination. We used the newline character because we knew it, but each device can specify something different. Some devices use the newline character as part of the commands you can send and specify that the line ending must be something else. Once we know how to terminate commands, we can go ahead and see the list of options.
 
-Many devices (but not all) follow a standard called SCPI\footnote{https://en.wikipedia.org/wiki/Standard\_Commands\_for\_Programmable\_Instruments}. The standard makes devices easy to exchange, because the commands for all oscilloscopes are the same, for all function generators are the same, and so forth. Moreover, the SCPI standard follows a structure that makes messages easy to understand and modular. A more powerful oscilloscope, for example, has commands not available to a more basic device, but the common features are controlled by the same messages.
+Many devices (but not all) follow a standard called SCPI\footnote{https://bit.ly/wiki\_SCPI}. The standard makes devices easy to exchange, because the commands for all oscilloscopes are the same, for all function generators are the same, and so forth. Moreover, the SCPI standard follows a structure that makes messages easy to understand and modular. A more powerful oscilloscope, for example, has commands not available to a more basic device, but the common features are controlled by the same messages.
 
 Now that we know how to get started with serial communication, it is time to move to more complex programs. Typing everything on the Python interpreter is not handy and takes much time. So now we can start working with files.
 
@@ -121,7 +121,7 @@ Now we can run the file:
  python communicate_with_device.py
 \end{minted}
 
-\tipsInfo{To be able to run the file, you need to be in the same folder where the file is. To change the folder in the terminal, you can use \py{cd}}
+\tipsInfo{Changing Directories}{To be able to run the file, you need to be in the same folder where the file is. To change the folder in the terminal, you can use \py{cd}}
 
 \textbf{What happens when you run the file?}
 
@@ -193,7 +193,7 @@ The value you are reading doesn't make much sense, especially if there is nothin
 
 \questionInfo{Exercise}{What happens if you use \mintinline{python}{read()} instead of \mintinline{python}{readline()}?}
 
-\questionInfo{Exercise}{What happens if you use \py{read()} once, and then \py{readline()}?}
+\questionInfo{Exercise}{What happens if you use \py{read()} once, and then\\ \py{readline()}?}
 
 \questionInfo{Exercise}{What happens if you call \py{readline()} before writing the \py{IDN} command?}
 
@@ -421,9 +421,9 @@ def __init__(self, port):
 
 def initialize(self):
     self.rsc = serial.Serial(port=self.port,
-                        baudrate=self.DEFAULTS['baudrate'],
-                        timeout=self.DEFAULTS['read_timeout'],
-                        write_timeout=self.DEFAULTS['write_timeout'])
+                    baudrate=self.DEFAULTS['baudrate'],
+                    timeout=self.DEFAULTS['read_timeout'],
+                    write_timeout= self.DEFAULTS['write_timeout'])
     sleep(1)
 \end{minted}
 
@@ -443,7 +443,7 @@ volts = dev.get_analog_input(0)
 print(volts)
 \end{minted}
 
-So far the only difference with the previous code is the \mintinline{python}{__init__} method. We have to improve the rest of the class. We already know that for message-based devices there are two operations: \textbf{read} and \textbf{write}. However, we will only read after a write (remember, we should ask something from the device first.) It is possible to update the methods of the class to reflect this behavior. Since all the commands of the device return a value, we can develop a method called \py{query}:
+\sloppy So far the only difference with the previous code is the \mintinline{python}{__init__} method. We have to improve the rest of the class. We already know that for message-based devices there are two operations: \textbf{read} and \textbf{write}. However, we will only read after a write (remember, we should ask something from the device first.) It is possible to update the methods of the class to reflect this behavior. Since all the commands of the device return a value, we can develop a method called \py{query}:
 
 \begin{minted}{python}
 def query(self, message):
@@ -624,7 +624,7 @@ To quickly see how to work with PyVISA, we can start in a python interpreter, be
  'PFTL DAQ Device built by Python for the Lab v.1.2020\n'
 \end{minted}
 
-We make explicit the backend we want to use by calling \py{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, we list all the devices connected to the computer. Bear in mind that this depends on the other packages that we installed. For example, we have only PySerial, and therefore pyvisa-py only lists serial devices. We can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what we have done before. It becomes clear why we decided to call \emph{resource} the communication with the device.
+\sloppy We make explicit the backend we want to use by calling \py{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, we list all the devices connected to the computer. Bear in mind that this depends on the other packages that we installed. For example, we have only PySerial, and therefore pyvisa-py only lists serial devices. We can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what we have done before. It becomes clear why we decided to call \emph{resource} the communication with the device.
 
 Pay attention to the \py{query} method that we use to get the serial number from the device. We didn't develop it. PyVISA already took care of defining query for us. Not only PyVISA takes care of the query method, but they have plenty of options that we can use, such as transforming the output according to some rules or establishing the write termination. If we were to follow the pyVISA path, we could start by reading their documentation\footnote{https://pyvisa.readthedocs.io}.
 

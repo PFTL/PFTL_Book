@@ -268,7 +268,7 @@ if __name__ == "__main__":
     daq.finalize()
 \end{minted}
 
-If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite\footnote{You can check the http://articles.latimes.com/1999/oct/01/news/mn-17288}. The Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
+If you are hesitant about the impact that different unit systems can have, there is a great example involving a multi-million dollar satellite\footnote{You can check the article on LA times: https://bit.ly/la-times-mo}. The Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
 
 \section{Testing the DAQ Model}\label{sec:testing-the-daq-model}
 At this point, we have a very functional program. We can handle units, we have split the logic of the units from the driver, meaning that we can easily share our code with colleagues or the rest of the world. It is time to test our program. One of the reasons we created the Examples folder was to be able to add extra python files that don't belong to our core program. In the Examples folder, create a file called \textbf{test\_daq.py}, and we can start using the Model to do some measurements:

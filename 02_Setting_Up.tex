@@ -1,5 +1,5 @@
 %! Suppress = EnDash
-\chapter{Setting Up The Development Environment}\label{ch:setting-up}
+\chapter[Setting Up]{Setting Up The Development Environment}\label{ch:setting-up}
 \section{Introduction}\label{sec:setting-up-introduction}
 To start developing software for the lab, we are going to need different programs. The process of installing programs is different depending on the operating system. It is almost impossible to keep an up-to-date detailed instruction set for every possible version of each program and every possible hardware configuration. The steps below are general and should not present issues. When in doubt, it is always best to check the instructions that the developers of the different packages provide, or ask in the forums.
 
@@ -160,7 +160,7 @@ If you want to remove a conda environment called \py{env}, you can run the follo
 conda remove --name env --all
 \end{minted}
 
-In practice, you also use the \py{remove} command to uninstall packages. When you do \py{remove --name env} means you want to remove a specific package from that environment, while the \py{--all} tells Anaconda to remove all the packages and the environment itself. Use with care, since we can't undo it.
+\sloppy In practice, you also use the \py{remove} command to uninstall packages. When you do \py{remove --name env} means you want to remove a specific package from that environment, while the \py{--all} tells Anaconda to remove all the packages and the environment itself. Use with care, since we can't undo it.
 
 \section{Installing Pure Python}\label{sec:installing-pure-python}
 If instead of installing Anaconda, you prefer to install pure Python, the procedure is straightforward, it just varies slightly on different operating systems.
@@ -267,7 +267,7 @@ Pip automatically grabs the latest version of the package from the repository an
  \item pyqtgraph -> Used for plotting results within the User Interfaces
 \end{itemize}
 
-You can install all the packages with pip without trouble. If you are in doubt, you can search for packages by typing \mintinline{bash}{pip search package_name}. Usually, it is not essential the order in which you install the packages. Notice that since pip installs the dependencies as well, sometimes you get a message saying that a package is already installed even if you didn't do it manually.
+\sloppy You can install all the packages with pip without trouble. If you are in doubt, you can search for packages by typing \mintinline{bash}{pip search package_name}. Usually, it is not essential the order in which you install the packages. Notice that since pip installs the dependencies as well, sometimes you get a message saying that a package is already installed even if you didn't do it manually.
 
 To build user interfaces, we have decided to use Qt Designer, which is an external program provided by the creators of Qt. You don't need to have this program to develop a graphical application because you can do everything directly from within Python. However, this approach can be much more time consuming than dragging and dropping elements onto a window.
 
@@ -427,7 +427,7 @@ Installing Qt Designer on Windows only takes one Python package: pyqt5-tools. Ru
  pip install pyqt5-tools
 \end{minted}
 
-And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder depends on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
+\sloppy And the designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The location of the folder depends on how you installed Python and whether you are using a virtual environment. If you are not sure, use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
 \subsection{Installing on Linux}\label{subsec:installing-on-linux}
 Linux users can install Qt Designer directly from within the terminal by running:

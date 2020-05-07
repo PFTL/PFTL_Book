@@ -1,0 +1,77 @@
+\documentclass[a4paper, 12pt]{book}
+\usepackage[top=3cm,bottom=2cm,left=2cm,right=2cm,headsep=10pt]{geometry}
+\geometry{
+    papersize={155.57mm, 234.95mm},
+    layoutsize={152.4mm, 228.61mm},
+    layoutoffset = {1.58mm,1.58mm},
+    bindingoffset = -1.27mm,
+    showcrop,
+}
+\usepackage{fontspec}
+\usepackage{fontawesome}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{emptypage}
+
+\usepackage{infoBulle}
+
+\setmainfont[Path = /usr/share/texlive/texmf-dist/fonts/opentype/public/libertinus/,
+BoldFont = libertinussans-bold,
+ItalicFont = libertinussans-italic,
+]{libertinussans-regular}
+
+\setmonofont[Scale=MatchLowercase, Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
+
+\usepackage{pdfpages}
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\hyphenpenalty=1000 % default 50
+\tolerance=500      % default 200
+
+\usepackage[titletoc]{appendix}
+\usepackage{titlesec} % Allows customization of titles
+\usepackage{tcolorbox}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{minted}
+\setminted{breaklines, autogobble, fontsize=\scriptsize}
+\setminted[]{bgcolor=pftl-light}
+
+\newenvironment{py}[1]{\mintinline{python}{#1}}
+
+\title{Python For The Lab}
+\author{Aquiles Carattino}
+
+\begin{document}
+    \frontmatter
+
+%    \includepdf[pages=-]{cover-pftl.pdf}
+
+    \include{00_title}
+
+    \newpage
+    \pagestyle{plain}
+    \tableofcontents
+    \mainmatter
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[RO, LE]{\leftmark}
+    \fancyfoot[RO, LE]{\thepage}
+    \include{01_Introduction}
+    \include{02_Setting_Up}
+    \include{03_First_Driver}
+    \include{04_MVCs}
+    \include{05_Device_Model}
+    \include{06_Experiment_Model}
+    \include{07_Run_Experiment}
+    \include{08_Build_Gui}
+    \include{09_User_Input_And_Plots}
+    \begin{appendices}
+        \appendixpage
+        \include{documentation_daq}
+        \include{review_basic_operations}
+        \include{class_python}
+    \end{appendices}
+
+\end{document}

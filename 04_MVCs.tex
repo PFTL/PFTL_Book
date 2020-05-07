@@ -138,7 +138,7 @@ if __name__ == '__main__':
 
 \end{minted}
 
-From the Terminal, we can just type \py{python Controller.dummy_controller.py}. The output should be:
+\sloppy From the Terminal, we can just type \py{python Controller.dummy_controller.py}. The output should be:
 
 \begin{minted}{bash}
 This is the dummy Controller
@@ -148,7 +148,7 @@ This is a function in the dummy Controller
 
 What we see is that the entire code got executed.
 
-\questionInfo{Exercise}{What do you expect to happen if you do \mintinline{python}{import dummy_controller}?}
+\questionInfo{Exercise}{What do you expect to happen if you do\\ \mintinline{python}{import dummy_controller}?}
 
 Things are going to be different when we import the file. In the Python interpreter we can do the following:
 
@@ -164,7 +164,7 @@ This is a function in the dummy Controller
 
 First, we notice that the code at the end never gets executed. This means that the \py{if} statement is not \py{True}. This block is handy when we want to have code that works standalone (when we execute it directly, for example), but we don't want to execute those lines if we import it. In the case of the real Controller, we wanted to leave some examples at the end to show how we can use it, but when we are importing a class, we don't want it to start communicating with the device.
 
-We can also see that the line \py{"This is the dummy Controller"} appears only once. Python knows that we have already imported the module \textbf{dummy\_controller}, and it doesn't execute again the lines that we already imported. Therefore, we have to be aware that it is not a matter of using the \py{from} in the importing procedure. We can close Python, start it again and revert the order in which we import, and the print is still there the first time but not the second. It means that Python is smart when importing modules, and won't fetch the elements it already has available, even if we are importing in a slightly different way.
+\sloppy We can also see that the line \py{"This is the dummy Controller"} appears only once. Python knows that we have already imported the module \textbf{dummy\_controller}, and it doesn't execute again the lines that we already imported. Therefore, we have to be aware that it is not a matter of using the \py{from} in the importing procedure. We can close Python, start it again and revert the order in which we import, and the print is still there the first time but not the second. It means that Python is smart when importing modules, and won't fetch the elements it already has available, even if we are importing in a slightly different way.
 
 \tipsInfo{Naming Conventions}{We should establish some naming conventions to avoid confusion later on. In Python, any file that defines variables, functions, or classes is called a \mintinline{python}{Module}. The folder that contains modules is called a \mintinline{python}{Package}.}
 

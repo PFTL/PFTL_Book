@@ -148,7 +148,7 @@ After improving the window design, we can run again the program and we will see 
 \begin{minted}{python}
     self.start_line.setText(self.experiment.config['Scan']['start'])
     self.stop_line.setText(self.experiment.config['Scan']['stop'])
-    self.num_steps_line.setText(str(self.experiment.config['Scan']['num_steps']))
+    self.num_steps_line.setText(str(self.experiment.config['Scan'] ['num_steps']))
 \end{minted}
 
 The \py{QLineEdit} objects have a method called \py{setText} that allows us to change what is displayed. For the start and stop values, there are no problems, because their values are already strings (remember they include the units), but the number of steps is an integer. PyQt is a very thin wrapper and won't try to convert a number to a string. We need to force it ourselves, adding the \py{str} function.
@@ -283,7 +283,7 @@ Of course, we may be tempted to open a pop-up dialog to ask for the folder where
 
 \questionInfo{Exercise}{Qt bundles a \py{QFileDialog} widget, which allows the user to select a folder on the computer or create a new one. It can be used like this:
 
-    \py{folder = QFileDialog.getExistingDirectory(self, 'Choose Folder')}.
+    \mint{python}{folder = QFileDialog.getExistingDirectory(self, 'Choose Folder')}
 
     Create a new action in the Designer to select the folder, and a new method in the main window to handle the selection of a directory to save the data.}
 
