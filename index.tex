@@ -11,6 +11,7 @@
 \usepackage{fontawesome}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
+\usepackage{emptypage}
 
 \usepackage{infoBulle}
 
@@ -42,16 +43,22 @@ ItalicFont = libertinussans-italic,
 \title{Python For The Lab}
 \author{Aquiles Carattino}
 
+\setlength{\headheight}{16pt}
+
 \begin{document}
     \frontmatter
 
     \includepdf[pages=-]{cover-pftl.pdf}
 
     \include{00_title}
-
     \newpage
+    \pagestyle{empty}
     \tableofcontents
     \mainmatter
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[R]{\leftmark}
+    \fancyfoot[C]{\thepage}
     \include{01_Introduction}
     \include{02_Setting_Up}
     \include{03_First_Driver}
