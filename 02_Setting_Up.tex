@@ -4,11 +4,11 @@
 To start developing software for the lab, you're going to need various different programs. The process of installing those programs will be different depending on your operating system. It's almost impossible to keep up-to-date, detailed sets of instructions for every possible version of each program, or for every possible hardware configuration. The steps below are generalized and should not present you with any issues. When in doubt, it's always best to either check the instructions that the package developers provide or ask in the forums.
 
 \section{Choosing Pure Python or Anaconda}\label{sec:python-or-anaconda}
-If you're already familiar with Python, then you probably know that there are different distributions that are worth discussing. In and of itself, Python is a text document that specifies what to expect when it encounters certain commands. This gives you much freedom to develop different implementations of those specifications, each one with different advantages. The \emph{official} distribution is available at python.org and is the distribution maintained by the Python Software Foundation. In the following sections, you'll see how to install it step by step. This distribution is also referred to as CPython because it's written in the programming language \textbf{C}. The official distribution follows Python's specifications to the letter. As a result, this is the one that comes bundled with Linux and Mac computers. Newer versions of Windows will start shipping the official Python distribution as well.
+If you're already familiar with Python, then you probably know that there are different \textbf{distributions} that are worth discussing. In and of itself, Python is a text document that specifies what to expect when it encounters certain commands. This gives you much freedom to develop different implementations of those specifications, each one with different advantages. The \emph{official} distribution is available at python.org and is the distribution maintained by the Python Software Foundation. In the following sections, you'll see how to install it step by step. This distribution is also referred to as CPython because it's written in the programming language \textbf{C}. The official distribution follows Python's specifications to the letter. As a result, this is the one that comes bundled with Linux and Mac computers. Newer versions of Windows will start shipping the official Python distribution as well.
 
 However, the base implementation of Python left room for improvement in certain areas. Some developers started to release optimized Python distributions that were tailored for specific tasks. For example, Intel released a specially-designed Python version to support multi-core architectures, one that leverages specific, low-level libraries that they developed themselves.
 
-There are other versions of Python, such as Pypy, Jython, Iron Python, and others. Each one has its own merits and drawbacks. Some can run much faster in some contexts but at the expense of limiting the number of things that you can do. Between this wealth of options, there's one that's very popular amongst scientists and those doing numeric computations called \emph{Anaconda}, which we cover in this book.
+There are other versions of Python, such as Pypy, Jython, Iron Python, and others. Each one has its own merits and drawbacks. Some can run much faster in some contexts but at the expense of limiting the number of things that you can do. Between this wealth of options, there's one that's very popular amongst scientists and those doing numeric computations called \textbf{Anaconda}, which we cover in this book.
 
 To expand Python, we can use external packages that can be developed and made publicly available. In the past, the Python package manager (pip) was limited; it allowed you to install only more straightforward packages. There was a clear need to have a tool that allowed the installation of more complex packages, including libraries not written in Python. Most numerical programs rely on libraries written in lower-level programming languages such as Fortran or C. Those libraries are not always easy to install on all operating systems, nor is it straightforward to keep track of their dependencies and versions. Anaconda was born to address these issues and is still thriving to this day.
 
@@ -17,22 +17,24 @@ Anaconda is a distribution of Python that comes with \emph{batteries included} f
 The first edition of this book included instructions for exclusively using pure Python because Anaconda is overkill for the purposes we're covering. However, it's common for researchers to have Anaconda installed on their computers. Therefore, we decided to show you how to work with it. If you're starting from scratch, we highly encourage you to begin with Anaconda, because it makes your life as a scientist much easier. However, if you're using a more limited computer or if your installation options are limited, then you can use pure Python. For this book, it's simple to install all the required libraries with either approach.
 
 \section{Installing Anaconda}\label{sec:installing-anaconda}
-To install Anaconda, you just need to head to the official website: anaconda.com. Go to the download section and select the installer of the newest version of Python. It usually auto-detects your operating system and offers you either a graphical installation (recommended) or a command-line one. If you are on Linux, you have to be careful whether you want the Anaconda Python to become your default Python installation. Typically, there won't be any issues; you just need to be aware that other programs that rely on Python use the Anaconda version and not the stock version.
+To install Anaconda, you just need to head to the official website: anaconda.com. Go to the download section and select the installer for the newest version of Python. The site usually auto-detects your operating system and offers you either a graphical installation (recommended) or a command-line one. If you're on Linux, you have to be careful whether you want the Anaconda Python to become your default Python installation. Typically, there won't be any issues; you'll just need to be aware that other programs that rely on Python will use the Anaconda version and not the stock version.
 
-\tipsInfo{Note}{Similar to the different distributions of Python, Anaconda also comes in two primary flavors: Anaconda and Miniconda. The main difference is that the latter bundles fewer programs and therefore is lighter to download. Unless you are very low in space on your computer or have particular requirements, we strongly recommend downloading Anaconda.}
+\tipsInfo{Note}{Similar to the different distributions of Python, Anaconda also comes in two primary flavors: Anaconda and Miniconda. The main difference is that the latter bundles fewer programs and is therefore lighter to download. Unless you're very low in space on your computer or have particular requirements, we strongly recommend downloading the full installation for Anaconda.}
 
 \subsection{Using Anaconda}\label{subsec:using-anaconda}
-Even though Anaconda comes with a graphical interface to installing packages, we favor the command line throughout the book because it is easier to transmit ideas with words. If you are on Windows, you need to start a program called \emph{Anaconda Prompt}, such as we show in the image below:
+Even though Anaconda comes with a graphical interface to install packages, it's highly recommended that you use the command line because it's easier to transmit ideas with words. If you're on Windows, you need to start a program called \emph{Anaconda Prompt}, as shown in the image below:
 
 \begin{center}
 \includegraphics[width=.5\textwidth]{images/Chapter_02/AnacondaPrompt_Menu.png}
 \end{center}
 
-If you are on Linux, you only need to open a terminal. On Ubuntu, you can do this by pressing Ctrl+Alt+T. What is important to note is that when you trigger Anaconda, you see that your command line has a \mintinline{bash}{(base)} prepending it. This is the best indication to know you are running on Anaconda installation, as shown in the image below:
+If you're on Linux, you only need to open a terminal. On Ubuntu, you can do this by pressing Ctrl+Alt+T. What's important to note is that when you trigger Anaconda, you'll see that your command line has a \mintinline{bash}{(base)} prepending it, as shown in the image below:
 
 \begin{center}
 \includegraphics[width=.5\textwidth]{images/Chapter_02/AnacondaPrompt.png}
 \end{center}
+
+This is the best indication to know you're running the Anaconda installation.
 
 You can run the following command to see all the installed packages:
 
@@ -40,7 +42,7 @@ You can run the following command to see all the installed packages:
 conda list
 \end{minted}
 
-The output depends on what you have installed, and if you have already used Anaconda in the past. You see that at the beginning it tells you where the Anaconda installation is, and then you have four columns: Name, Version, Build, and Channel, something like this:
+The output you'll see will depend on what you have installed and whether or not you've already used Anaconda in the past. You'll see that at the beginning it tells you where your Anaconda installation is, followed by four columns: Name, Version, Build, and Channel. It should look something like this:
 
 \begin{minted}{bash}
 # packages in environment at /opt/anaconda3:
@@ -52,34 +54,36 @@ pyyaml                    5.3              py37h7b6447c_0
 yaml                      0.1.7                had09818_2
 \end{minted}
 
-I have just selected some of the packages as an example, but the output should be much longer. One of the good things about Anaconda is that it keeps track of each package, its version, and the build. The difference is that you may be using Anaconda on a computer with an Intel processor, or a Raspberry Pi with an ARM processor. In both cases, the version of, let's say, numpy may be the same, but they were compiled differently. You could also be using the same version of numpy but with a different version of Python, hence the \py{py37} that appears in the build numbers, allowing you to keep full track of what you are doing at every moment.
+This image shows a few example packages, but your output should be much longer.
 
-The last two lines show you a package called \py{pyyaml} that depends on a library called \py{yaml}, and that we use later. With Anaconda, you can keep track of both separately, the Python package and the lower-level library that this package uses. If you come from Linux, this is not a great surprise, since this is precisely what the package manager in your computer does. If you come from Windows, however, this is something incredibly handy.
+One of the good things about Anaconda is that it keeps track of each package, its version, and the build. The difference is that you may be using Anaconda on a computer with an Intel processor, or a Raspberry Pi with an ARM processor. In both cases, the version of, let's say, \py{numpy} may be the same, but they were compiled differently. You could also be using the same version of \py{numpy} but with a different version of Python (hence the \py{py37} that appears in the build numbers) which allows you to keep track of what you're doing at any given moment.
 
-Let's say we would like to install a package that is not yet available. A package that we use later in the book is called \py{PySerial}. Installing it becomes as easy as running the following command:
+The last two lines show you a package called \py{pyyaml} that depends on a library called \py{yaml}, which you'll use later. With Anaconda, you can separately keep track of both the Python package and the lower-level library that this package uses. If you're coming from Linux, this won't be a great surprise, since this is precisely what the package manager on your computer does. If you're coming from Windows, however, this is something incredibly handy.
+
+Say you want to install a package that you don't yet have on your machine. Let's see how you would install \py{PySerial}, which is a package that you'll use later in the book. Installing it becomes as easy as running the following command:
 
 \begin{minted}{bash}
 conda install pyserial
 \end{minted}
 
-It outputs some information, such as the version and the build, and asks us if we want to install it. We can select 'yes', and it proceeds. If we list the installed packages again, you notice that PySerial is on it.
+This command outputs some information, such as the version and the build, then asks if you want to install it. You can select 'yes' and it will proceed. If you list the installed packages again, you'll notice that PySerial is listed there.
 
-But this is not all Anaconda allows us to. We can also separate environments based on your projects.
+But this is not all Anaconda allows you to do. You can also use separate environments based on your projects.
 
 \subsection{Working with Conda environments}\label{subsec:conda-environments}
-A conda environment is, in practical matters, a folder where all the packages that we need to run code are located, including also the underlying libraries. The environments are isolated from each other; therefore, it does not affect the others if you update or delete a package on one. When you are working on different projects, perhaps one of them needs a specific library version, and you don't want to ruin the other projects. To create a new environment, you need to run the following command (change \py{myenv} by any name you want):
+A \textbf{conda environment} is, in practical matters, a folder where all the packages that you'll need to run your code are located, including any underlying libraries. The environments are \textbf{isolated} from each other; in other words, updating or deleting a package in one environment won't affect the state of that same package in any other environment. When you're working on different projects, there may be times where one needs a specific library version, and you don't want to ruin the other projects. To create a new environment, you need to run the following command (changing \py{myenv} to any name you want):
 
 \begin{minted}{bash}
  conda create --name myenv
 \end{minted}
 
-And then we activate it:
+Then you activate it:
 
 \begin{minted}{bash}
  conda activate myenv
 \end{minted}
 
-If now you list the installed packages you will see there is nothing there:
+Now if you list the installed packages you'll see there's nothing there:
 
 \begin{minted}{bash}
 conda list
@@ -88,21 +92,23 @@ conda list
 # Name                    Version                   Build  Channel
 \end{minted}
 
-Now is time to install the packages we want, starting with Python itself:
+From here, in your newly created environment, it's time to install the packages you want, starting with Python itself:
 
 \begin{minted}{bash}
  conda install python=3.7
 \end{minted}
 
-\infoInfo{Python Versions}{The \py{3.7} that we added after Python specifies which version of Python we want to use. If you don't specify it, Anaconda installs the newest version, which at the time of writing is \py{3.8}. When Python updates, some libraries may not work correctly, or may not be available yet for that specific version. When selecting the Python version, be sure all your libraries are available.}
+This will install the specified version of Python in your new environment.
 
-After installing Python, you can start it by running:
+\infoInfo{Python Versions}{The \py{3.7} that you added after \py{python=} specifies which version of Python we want to use. If you don't specify it, then Anaconda installs the latest version, which at the time of writing is \py{3.8}. When Python updates, some libraries may not work correctly, or they  may not yet be available for that specific version. When selecting the Python version, be sure all your libraries are available.}
+
+After installing Python, you can run it by typing:
 
 \begin{minted}{bash}
  python
 \end{minted}
 
-And the output will be something like this:
+The output will look something like this:
 
 \begin{minted}{text}
 Python 3.7.7 (default, Mar 26 2020, 15:48:22)
@@ -116,55 +122,59 @@ To exit, just type:
 exit()
 \end{minted}
 
-To follow the book, you will need these packages:
+To follow the book, you'll need these packages:
 
 \begin{itemize}
- \item numpy -> For working with numerical arrays
- \item pyserial -> For communicating with serial devices
- \item PyYAML -> To work with YAML files, a specially structured text file
- \item PyQt -> Used for building Graphical User Interfaces
- \item pyqtgraph -> Used for plotting results within the User Interfaces
+ \item NumPy -> For working with numerical arrays
+ \item pySerial -> For communicating with serial devices
+ \item PyYAML -> For working with YAML files, a specially structured text file
+ \item PyQt -> For building Graphical User Interfaces
+ \item PyQtGraph -> For plotting results within the User Interfaces
 \end{itemize}
 
-Which we can install by running:
+You can install all of these by running:
 
 \begin{minted}{bash}
 conda install numpy pyserial pyyaml pyqt pyqtgraph
 \end{minted}
 
-Don't worry too much about these packages, since we will see one by one later on. If you run \mintinline{bash}{conda list}, you see that you got many more things installed. Each package depends either on other packages or libraries, and Anaconda took care of installing all of them for us. With a \mintinline{bash}{conda install} command, we can install packages that Anaconda itself maintains. Those are official packages that come with a \emph{certification} of quality. Many companies allow their employees to install only packages officially supported by Anaconda to avoid having malware installed within their network.
+Don't worry too much about these packages, since you'll see them one-by-one later on.
 
-To follow the book, we need one extra package called \py{Pint}. This package is not on the official conda repositories. To install packages that didn't make it to the official repository yet, we can use an unofficial repository called \py{conda forge}. Some packages that are not mature enough, or versions that are too new and not tested enough, are located in this repository. To install a package, we just need to run the following command:
+If you run \mintinline{bash}{conda list}, you'll see that there are \emph{many} more packages installed. Each package depends either on other packages or libraries, and Anaconda took care of installing all of them for you. With a \mintinline{bash}{conda install} command, you can install packages that Anaconda itself maintains. These are official packages that come with a certification of quality. Many companies will allow their employees to only install packages that are officially supported by Anaconda, in order to avoid having malware installed within their network.
+
+To follow the book, you'll need one more package called \py{Pint}. This package is \emph{not} in the official conda repositories. To install packages that aren't yet in the official repository, you can use an unofficial repository called \py{conda forge}. Packages that aren't mature enough, or versions that are too new and not tested enough, are located in this repository. To install a package, you just need to run the following command:
 
 \begin{minted}{bash}
   conda install -c conda-forge pint
 \end{minted}
 
-The \mintinline{bash}{-c conda-forge} specifies the \py{channel} from which we are installing the package. With this, we have completed installing all the packages we need to follow the rest of the book.
+The \mintinline{bash}{-c conda-forge} specifies the \py{channel} you want to install the package from. With this, you've finished installing all the packages you'll need to follow the rest of the book.
 
-If you want to go outside of the environment, you can run:
+If you want to leave the environment, you can run:
 
 \begin{minted}{bash}
 conda deactivate
 \end{minted}
 
-\subsubsection{Quicker environment creation}
-We have created an empty environment in the steps above, and then we installed the packages we wanted. We can perform this operation slightly faster if we already know what we need, for example, we can do the following:
+This should return you to your normal shell prompt.
+
+\subsubsection{Creating environments more quickly}
+In the steps above, you created an empty environment and then installed the necessary packages. You can perform this operation slightly faster if you already know what you need. For example, you can do the following:
 
 \begin{minted}{bash}
 conda create --name env python=3.7 numpy=1.18 pyserial
 \end{minted}
 
-The command above creates an environment using the specified versions of Python and Numpy while using the latest version of pyserial.
+The command above creates an environment using the specified versions of Python and NumPy while using the latest version of PySerial.
 
-\subsubsection{Remove an environment}
+\subsubsection{Removing an environment}
 If you want to remove a conda environment called \py{env}, you can run the following command:
 
 \begin{minted}{bash}
 conda remove --name env --all
 \end{minted}
 
-\sloppy In practice, you also use the \py{remove} command to uninstall packages. When you do \py{remove --name env} means you want to remove a specific package from that environment, while the \py{--all} tells Anaconda to remove all the packages and the environment itself. Use with care, since we can't undo it.
+\sloppy In practice, you also use the \py{remove} command to uninstall packages. When you do \py{remove --name env} it means that you want to remove a specific package from that environment, while the \py{--all} option tells Anaconda to remove \emph{all} the packages \emph{and} the environment itself. Use with care, since you can't undo it!
 
 \section{Installing Pure Python}\label{sec:installing-pure-python}
 If instead of installing Anaconda, you prefer to install pure Python, the procedure is straightforward. It just varies slightly on different operating systems.
