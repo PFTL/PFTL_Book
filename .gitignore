@@ -14,3 +14,4 @@ _minted-index_print/
 *.pdf_tex
 *checkpoints/
 out/
+.tex.swp
