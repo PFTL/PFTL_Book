@@ -1,11 +1,8 @@
 %! Suppress = Ellipsis
 \chapter{Writing the First Driver}\label{ch:first-driver}
 
-\section{Objectives}\label{sec:driver-objectives}
-Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only is their behavior different (you can't compare a camera to an oscilloscope), but they also communicate in different ways with the computer. In this chapter,
-we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and, from that experience, build a reusable class that you can share with other developers.
-
 \section{Introduction}\label{sec:driver-introduction}
+Communicating with real-world devices is the cornerstone of every experiment. However, devices are very different from each other. Not only is their behavior different (you can't compare a camera to an oscilloscope), but they also communicate in different ways with the computer. In this chapter, we are going to build the first driver for communicating with a real-world device. You are going to learn about low-level communication with a serial device and, from that experience, build a reusable class that you can share with other developers.
 We can split devices into different categories depending on how they communicate with a computer. One of the most common ways to communicate is through the exchange of text messages. The idea is that the user sends a specific command, i.e., a message, and the device answers with specific information, another message. Sometimes there is no answer because it is just a command to perform an action such as an auto setting or switching off. Sometimes the message we get back contains the information we requested.
 
 To have an idea of how commands look like, you can check the manuals of devices such as oscilloscopes or function generators. Both Tektronics\footnote{You can check the manual of an oscilloscope here: https://www.tek.com/oscilloscope/tds1000-manual} and Agilent have complete sets of instructions. If you search through their websites, you find plenty of examples. A command that you can send to a device may look like this:
