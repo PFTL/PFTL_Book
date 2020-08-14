@@ -19,7 +19,7 @@ The devices that exchange information with the computer in this way are called \
 
 Remember, \textit{message-based} refers only to how the device exchanges information with the computer, and not to the actual connection between them. It is possible to connect a message-based device via RS-232, USB, GPIB, or TCP/IP. Be aware, however, that it is not a reciprocal relation: not all devices connected through RS-232 or USB are message-based. If you want to be sure, check the manual of the device and see how it is controlled. In this chapter, we are going to build a driver for a message based device.
 
-\subsection{Scope of the Chapter}\label{subsec:scope-of-the-chapter}
+\subsection{Understanding this chapter's scope}\label{subsec:scope-of-the-chapter}
 In the introduction, we discussed that the objective is to acquire the I-V curve of a diode. You need, therefore, to set an analog output (the V) and read an analog input (the I) with the device. In this chapter, we focus
 on everything we need to perform our first measurement. However, keep in mind the onion principle, which tells you that you should always be prepared to expand your code later on if the need arises.
 
@@ -94,10 +94,10 @@ Many devices (but not all) follow a standard called SCPI\footnote{https://bit.ly
 
 Now that we know how to get started with serial communication, it is time to move to more complex programs. Typing everything on the Python interpreter is not handy and takes much time. So now we can start working with files.
 
-\subsection{Organizing Files and Folders}\label{subsec:organizing-files-and-folders}
+\subsection{Organizing files and folders}\label{subsec:organizing-files-and-folders}
 When we start a new project, it is always a good idea to decide how we are going to organize the work. In the previous chapter, we have set up an environment for developing a program. That is the first step to be organized. The second step is deciding where we are going to save the files we need to write our program. The general advice is to have a folder for all the programs, for example, \py{Programs}. Inside, each project we work on has its folder, such as \py{PythonForTheLab}. Each person has their way of organizing themselves, but from now on, every time we talk about creating a file, we are referring to that base folder for the project.
 
-\section{Basic Python Script}\label{sec:basic-python-script}
+\section{Writing a Basic Python Script}\label{sec:basic-python-script}
 The code we have developed above can also be written as a Python script, that we can run from the command line without the need to re-write everything. Create an empty file called \textbf{communicate\_with\_device.py}, and add the same code we had earlier to it:
 
 \begin{minted}{python}
@@ -165,7 +165,7 @@ print('Device closed')
 
 If you rerun the program, you can see that it takes a bit of time to run, but it outputs the proper message. The \py{sleep} function makes the program wait for a given number of seconds (also fractions) before continuing. You can try lowering the number until you get the minimum possible value. Still, in typical cases, you start the communication only once, therefore waiting 1 second or .5 seconds won't have a significant impact on the overall execution time.
 
-\subsubsection{Reading an Analog Value}
+\subsubsection{Reading an analog value}
 Before we continue, it would be great to also read a value from the device, not just the serial number. If we refer again to the manual, we see that the way of getting an analog value is using the \py{IN} command. We can modify the code on our previous program to read a value with the device:
 
 \begin{minted}{python}
@@ -227,7 +227,7 @@ Only three cables, an LED and a resistance, are all you need to follow the rest 
 
 \questionInfo{Exercise}{Now that you have set up the experiment know how to set and read values. Acquire the I-V curve of the diode. It is a challenging exercise, aimed at showing you that it doesn't take a long time to be able to achieve an essential goal.}
 
-\section{Going Higher Level}\label{sec:going-higher-level}
+\section{Making Improvements}\label{sec:going-higher-level}
 We saw that communicating with a device implies taking into account parameters such as the line ending, or adding the \py{b} in front of messages for encoding. If the number of commands is large, it becomes very unhandy. The {PFTL DAQ} device is an exception because it is minimal, but there are still a lot of possible improvements.
 
 If you still remember the \emph{Onion Principle} (Section~\ref{sec:onion-principle}), it is now the time to start applying it. If you completed the last exercise, you probably have written much code to do the measurement. Perhaps you used a for loop, and acquired values in a sequence. However, if you want to change any of the parameters, you need to alter the code itself. This approach is not very sustainable for the future, especially if you are going to share the code with someone else.
@@ -268,7 +268,7 @@ The second method, \py{idn}, just repeats what we have done earlier: we write a 
 
 \questionInfo{Exercise}{When you use the method \mintinline{python}{idn}, instead of writing to the device, check if the command was already used and return the value stored. This behavior is called caching, and is very useful not to overflow your devices with useless requests for data.}
 
-\subsubsection{Reading and Setting Values}
+\subsubsection{Reading and setting values}
 We have just developed the most basic class, one that allows us to start the communication with the device and read its identification number. We can also write methods for reading an analog input or generating an output. The most important thing is to decide what argument each method needs. For example, reading a value only needs the channel that we want to read. Setting a value needs not only a channel but also the value itself. Also, reading a means that the method returns something. When you set an output, there is not much to return to the user.
 
 \questionInfo{Exercise}{Write a method \mintinline{python}{get_analog_input} which takes two arguments: \mintinline{python}{self} and \mintinline{python}{channel} and which returns the value read from the specified channel.}
@@ -363,7 +363,7 @@ def set_analog_output(self, channel, output_value):
 
 We are not doing anything with the information we get. We just clear it from the device.
 
-\subsubsection{Proper Values Instead of Bytes}
+\subsubsection{Transforming bytes to strings}
 To have a bit more functional class, it would be great if we could get rid of the extra \py{b} and \py{\n} that we get every time we use the \py{readline()} function. First, we need to transform bytes to strings. In the previous section we transformed strings to bytes by using \py{.encode('ascii')}, and to no surprise, if we want to transform bytes to a string, we can do the opposite, in the \py{idn} method, for example:
 
 \begin{minted}{python}
@@ -389,7 +389,7 @@ Note that we have used %! Suppress = Ellipsis
 
 \questionInfo{Exercise}{By using what you've learned for the \py{idn} method, improve the \py{get_analog_input} method so that it returns an integer. \textbf{Hint:} To transform a string to an integer, you can use \py{int()}, for example: \py{int('12')}.}
 
-\subsection{Abstracting Repetitive Patterns}\label{subsec:abstracting-repetitive-patterns}
+\subsection{Abstracting repetitive patterns}\label{subsec:abstracting-repetitive-patterns}
 When you start to develop programs, there is a principle called \textbf{DRY}, which stands for \emph{don't repeat yourself}. Sometimes it is clear that code is repeating itself, for example, if we copy-pasted some lines. Sometimes, however, the repetition is not about code itself but a pattern. {DRY} is not a matter of just typing fewer lines of code. It is a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. We would need to go through all your code to find out where the line ending is used and change it. If we would specify the line ending in only one location, changing it would require just to change one line.
 
 First, we can specify the default parameters for our device. They will be all the constants that we need in order to communicate with it, such as line endings. We can define them just before the \mintinline{python}{__init__} method, like this:
@@ -513,7 +513,7 @@ dev.finalize()
 
 We may wonder why things work out fine even though we didn't have the \py{finalize} method in place. The answer is that PySerial is smart enough to close the communication with the device when it realizes we will no longer use it. However, it is not always the case if the program crashes. Sometimes the communication stays open, and the only way to regain control of the device is by manually shutting it off and on again. If this happens, we must always check whether the port changed.
 
-\section{Doing something in the \emph{Real World}}\label{sec:doing-something-in-theemph}
+\section{Interacting with the Real World}\label{sec:doing-something-in-theemph}
 Until now, everything looked like a big exercise of programming but now it is time to start interacting with the real world. As we know from reading the manual, the {PFTL DAQ} device can generate analog outputs, and the values we can use go from $0$ to $4095$. We can expand slightly the code below the class in order to make the LED blink for a given number of times, and report the measured voltage when it is either on or off:
 
 \begin{minted}{python}
@@ -536,7 +536,7 @@ With this simple code, we can switch on and off the LED 10 times, and we print t
 
 Before we can proceed, we must understand how to transform Analog signals to digital values and the opposite.
 
-\subsection{Analog to Digital, Digital to Analog}\label{subsec:adc-dca}
+\subsection{Digitizing Signals}\label{subsec:adc-dca}
 Almost every device that we find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you are interested in a voltage. Then, we need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore we have discrete steps in our data.
 
 For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). It means that if the device gives us a value of $0$, we can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$, and there is a linear relationship with the values in between.
@@ -559,7 +559,7 @@ Digitizing is everywhere. Digital cameras have a certain \emph{bit depth}, which
 
 \questionInfo{Exercise}{We have used a for-loop to switch on and off the LED, and we have also displayed the voltage measured, but without units. Update the code so that instead of printing integers it prints the read value in volts.}
 
-\section{Doing an experiment}\label{sec:doing-an-experiment}
+\section{Performing an Experiment}\label{sec:doing-an-experiment}
 At this stage, we can easily communicate with the device; we can set an output and measure a voltage. It means that we have developed everything that we needed to measure the current that goes through the LED. We only need to combine setting an analog output and then reading an analog input. Since we are going to develop this with a more consistent approach, we leave it as an exercise:
 
 \questionInfo{Exercise}{Write a method that allows you to linearly increase an analog output in a given range of values for a given step. \textbf{Hint:} the function \py{range} allows you to do this:
