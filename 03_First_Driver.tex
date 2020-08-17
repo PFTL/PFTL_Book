@@ -389,9 +389,9 @@ Note that we have used %! Suppress = Ellipsis
 \questionInfo{Exercise}{By using what you've learned for the \py{.idn()} method, improve the \py{.get_analog_input()} method so that it returns an integer. \textbf{Hint:} To transform a string to an integer, you can use \py{int()}, for example: \py{int('12')}.}
 
 \subsection{Abstracting repetitive patterns}\label{subsec:abstracting-repetitive-patterns}
-When you start to develop programs, there's a principle called \textbf{DRY}, which stands for \emph{don't repeat yourself}. Sometimes it's clear that code is repeating itself, for example, if you copy-pasted some lines. Sometimes, however, the repetition is not about code itself but a pattern. {DRY} is not a matter of just typing fewer lines of code. It's a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. You would need to go through all your code to find out where the line ending is used and change it. If you would specify the line ending in only one location, changing it would require just to change one line.
+There's a programming principle called \textbf{DRY}, which stands for \emph{Don't Repeat Yourself}, which many developers use to help them build programs. Sometimes it's clear that code is repeating itself, for example, if you copy-pasted some lines. However, oftentimes the repetition is not about code itself but a pattern. {DRY} is not a matter of just typing fewer lines of code. It's a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. You would need to go through all your code to find out where the line ending is used and change it. If you would specify the line ending in only one location, changing it would require that you just change one line.
 
-First, you can specify the default parameters for our device. They will be all the constants that you need in order to communicate with it, such as line endings. You can define them just before the \mintinline{python}{__init__} method, like this:
+Let's use the DRY principle to refactor your code. First, you can specify the default parameters for your device. They will be all the constants that you need in order to communicate with it, such as line endings. You can define them just before the \mintinline{python}{__init__} method, like this:
 
 \begin{minted}{python}
 class Device:
@@ -406,9 +406,9 @@ class Device:
         [...]
 \end{minted}
 
-You can see that there's much new information in the class. You have established a clear place where both the read and write line endings are specified (in principle they don't need to be the same), you also specify that you want to use ascii to encode the strings and that the baud rate is 9600. This value is the default of PySerial, but it's worth making it explicit in case newer devices need a different option. We also specify timeouts, which are allowed by PySerial and would prevent the program from freezing if writing or reading takes too long.
+You can see that there's a lot of new information in the class. You have established a clear place where both the read and write line endings are specified (in principle, they don't need to be the same). You also specify that you want to use ascii to encode the strings and that the baud rate is 9600. This value is the default of PySerial, but it's worth making it explicit in case newer devices need a different option. You also specify timeouts, which are allowed by PySerial and would prevent the program from freezing if writing or reading takes too long.
 
-It's normally good practice to separate the instantiation of the class with the initialization of the communication. One thing is creating an object in Python, and the other is to establish communication with a real device. Therefore, you can rewrite the class like this:
+It's normally good practice to separate the instantiation of the class with the initialization of the communication. One task is to create an object in Python, and the other is to establish communication with a real device. Therefore, you can rewrite the class like this:
 
 \begin{minted}{python}
 def __init__(self, port):
@@ -423,7 +423,9 @@ def initialize(self):
     sleep(1)
 \end{minted}
 
-You can see that there are some major changes to the code, but the arguments of the \mintinline{python}{__init__} method are the same. In this way, code already written does not fail if you change the number of arguments of a method. When you do this kind of change, it's called \emph{refactoring}. It's a complex topic, but one of the best strategies you can adopt is not to change the number of arguments functions take, and the output should remain the same. In the class, the \mintinline{python}{__init__} definition looks the same, but its behavior is different. Now, it just stores the \mintinline{python}{port} as the attribute \mintinline{python}{self.port}. Therefore, to start the communication with the device, you need to do \mintinline{python}{dev.initialize()}. You can also see that you have used almost all the settings from the \mintinline{python}{DEFAULTS} dictionary to start the serial communication.
+You can see that there are some major changes to the code, but the arguments of the \mintinline{python}{__init__} method are the same. In this way, code already written does not fail if you change the number of arguments of a method. When you do this kind of change, it's called \textbf{refactoring}. It's a complex topic, but one of the best strategies you can adopt is to not change the number of arguments functions take and to keep the output the same.
+
+In the class, the \mintinline{python}{__init__} definition looks the same, but its behavior is different. Now, it just stores the \mintinline{python}{port} as the attribute \mintinline{python}{self.port}. Therefore, to start the communication with the device, you need to do \mintinline{python}{dev.initialize()}. You can also see that you have used almost all the settings from the \mintinline{python}{DEFAULTS} dictionary to start the serial communication.
 
 After you do these changes, you should also update the code you use to test the device:
 
@@ -439,7 +441,7 @@ volts = dev.get_analog_input(0)
 print(volts)
 \end{minted}
 
-\sloppy So far the only difference with the previous code is the \mintinline{python}{__init__} method. You have to improve the rest of the class. We already know that for message-based devices there are two operations: \textbf{read} and \textbf{write}. However, you will only read after a write (remember, you should ask something from the device first.) It's possible to update the methods of the class to reflect this behavior. Since all the commands of the device return a value, you can develop a method called \py{query}:
+\sloppy So far the only difference with the previous code is the \mintinline{python}{__init__} method. You have to improve the rest of the class. You already know that for message-based devices there are two operations: \textbf{read} and \textbf{write}. However, you will only read after a write, since you should always ask something from the device first. It's possible to update the methods of the class to reflect this behavior. Since all the commands of the device return a value, you can develop a method called \py{.query()}:
 
 \begin{minted}{python}
 def query(self, message):
@@ -451,15 +453,14 @@ def query(self, message):
     return ans
 \end{minted}
 
-In this way, you take the message, append the proper termination, and encodes it as specified in the \py{DEFAULTS}. Then, it writes the message to the
-device exactly as you did before. Then you read the line, you decode it using the defaults and strip the line ending. Now it's time to update the other methods of the class to use the \py{query} method you have just developed. Let's start with \py{idn}, which now looks like this:
+In this way, you take the message, append the proper termination, and encode it as specified in the \py{DEFAULTS}. Then, you write the message to the device exactly as you did before. Finally, you read the line, decode it using the defaults, and strip the line ending. Now it's time to update the other methods of the class to use the \py{.query()} method you have just developed. Let's start with \py{.idn()}, which now looks like this:
 
 \begin{minted}{python}
 def idn(self):
     return self.query('IDN')
 \end{minted}
 
-And the same you can do for the other methods:
+You can do the same for the other methods:
 
 \begin{minted}{python}
 def get_analog_input(self, channel):
@@ -473,21 +474,21 @@ def set_analog_output(self, channel, output_value):
     self.query(message)
 \end{minted}
 
-For such a simple device, perhaps the advantages of abstracting patterns are not evident. It's something that happens very often in more extensive programs, and being able to identify those patterns can make the difference between a successful program and something only one person can understand. Note that even if you have changed the methods for identifying, reading, and setting analog values, there's no need to update the example code.
+For such a simple device, perhaps the advantages of abstracting patterns are not evident. It's something that happens very often in more extensive programs, and being able to identify those patterns can be the difference between a successful program and something only one person can understand. Note that even if you have changed the methods for identifying, reading, and setting analog values, there's no need to update the example code.
 
-It's important to see that you achieved the communication with the device through the resource \mintinline{python}{self.rsc} that is created with the method \mintinline{python}{initialize}. There is a common pitfall with this command. If you try to interact with the device before you initialize it, you get an error like the following:
+It's important to see that you achieved communication with the device through the resource \mintinline{python}{self.rsc} that's created with the method \mintinline{python}{.initialize()}. There is a common pitfall with this command. If you try to interact with the device before you initialize it, you get an error like the following:
 
 \begin{minted}{python}
 AttributeError: 'NoneType' object has no attribute 'write'
 \end{minted}
 
-You now remember why this happened, but it's very likely that in the future, either you forget or someone else is using our code, and the error message that appears is incredibly cryptical. Therefore, you suggest you do the following:
+You now remember why this happened, but it's very likely that in the future, either you or someone else using your code runs across this error message that appears, and it's incredibly cryptic. Therefore, it's recommended that you do the following:
 
-\questionInfo{Exercise}{Improve the \py{query} method to check whether the communication with the device has initialized. If it hasn't, you can print a message to the screen and prevent the rest of the program from running.}
+\questionInfo{Exercise}{Improve the \py{.query()} method to check whether communication with the device has initialized. If it hasn't, you can print a message to the screen and prevent the rest of the program from running.}
 
-When you develop code, you must always keep an eye on two people: the future us and other users. It may seem obvious now that you initialize the communication before attempting anything with the device, but in a month, or a year, when you dig up the code and try to do something new, you're going to be another person. We won't have the same ideas in our mind as right now. Adding safeguards are, on the one hand, a great way of preserving the integrity of your equipment; on the other, it cuts down the time it takes to find out what the error was.
+When you develop code, you must always keep an eye on two people: the future you and other users. It may seem obvious now that you must initialize communication before attempting anything with the device, but in a month, or a year from now, when you dig up the code and try to do something new, you're going to be different person. You won't have the same ideas in your mind as you do right now. Adding safeguards is a great way of preserving the integrity of your equipment. It also cuts down on the time it takes to find out what the error was.
 
-There is only one last thing that you're missing. You have completely forgotten to add a proper way of closing the communication with the device. We can call that method \py{finalize}:
+There's only one last thing that you're missing. You have completely forgotten to add a proper way of closing the communication with the device. You can call that method \py{.finalize()}:
 
 \begin{minted}{python}
 def finalize(self):
@@ -495,7 +496,7 @@ def finalize(self):
         self.rsc.close()
 \end{minted}
 
-You first check that you have actually created the communication by verifying that the \mintinline{python}{rsc} is not \mintinline{python}{None}. Then, you can update our example code at the bottom of the file to actually use the finalize method:
+You first check that you have actually created the communication by verifying that the \mintinline{python}{rsc} is not \mintinline{python}{None}. Then, you can update your example code at the bottom of the file to actually use the \py{.finalize()} method:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
