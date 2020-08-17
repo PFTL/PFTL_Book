@@ -202,7 +202,7 @@ The {PFTL DAQ} device, since it acts as a hub for a serial connection, can show 
 \questionInfo{Exercise}{Read the {PFTL DAQ} manual and find a way to set an analog output to 1 Volt.}
 
 \section{Preparing the Experiment}\label{sec:preparing-the-experiment}
-Before you move forward with programming, you first need to set up the measurement you want to perform and determine what you need to achieve it. This book revolves around the idea of measuring the I-V curve of a diode. If you're not too familiar with electronics, don't worry! It's not essential to follow the book. You can just copy the connections as shown below. If you're a bit more familiar with electronics, then it's worth explaining what you're going to do.
+Before you move forward with programming, you first need to set up the measurement you want to perform and determine what you need to achieve it. This book revolves around the idea of measuring the I-V curve of a diode. If you're not too familiar with electronics, don't worry! It's not essential for you to be able to follow the book. You can just copy the connections as shown below. If you're a bit more familiar with electronics, then it's worth explaining what you're going to do.
 
 \textbf{Diodes} are elements that let current flow only in one direction, but their behavior is highly non-linear. The current flowing is not proportional to the voltage applied. We chose to use an LED for the experiments because it's easy to have visual feedback on what is going on. On the other hand, you can't measure current directly. First, you need to transform it into a voltage. If you're familiar with Ohm's law, then you remember this relationship:
 
@@ -212,9 +212,9 @@ V = I \cdot R
 
 Voltage is current times resistance. In other words, if you want to transform a current to a voltage, you just need to add resistance to the circuit.
 
-To perform the experiment, you need to apply a given voltage and read a  voltage. This pattern is common to a wealth of experiments. The underlying meaning is what matters.
+To perform the experiment, you need to apply a given voltage and read another voltage. This pattern is common to a wealth of experiments. The underlying meaning is what matters.
 
-With the {PFTL DAQ} device, the connections that will allow us to apply a voltage and read a voltage are as follows:
+With the {PFTL DAQ} device, the connections that will allow you to apply a voltage and read a voltage are as follows:
 
 \begin{figure}
 \centering
@@ -222,18 +222,18 @@ With the {PFTL DAQ} device, the connections that will allow us to apply a voltag
 \caption{Schematic of the connections to perform the experiment}
 \end{figure}
 
-Only three cables, an LED and a resistance, are all you need to follow the rest of the book. You apply the voltage to the LED through \py{DAC0}. The current flows through the diode and the resistance. The voltage that you acquire at the Analog In \py{A0} is proportional to the current flowing through the resistance.
+All you need to follow the rest of the book are three cables, an LED, and a resistance. You apply the voltage to the LED through \py{DAC0}. The current flows through the diode and the resistance. The voltage that you acquire at the \emph{Analog In} \py{A0} is proportional to the current flowing through the resistance.
 
-\questionInfo{Exercise}{Now that you have set up the experiment know how to set and read values. Acquire the I-V curve of the diode. It's a challenging exercise, aimed at showing you that it doesn't take a long time to be able to achieve an essential goal.}
+\questionInfo{Exercise}{Now that you have set up the experiment, you know how to set and read values. Acquire the I-V curve of the diode. It's a challenging exercise, aimed at showing you that it doesn't take a long time to be able to achieve an essential goal.}
 
 \section{Making Improvements}\label{sec:going-higher-level}
-You saw that communicating with a device implies taking into account parameters such as the line ending, or adding the \py{b} in front of messages for encoding. If the number of commands is large, it becomes very unhandy. The {PFTL DAQ} device is an exception because it's minimal, but there are still a lot of possible improvements.
+You saw that communicating with a device implies taking into account parameters such as the line ending, or adding the \py{b} in front of messages for encoding. If the number of commands is large, this becomes very unwieldy. The {PFTL DAQ} device is an exception because it's minimal, but there are still a lot of possible improvements.
 
-If you still remember the \emph{Onion Principle} (Section~\ref{sec:onion-principle}), it's now the time to start applying it. If you completed the last exercise, you probably have written much code to do the measurement. Perhaps you used a for loop, and acquired values in a sequence. However, if you want to change any of the parameters, you need to alter the code itself. This approach is not very sustainable for the future, especially if you're going to share the code with someone else.
+If you still remember the \emph{Onion Principle} (Section~\ref{sec:onion-principle}), it's now the time to start applying it. If you completed the last exercise, you probably have written a lot of code to do the measurement. Perhaps you used a for loop and acquired values in a sequence. However, if you want to change any of the parameters, you need to alter the code itself. This approach is not very sustainable for the future, especially if you're going to share the code with someone else.
 
-Since you know how to communicate with the device, you can transform that knowledge into a reusable Python code by defining a class. Classes have the advantage of being easy to import into other projects, which are easy to document and to understand. Moreover, they are easy to expand later on. If you're not familiar with what classes are, check the appendix~\ref{ch:classes-in-python} for a quick overview. With a bit of patience and critical thinking, you can follow the rest of the chapter and understand what is going on as you keep reading.
+Since you know how to communicate with the device, you can transform that knowledge into a reusable Python code by defining a \textbf{class}. Classes have the advantage of being easy to import into other projects, and they're easy to document and to understand. Moreover, it's quite simple to expand on them later on. If you're not familiar with what classes are, check Appendix~\ref{ch:classes-in-python} for a quick overview. With a bit of patience and critical thinking, you can follow the rest of the chapter and understand what is going on as you keep reading.
 
-Create a new, empty file, called \textbf{pftl\_daq.py}, and write the following into it:
+Create a new, empty file called \textbf{pftl\_daq.py} and write the following into it:
 
 \begin{minted}{python}
 import serial
@@ -251,7 +251,7 @@ class Device:
 
 \end{minted}
 
-The code above shows you how to start a class for communicating with a device and get its serial number. However, if you run the file, nothing happens. At the end of the file, add the following code:
+The code above shows you how to start a class to communicate with a device and get its serial number. However, if you run the file, nothing happens. At the end of the file, add the following code:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -259,20 +259,20 @@ serial_number = dev.idn()
 print(f'The device serial number is: {serial_number}')
 \end{minted}
 
-If you rerun the code, you get the serial number of the device. Let's go line by line to understand what is going on. First, you create a class, and you define what do you want to happen when you do \py{Device()}. In the \py{__init__} method, you specify that the class needs a port, and you use that port to start the serial communication. The serial communication is stored as \py{self.rsc} in the class itself, where \py{rsc} is just a shorthand notation for \textit{resource}. Then you sleep for one second to give time to the communication to be established.
+If you rerun the code, you get the serial number of the device. Let's go line by line to understand what is going on. First, you create a class, and you define what you want to happen when you call \py{Device()}. In the \py{__init__} method, you specify that the class needs a port, and you use that port to start the serial communication. The serial communication is stored as \py{self.rsc} in the class itself, where \py{rsc} is just a shorthand notation for \textit{resource}. Then you sleep for one second to give time for the communication to be established.
 
-The second method, \py{idn}, just repeats what you have done earlier: you write a command, you read the line and return the output. If you look at the few lines at the bottom of the file, you now see that way of working with this class is simpler. You just use \py{idn()} instead of having to write and read every time.
+The second method, \py{idn()}, just repeats what you have done earlier: you write a command, you read the line, and you return the output. If you look at the few lines at the bottom of the file, you now see that this way of working with this class is simpler. You just use \py{.idn()} instead of having to write and read every time.
 
-\questionInfo{Exercise}{Once you read the serial number from the device, it does not change. Instead of just returning the value to the user, store it in the class in an attribute \mintinline{python}{self.serial_number}.}
+\questionInfo{Exercise}{Once you read the serial number from the device, it does not change. Instead of just returning the value to the user, store it in the class in the attribute \mintinline{python}{self.serial_number}.}
 
-\questionInfo{Exercise}{When you use the method \mintinline{python}{idn}, instead of writing to the device, check if the command was already used and return the value stored. This behavior is called caching, and is very useful not to overflow your devices with useless requests for data.}
+\questionInfo{Exercise}{When you use the method \mintinline{python}{.idn()}, instead of writing to the device, check if the command was already used and return the value stored. This behavior is called \textbf{caching}, and it's very useful for not overflowing your devices with useless requests for data.}
 
 \subsubsection{Reading and setting values}
-You have just developed the most basic class, one that allows us to start the communication with the device and read its identification number. We can also write methods for reading an analog input or generating an output. The most important thing is to decide what argument each method needs. For example, reading a value only needs the channel that you want to read. Setting a value needs not only a channel but also the value itself. Also, reading a means that the method returns something. When you set an output, there's not much to return to the user.
+You have just developed the most basic class, one that allows you to start communicating with the device and reading its identification number. You can also write methods for reading an analog input or generating an output. The most important thing is to decide what argument each method needs. For example, reading a value only needs the channel that you want to read. Setting a value needs not only a channel but also the value itself. Also, reading a means that the method returns something. When you set an output, there's not much to return to the user.
 
-\questionInfo{Exercise}{Write a method \mintinline{python}{get_analog_input} which takes two arguments: \mintinline{python}{self} and \mintinline{python}{channel} and which returns the value read from the specified channel.}
+\questionInfo{Exercise}{Write a method \mintinline{python}{get_analog_input} which takes two arguments, \mintinline{python}{self} and \mintinline{python}{channel}, and which returns the value read from the specified channel.}
 
-\questionInfo{Exercise}{Write a method \mintinline{python}{set_analog_value} which takes three  arguments: \mintinline{python}{self}, \mintinline{python}{channel} and \mintinline{python}{value} and that sets the output value to the specified port.}
+\questionInfo{Exercise}{Write a method \mintinline{python}{set_analog_value} which takes three arguments (\mintinline{python}{self}, \mintinline{python}{channel}, and \mintinline{python}{value}) and that sets the output value to the specified port.}
 
 Even though the exercises are important for you to start thinking by yourself, they have some caveats that are very hard to iron out if you don't have a bit of experience. First, let's look at the way of reading an analog input. You can try to develop a method that looks like this:
 
@@ -283,13 +283,13 @@ def get_analog_input(self, channel):
     return self.rsc.readline()
 \end{minted}
 
-But it won't work, because even though you're adding the line ending, you're missing the \py{b} that you were using in the other examples. On the other hand, if you try to do something like:
+However, it won't work, because even though you're adding the line ending, you're missing the \py{b} that you were using in the other examples. On the other hand, say you try to do something like this:
 
 \begin{minted}{python}
 message = b'IN:CH{}\n'.format(channel)
 \end{minted}
 
-It will fail, because \py{format} only works with strings, and as soon as the \py{b} is added in front of a string, it's encoded to bytes. This means that you have to do it in two steps:
+This will also fail, because \py{format} only works with strings, and as soon as the \py{b} is added in front of a string, it's encoded to bytes. This means that you have to do it in two steps:
 
 \begin{minted}{python}
 def get_analog_input(self, channel):
@@ -299,7 +299,7 @@ def get_analog_input(self, channel):
     return self.rsc.readline()
 \end{minted}
 
-First you form the message you want to send to the device, then you \emph{encode} it, which is the same as adding the \py{b} in front of a string. And then you write it to the device. After writing, you return the line with the value. You could use it as follows:
+First you form the message you want to send to the device, then you \textbf{encode} it, which is the same as adding the \py{b} in front of a string. Then you write it to the device. After writing, you return the line with the value. You could use it as follows:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -309,7 +309,7 @@ volts = dev.get_analog_input(0)
 print(volts)
 \end{minted}
 
-If you run the code above, you will notice that the output still has the \py{b} and the \py{\n}, you will work on this later. The next step is to generate an output:
+If you run the code above, you will notice that the output still has the \py{b} and the \py{\n}. You will work on this later. The next step is to generate an output:
 
 \begin{minted}{python}
 def set_analog_output(self, channel, output_value):
@@ -318,7 +318,7 @@ def set_analog_output(self, channel, output_value):
     self.rsc.write(message)
 \end{minted}
 
-And you can use it as follows:
+You can use it as follows:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -329,7 +329,7 @@ print(volts)
 dev.set_analog_output(0, 1000)
 \end{minted}
 
-This would be all, unless you do add something extra, like reading the input after setting the output:
+This would be all, unless you add something extra, like reading the input after setting the output:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -344,11 +344,11 @@ print(volts)
 
 The second time you read the analog input, you get the same value you passed to the analog output. It does not matter if it's $1000$ or $999$; it does not matter if the cables are connected or not. The value is always the same.
 
-\questionInfo{Exercise}{Explain why when getting the analog input you get the same value that you set earlier}
+\questionInfo{Exercise}{Explain why, when getting the analog input, you get the same value that you set earlier.}
 
-This question is very tricky and requires that you read the manual of the device. In the documentation for the \py{OUT} command, you can see that it returns something: the same value that was passed to it. However, in our method, you're just writing to the device and not reading from it. The message waits in the queue until next time you read from it, and this happens when you try to read an analog input.
+This question is very tricky and requires that you read the manual of the device. In the documentation for the \py{OUT} command, you can see that it returns something: the same value that was passed to it. However, in this method, you're just writing to the device and not reading from it. The message waits in the queue until the next time you read from it, and this happens when you try to read an analog input.
 
-As you can see, the number of possible mistakes that you can do when developing this kind of programs is huge. On top of that, many mistakes do not generate an error, and can easily go unnoticed. When performing measurements, perhaps you don't realize the mistake on the \py{set_analog_output} until you're analyzing the data you acquired.
+As you can see, the number of possible mistakes that you can make when developing this kind of program is huge. On top of that, many mistakes do not generate an error and can easily go unnoticed. When performing measurements, perhaps you won't realize the mistake on \py{.set_analog_output()} until you're analyzing the data you acquired.
 
 To solve the problem while setting the output, you just need to read from the device after setting the output:
 
@@ -360,10 +360,10 @@ def set_analog_output(self, channel, output_value):
     self.rsc.readline()
 \end{minted}
 
-You are not doing anything with the information you get. We just clear it from the device.
+You are not doing anything with the information you get. You just clear it from the device.
 
 \subsubsection{Transforming bytes to strings}
-To have a bit more functional class, it would be great if you could get rid of the extra \py{b} and \py{\n} that you get every time you use the \py{readline()} function. First, you need to transform bytes to strings. In the previous section you transformed strings to bytes by using \py{.encode('ascii')}, and to no surprise, if you want to transform bytes to a string, you can do the opposite, in the \py{idn} method, for example:
+To have a more functional class, it would be great if you could get rid of the extra \py{b} and \py{\n} that you get every time you use the \py{.readline()} method. First, you need to transform bytes to strings. In the previous section you transformed strings to bytes by using \py{.encode('ascii')}. To no surprise, if you want to transform bytes to a string, you can do the opposite in the \py{.idn()} method itself:
 
 \begin{minted}{python}
 def idn(self):
@@ -383,10 +383,10 @@ def idn(self):
     return answer
 \end{minted}
 
-Note that you have used %! Suppress = Ellipsis
+Note that we have used %! Suppress = Ellipsis
 \py{[...]} to hide the code that didn't change. Now you can go ahead and see that the output is formatted correctly.
 
-\questionInfo{Exercise}{By using what you've learned for the \py{idn} method, improve the \py{get_analog_input} method so that it returns an integer. \textbf{Hint:} To transform a string to an integer, you can use \py{int()}, for example: \py{int('12')}.}
+\questionInfo{Exercise}{By using what you've learned for the \py{.idn()} method, improve the \py{.get_analog_input()} method so that it returns an integer. \textbf{Hint:} To transform a string to an integer, you can use \py{int()}, for example: \py{int('12')}.}
 
 \subsection{Abstracting repetitive patterns}\label{subsec:abstracting-repetitive-patterns}
 When you start to develop programs, there's a principle called \textbf{DRY}, which stands for \emph{don't repeat yourself}. Sometimes it's clear that code is repeating itself, for example, if you copy-pasted some lines. Sometimes, however, the repetition is not about code itself but a pattern. {DRY} is not a matter of just typing fewer lines of code. It's a way of reducing errors and making the code more maintainable. Imagine that after an upgrade, the device requires a different line ending. You would need to go through all your code to find out where the line ending is used and change it. If you would specify the line ending in only one location, changing it would require just to change one line.
