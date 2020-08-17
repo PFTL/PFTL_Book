@@ -511,10 +511,10 @@ print(volts)
 dev.finalize()
 \end{minted}
 
-You may wonder why things work out fine even though you didn't have the \py{finalize} method in place. The answer is that PySerial is smart enough to close the communication with the device when it realizes you will no longer use it. However, it's not always the case if the program crashes. Sometimes the communication stays open, and the only way to regain control of the device is by manually shutting it off and on again. If this happens, you must always check whether the port changed.
+You may wonder why things worked out fine before, even though you didn't have the \py{.finalize()} method in place. The answer is that PySerial is smart enough to close the communication with the device when it realizes you will no longer use it. However, this is not always (for instance, if the program crashes). Sometimes, the communication stays open, and the only way to regain control of the device is by manually shutting it off and on again. If this happens, you must always check whether the port changed.
 
 \section{Interacting with the Real World}\label{sec:doing-something-in-theemph}
-Until now, everything looked like a big exercise of programming but now it's time to start interacting with the real world. As you know from reading the manual, the {PFTL DAQ} device can generate analog outputs, and the values you can use go from $0$ to $4095$. You can expand slightly the code below the class in order to make the LED blink for a given number of times, and report the measured voltage when it's either on or off:
+Up until now, everything you've completed may have looked like one big programming exercise, but now it's time to start interacting with the real world. As you know from reading the manual, the {PFTL DAQ} device can generate analog outputs, and the values you can use go from $0$ to $4095$. You can slightly expand the code below the class in order to make the LED blink for a given number of times, and report the measured voltage when it's either on or off:
 
 \begin{minted}{python}
 dev = Device('/dev/ttyACM0') #<---- Remember to change the port
@@ -532,84 +532,86 @@ for i in range(10):
     sleep(.5)
 \end{minted}
 
-With this simple code, you can switch on and off the LED 10 times, and you print to screen the values that you're reading when it's on or off. There are two things to note: first, you are switching it ON by using a value of $4000$. You have selected it because it's high enough to switch the LED on, but it has no units, it's not a voltage. The same with the value reported by the \py{get_anlog_input}, which is just an integer, but you have no idea, yet, of what it means.
+With this simple code, you can switch the LED on and off 10 times, and print to screen the values that you're reading when it's on or off. There are two things to note: first, you are switching it ON by using a value of $4000$. You have selected this because it's high enough to switch the LED on, but it has no units, since it's not a voltage. The same goes for the value reported by \py{.get_anlog_input}(), which is just an integer, though you have no idea what it means yet.
 
-Before you can proceed, you must understand how to transform Analog signals to digital values and the opposite.
+Before you can proceed, you must understand how to transform analog signals to digital values and vice versa.
 
 \subsection{Digitizing Signals}\label{subsec:adc-dca}
-Almost every device that you find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step is to transform the quantity you're interested in a voltage. Then, you need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \emph{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and therefore you have discrete steps in our data.
+Almost every device that you'll find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step in doing this is to transform the quantity you're interested in into a voltage. Then, you need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \textbf{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and so you have discrete steps in your data.
 
-For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ ($2^{10}-1$). It means that if the device gives us a value of $0$, you can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$, and there's a linear relationship with the values in between.
+For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ (or $2^{10}-1$). This means that if the device gives you a value of $0$, you can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$. There's a linear relationship for the values in between.
 
 \begin{center}
 \includegraphics[width=.6\textwidth]{images/Chapter_03/digitalization.png}
 \end{center}
 
-The figure above shows a detail of how the digitalization looks like for a range of voltages. You see the discrete steps that the digital value takes for different voltages. Digitizing signals is a critical topic for anybody working in the lab. There is a whole set of ramifications regarding visualization, data storage, and more.
+The figure above shows what the digitization looks like for a range of voltages. You see the discrete steps that the digital value takes for different voltages. Digitizing signals is a critical topic for anybody working in the lab. There's a whole set of ramifications regarding visualization, data storage, and more.
 
-Particularly, the {PFTL DAQ} has a different behavior for reading than for setting values. The output channels take $4095$ ($2^{12}-1$) different values, i.e.\ they work with 12 bits instead of 10. Knowing the number of bits, also allows us to calculate the minimum difference between two output values:
+In particular, the {PFTL DAQ} has different behavior for reading than for setting values. The output channels take on $4095$ (or $2^{12}-1$) different values. In other words, they work with 12 bits instead of 10. Knowing the number of bits also allows you to calculate the minimum difference between two output values:
 
 \begin{equation}
  \frac{3.3\,\textrm{V} - 0\,\textrm{V}}{4096} \approx 0.0008\,\textrm{V} = 0.8\,\textrm{mV}
 \end{equation}
 
-The equation above shows how the resolution of the experiment is affected by the digitalization of the signals. You can't create voltages with a difference between them below $0.8\,\textrm{mV}$, and you're not able to detect changes below $3\,\textrm{mV}$. Later in the book, you come back to this discussion when you need to decide some parameters for visualizing our data.
+The equation above shows how the resolution of the experiment is affected by the digitization of the signals. You can't create voltages with a difference between them that's below $0.8\,\textrm{mV}$, and you're not able to detect changes below $3\,\textrm{mV}$. Later in the book, you'll come back to this discussion when you need to decide some parameters for visualizing your data.
 
-Digitizing is everywhere. Digital cameras have a certain \emph{bit depth}, which tells us which range of values they can cover or, in other words, their dynamic range. Oscilloscopes, function generators, acquisition cards, they all have a precise digital resolution. When planning experiments, you always need to keep an eye on these values to understand if the devices are appropriate for the measurement you want to perform.
+Digitization is everywhere. Digital cameras have a certain \textbf{bit depth}, which tells you which range of values they can cover (in other words, their dynamic range). Oscilloscopes, function generators, and acquisition cards all have a precise digital resolution. When planning experiments, you always need to keep an eye on these values to understand if the devices are appropriate for the measurement you want to perform.
 
 \questionInfo{Exercise}{You have used a for-loop to switch on and off the LED, and you have also displayed the voltage measured, but without units. Update the code so that instead of printing integers it prints the read value in volts.}
 
 \section{Performing an Experiment}\label{sec:doing-an-experiment}
-At this stage, you can easily communicate with the device; you can set an output and measure a voltage. It means that you have developed everything that you needed to measure the current that goes through the LED. You only need to combine setting an analog output and then reading an analog input. Since you're going to develop this with a more consistent approach, you leave it as an exercise:
+At this stage, you can easily communicate with the device. You can set an output and measure a voltage. This means that you have developed everything that you need to measure the current that goes through the LED. You only need to combine setting an analog output and then reading an analog input. Since you're going to develop this with a more consistent approach, we leave it as an exercise:
 
-\questionInfo{Exercise}{Write a method that allows you to linearly increase an analog output in a given range of values for a given step. \textbf{Hint:} the function \py{range} allows you to do this:
+\questionInfo{Exercise}{Write a method that allows you to linearly increase an analog output in a given range of values for a given step. \textbf{Hint:} the \py{range()} function allows you to do this:
 
-\py{range(start, stop, step}.
+\py{range(start, stop, step}
 
-If you use this method, you should be able to see the LED switching gradually on.}
+If you use this method, you should be able to see the LED switching on gradually.}
 
 \questionInfo{Exercise}{Improve the method so that you can read analog values and store them once the measurement is complete. Returning the values can be a good idea so that you can use them outside of the object itself.}
 
-\questionInfo{Exercise}{If you already have some experience with Python, you can also make a plot of the results. You cover this topic, later on, so don't stress too much about it now.}
+\questionInfo{Exercise}{If you already have some experience with Python, you can also make a plot of the results. You'll cover this topic later on, so don't stress too much about it now.}
 
-If you tried to solve the exercises, you probably noticed that by having classes, our code is straightforward to use. It would be simple to share it with a colleague that has the same device, and they can adapt and expand it according to their needs. You should also keep in mind that when working with devices, it may very well be that someone else has already developed a Python driver for it, and you can just use it. One of the keys to developing sustainable code is to compartmentalize different aspects of it. Don't mix the logic of a particular experiment with the capabilities of a device, for example, is precisely the topic of the following chapter.
+If you tried to solve the exercises, you probably noticed that by having classes, your code is more straightforward to use. It would be simple to share it with a colleague who has the same device, and they'll be able to adapt and expand on it according to their needs.
 
-\textbf{Remember the Onion}: You have discussed in the Introduction, that you should always remember the onion principle when developing software. If you see the outcome of these last few exercises, you notice that you're failing to follow the principle. We have added much functionality to the driver class that does not reflect what the device itself can do. The {PFTL DAQ} doesn't have a way of linearly increasing an output, and you have achieved that new behavior with a loop in a program. Therefore, the proper way of adding extra functionality would be by adding another layer to the program, as you see in the next chapter.
+You should also keep in mind that when working with devices, it may very well be that someone else has already developed a Python driver for it, and you can just use that. One of the keys to developing sustainable code is to compartmentalize different aspects of it. Don't mix the logic of a particular experiment with the capabilities of a device, for example. Interestingly enough, this is precisely the topic of the following chapter.
 
-Before moving forward, it's also important to discuss other libraries that may come in handy. We are not the first ones who try to develop a driver for a device. The pattern of writing and reading, initializing, and many more that you haven't covered, were faced by many developers before ourselves. It means that there are libraries already available that can speed up a lot the development of drivers. Let's see some of them.
+\textbf{Remember the Onion}: In the introduction, you learned that you should always remember the onion principle when developing software. If you look at the outcome of these last few exercises, you'll notice that you're failing to follow the principle. You have added much functionality to the driver class that does not reflect what the device itself can do. The {PFTL DAQ} doesn't have a way of linearly increasing an output, and you have achieved that new behavior with a loop in a program. Therefore, the proper way of adding extra functionality would be by adding another layer to the program, as you'll see in the next chapter.
+
+Before moving forward, it's also important to discuss other libraries that may come in handy. You are not the first one to try and develop a driver for a device. The pattern of writing and reading, initializing, and many more that you haven't yet covered, were faced by many developers before you. It means that there are libraries already available that can speed up a lot of the development of drivers. Let's see some of them.
 
 \section{Using PyVISA}\label{sec:pyvisa}
-Some decades ago, prominent manufacturers of measurement instruments sat together and developed a standard called Virtual instrument software architecture, or VISA for short. This standard allows communicating with devices independently from the communication channel selected, and from the backend chosen. Different companies have developed different backends, such as NI-VISA, or TekVISA, but they \emph{should} be interchangeable. The backends are generally hard to install and do not work on every operating system. But they do allow to switch from a device connected via Serial to a device connected via USB or GPIB without changing the code.
+A few decades ago, prominent manufacturers of measurement instruments sat together and developed a standard called \textbf{Virtual Instrument Software Architecture}, or VISA for short. This standard allows you to communicate with devices independently from the communication channel selected and from the back end chosen. Different companies have developed different back ends, such as NI-VISA or TekVISA, but they \emph{should} be interchangeable. The back ends are generally hard to install and do not work on every operating system, but they do allow you to switch from a device connected via Serial to a device connected via USB or GPIB without changing the code.
 
-To work with VISA instruments, you can use a library available for Python called \py{pyvisa}. There is also a pure Python implementation of the VISA backend called \mintinline{python}{pyvisa-py}, which is relatively stable even if it's still work in progress. It does not cover 100\% of the VISA standard, but for simple devices like the {PFTL DAQ} it should be more than enough. For complex projects, the solutions provided by vendors such as Tektronix or National Instruments may be more appropriate. In the next few paragraphs, you see how to get started with pyvisa-py, but it's not a requirement of the book. We decided to show it here to have it as a reference for other projects.
+To work with VISA instruments, you can use a library available for Python called \py{pyvisa}. There's also a pure Python implementation of the VISA back end called \mintinline{python}{pyvisa-py}, which is relatively stable, even though it's still work in progress. It does not cover 100\% of the VISA standard, but for simple devices like the {PFTL DAQ} it should be more than enough. For complex projects, the solutions provided by vendors such as Tektronix or National Instruments may be more appropriate. In the next few paragraphs, you'll see how to get started with \mintinline{python}{pyvisa-py}, but it's not a requirement to follow the book. We decided to show it here to have it as a reference for other projects.
 
-First, you need to install \mintinline{python}{pyvisa}, which is a wrapper around the VISA standard. Either with pip:
+First, you need to install \mintinline{python}{pyvisa}, which is a wrapper around the VISA standard. You can do this with pip:
 
 \begin{minted}{bash}
  pip install pyvisa
 \end{minted}
 
-Or with conda:
+Alternatively, you can also install it with conda:
 
 \begin{minted}{bash}
  conda install -c conda-forge pyvisa
 \end{minted}
 
-In case you don't have a VISA backend on our computer, you need to install one, and the easiest is the python implementation:
+If you don't have a VISA back end on our computer, you need to install one. The easiest one to use is the Python implementation. Again, you can install it with pip:
 
 \begin{minted}{bash}
  pip install pyvisa-py
 \end{minted}
 
-or with conda:
+Here's how to install it with conda:
 
 \begin{minted}{bash}
  conda install -c conda-forge pyvisa-py
 \end{minted}
 
-There is also an interesting dependency missing: PySerial. Neither Pyvisa nor Pyvisa-py depend on PySerial. If you're going to communicate with serial devices, you should install that package ourselves (and the same is true for USB, GPIB, or any other communication standard.) The documentation of pyvisa-py\footnote{https://pyvisa-py.readthedocs.io} has handy information.
+There is also an interesting dependency missing: PySerial. Neither \py{pyvisa} or \py{pyvisa-py} depend on PySerial. If you're going to communicate with serial devices, you should install that package yourself (and the same is true for USB, GPIB, or any other communication standard.) The documentation for pyvisa-py\footnote{https://pyvisa-py.readthedocs.io} has handy information.
 
-To quickly see how to work with PyVISA, you can start in a python interpreter, before going to more complex code. VISA allows you to list your devices:
+To quickly see how to work with PyVISA, you can start in a Python interpreter before moving on to more complex code. VISA allows you to list your devices:
 
 \begin{minted}{pycon}
  >>> import visa
@@ -621,26 +623,26 @@ To quickly see how to work with PyVISA, you can start in a python interpreter, b
  'PFTL DAQ Device built by Python for the Lab v.1.2020\n'
 \end{minted}
 
-\sloppy You make explicit the backend you want to use by calling \py{ResourceManger}. In some cases, visa can automatically identify the backend on the computer. Then, you list all the devices connected to the computer. Bear in mind that this depends on the other packages that you installed. For example, you have only PySerial, and therefore pyvisa-py only lists serial devices. We can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what you have done before. It becomes clear why you decided to call \emph{resource} the communication with the device.
+\sloppy You make explicit the back end you want to use by calling \py{.ResourceManger()}. In some cases, VISA can automatically identify the back end on the computer. Then, you list all the devices connected to the computer. Bear in mind that this depends on the other packages that you installed. For example, you have only PySerial installed at this moment, so \py{pyvisa-py} only lists serial devices. You can install PyUSB to work with USB devices, or GPIB, and so forth. The rest of the code is very similar to what you have done before. It becomes clear why you decided to call \emph{resource} the communication with the device.
 
-Pay attention to the \py{query} method that you use to get the serial number from the device. We didn't develop it. PyVISA already took care of defining query for us. Not only PyVISA takes care of the query method, but they have plenty of options that you can use, such as transforming the output according to some rules or establishing the write termination. If you were to follow the pyVISA path, you could start by reading their documentation\footnote{https://pyvisa.readthedocs.io}.
+Pay attention to the \py{.query()} method that you use to get the serial number from the device. We didn't develop it. PyVISA already took care of defining it for you. Not only does PyVISA take care of the query method, but they also have plenty of options that you can use, such as transforming the output according to some rules or establishing the write termination. If you want to follow the PyVISA path, you could start by reading their documentation\footnote{https://pyvisa.readthedocs.io}.
 
-\textbf{Why didn't you start with pyVISA?}. There are several reasons. One is pedagogical. It's better to start with as few dependencies as possible, so you can understand what is going on. You had to understand not only what commands are available, but you also had to be aware of the encoding and line termination. We made explicit the fact that to read from a device, you first have to write something to it. Once you gain confidence with the topics covered in this chapter, you can explore other solutions and alternatives. PyVISA is only the tip of the iceberg.
+\textbf{Why didn't you start with PyVISA?}. There are several reasons. One is pedagogical. It's better to start with as few dependencies as possible, so you can understand what is going on. You had to understand not only what commands are available, but you also had to be aware of the encoding and line termination. We made explicit the fact that to read from a device, you first have to write something to it. Once you gain confidence with the topics covered in this chapter, you can explore other solutions and alternatives. PyVISA is only the tip of the iceberg.
 
 \section{Introducing Lantz}\label{sec:lantz}
-Defining a class for your device was a massive step in terms of usability. You can easily share your code with your colleagues, and they can immediately start using what you have developed with really few extra lines of code. However, there are many features that you may want but that someone needs to develop. For example, imagine that you want to limit the number of times the output voltage can change, or you don't want to write to the device always the same value, the first time was enough.
+Defining a class for your device was a massive step in terms of usability. You can easily share your code with your colleagues, and they can immediately start using what you have developed with few extra lines of code. However, there are many features that you may want but that someone needs to develop. For example, imagine that you want to limit the number of times the output voltage can change, or you don't always want to write the same value to the device, since the first time was enough.
 
-You may want to establish some limits, for example, to the analog output values. Imagine that you have a device that can handle up to $2.5\,\textrm{V}$. If you set the analog output to $3\,\textrm{V}$, you would burn it. Fortunately, there are some packages written especially to address this kind of problem. We are going to mention only one because it's a project with which you collaborate: Lantz\footnote{https://github.com/lantzproject}. You can install it by running:
+You may want to establish some limits, for example, to the analog output values. Imagine that you have a device that can handle up to $2.5\,\textrm{V}$. If you set the analog output to $3\,\textrm{V}$, you would burn it. Fortunately, there are some packages written especially to address this kind of problem. We are only going to mention one because it's a project that you can collaborate on called Lantz\footnote{https://github.com/lantzproject}. You can install it by running:
 
 \begin{minted}{bash}
 pip install lantzdev
 \end{minted}
 
-\infoInfo{About Lantz}{We introduce Lantz here for you to see that there's much room for improvement. However, through this book, you're not going to use it, and that is why it was not a requirement when you were setting up the environment. Lantz is under development, and therefore some of the fine-tuned options may not work correctly on different platforms. Using Lantz also shifts a lot of the things you need to understand under-the-hood, and it's not what you want for an introductory course. If you're interested in learning more about Lantz and other packages, you should check for the Advanced Python for the Lab book when you finish with this one.}
+\infoInfo{About Lantz}{We introduce Lantz here for you to see that there's much room for improvement. However, through this book, you're not going to use it, and that is why it was not a requirement when you were setting up the environment. Lantz is under development, and therefore some of the fine-tuned options may not work correctly on different platforms. Using Lantz also shifts a lot of the things you need to understand under-the-hood, and that's not what you want for an introductory course. If you're interested in learning more about Lantz and other packages, you should check for the Advanced Python for the Lab book when you finish with this one.}
 
-Lantz is a Python package that focuses exclusively on instrumentation. We suggest you check their documentation and tutorials since they can be very inspiring. Here you just show you how to write your driver for the {PFTL DAQ} device using Lantz, and how to take advantage of some of its options. Lantz can do much more than what you show you here, but with these basics, you can start in the proper direction. You can also notice that some of the decisions you made earlier were directly inspired by how Lantz works.
+Lantz is a Python package that focuses exclusively on instrumentation. We suggest you check their documentation and tutorials since they can be very inspiring. Here you'll simply see how to write your driver for the {PFTL DAQ} device using Lantz, and how to take advantage of some of its options. Lantz can do much more than what you'll see here, but with these basics, you can start off in the proper direction. You'll also notice that some of the decisions you made earlier were directly inspired by how Lantz works.
 
-Let's first re-write our driver class to make it Lantz-compatible, you start by importing what you need and define some of the constants of our device. You also add a simple method to get the identification of the device. Note that the first import is \py{MessageBasedDriver}, precisely what you have discussed at the beginning of the chapter.
+Let's first re-write your driver class to make it Lantz-compatible. Start by importing what you need and defining some of the constants of your device. You also add a simple method to get the identification of the device. Note that the first import is \py{MessageBasedDriver}, precisely what you saw at the beginning of the chapter.
 
 \begin{minted}{python}
 from time import sleep
@@ -666,15 +668,15 @@ sleep(1)
 print(dev.idn)
 \end{minted}
 
-There are several things to point out in this example. First, you have to note that you're importing a special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Our class \mintinline{python}{MyDevice} inherits from the \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as you see later. The first thing you do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones you have defined for our driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, you can specify different defaults for the same device, depending on the connection type. If you were using a {USB} connection, you would have used \py{USB}, or \py{GPIB} instead of, or in addition to \py{ASRL}.
+There are several things to point out in this example. First, note that you're importing a special module from Lantz, the \mintinline{python}{MessageBasedDriver}. Your class \mintinline{python}{MyDevice} inherits from \mintinline{python}{MessageBasedDriver}. There is no \mintinline{python}{__init__} method in the snippet above. The reason for this is that the instantiation of the class is different, as you'll see later. The first thing you do in the class is to define the \mintinline{python}{DEFAULTS}. At first sight, they look the same as the ones you have defined for your driver. The \mintinline{python}{ASRL} option is for serial devices. In principle, you can specify different defaults for the same device, depending on the connection type. If you were using a {USB} connection, you would have used \py{USB} or \py{GPIB} instead of, or in addition to, \py{ASRL}.
 
-The only method that you have included in the example is \mintinline{python}{idn} because, even if simple, it already shows some of the most interesting capabilities of Lantz. First, you can see that you have used \py{query} instead of \py{write} and \py{read}. Indeed, Lantz depends on pyVISA, so what is happening here is that under the hood, you're using the same command that you saw in the previous section. Bear in mind that Lantz automatically uses the write and read termination.
+The only method included in the example is \mintinline{python}{.idn()} because, though simple, it already shows some of the most interesting capabilities of Lantz. First, you can see that you have used \py{.query()} instead of \py{.write()} and \py{.read()}. Indeed, Lantz depends on PyVISA, so what's happening here is that under the hood, you're using the same command that you saw in the previous section. Bear in mind that Lantz automatically uses the write and read termination.
 
-An extra syntactic thing to note is the \py{@Feat()} before the function. It's a \py{decorator}, one of the most useful ways of systematically altering the behavior of functions without rewriting. Without entering too much into details, a decorator is a function that takes as an argument another function. In Lantz, when using a \py{Feat}, it checks the arguments that you're passing to the method before actually executing it. Another advantage is that you can treat the method as an attribute. For example, you can do something like this \py{print(dev.idn)} instead of \py{print(dev.idn())} as you did in the previous section.
+An extra syntactic thing to note is the \py{@Feat()} before the function. This is called a \textbf{decorator}, and it's one of the most useful ways of systematically altering the behavior of functions without rewriting them. Without going too much into detail, a decorator is a function that takes another function as an argument. In Lantz, when you use this decorator, it checks the arguments that you're passing to the method before actually executing it. Another advantage is that you can treat the method as an attribute. For example, you can do something like this: \py{print(dev.idn)}, instead of \py{print(dev.idn())}, as you did in the previous section.
 
 \questionInfo{Exercise}{Write another method for getting the value of an analog input. Remember that the function should take one argument: the channel.}
 
-To read or write to the device, you need to define new methods. If you're stuck with the exercise, you can find inspiration from the example on how to write to an analog output below.
+To read or write to the device, you need to define new methods. If you're stuck with this exercise, you can find inspiration from the example on how to write to an analog output below.
 
 \begin{minted}{python}
 output0 = None
@@ -692,7 +694,7 @@ def set_output0(self, value):
     self.output0 = value
 \end{minted}
 
-What you have done may end up being a bit confusing for people working with Lantz and with instrumentation for the first time. When you use \py{Features} in Lantz, you have to split the methods in two: first, a method for getting the value of a feature, and then a method for setting the value. You have to trick Lantz because our device doesn't have a way of knowing the value of an output. When you initialize the class, you create an attribute called \py{output0}, with a \py{None} value. Every time you update the value of the output on channel 0, you're going to store the latest value in this variable.
+What you have done may end up being a bit confusing for people working with Lantz and with instrumentation for the first time. When you use \py{Features} in Lantz, you have to split the methods in two: first, a method for getting the value of a feature, and then a method for setting the value. You have to trick Lantz because your device doesn't have a way of knowing the value of an output. When you initialize the class, you create an attribute called \py{output0} with a value of \py{None}. Every time you update the value of the output on channel 0, you're going to store the latest value in this variable.
 
 The first method reads the value, pretty much in the same way than with the \py{idn} method. The main difference here is that you're specifying some limits to the options, exactly as the manual specifies for the {PFTL DAQ} device. The method \py{set_output0} returns the last value that has been set to the channel 0, or \py{None} if it has never been set to a value. The \py{@Feat} in Lantz, forces us to define the first method, also called a \py{getter}. It's the reason why you have to trick Lantz, and you couldn't simply define the \py{setter}. On the other hand, if the setter is not defined, it means that you have a read-only feature, such as with \py{idn}. The second method determines how to set the output and has no return value. The command is very similar to how the driver you developed earlier works. Once you instantiate the class, you can use the two commands like this:
 
