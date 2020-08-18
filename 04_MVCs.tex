@@ -205,9 +205,9 @@ You have to replace \py{/path/to/PFTL} with the full path to the folder where yo
 If you're using an IDE to develop and run the code, you may have noticed that there's no need to add anything to the Python path. This is one of the advantages of using robust programs to develop software. They take care of many things for you. However, at some point, it's also essential for you to be able to run the program independently of the editor software.
 
 \section{Finalizing the Layout}\label{sec:final-layout}
-At this stage, you should have a clear separation of the code into Model, Controller, and View. Most of them are, for the time being, empty folders. However, you're not limited to having only three folders in your project. Most likely, you want to provide some examples of how to use the code or some documentation.
+At this stage, you should have a clear separation of the code into folders titled \emph{Model}, \emph{Controller}, and \emph{View}. Most of these are, for the time being, empty folders. However, you're not limited to having only three folders in your project. Most likely, you want to provide some examples of how to use the code or some documentation.
 
-However, if you create extra folders next to the three main ones, the structure of the program starts to be polluted. It won't be clear what is part of the program, and what is a user-specific setting. Therefore, it's a common practice to make a folder to hold all the program and, next to it, you create an extra folder to contain non-essential elements. In your case, the folder structure would look like this:
+However, if you create extra folders next to the three main ones, then the structure of the program will start to become polluted. It won't be clear what's part of the program and what's a user-specific setting. Therefore, it's a common practice to make a folder to hold the program itself. Then, next to it, you create an extra folder to contain any non-essential elements. In this case, the folder structure could look like this:
 
 \begin{minted}{text}
 ├── Docs/
@@ -223,13 +223,13 @@ However, if you create extra folders next to the three main ones, the structure 
     └── __init__.py
 \end{minted}
 
-There are three folders at the top level: \emph{Docs}, \emph{Examples} and \emph{PythonForTheLab}. The last one is holding the \emph{Model}, \emph{View} and \emph{Controller} with all the code that you have developed up to now. The \emph{PythonForTheLab} also requires an \textbf{\_\_init\_\_.py} file, because it's your main package. This folder structure would allow us to do the following:
+There are three folders at the top level: \emph{Docs}, \emph{Examples}, and \emph{PythonForTheLab}. This last folder holds the \emph{Model}, \emph{View} and \emph{Controller} folders with all the code that you've developed up until now. The folder \emph{PythonForTheLab} also requires an \textbf{\_\_init\_\_.py} file, because it's your main package. This folder structure would allow you to do the following:
 
 \begin{minted}{pycon}
 >>> from PythonForTheLab.Controller import pftl_daq
 \end{minted}
 
-This code is clearer than importing the Controller directly, because it also allows us to, in principle, have different programs at the same time and import only the elements you need from each one. For example, you could have one big project with many devices and complex measurements, and a smaller program to do more specialized tasks that only require \emph{some} of the devices.
+This code is cleaner than importing the Controller directly because it also allows you to, in principle, have different programs at the same time and import only the elements you need from each one. For example, you could have one big project with many devices and complex measurements, and a smaller program to do more specialized tasks that only require some of those devices.
 
 \section{Conclusions}\label{sec:layout-conclusions}
 Following a pattern when programming makes the code much easier to understand, to maintain, and to explain to others. Patterns, however, are not set in stone. Sometimes there's no clear divide between what you should develop where. The important thing is to be consistent. For example, if at some point it's decided that controllers should handle real-world units, then all controllers should do it. If, on the other hand, you agreed that models should handle units, then all models should do it, regardless of what the specific controllers do.
