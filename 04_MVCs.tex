@@ -1,20 +1,22 @@
 \chapter{Model-View-Controller for Science}\label{ch:mvcs}
 
 \section{Introduction}\label{sec:mvc-introduction}
-Developing a computer program is much more than having a few scripts that you can run when you need them. The software should take care of a lot of concerns, such as the limits of the devices, should be flexible enough that enables you to change what measurements you're doing without spending months. More importantly, a program should be extensible in the long run, not just by yourself but also by future colleagues and, potentially, by anyone who finds your application online.
+Developing a computer program is much more than having a few scripts that you can run when you need them. The software should take care of a lot of your concerns, such as the limits of your devices, and it should be flexible enough that it enables you to change what measurements you're performing without spending months changing the code base. More importantly, a program should be extensible in the long run, not just by you but also by future colleagues and, potentially, by anyone who finds your application online.
 
-Therefore, when you develop software, you want to keep in mind the following programmer's \emph{mantras}:
+Therefore, when you develop software, you'll want to keep in mind the following \textbf{programmer's mantras}:
 
 \begin{itemize}
-\item What you develop should be readable by current and future colleagues
-\item It should be easy to add solutions developed by others
-\item The program should allow exchanging devices that achieve the same goal (e.g., oscilloscopes of different brands)
+\item What you develop should be readable by both current and future colleagues
+\item It should be easy to add solutions that have been developed by others
+\item The program should allow you to exchange devices that achieve the same goal (e.g., oscilloscopes of different brands)
 \item The code developed in one context has to be available in other contexts (i.e., in other experiments)
 \end{itemize}
 
-The first line does not pose a challenge to be understood. When you talk about solutions developed by others, you mean that often someone already wrote a driver for a device, or they wrote a measurement script. Therefore, it should be easy to get other's code and use them in your projects. Exchanging hardware is something that is not valued until it happens. In most labs, there's always a legacy device that sooner or later breaks down, and you need to replace it. Or you move to a different lab and need to continue with your experiments with different hardware. There are patterns that you can follow to allow a simple exchange of devices. Finally, when you talk about context, you mean that sometimes experiments are very different, but the logic behind it is very similar. You measure the I-V curve of a diode, but it is, by no means, any different from doing a 1-D scan on a confocal microscope, or tuning the wavelength of a laser.
+Let's take a look at each of these in turn. The first mantra isn't too challenging to understand in and of itself. The second mantra talks about solutions developed by others, meaning that often another developer may have already written a driver for a device, or perhaps a measurement script. Therefore, it should be easy to get code from other developers and use their software in your projects.
 
-The mantras are no rules. They are just points on which you have to reflect on realizing whether you're departing from the path you wanted to follow when you started. In the following sections, you're going to explore a design pattern for software that has many benefits when developing scientific software for controlling experiments. It's called \textbf{The Model-View-Controller for Science}
+The third mantra discusses exchanging hardware, which is something that's often not valued until it happens. In most labs, there's always a legacy device that sooner or later breaks down, and you'll need to replace it. In another case, you might move to a different lab and need to continue your experiments with different hardware. There are patterns that you can follow to allow a simple exchange of devices. The last mantra speaks about context. Experiments can be very different, but the logic behind them is often quite similar. You measure the I-V curve of a diode, but this is, by no means, any different from doing a 1-D scan on a confocal microscope, or tuning the wavelength of a laser.
+
+The mantras are not rules. They're just points on which you should reflect to try and recognize when you're departing from the path you wanted to follow when you started your project. In the following sections, you're going to explore a design pattern for software that has many benefits when developing scientific software for controlling experiments. It's called \textbf{The Model-View-Controller for Science.}
 
 \section{Understanding the MVC Design Pattern}\label{sec:mvc}
 \begin{center}
