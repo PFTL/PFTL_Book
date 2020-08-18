@@ -57,26 +57,26 @@ The \emph{View} folder is going to require a bit more work than the other two. H
 Now that you've started to split the code into different folders and files, it's essential for you to learn how to make programs that can use the code that's located in those separate files. This process is called \textbf{importing}, and it's the focus of the next section.
 
 \section{Importing Modules in Python}\label{sec:importing-python}
-In the previous chapter, you have already seen some lines that look like this:
+In the previous chapter, you saw some lines that look like this:
 
 \begin{minted}{python}
 import numpy as np
 from time import sleep
 \end{minted}
 
-The first one is importing the numpy package, but changing its name to \mintinline{python}{np}. Changing the name makes it easier to work with because you need to type only two letters, \mintinline{python}{np} instead of \mintinline{python}{numpy}. The second line is importing one specific function from a package called \mintinline{python}{time}. It's important to realize that the import process was different in both cases. \emph{Numpy} is a complex package, with many modules that you can use. The same is true for \emph{time}. However, in the lines above, you have imported only the module \emph{sleep} from package \emph{time}. If you want to use it, you can do:
+The first line imports the NumPy package, but changes its name to \mintinline{python}{np}. Changing the name makes it easier for you to work with libraries, since you can type fewer letters (\mintinline{python}{np} instead of \mintinline{python}{numpy}). The second line is importing one specific function from a package called \mintinline{python}{time}. It's important for you to realize that the import process is different in both cases. NumPy is a complex package, with many modules that you can use. The same is true for \emph{time}. However, in the lines above, you have only imported the module \emph{sleep} from the package \emph{time}. If you want to use it, you can do this:
 
 \begin{minted}{python}
 sleep(1)
 \end{minted}
 
-While for using \emph{Numpy}, you will need to specify which module you want:
+With \emph{Numpy}, you will need to specify which module you want:
 
 \begin{minted}{python}
 np.random.random(1)
 \end{minted}
 
-If you know you only want to use \mintinline{python}{random} from \emph{Numpy}, you can also import and use it like this:
+If you know you only want to use \mintinline{python}{random} from NumPy, then you can also import and use it like this:
 
 \begin{minted}{python}
 from numpy.random import random
@@ -84,30 +84,30 @@ from numpy.random import random
 random(1)
 \end{minted}
 
-We may wonder why you would import all of numpy is you're just using one of its functions. The name \emph{random} is not defined solely by numpy. Python also provides its random module. You can import it like this:
+You may wonder why you would import all of NumPy if you're just using one of its functions. Well, the name \emph{random} is not defined solely by NumPy. Python also provides its own \py{random} module. You can import it like this:
 
 \begin{minted}{python}
 import random
 \end{minted}
 
-If you needed both \emph{random} functions in the same program, you would have a clash. How would you be sure you're using Numpy's and not Python's function? You may, for example, define your random function, and you would like to be able to choose which one to use and, more importantly, you want to avoid generating an unexpected behavior because of redefining functions without realizing it.
+If you needed both \emph{random} functions (the one from NumPy and the one from Python's standard library) in the same program, you would have a clash. How could you be sure that you're using NumPy's function and not Python's? What's more, you might even define your own random function, and you would like to be able to choose which one to use. More importantly, you want to avoid generating unexpected behavior because of redefining functions without realizing it.
 
-When working with your code, you can import different modules in the same way. Open a terminal and navigate to the root folder of the project, i.e., the folder that contains the Model, View, and Controller folders. Start the Python interpreter, and then type:
+When working with your code, you can import different modules in the same way. Open a terminal and navigate to the root folder of the project. This is the folder that contains the \emph{Model}, \emph{View}, and \emph{Controller} folders. Start the Python interpreter, and then type this:
 
 \begin{minted}{pycon}
 >>> from Controller.pftl_daq import Device
 \end{minted}
 
-Now you have the controller available to use. You can do the following:
+Now you have the controller available for use. You can then do the following:
 
 \begin{minted}{pycon}
 >>> dev = Device('/dev/ttyACM0')
 >>> dev.initialize()
 \end{minted}
 
-However, there's something strange happening if you run the code above. As soon as you import \py{Device}, it starts communicating with the device, outputs the identification number, and switches on and off the LED. This behavior is, of course, something you don't want, and a very common pitfall for Python developers. Of course, you don't want to trigger a measurement just because you imported the module to your program.
+However, something strange happens if you run the code above. As soon as you import \py{Device}, the program starts communicating with the device, outputs the identification number, and switches on and off the LED. This behavior is something you don't want, and this is a very common pitfall for Python developers. Of course, you don't want the code to trigger a measurement just because you imported the module into your program.
 
-To avoid running code when importing, you must change the file \textbf{pftl\_daq.py}. You can add one line of code at the end of the file, and some indentation, to make it look like this:
+To avoid having the code run as soon as an import happens, you must change the file \textbf{pftl\_daq.py}. You can add one line of code at the end of the file, as well as some indentation, to make it look like this:
 
 \begin{minted}{python}
 if __name__ == "__main__":
@@ -126,9 +126,9 @@ if __name__ == "__main__":
         sleep(.5)
 \end{minted}
 
-To see the changes, you first must close Python running the \py{exit()} command, and then opening it again. Python does not import twice the same modules, and therefore, it won't realize that the file with your Controller changed. After you restart Python, you can try again importing the Controller. Now things are going to look fine, and you can use the \py{Device} as you intended. You can leave the space at the bottom of files to hold examples of how to use the code above. If you ever find the Device around, and you don't remember what you were supposed to do with it, you can always go to the bottom of the file and see how it works.
+To see the changes, you first must close Python by running the \py{exit()} command and then open it again. Python won't import the same modules twice, so it won't realize that the file with your Controller changed. After you restart Python, you can try to import the Controller again. Now, things are going to look fine, and you can use the \py{Device} as you intended. You can leave the space at the bottom of the files to hold examples of how to use the code above. If you ever find the Device around, and you don't remember what you were supposed to do with it, you can always go to the bottom of the file and see how it works.
 
-Every time you encounter a behavior which is not easy to understand, the best idea is to transform it into simpler components and explore them one by one. In this case, the importing process may be a bit confusing. To understand it a bit more about, especially how the \mintinline{python}{if __name__} works you can create a new file called \textbf{dummy\_controller.py} in the \emph{Controller} folder, with the following lines of code:
+Every time you encounter a behavior that's not easy to understand, the best idea is for you to transform it into simpler components and explore them one by one. In this case, the import process may be a bit confusing. To understand it a bit more, especially with respect to how the line \mintinline{python}{if __name__} works, you can create a new file called \textbf{dummy\_controller.py} in the \emph{Controller} folder with the following lines of code:
 
 \begin{minted}{python}
 print('This is the dummy Controller')
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
 \end{minted}
 
-\sloppy From the Terminal, you can just type \py{python Controller.dummy_controller.py}. The output should be:
+\sloppy From the Terminal, you can just type \py{python Controller.dummy_controller.py}. The output should be like what you see below:
 
 \begin{minted}{bash}
 This is the dummy Controller
@@ -150,9 +150,9 @@ This is printed only from __main__
 This is a function in the dummy Controller
 \end{minted}
 
-What you see is that the entire code got executed.
+What you see is that the entire code was executed.
 
-\questionInfo{Exercise}{What do you expect to happen if you do\\ \mintinline{python}{import dummy_controller}?}
+\questionInfo{Exercise}{What do you expect to happen if you run \mintinline{python}{import dummy_controller}?}
 
 Things are going to be different when you import the file. In the Python interpreter you can do the following:
 
@@ -166,9 +166,9 @@ This is a function in the dummy Controller
 This is a function in the dummy Controller
 \end{minted}
 
-First, you notice that the code at the end never gets executed. This means that the \py{if} statement is not \py{True}. This block is handy when you want to have code that works standalone (when you execute it directly, for example), but you don't want to execute those lines if you import it. In the case of the real Controller, you wanted to leave some examples at the end to show how you can use it, but when you're importing a class, you don't want it to start communicating with the device.
+First, notice that the code at the end never gets executed. This means that the \py{if} statement is not \py{True}. This block is handy when you want to have code that works as a standalone (when you execute it directly, for example), but you don't want to execute those lines if you import. In the case of the real Controller, we wanted to leave some examples at the end to show how you can use it, but when you're importing a class, you don't want it to start communicating with the device.
 
-\sloppy You can also see that the line \py{"This is the dummy Controller"} appears only once. Python knows that you have already imported the module \textbf{dummy\_controller}, and it doesn't execute again the lines that you already imported. Therefore, you have to be aware that it's not a matter of using the \py{from} in the importing procedure. You can close Python, start it again and revert the order in which you import, and the print is still there the first time but not the second. It means that Python is smart when importing modules, and won't fetch the elements it already has available, even if you're importing in a slightly different way.
+\sloppy You can also see that the line \py{"This is the dummy Controller"} appears only once. Python knows that you've already imported the module \textbf{dummy\_controller}, and it won't execute those import lines again. Therefore, you have to be aware that it's not a matter of using the \py{from} in the importing procedure. You can close Python, start it again and revert the order in which you import, and the print will still be there the first time but not the second. It means that Python is smart when importing modules, and it won't fetch the elements it already has available, even if you're importing in a slightly different way.
 
 \tipsInfo{Naming Conventions}{We should establish some naming conventions to avoid confusion later on. In Python, any file that defines variables, functions, or classes is called a \mintinline{python}{Module}. The folder that contains modules is called a \mintinline{python}{Package}.}
 
