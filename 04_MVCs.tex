@@ -183,7 +183,7 @@ For Python to understand that a folder is a \emph{package}, you should add an em
 The init files of packages allow you to specify more complex behaviors when importing, but that goes beyond the scope of this book. Going through other packages is an excellent way of understanding how developers have decided to structure their code.
 
 \section{Changing the PATH Variable}\label{sec:path}
-There is still a huge difference between your code and the way a library, such as \emph{Numpy}, can be imported. \emph{Numpy} can be imported regardless of where you have started the Python interpreter. You can go to any folder in the Terminal, start Python and import numpy. However, you can import your package only if you're in its directory. If you're sitting on a different folder and try to import the Controller, you get an error like the following:
+There's still a huge difference in the way you perform imports when you compare your own code to a library such as NumPy. Packages like NumPy can be imported regardless of where you've started the Python interpreter. You can go to any folder in the Terminal, start Python, and \py{import numpy}. However, you can only import your package if you're in its directory. If you're sitting in a different folder and try to import the Controller, you get an error like the following:
 
 \begin{minted}{pycon}
 >>> from Controller.pftl_daq import Device
@@ -192,17 +192,17 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'controller'
 \end{minted}
 
-Python searches for packages in specific locations, and once it finds one, it stops searching. \emph{Numpy} is located in one of the folders that Python uses, but Python is not aware of your package yet. One way to let Python know where your package is located, is by adding the folder to a system variable called \emph{PYTHONPATH}.
+Python searches for packages in specific locations, and once it finds one, it stops searching. NumPy is located in one of the folders that Python searches, but Python is not aware of your package yet. One way to let Python know where your package is located is to add the folder to a system variable called \mintinline{bash}{PYTHONPATH}.
 
-On Windows, you can follow the steps explained in Section~\ref{subsec:path-windows}, when you were dealing with the details of adding environment variables after installing Python. The only difference is that you should use the variable PYTHONPATH instead of just PATH. On Linux, it's enough to run the following command:
+On Windows, you can follow the steps explained in Section~\ref{subsec:path-windows}, where you were dealing with the details of adding environment variables after installing Python. The only difference is that you should use the variable \mintinline{bash}{PYTHONPATH} instead of just \mintinline{bash}{PATH}. On Linux, it's enough to run the following command:
 
 \begin{minted}{bash}
 $ export PYTHONPATH=$PYTHONPATH":/path/to/PFTL"
 \end{minted}
 
-We have to change \py{/path/to/PFTL} with the full path to the folder where you're keeping the code. After doing that, you can type \py{from Controller import *} wherever you're in your computer, and Python finds the appropriate folder. On Linux, the change is not permanent, and you need to rerun the line next time you start the Terminal. You can modify environment variables permanently, but this goes too much into the details of the operating systems.
+You have to replace \py{/path/to/PFTL} with the full path to the folder where you're keeping the code. After running that, you can type \py{from Controller import *} wherever you are in your computer, and Python will find the appropriate folder. On Linux, this change is not permanent, so you'll need to rerun the command the next time you start the Terminal. You can modify environment variables permanently, but that goes too much into the details of the operating systems. We leave this as an exercise for the reader.
 
-If you're using an IDE to develop and run the code, you may have noticed that there's no need to add anything to the Python path. It's one of the advantages of using robust programs to develop software. They take care of many things for us. However, at some point, it's also essential to be able to run the program independently of the editor software.
+If you're using an IDE to develop and run the code, you may have noticed that there's no need to add anything to the Python path. This is one of the advantages of using robust programs to develop software. They take care of many things for you. However, at some point, it's also essential for you to be able to run the program independently of the editor software.
 
 \section{Finalizing the Layout}\label{sec:final-layout}
 At this stage, you should have a clear separation of the code into Model, Controller, and View. Most of them are, for the time being, empty folders. However, you're not limited to having only three folders in your project. Most likely, you want to provide some examples of how to use the code or some documentation.
