@@ -7,7 +7,7 @@ There is no magical recipe to teach precisely how to develop models for devices.
 
 \warningInfo{Device Manuals}{It is impossible to overestimate the importance of reading the manuals of your devices. Hardware in the lab is not the same as consumer hardware. Things can break, signals may not make sense. Be always sure to understand the limits under which each component operates.}
 
-\section{Device Model}\label{sec:device-model}
+\section{Developing the Device Model}\label{sec:device-model}
 We must first thing how do we want to interact with that particular device. Of course, we would like to initialize it, set a voltage, read a voltage, and finalize the device. But we don't want just to repeat what the Controller can do. When we initialize or finalize the device, we want to be sure the output voltages are at $0\,\textrm{V}$. In this way, we can ensure that no current flows through the LED unless we explicitly want it. We also want to be able to use values in volts when setting an output, and getting values in volts when reading a voltage.
 
 We can develop a skeleton of the Model. We can use empty methods to have an idea of what we need to develop and the arguments and outputs of each method. Let's start by creating a file \textbf{analog\_daq.py} in the \emph{Model} folder, we can then add the following code:
@@ -84,7 +84,7 @@ And we can do the same for the get method:
 
 And that is all that is needed. We can now run the code and see that we are reading voltages and setting voltages. Because of how the experiment works, the values we get at the analog input are going to be very small, in the order of few tens of millivolts, but enough to be detected by the {PFTL DAQ}.
 
-\section{Base Model}\label{sec:base-model}
+\section{Developing the Base Model}\label{sec:base-model}
 In this book, we are working with only one device, and therefore we are using only one model. But if we want to make our program compatible with more devices, we need to start developing models for each new device. Since we have one model, it would look reasonable to copy it and adapt the methods based on what the new drivers allow us to do. Another option is to create a base class that all other models inherit. In this way, we know that all the methods are defined, perhaps they don't do anything, but at least they are there.
 
 What we do in this section is not a requirement to keep going, but it is important to show the pattern because sooner or later, when the program grows, it becomes a handy approach. Create a file called \textbf{base\_daq.py} inside the Controller folder, we can add the following code to it:
@@ -137,7 +137,7 @@ Of course, when we set a voltage, initialize, or finalize the Model, nothing hap
 
 \questionInfo{Exercise}{Update the real Model to inherit from the base class}
 
-\section{Adding real units to the code}\label{sec:pint}
+\section{Adding Real Units to the Code}\label{sec:pint}
 The Model for the {PFTL DAQ} device is working great, but it has one problem. It allows us to set the output in volts and reads a value in volts. But if we ever make the mistake of supplying the value in millivolts, the program won't work as expected. In real cases, it is tough to remember the units that every method should take. Sometimes you have very different outputs and inputs, with each one taking different units. Imagine you want to make a periodic signal, perhaps the device asks for the frequency, perhaps for the period.
 
 In Python we can overcome the limitations of working with plain numbers by using a package called \emph{Pint}, that allows us to work with \emph{real} units. Let's quickly see how Pint can be used with a simple example:
@@ -336,7 +336,7 @@ Every time we want to use units and the unit registry, we can do the following:
 
 After completing the exercises above, we should be able to run the example and get the values we wanted. We are getting currents in amperes, we are setting voltages in volts. We are still missing some details, such as saving data, but the core of the measurement is already there.
 
-\section{Appending to the PATH at runtime}\label{sec:appending-path}
+\section{Appending to the PATH at Runtime}\label{sec:appending-path}
 In Section~\ref{sec:path}, we have seen how to add the root folder of the project to the computer's PYTHONPATH. It allows Python to find our program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, but it can also lead to unwanted results. For example, we may be overwriting something important if there is any name clash between the program we develop and some other library on the computer.
 
 Therefore, we can go a different route and add the folder to the path directly from within Python. This change is not permanent, and it is in place only while the program runs, but no further. First, we need to learn how to identify the folder we want to add to the path. For this, Python offers a module called \py{os}. The code below looks cumbersome, but we explain it after. We can add the following line at the beginning of the \textbf{test\_daq.py} file:
@@ -361,7 +361,7 @@ And that is it. It doesn't matter if we modify the PYTHONPATH variable anymore, 
 
 \warningInfo{The PATH}{Since appending to path only works while the program runs, if we try to run the package files independently, Python does not know where to find the modules. The test files we created in Examples are what are called entry points, and the program should be run directly from them}
 
-\section{Real World Example}\label{sec:real-world-model}
+\section{Brainstorming a Real World Example}\label{sec:real-world-model}
 The usefulness of models at this stage may still be obscure. We may be tempted to define units and transformation in the Controller itself. We know we are the only ones using it, just to do one experiment. It may be fine when you start, but at some point, the code grows because the experiment is progressing and getting more complex. As an example, at Python for the Lab, we have developed software for controlling a microscope using a camera. However, there were several cameras available, some more expensive and powerful, and they were all shared between people and experiments.
 
 Therefore, having a flexible way of using different cameras for the same experiment became mandatory. Sometimes we would use a Hamamatsu, sometimes a Basler, sometimes a Photonics Science. However, each camera had an incredibly different way of working. First, Hamamatsu didn't provide any drivers written in Python. Photonics Science shared an internal tool they used, and Basler as an entire package called PyPylon to control their cameras. The controller layer, therefore, was not developed by us but was given.
