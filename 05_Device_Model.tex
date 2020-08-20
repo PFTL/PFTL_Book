@@ -345,9 +345,9 @@ Every time you want to use units and the unit registry, you can do the following
 After completing the exercises above, you should be able to run the example and get the values you wanted. You're getting currents in amperes, and you're setting voltages in volts. You're still missing some details, such as saving data, but the core of the measurement is already there.
 
 \section{Appending to the PATH at Runtime}\label{sec:appending-path}
-In Section~\ref{sec:path}, you have seen how to add the root folder of the project to the computer's PYTHONPATH. It allows Python to find your program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, but it can also lead to unwanted results. For example, you may be overwriting something important if there's any name clash between the program you develop and some other library on the computer.
+In Section~\ref{sec:path}, you saw how to add the root folder of the project to the computer's PYTHONPATH, which allows Python to find your program and allows you to import packages and modules very easily. However, altering environment variables in different operating systems is not only cumbersome, but it can also lead to unwanted results. For example, you may be overwriting something important if there are any name clashes between the program you develop and some other library on the computer.
 
-Therefore, you can go a different route and add the folder to the path directly from within Python. This change is not permanent, and it's in place only while the program runs, but no further. First, you need to learn how to identify the folder you want to add to the path. For this, Python offers a module called \py{os}. The code below looks cumbersome, but you explain it after. You can add the following line at the beginning of the \textbf{test\_daq.py} file:
+Therefore, you can go a different route and add the folder to the path directly from within Python. This change is not permanent, and it's in place only while the program runs, but no longer. First, you need to learn how to identify the folder you want to add to the path. For this, Python offers a module called \py{os}. The code below looks cumbersome, but you'll see an explanation in just a moment. You can add the following line at the beginning of the \textbf{test\_daq.py} file:
 
 \begin{minted}{python}
 import os
@@ -355,9 +355,9 @@ import os
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 \end{minted}
 
-First, \py{__file__} variable is a way of letting Python know you're interested in the current file, which in this case is \py{test_daq.py}. You can start from the inside of the function. First, you get the absolute path to the file, including all the folders to get there. Then, you grab the directory that holds the file, which would be the \emph{Examples} folder. And then, you grab the directory that contains the examples, which in your case is the root folder or \py{base_dir} as you called it.
+Let's start from the innermost part of the function. The \py{__file__} variable is a way of letting Python know that you're interested in the current file, which in this case is \py{test_daq.py}. First, you get the absolute path to this file, including all the folders you'd need to traverse to get there. Next, you grab the directory that holds the file, which would be the \emph{Examples} folder. Then, you grab the directory that contains the examples, which in this case is the root folder or \py{base_dir} it's called here.
 
-Next, you need to add the \py{base_dir} to the path. For this, you use another package called \py{sys}, which is a wrapper for the operating system. It means that this package adapts according to which operating system you use to run the program. To add the folder, you only need to do the following:
+Finally, you need to add the \py{base_dir} to the path. For this, you use another package called \py{sys}, which is a wrapper for the operating system. It means that this package adapts accordingly to the operating system you're using to run the program. To add the folder, you only need to do the following:
 
 \begin{minted}{python}
 import sys
@@ -365,9 +365,9 @@ import sys
 sys.path.append(base_dir)
 \end{minted}
 
-And that is it. It doesn't matter if you modify the PYTHONPATH variable anymore, you can always run the \py{test_daq.py} file.
+That's it! It doesn't matter if you modify the PYTHONPATH variable anymore, as you can always run the \py{test_daq.py} file.
 
-\warningInfo{The PATH}{Since appending to path only works while the program runs, if you try to run the package files independently, Python does not know where to find the modules. The test files you created in Examples are what are called entry points, and the program should be run directly from them}
+\warningInfo{The PATH}{Since appending to path only works while the program runs, if you try to run the package files independently,  then Python won't know where to find the modules. The test files you created in \emph{Examples} are what are called \textbf{entry points}, and the program should be run directly from them.}
 
 \section{Brainstorming a Real World Example}\label{sec:real-world-model}
 The usefulness of models at this stage may still be obscure. You may be tempted to define units and transformation in the Controller itself. You know you're the only ones using it, just to do one experiment. It may be fine when you start, but at some point, the code grows because the experiment is progressing and getting more complex. As an example, at Python for the Lab, you have developed software for controlling a microscope using a camera. However, there were several cameras available, some more expensive and powerful, and they were all shared between people and experiments.
