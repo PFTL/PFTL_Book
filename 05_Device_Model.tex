@@ -8,9 +8,9 @@ There's no magical recipe to teach precisely how to develop models for devices. 
 \warningInfo{Device Manuals}{It's impossible to overestimate the importance of reading the manuals for your devices. Hardware in the lab is not the same as consumer hardware. Things can break, signals may not make sense, and you could run into a host of other issues. Always be sure that you understand the limits under which your components operate.}
 
 \section{Developing the Device Model}\label{sec:device-model}
-You must first thing how do you want to interact with that particular device. Of course, you would like to initialize it, set a voltage, read a voltage, and finalize the device. But you don't want just to repeat what the Controller can do. When you initialize or finalize the device, you want to be sure the output voltages are at $0\,\textrm{V}$. In this way, you can ensure that no current flows through the LED unless you explicitly want it. You also want to be able to use values in volts when setting an output, and getting values in volts when reading a voltage.
+The first thing you should think about is how you want to interact with a particular device. Of course, you would like to initialize it, set a voltage, read a voltage, and then finalize the device. However, you don't simply want to repeat what the Controller can do. Rather, when you initialize or finalize the device, you want to be sure that the output voltages are at $0\,\textrm{V}$. In this way, you can ensure that no current flows through the LED unless you explicitly want it to do so. You also want to be able to input values in volts when setting an output, and get values in volts when reading a voltage.
 
-You can develop a skeleton of the Model. You can use empty methods to have an idea of what you need to develop and the arguments and outputs of each method. Let's start by creating a file \textbf{analog\_daq.py} in the \emph{Model} folder, you can then add the following code:
+With these things in mind, you can develop a skeleton for the Model. You can use empty methods to get an idea of what you'll need to develop, as well as the arguments and outputs of each method. Start by creating a file \textbf{analog\_daq.py} in the \emph{Model} folder and add the following code:
 
 \begin{minted}{python}
 class AnalogDaq:
@@ -30,7 +30,7 @@ class AnalogDaq:
         pass
 \end{minted}
 
-Now you can start step by step. You start very similarly to how you started the Controller; the \py{AnalogDaq} class takes port as an argument for initializing. The main difference is that you don't use PySerial directly, but you use the Controller. You can start improving your code, like this:
+Now you can add code to the file line by line. You'll start very similar to how you started the Controller. The \py{AnalogDaq} class takes \py{port} as an argument for initializing. The main difference is that you don't use PySerial directly, but instead you use the Controller. You can start improving your code like this:
 
 \begin{minted}{python}
 from PythonForTheLab.Controller.pftl_daq import Device
@@ -46,7 +46,7 @@ class AnalogDaq:
         self.set_voltage(1, 0)
 \end{minted}
 
-You initialize the class by storing the \py{port} and by creating a \py{self.driver} attribute. Remember that the \py{Device} has a separate method for initializing. The \py{initialize} method now not only initializes the the driver itself, but also sets the output voltages to 0. You haven't developed a way of setting voltaes, yet, but you see the flow. The same works for the \py{finalize} method:
+You initialize the class by storing the \py{port} and creating a \py{self.driver} attribute. Remember that the \py{Device} has a separate method for initializing. The \py{.initialize()} method now not only initializes the driver itself, but also sets the output voltages to 0. You haven't developed a way of setting voltages yet, but you can see the flow. The same works for the \py{.finalize()} method:
 
 \begin{minted}{python}
     def finalize(self):
@@ -55,7 +55,9 @@ You initialize the class by storing the \py{port} and by creating a \py{self.dri
         self.driver.finalize()
 \end{minted}
 
-You first set the voltages to $0$, and then you finalize the Controller. This is a clear example of your own logic imposed on the device. In some cases, you don't want to set the voltage to 0 when closing the communication. Perhaps you're just switching on a laser, and you want it to stay on even if you switch off the computer, or you're using piezo stages and is not recommended to suddenly shake them by setting a different voltage, it's better just to leave a voltage applied to them. That is why adding these features to the Controller would imply violating the separation of models and controllers. What you do with the voltages is part of the logic, not of the device itself. Now that you have this code, you can also add an example to the end of the file, to show how to use the Model:
+You first set the voltages to $0$, and then you finalize the Controller. This is a clear example of how you might impose your own logic onto the device. In some cases, you won't want to set the voltage to 0 when stopping communication. Perhaps you're just switching on a laser, and you want it to stay on even if you switch off the computer. Or perhaps you're using piezo stages where it's not recommended to suddenly shake them by setting a different voltage; it's better to just leave a voltage applied to them. Scenarios like these show why adding these features to the Controller would imply violating the separation of models and controllers. What you do with the voltages is part of the logic, not the device itself.
+
+Now that you have this code, you can also add an example to the end of the file, to show you how to use the Model:
 
 \begin{minted}{python}
 if __name__ == "__main__":
@@ -65,7 +67,7 @@ if __name__ == "__main__":
     daq.finalize()
 \end{minted}
 
-The last missing bits are the methods for getting and setting a voltage. What you do in these steps was discussed in Section~\ref{subsec:adc-dca}. To set a voltage, you first need to transform a number in the range $0-3.3$ to an integer in the range $0-4095$ and then you apply it:
+The last missing bits are the methods for getting and setting a voltage. What you do in these steps was discussed in Section~\ref{subsec:adc-dca}. To set a voltage, you first need to transform a number in the range $0-3.3$ to an integer in the range $0-4095$. Then, you apply it:
 
 \begin{minted}{python}
     def set_voltage(self, channel, volts):
@@ -73,7 +75,7 @@ The last missing bits are the methods for getting and setting a voltage. What yo
         self.driver.set_analog_output(channel, voltage_bits)
 \end{minted}
 
-And you can do the same for the get method:
+You can do the same for the \py{.get()} method:
 
 \begin{minted}{python}
     def get_voltage(self, channel):
@@ -82,7 +84,7 @@ And you can do the same for the get method:
         return voltage
 \end{minted}
 
-And that is all that is needed. You can now run the code and see that you're reading voltages and setting voltages. Because of how the experiment works, the values you get at the analog input are going to be very small, in the order of few tens of millivolts, but enough to be detected by the {PFTL DAQ}.
+That is all that's needed. You can now run the code and see that you can read and set voltages. Because of how the experiment works, the values you get at the analog input are going to be very small (in the order of a few tens of millivolts), but it's enough to be detected by the {PFTL DAQ}.
 
 \section{Developing the Base Model}\label{sec:base-model}
 In this book, you're working with only one device, and therefore you're using only one model. But if you want to make your program compatible with more devices, you need to start developing models for each new device. Since you have one model, it would look reasonable to copy it and adapt the methods based on what the new drivers allow us to do. Another option is to create a base class that all other models inherit. In this way, you know that all the methods are defined, perhaps they don't do anything, but at least they are there.
