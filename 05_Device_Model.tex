@@ -140,9 +140,9 @@ Of course, when you set a voltage, initialize, or finalize the Model, nothing ha
 \questionInfo{Exercise}{Update the real Model to inherit from the base class.}
 
 \section{Adding Real Units to the Code}\label{sec:pint}
-The Model for the {PFTL DAQ} device is working great, but it has one problem. It allows us to set the output in volts and reads a value in volts. But if you ever make the mistake of supplying the value in millivolts, the program won't work as expected. In real cases, it's tough to remember the units that every method should take. Sometimes you have very different outputs and inputs, with each one taking different units. Imagine you want to make a periodic signal, perhaps the device asks for the frequency, perhaps for the period.
+Your Model for the {PFTL DAQ} device is working great, but it does have one problem. It allows you to set the output in volts and read a value in volts, but if you ever were to make the mistake of supplying the value in millivolts, then the program wouldn't work as expected. In real cases, it's tough to remember the units that every method should take. Sometimes you have very different outputs and inputs, with each one taking on different units. Imagine that you want to make a periodic signal, where perhaps the device asks for the frequency, perhaps for the period.
 
-In Python you can overcome the limitations of working with plain numbers by using a package called \emph{Pint}, that allows us to work with \emph{real} units. Let's quickly see how Pint can be used with a simple example:
+In Python, you can overcome the limitations of working with plain numbers by using a package called \emph{Pint}, which allows you to work with \emph{real} units. Let's quickly see how Pint can be used with a simple example:
 
 \begin{minted}{pycon}
 >>> import pint
@@ -158,14 +158,14 @@ In Python you can overcome the limitations of working with plain numbers by usin
 196.8503937007874 inch
 \end{minted}
 
-First, you import the package and start the \emph{Unit Registry}. In principle, Pint allows us to work with custom-made units, but the fundamental ones are already included in their \emph{Unit Registry}. Then, because of convenience, you define the variable \py{meter}, as actually the unit meter. Finally, you assign the value of \py{5 meters} to \py{b}. In this case, \py{b} is of type \py{Quantity}. Therefore it's not just a number but a number and a unit attached to it. \emph{Pint} allows us to convert between units, and this is how you create the variable \py{c}, which is 5 meters converted to inches. And things can get very interesting:
+First, you import the package and start the \py{.UnitRegistry()}. In principle, Pint allows you to work with custom-made units, but the fundamental ones are already included in the \py{.UnitRegistry()}. Then, because of convenience, you define the variable \py{meter} as actually the unit meter. Finally, you assign the value of 5 meters to \py{b}. In this case, \py{b} is of type \py{Quantity}. Therefore, it's not just a number, but a number with a unit attached to it. \emph{Pint} allows you to convert between units, and this is how you create the variable \py{c}, which is 5 meters converted to inches. With this, things can get very interesting:
 
 \begin{minted}{pycon}
  >>> b == c
  True
 \end{minted}
 
-Even if the numeric value of \py{b} and \py{c} is different, they are still equal to each other, exactly as you would have imagined. You can also work with more complex units:
+Even if the numeric values of \py{b} and \py{c} are different, they're still equal to each other, exactly as you would have imagined. You can also work with more complex units:
 
 \begin{minted}{pycon}
 >>> d = c*b
@@ -179,7 +179,7 @@ Even if the numeric value of \py{b} and \py{c} is different, they are still equa
 78.74015748031496 inch / second
 \end{minted}
 
-So far you have always been transforming between units of the same type, i.e.\ a length in meters to a length in inches, etc. But Pint can also handle combined units such as what happens with voltage, current and resistance:
+So far, you have always been transforming between units of the same type (for example, a length in meters to a length in inches). But Pint can also handle combined units like you would see with voltage, current, and resistance:
 
 \begin{minted}{pycon}
 >>> current = 5*ur('A')
@@ -193,14 +193,18 @@ So far you have always been transforming between units of the same type, i.e.\ a
 50000.0
 \end{minted}
 
-The snippet above shows you that Pint can understand the relationship between Amperes, Ohms, and Volts. There's one more feature that is important to point out: Pint can parse strings to separate the units from the numbers. For example, you can do the following:
+The snippet above shows you that Pint can understand the relationship between Amperes, Ohms, and Volts.
+
+Pint also has one more useful feature: it can parse strings to separate the units from the numbers. For example, you can do the following:
 
 \begin{minted}{pycon}
  >>> current = ur('5 A')
  >>> resistance = ur('10 ohm')
 \end{minted}
 
-Being able to parse strings so easily is going to make your life much easier when you will be dealing with user input. Now you have seen how to handle \emph{real} units on your code. However, the device still requires us to set the output using plain numbers. In the context of Pint, just the number, without the units is called the \emph{magnitude}. To get the magnitude out of a quantity, you can do the following:
+Having the ability to parse strings so easily will make your life much easier when dealing with user input.
+
+Now you've seen how to handle \emph{real} units in your code. However, the device still requires that you set the output using plain numbers. In the context of Pint, the number on its own without units is called the \textbf{magnitude}. To get the magnitude of a quantity, you can do the following:
 
 \begin{minted}{pycon}
  >>> current = ur('5 A')
@@ -214,7 +218,7 @@ Being able to parse strings so easily is going to make your life much easier whe
  5000.0
 \end{minted}
 
-You start with a quantity called \py{current} of $5\,\textrm{A}$. If you just append the \py{.m} to the variable, you get the magnitude in whatever unit it's already expressed. If you want to be sure to get the magnitude in a specific unit, you use the command \py{.m_as()}. In your case, you will need to transform the user input to an integer, and you will not need to assume it's in volts, you can transform it to volts before converting it to an integer. The \py{set_voltage} method would look like this:
+You start with a quantity called \py{current} of $5\,\textrm{A}$. If you just append the \py{.m} to the variable, you get the magnitude in whatever unit it's already expressed. If you want to be sure to get the magnitude in a specific unit, you use the command \py{.m_as()}. In this case, you will need to transform the user input to an integer. You won't need to assume it's in volts, since you can transform it to volts before converting it to an integer. The \py{.set_voltage()} method would look like this:
 
 \begin{minted}{python}
     def set_voltage(self, channel, volts):
@@ -223,11 +227,11 @@ You start with a quantity called \py{current} of $5\,\textrm{A}$. If you just ap
         self.driver.set_analog_output(channel, value_int)
 \end{minted}
 
-You transform the value to volts and get only the magnitude. Then you transform that value to bits, using the round function to get an integer after the operation. You use that rounded value to set the output on the device. Our program is now very flexible since the user can provide the output value in whatever units she pleases, provided that Pint can transform them into volts.
+You transform the value to volts and get only the magnitude. Then, you transform that value to bits, using \py{round()} to get an integer after the operation. You use that rounded value to set the output on the device. This program is now very flexible since the user can provide the output value in whatever units she pleases, provided that Pint can transform them into volts.
 
-\questionInfo{Exercise}{Update the method \py{get_voltage} so it generates an in volts. Pay attention to the fact that you need to import Pint and create the unit registry before you define your class to be able to use it.}
+\questionInfo{Exercise}{Update the method \py{.get_voltage()} so it generates output in volts. Pay attention to the fact that you need to import Pint and create the unit registry before you define your class to be able to use it.}
 
-You should also update the method for getting a voltage to return a voltage and not a plain number. The code below only shows the parts that have changed or added, not the entire class:
+You should also update the method for getting a voltage to return a voltage and not a plain number. The code below only shows the parts that have changed or been added, not the entire class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -243,7 +247,7 @@ ur = pint.UnitRegistry()
         return voltage
 \end{minted}
 
-However, you also need to update the \py{initialize} and \py{finalize} methods in order to use units and not plain numbers:
+However, you also need to update the \py{.initialize()} and \py{.finalize()} methods in order to use units and not plain numbers:
 
 \begin{minted}{python}
     def initialize(self):
@@ -257,7 +261,7 @@ However, you also need to update the \py{initialize} and \py{finalize} methods i
         self.driver.finalize()
 \end{minted}
 
-The class is complete and you need to update the example code at the bottom of the file in order to use the real units:
+The class is complete. You need to update the example code at the bottom of the file in order to use the real units:
 
 \begin{minted}{python}
 if __name__ == "__main__":
@@ -270,7 +274,7 @@ if __name__ == "__main__":
     daq.finalize()
 \end{minted}
 
-If you're hesitant about the impact that different unit systems can have, there's a great example involving a multi-million dollar satellite\footnote{You can check the article on LA times: https://bit.ly/la-times-mo}. The Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
+If you're hesitant about the impact that different unit systems can have, there's a great example involving a multi-million dollar satellite\footnote{You can check the article on LA times: https://bit.ly/la-times-mo} that you can use as a reference. The Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
 
 \section{Testing the DAQ Model}\label{sec:testing-the-daq-model}
 At this point, you have a very functional program. You can handle units, you have split the logic of the units from the driver, meaning that you can easily share your code with colleagues or the rest of the world. It's time to test your program. One of the reasons you created the Examples folder was to be able to add extra python files that don't belong to your core program. In the Examples folder, create a file called \textbf{test\_daq.py}, and you can start using the Model to do some measurements:
