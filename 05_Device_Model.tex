@@ -277,7 +277,9 @@ if __name__ == "__main__":
 If you're hesitant about the impact that different unit systems can have, there's a great example involving a multi-million dollar satellite\footnote{You can check the article on LA times: https://bit.ly/la-times-mo} that you can use as a reference. The Mars Climate Orbiter fell from its orbit because engineers from the US failed at using the established units of measure in their software, resulting in a mix of metric and imperial systems.
 
 \section{Testing the DAQ Model}\label{sec:testing-the-daq-model}
-At this point, you have a very functional program. You can handle units, you have split the logic of the units from the driver, meaning that you can easily share your code with colleagues or the rest of the world. It's time to test your program. One of the reasons you created the Examples folder was to be able to add extra python files that don't belong to your core program. In the Examples folder, create a file called \textbf{test\_daq.py}, and you can start using the Model to do some measurements:
+At this point, you have a very functional program! You can handle units, and you've separated the logic of the units from the driver, meaning that you can easily share your code with colleagues (or even the rest of the world).
+
+It's time to test your program. One of the reasons you created the \emph{Examples} folder was to be able to add extra Python files that don't belong to your core program. In this folder, create a file called \textbf{test\_daq.py}, and try to start using the Model to do some measurements:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -302,7 +304,7 @@ for volt in volt_range:
 print(current)
 \end{minted}
 
-You can run the code above, but you will notice that you're printing currents with units of volts. This can be very confusing for someone looking at your results, or even for ourselves. You have to remember that you can transform volts to amperes by deviding them with the resistance you're using. If you have a $100\,\textrm{Ohm}$ resistance, you can do the following:
+You can run the code above, but you'll notice that you're printing currents with units of volts. This can be very confusing for someone looking at your results, or even for your future self. You have to remember that you can transform volts to amperes by dividing them with the resistance you're using. If you have a $100\,\textrm{Ohm}$ resistance, you can do the following:
 
 \begin{minted}{python}
 for volt in volt_range:
@@ -320,9 +322,9 @@ If you run the code with the changes above, you will get the following error:
  ValueError: Cannot operate with Quantity and Quantity of different registries.
 \end{minted}
 
-The error is descriptive, but hard to understand without knowing the underlaying principles of Pint. The unit registry is a collection of rules that allows us to transform from one quantity to another. But these rules belong to a unit registry. In principle, two distinct unit registries hold rules for different sets of units. It means that you can't convert units across unit registries. You need to use only one registry throughout the program. Right now, you're creating the registry in two different places: The device model and the example.
+The error is descriptive, but it's still hard to understand if you don't know the underlying principles of Pint. The unit registry is a collection of rules that allows you to transform one quantity into another. Still, these rules belong to a unit registry. In principle, two distinct unit registries hold rules for different sets of units. This means that you can't convert units across unit registries. You need to use only \emph{one} registry throughout the program. Right now, you're creating the registry in two different places: the device model and the example.
 
-Since units belong to the entire program, it could be a good idea to define the unit registry at the root. In other words, you can create it directly in the \textbf{\_\_init\_\_.py} file that you placed in the PythonForTheLab folder:
+Since units belong to the entire program, it might be a good idea to define the unit registry at the root. In other words, you can create it directly in the \textbf{\_\_init\_\_.py} file that you placed in the \emph{PythonForTheLab} folder:
 
 \begin{minted}{python}
  import pint
@@ -336,11 +338,11 @@ Every time you want to use units and the unit registry, you can do the following
  from PythonForTheLab import ur
 \end{minted}
 
-\questionInfo{Exercise}{Improve DAQ model to use the central unit registry and not one defined locally.}
+\questionInfo{Exercise}{Improve the DAQ model to use the central unit registry and not the one defined locally.}
 
-\questionInfo{Exercise}{Modify the example that you developed for testing the DAQ model, so it uses the central unit registry, and see that it works as expected.}
+\questionInfo{Exercise}{Modify the example that you developed for testing the DAQ model so that it uses the central unit registry, and see that it works as expected.}
 
-After completing the exercises above, you should be able to run the example and get the values you wanted. You're getting currents in amperes, you're setting voltages in volts. You're still missing some details, such as saving data, but the core of the measurement is already there.
+After completing the exercises above, you should be able to run the example and get the values you wanted. You're getting currents in amperes, and you're setting voltages in volts. You're still missing some details, such as saving data, but the core of the measurement is already there.
 
 \section{Appending to the PATH at Runtime}\label{sec:appending-path}
 In Section~\ref{sec:path}, you have seen how to add the root folder of the project to the computer's PYTHONPATH. It allows Python to find your program and allows us to import the packages and modules very easily. However, altering environment variables in different Operating Systems is not only cumbersome, but it can also lead to unwanted results. For example, you may be overwriting something important if there's any name clash between the program you develop and some other library on the computer.
