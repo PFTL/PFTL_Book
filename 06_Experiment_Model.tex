@@ -397,7 +397,7 @@ Finally, you can see the data you acquired after the scan runs. This would allow
 Now you can proceed further to the last missing step: saving data.
 
 \section{Saving Data to a File}\label{sec:saving-data}
-After you perform a scan, you must save both the data and the \emph{metadata}. With metadata you mean information on the parameters used to perform an experiment and that would allow you or anybody else to repeat the measurement. Let's start by the beginning, just saving data to a file, you're going to use the built-in functions of numpy for this, because you've to save two arrays: \py{scan_data} and \py{scan_range}. And since you already know that Pint and Numpy interact in special ways, you anticipate the errors that may appear:
+After you perform a scan, you must save both the data and the \emph{metadata}. The metadata is the information on the parameters used to perform an experiment that would allow you or anybody else to repeat the measurement. Let's start at the beginning, with simply saving data to a file. You're going to use the built-in functions of NumPy for this, because you have to save two arrays: \py{scan_data} and \py{scan_range}. Since you already know that Pint and NumPy interact in special ways, you can anticipate the errors that may appear:
 
 \begin{minted}{python}
 def save_data(self):
@@ -407,7 +407,7 @@ def save_data(self):
     np.savetxt(filename, data.m_as('V'), header=header)
 \end{minted}
 
-The method above works. You can go ahead and run the experiment, and it generates a file with two columns (that is the reason for the \py{vstack} and the \py{.T}) and a header specifying that the data is in units of Volts. However, if you run the experiment for a second time, the data gets overwritten. Moreover, you're saving the data to the same folder where you run the experiment, and this is a terrible idea, you would like to save the data in a dedicated place. Therefore, you need to update the config file first, and then the saving method. The folder you're using for saving data is only an example, and one should change it according to their needs:
+The method above works. You can go ahead and run the experiment, and it generates a file with two columns (which is the reason for the \py{vstack} and the \py{.T}) as well as a header specifying that the data is in units of Volts. However, if you run the experiment for a second time, the data gets overwritten. Moreover, you're saving the data to the same folder where you run the experiment, and this is a terrible idea. It would be better to save the data in a dedicated place. Therefore, you need to update the config file first, and then the saving method. The folder you're using for saving data here is only an example, and you should change it according to your needs:
 
 \begin{minted}{text}
 Saving:
@@ -415,7 +415,7 @@ Saving:
   folder: /home/aquiles/Data
 \end{minted}
 
-Something handy when saving data is to organize it by dates. You can create a folder with the date of the measurement inside the \emph{Data} folder. First, you see snippets to understand what you need, and then you add the modifications to the method itself. To get the date of today as a string, you can combine the \py{datetime} package and the formatting of strings:
+One best practice to consider when saving data is to organize it by dates. You can create a folder with the date of the measurement inside the \emph{Data} folder. First, you'll see snippets to understand what you need, and then you can add the modifications to the method itself. To get the date of today as a string, you can combine the \py{datetime} package with the formatting of strings:
 
 \begin{minted}{pycon}
 >>> from datetime import datetime
@@ -425,7 +425,7 @@ Something handy when saving data is to organize it by dates. You can create a fo
 2020-04-13
 \end{minted}
 
-The first part is there, you know how to get the folder name based on todays date. Now you've to create the folder if it does not exist:
+The first part is there, and you know how to get the folder name based on today's date. Now you have to create the folder if it does not exist:
 
 \begin{minted}{pycon}
 >>> import os
@@ -439,9 +439,9 @@ False
 True
 \end{minted}
 
-Using the package \py{os} allows you to take care of the common problems that appear when dealing with directories. For example, Linux uses \texttt{/} to separate the structure, while Windows uses \texttt{\\}. Also, you may define the folder with a trailing \texttt{/} or not. \py{os} takes care of all this complexity for us. You join the data folder and today's folder and check if it exists, if it doesn't, you create it. The \py{makedirs} also creates the missing parent directories. For example, if the \emph{Data} folder does not exist, the program creates it.
+Using the \py{os} module allows you to take care of common problems that can appear when dealing with directories. For example, Linux uses the forward slash to separate the folder structure, while Windows uses the backslash. Also, you may define the folder with a trailing \texttt{/} or not. \py{os} takes care of all of this complexity for you. In the code block above, you join the data folder and today's folder and check if it exists; if it doesn't, you create it. The \py{makedirs} also creates the missing parent directories. For example, if the \emph{Data} folder does not exist, the program creates it.
 
-Next, you've to be sure you will not overwrite the files when you save new scans. Ideally, you would like the files to look like \py{data_001.dat}, \py{data_002.dat}, etc. Using what you specified in the config file, you can achieve something like it:
+Next, you have to be sure you will not overwrite the files when you save new scans. Ideally, you would like the files to have a naming structure like \py{data_001.dat}, \py{data_002.dat}, and so on. Using what you specified in the config file, you can achieve something like it:
 
 \begin{minted}{python}
 >>> filename = 'data.dat'
@@ -453,7 +453,7 @@ Next, you've to be sure you will not overwrite the files when you save new scans
 data_0001.dat
 \end{minted}
 
-It seems like much work just to format the name, but once you've it, you can use it in all your experiments. You only need to know which is the first available name and save data there. You're now ready to save the data, and also the metadata:
+This seems like too much work just to format the name, but once you've done it, you can use it in all your experiments. You only need to know what the first available name is and then save the data there. You're now ready to save the data, as well as the metadata:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -484,11 +484,11 @@ def save_data(self):
         f.write(yaml.dump(self.config, default_flow_style=False))
 \end{minted}
 
-The \py{save_data} method may be the most complex in the program, but it's also powerful. You start with a base folder and create a folder with the current date, with the format Year-Month-Day. You format the data to make it easy to store as two columns on a text file, and you also add a header to explain what you're storing. You extract the base part of the filename and the extension as two separate variables, and you format the filename in such a way that it can have a number appended to it. The syntax \py{i:04d} is the secret to formating numbers with an appropriate number of $0$ in front. You use a while loop to increase the counter until the first file is available, and use that value to store the data. You also create another file with the same number and a similar name, to store the metadata. In your case, the metadata is nothing more than the \py{config} dictionary.
+The \py{.save_data()} method may be the most complex in the program, but it's also powerful. You start with a base folder and create a folder based on the current date, with the format Year-Month-Day. You format the data to make it easy to store as two columns of a text file, and you also add a header to explain what you're storing. You extract the base part of the filename and the extension as two separate variables, and you format the filename in such a way that it can have a number appended to it. The syntax \py{i:04d} is the secret to formatting numbers with an appropriate number of zeros in front. You use a while loop to increase the counter until the first file is available, and then use that value to store the data. You also create another file with the same number and a similar name to store the metadata. In this case, the metadata is nothing more than the \py{config} dictionary.
 
 \checkInfo{Saving Metadata}{A convenient by-product of saving the config as a YAML file is that you can use it as the config file for the next experiment. If you want to repeat a measurement from the past, you just need to point the experiment to the config you saved from that date.}
 
-You can update the \textbf{run\_experiment.py} file, and perform a complete measurement:
+You can update the \textbf{run\_experiment.py} file and perform a complete measurement:
 
 \begin{minted}{python}
 import sys
@@ -509,7 +509,7 @@ experiment.save_data()
 experiment.finalize()
 \end{minted}
 
-Except for the part of appending the folder to the system path, you can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. Being able to reduce a complex problem to a relatively simple flow is thanks to the effort you put into defining the proper methods in the experiment and device models.
+Save for the part where you append the folder to the system path, you can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. This ability to reduce a complex problem into a relatively simple flow is thanks to the effort you put into defining the proper methods in the experiment and device models.
 
 \section{Conclusions}\label{sec:experiment-model-conclusions}
 With this chapter, you've finished the core code for a functioning experiment. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code, such as doing a scan or saving data are in place, your running script just needs one line of code. The model takes care of rest automatically. If you share the code with a colleague and you show them the \py{run_experiment} script, they will be able to perform their measurements in no time.
