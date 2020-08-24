@@ -12,7 +12,7 @@ At this moment, the \emph{onion principle} starts making sense. You're slowly bu
 There are two extra advantages of developing an experiment model, which become apparent only after working on these topics for a long enough tim. On the one hand, the models are going to lead to reproducible experiments. If you keep track of the parameters, you can go back to precisely the same conditions in which you've performed a specific measurement. On the other hand, having a well-structured model is going to make it very straightforward for you to build a Graphical User Interface ({GUI}) on top of it, though you won't delve further into that subject here.
 
 \section{Writing the Skeleton of an Experiment Model}\label{sec:skeleton-experiment-model}
-Every time you want to start developing a model, it's handy to start from an empty skeleton. It helps us know what parts of the code you need to develop, what things you don't know how to do yet and need to learn. It also allows us to have a quick glimpse of how you expect our program to be used. You did it for the device model in the previous chapter, and you can do the same for the experiment in this chapter. First, you create a file called \textbf{experiment.py} inside the \emph{Model} folder, and then you think about the steps needed to perform a measurement:
+Every time you want to start developing a model, it's handy to start from an empty skeleton. It helps you to know what parts of the code you need to develop, what things you don't know how to do yet, and what things you still need to learn. It also allows you to have a quick glimpse of how you expect your program to be used. You did this for the device model in the previous chapter, and you can do the same for the experiment model in this chapter. First, create a file called \textbf{experiment.py} inside the \emph{Model} folder, and then think about the steps needed to perform a measurement:
 
 \begin{minted}{python}
 class Experiment:
@@ -36,9 +36,9 @@ class Experiment:
 
 \end{minted}
 
-Most of the code should be self-explanatory, but some steps are worth mentioning. First, you include a \py{load_config} method, which will rely on the \py{config_file} you specify at the \py{__init__}. Having a separate config file is useful not only to change parameters between measurements, but it helps us with our code. Especially when the number of things you need to remember grows, it's always handy to have a file where to look at how you named things.
+Most of the code should be self-explanatory, but some steps are worth mentioning. First, you include a \py{.load_config()} method, which will rely on the \py{config_file} you specify at the \py{.__init__()}. Having a separate config file is useful not only to change parameters between measurements, but it helps you with your code. Especially when the number of things you need to remember grows, it's always handy to have a file where you can see how you named things.
 
-You've also included a \py{load_daq} method. So far, you've only one DAQ to use, but you go a bit ahead of time and assume that at some point, there may be more than one, and therefore you should have a way of loading one or the other. It can also be a case of premature optimization, in which you anticipate a future that never comes. Nevertheless, it's pedagogically useful to define it there.
+You've also included a \py{.load_daq()} method. So far, you only have one DAQ to use, but you can assume that at some point, there may be more than one, so you should have a way of loading one or the other. This can also be a case of premature optimization, in which you anticipate a future that never comes. Nevertheless, it's pedagogically useful to define it here.
 
 The rest of the methods may seem intuitive enough. If you're missing extra pieces, you can always come back and add them. Now it's time to start developing each one of the building blocks.
 
