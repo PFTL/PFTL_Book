@@ -255,11 +255,11 @@ You've also included a final clause in your if-statement to raise an exception i
 \questionInfo{Exercise}{In Section~\ref{sec:pint} you included units for the \py{AnalaogDaq} class, but you didn't add units for the \py{DummyDaq}. This is an inconsistency, since both models are going to generate different types of output. Update the dummy model to generate random values including units of volts.}
 
 \section{Performing a Scan}\label{sec:doing-scan}
-The core of the experiment model is being able to perform a scan, changing the voltages on the output, and reading the voltages in the input. This kind of measurement is widespread in a lot of different experiments, not only in electronics. That is the reason you decided to call it \py{scan}, which is a fairly generic name.
+The core of the experiment model is being able to perform a scan, change the voltages on the output, and read the voltages in the input. This kind of measurement is widespread in a lot of different experiments, not only in electronics. That is the reason you're calling this \py{scan}, which is a fairly generic name.
 
-\questionInfo{Exercise}{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
+\questionInfo{Exercise}{Think of at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
-To perform a scan, you use the parameters that you've defined in the \py{Scan} Section of the config file. Since you already performed this type of measurement either from the command line or from example files, it's easy to adapt to what you did to the method in the Experiment class:
+To perform a scan, you use the parameters that you've defined in the \py{Scan} Section of the config file. Since you already performed this type of measurement either from the command line or from example files, it's easy to adapt what you did to the method in the Experiment class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -272,21 +272,21 @@ def do_scan(self):
     step = ur(self.config['Scan']['step'])
 \end{minted}
 
-After the first few lines, you need to stop and think. After you introduced units to your model, you didn't try to perform a scan, and therefore you need to see how Pint works. You know that \py{start}, \py{stop}, and \py{step} all have units of volts or related. However, if you try to use the start, stop, and step values as they are, you will fail. Nore the Python \py{range} function, nor Numpy's \py{arange} know how to deal with quantities. However, Pint allows you to transform a quantity to a plain number in given units, by using the \py{m_as} method. Therefore, if you want to have a range of values over which to perform the scan, you can do this:
+After the first few lines, you need to stop and think. After you introduced units to your model, you didn't try to perform a scan, and so you need to see how Pint works. You know that \py{start}, \py{stop}, and \py{step} all have units of volts or related. However, if you try to use the start, stop, and step values as they are, you will fail. Neither the Python \py{range} function nor NumPy's \py{arange} function know how to deal with quantities. However, Pint allows you to transform a quantity to a plain number in given units by using the \py{.m_as()} method. Therefore, if you want to have a range of values over which to perform the scan, you can do this:
 
 \begin{minted}{python}
 scan_range = np.arange(start.m_as('V'), stop.m_as('V'), step.m_as('V'))
 \end{minted}
 
-If you explore the \py{scan_range} variable, you will see that it includes the numbers starting with \py{start}, going in increments of \py{step}, but it does not include the \py{stop} value. This is not a bug, but just how \py{arange} works. The documentation clearly states that arange generates values in the semi-open interval $[\textrm{start}, \textrm{stop})$. If you want to include the last point or not, is debatable. On possible strategy would be to do this:
+If you explore the \py{scan_range} variable, you will see that it includes the numbers starting with \py{start}, going in increments of \py{step}, but it does not include the \py{stop} value. This is not a bug; it's just how \py{arange} works. The documentation clearly states that \py{arange} generates values in the semi-open interval $[\textrm{start}, \textrm{stop})$. If you want to include the last point or not, it's debatable. One possible strategy would be to do this:
 
 \begin{minted}{python}
 scan_range = np.arange(start.m_as('V'), stop.m_as('V')+step.m_as('V'), step.m_as('V'))
 \end{minted}
 
-But this has an associated risk. What happens if start is $0\,\textrm{V}$, stop is $3.3\,\textrm{V}$ and step is $0.5\,\textrm{V}$? The last value in the range would be higher than $3.3\,\textrm{V}$. It means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals.
+However, this has an associated risk. What happens if start is $0\,\textrm{V}$, stop is $3.3\,\textrm{V}$ and step is $0.5\,\textrm{V}$? The last value in the range would be higher than $3.3\,\textrm{V}$. This means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals.
 
-You could use numpy's \py{linspace}, which allows you to generate equally spaced values if you provide a start, stop and the number of points you want. This seems like a viable solution. You can do the following:
+You could use numpy's \py{linspace}, which allows you to generate equally-spaced values if you provide a start, stop, and the number of points you want. This seems like a viable solution. You can do the following:
 
 \begin{minted}{python}
 num_points = int((stop.m_as('V')-start.m_as('V'))/step.m_as('V'))+1
@@ -299,7 +299,7 @@ You added a \py{+1} to the number of points to accommodate the last value. For e
 array([0.  , 0.55, 1.1 , 1.65, 2.2 , 2.75, 3.3 ])
 \end{minted}
 
-Which is not spaced by $0.5\,\textrm{V}$, but it respects the start and stop values. The last option to which you can resource is to change the config file. You thought that defining the step was a good idea, but perhaps it's a better idea to use the number of steps you want in your scan instead of the step size. Therefore, you've to update \textbf{experiment.yml} to include the number of steps and not the step size:
+This is not spaced by $0.5\,\textrm{V}$, but it respects the start and stop values. The last option to which you can resort is to change the config file. You may have thought that defining the step was a good idea, but perhaps it's better to use the number of steps you want in your scan instead of the step size. Therefore, you have to update \textbf{experiment.yml} to include the number of steps and not the step size:
 
 \begin{minted}{text}
 Scan:
@@ -311,7 +311,7 @@ Scan:
   delay: 100ms
 \end{minted}
 
-Before you proceed with the experiment class, you see that the array that numpy generates has no units, and this makes sense because you stripped the units from the parameters of the scan. But this can be easily solved by multiplying the array with the proper units, like the code below shows:
+Before you proceed with the experiment class, you see that the array that NumPy generates has no units, and this makes sense because you stripped the units from the parameters of the scan. But this can be easily solved by multiplying the array with the proper units, like the code below shows:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -335,7 +335,7 @@ def do_scan(self):
         sleep(delay.m_as('s'))
 \end{minted}
 
-The \py{do_scan} method is very complete now. You use the number of steps specified in the config file, you're also using the delay, and therefore you import \py{sleep} at the top of the file. Then you go through all the voltages. You also defined a variable called \py{scan_data} to hold the values as you measure them. It's a big achievement, and you need to reflect it the file you were using for testing the Experiment class. You can update \textbf{run\_experiment.py}:
+The \py{.do_scan()} method is quite complete now. You use the number of steps specified in the config file. You're also using the delay, and so you import \py{sleep} at the top of the file. Then, you go through all the voltages. You also defined a variable called \py{scan_data} to hold the values as you measure them. It's a big achievement, and you need to reflect this in the file you were using for testing the Experiment class. You can update \textbf{run\_experiment.py}:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -355,13 +355,13 @@ Traceback (most recent call last):
 ValueError: setting an array element with a sequence.
 \end{minted}
 
-It's because of how Pint and numpy work together. You can't simply put into a numpy array a quantity. However, solving this problem is very straightforward. In the same way you defined the \py{scan_range} as an array with units, you can define \py{scan_data} to also include units:
+This is because of how Pint and NumPy work together. You can't simply put a quantity into a NumPy array. However, solving this problem is very straightforward. In the same way that you defined the \py{scan_range} as an array with units, you can define \py{scan_data} to also include units:
 
 \begin{minted}{python}
 scan_data = np.zeros(num_steps) * ur('V')
 \end{minted}
 
-And you can go ahead now and run the experiment without errors. After you do the scan you can finalize the experiment, but there's no way for you to actually look at the data that you acquired. To make the data available to the outside world, or to other methods in the same class, you can define attributes instead of just variables that get destroyed when the method finishes. The \py{do_scan} method can then look like this:
+Now you can go ahead and run the experiment without errors. After you do the scan you can finalize the experiment, but there's no way for you to actually look at the data that you acquired. To make the data available to the outside world, or to other methods in the same class, you can define attributes instead of just variables that get destroyed when the method finishes. The \py{do_scan} method can then look like this:
 
 \begin{minted}{python}
 def do_scan(self):
@@ -392,7 +392,7 @@ print(experiment.scan_data)
 experiment.finalize()
 \end{minted}
 
-Finally, you can see the data you acquired after the scan runs. It would allow you to do plenty of things like saving, plotting, analyzing. But you should not go ahead of ourselves at this stage. You had laid out a plan for the Experiment class, and you should follow it as much as you can. The strategy of adding \py{self.} before a variable is beneficial, and this is the real power of objects. The idea is that you should use objects when you need to maintain \emph{state}. It's not just a function that runs and returns a value, but it's updating the \emph{state} of the experiment, or the device.
+Finally, you can see the data you acquired after the scan runs. This would allow you to do plenty of things like saving, plotting, and analyzing. However, you should not get too far ahead of yourself at this stage. You had laid out a plan for the Experiment class, and you should follow it as much as you can. The strategy of adding \py{self.} before a variable is beneficial, and this is the real power of objects. The idea is that you should use objects when you need to maintain \emph{state}. It's not just running a function and returning a value, but it's updating the \emph{state} of the experiment, or the device.
 
 Now you can proceed further to the last missing step: saving data.
 
