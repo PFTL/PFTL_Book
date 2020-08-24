@@ -176,7 +176,7 @@ Now you have a consistent interface for loading the configuration file into your
 \questionInfo{Exercise}{When \py{.load_config()} loads the configuration from a file, verify that some essential parameters are defined. For example, verify that there's a user associated with an experiment. If something is missing, print an error message or raise an Exception.}
 
 \section{Loading the DAQ}\label{sec:loading-daq}
-To load the DAQ into your experiment, you can start with the simplest approach. You import the model for the daq, and you initialize it using the \py{load_daq} method. You can update the experiment model (we omitted some parts of the code for brevity):
+To load the DAQ into your experiment, you can start with the simplest approach. You import the model for the DAQ, and then you initialize it using the \py{.load_daq()} method. You can update the experiment model like so (noting that some parts of the code have been omitted for brevity):
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -189,9 +189,9 @@ def load_daq(self):
     self.daq.initialize()
 \end{minted}
 
-The \py{load_daq} method uses the information stored in the configuration file to instantiate and initialize the daq model. Having a config file in YAML format makes it very easy to navigate and find where is located the information of the port for the daq. The main key is \py{DAQ}, and the sub-key is \py{port}. In this way, there are many fewer things you need to keep in your heads. You can always go back to the file and read what you need to know. You've also decided that you initialize the device right after loading it. You could have developed a separate method, but at this stage and for this experiment, there's no real need.
+The \py{.load_daq()} method uses the information stored in the configuration file to instantiate and initialize the DAQ model. Having a config file in YAML format makes it very easy to navigate and locate the information for the DAQ port. The main key is \py{DAQ}, and the sub-key is \py{port}. In this way, there are much fewer things you need to keep in your head. You can always go back to the file and read what you need to know. You've also decided to initialize the device right after loading it. You could have developed a separate method, but at this stage and for this experiment, there's no real need.
 
-Since you're taking care of loading and initializing the DAQ, you can also develop the finalize method, which takes just one line:
+Since you've taken care of loading and initializing the DAQ, you can also develop the finalize method, which takes just one line:
 
 \begin{minted}{python}
 def finalize(self):
@@ -221,9 +221,9 @@ class AnalogDaq:
         return "Analog Daq"
 \end{minted}
 
-The method \py{__str__} is called a \emph{dunder} method, because it has the double underscore before and after its name. These are magic methods in classes that allow you to change the behavior at a much lower level. The \emph{str} method is responsible for letting Python know how to transform an object to a string. It happens, for example, when you use the \py{print} function. If you rerun the experiment, you see that the output is clearer than before.
+The method \py{__str__} is called a \emph{dunder} method, because it has the double underscore before and after its name. These are magic methods in classes that allow you to change the behavior at a much lower level. The \emph{str} method is responsible for letting Python know how to transform an object to a string. This happens, for example, when you use the \py{print()} function. If you rerun the experiment, you see that the output is clearer than before.
 
-\infoInfo{String Representation}{Adding a string representation to the classes you build is an excellent addition but not mandatory. You should be careful not to derail on details that don't bring you close to the goal of performing a measurement.}
+\infoInfo{String Representation}{Adding a string representation to the classes you build is an excellent addition to the code, though it's not mandatory. You should be careful not to get sidetracked on details that don't bring you close to the goal of performing a measurement.}
 
 \subsection{Including the dummy DAQ}\label{subsec:loading-dummy-daq}
 In the previous chapter, you took a small detour when you discussed the creation of a base class for the device models. In Section~\ref{sec:base-model}, you also discussed creating a dummy device, a fake model that outputs random numbers when requested. It means that you've two different DAQ devices you can use, one real and one fake. Therefore, you can improve the Experiment model to accommodate the possibility of using one or the other. You're going to follow a non-standard approach, which does not comply with the general principles of Python, but that it's nevertheless convenient. In the config file, you included the name of the DAQ, and it's time to use this information. There will be two possibilities, either \py{AnalogDaq}, or \py{DummyDaq}:
