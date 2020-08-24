@@ -44,9 +44,9 @@ The rest of the methods may seem intuitive enough. If you're missing extra piece
 
 \section{Writing the Configuration File}\label{sec:configuration-file}
 \subsection{Working with YAML files}\label{subsec:yaml-files}
-Before you keep developing code, you need to stop for a second to think about what do you want our program to do. You need to think about what inputs you need for our program. For example, you need to know the port to which the device is connected. You also know that you need to define an output and input channel, a range for the scan, a delay between data points. Before going into the details, let's see how to store all these parameters into a text file easily.
+Before you keep developing code, you need to stop for a second to think about what you want your program to do. You need to think about what inputs you need for your program. For example, you need to know the port to which the device is connected. You also know that you need to define an output and input channel, a range for the scan, a delay between data points. Before going into the details, let's see how you can easily store all these parameters into a text file.
 
-In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. You can create the file with any text editor, including the one you're using for editing Python files. The only difference is the extension \emph{yml}. You're going to use this file to hold all the parameters of the experiment. The format fo the file is called {YAML}, which has a straightforward structure; it looks like this:
+In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. You can create the file with any text editor, including the one you're using for editing Python files. The only difference is the extension \emph{yml}. You're going to use this file to hold all the parameters of the experiment. The format of the file is called {YAML}, which has a straightforward structure. It looks like this:
 
 \begin{minted}{yaml}
 Experiment:
@@ -57,7 +57,7 @@ Experiment:
    - second Element
 \end{minted}
 
-{YAML} is very simple to read both by a person and by the computer. It has just a few rules. The most important one is that the indentation is \textbf{2} spaces. In the example above, there's a main element called \textbf{Experiment}; everything that is indented compared to that element belongs to it. To read the file, you're going to use a package called PyYAML, which you installed in Chapter~\ref{ch:setting-up}. You can create a file called \textbf{test\_yaml.py} also in the Examples folder to understand how to use these files:
+{YAML} is very simple to read for both a person and a computer. It has just a few rules. The most important one is that the indentation is \textbf{2} spaces. In the example above, there's a main element called \textbf{Experiment}. Everything that is indented relative to that element belongs to it. To read the file, you're going to use a package called PyYAML, which you installed in Chapter~\ref{ch:setting-up}. You can create a file called \textbf{test\_yaml.py} (also in the Examples folder) to understand how to use these files:
 
 \begin{minted}{python}
 import yaml
@@ -72,15 +72,15 @@ for k in e['Experiment']:
     print(10*'-')
 \end{minted}
 
-You begin by opening the file using \mintinline{python}{open}. You use the \mintinline{python}{with} command because it's convenient for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is then responsible for interpreting the information contained in the file. You store this information in a variable \py{e}, which turns out to be a dictionary.
+You begin by opening the file using \mintinline{python}{open()}. You use the \mintinline{python}{with} command because it's convenient for working with files and other resources that have the same pattern of "open, do, close." YAML is then responsible for interpreting the information contained in the file. You store this information in a variable \py{e}, which turns out to be a dictionary.
 
-To get the elements stored in dictionaries, you use keys. In the example above, there's a main key called \py{'Experiment'}, and the sub-keys \py{'name'}, \py{'range'} and \py{'list'}. If you want to use one of those elements, you can type \py{e['Experiment']['name']}, for example. The code prints out each element, separated by a horizontal line. Yaml imported the file directly as a dictionary, but some of the elements are special. You can see that \py{'name'} is a string, but \py{'range'} and \py{'list'} are not. {YAML} automatically detects what kind of information you're storing, making our job easier if you already know what you want to store.
+To get the elements stored in dictionaries, you use keys. In the example above, there's a main key called \py{'Experiment'} with sub-keys \py{'name'}, \py{'range'}, and \py{'list'}. If you want to use one of those elements, you can type \py{e['Experiment']['name']}, for instance. The code prints out each element separated by a horizontal line. YAML imported the file directly as a dictionary, but some of the elements are special. You can see that \py{'name'} is a string, but \py{'range'} and \py{'list'} are not. {YAML} automatically detects what kind of information you're storing, making your job easier if you already know what you want to store.
 
-\questionInfo{Exercise}{What type of variables has yaml generated for \py{'range'} and the \py{'list'}? (Remember that you can use \py{type(var)} to know the type of the variable.}
+\questionInfo{Exercise}{What type of variables has YAML generated for \py{'range'} and the \py{'list'}? Remember that you can use \py{type(var)} to know the type of the variable.}
 
 \questionInfo{Exercise}{YAML also supports numeric information. Create a new element and assign it a value of \py{1} or \py{3.14}. What kind of variable has YAML created in such cases?}
 
-Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, you can use \py{yaml.dump} method to save it. For example, you can define a dictionary with the following information:
+Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, you can use \py{yaml.dump()} to save it. For example, you can define a dictionary with the following information:
 
 \begin{minted}{python}
 d = {'Experiment': {
@@ -97,17 +97,17 @@ with open('data.yml', 'w') as f:
     f.write(yaml.dump(d, default_flow_style=False))
 \end{minted}
 
-You're using the \py{'w'} option to open the file, which means that every time you run the code, it overwrites the file, and you lose the previous contents. After running the code, you can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one you created ourselves earlier. One of the advantages of the YAML format is that files are straightforward to read, and don't require much typing.
+You're using the \py{'w'} option to open the file, which means that every time you run the code, it overwrites the file, and you lose the previous contents. After running the code, you can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one you created earlier. One of the advantages of the YAML format is that files are straightforward to read and don't require much typing.
 
-\questionInfo{Exercise}{Read back the contents of \textbf{data.yml} and check that they are the same you saved.}
+\questionInfo{Exercise}{Read back the contents of \textbf{data.yml} and check that they are the same as the file you saved.}
 
 \questionInfo{Exercise}{Modify some values in \textbf{data.yml} directly with your text editor and see that those changes are reflected when you reread the file.}
 
-\questionInfo{Exercise}{Create a numpy array and store it using yaml. How does it look like in the file? What happens if you read it back?}
+\questionInfo{Exercise}{Create a NumPy array and store it using YAML. What does it look like in the file? What happens if you read it back?}
 
-\questionInfo{Exercise: Advanced}{Save a numpy array using yaml. Then activate a virtual environment in which PyYAML is available but not numpy. Try to load the contents of the file. What happens?}
+\questionInfo{Exercise: Advanced}{Save a NumPy array using YAML. Then, activate a virtual environment in which PyYAML is available but not NumPy. Try to load the contents of the file. What happens?}
 
-Now that you know how to work with YAML files, it's time to start thinking about the experiment again. You need to stop and think about what do you need to know to perform an experiment.
+Now that you know how to work with YAML files, it's time to start thinking about the experiment again. You need to stop and think about what you need to know to perform an experiment.
 
 \questionInfo{Exercise}{Create a new experiment.yml file in the \emph{Examples} folder. Use what you've learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
 
