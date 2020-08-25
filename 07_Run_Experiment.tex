@@ -61,7 +61,7 @@ One of the important things to note is that when you work with units, you leave 
 \end{minted}
 
 \section{Plotting Scan Data}\label{sec:basic-plotting}
-You've learned how to do several things with the device, but you're not doing anything with the data after you save it. Being able to see what you're doing through a plot seems a lovely addition to our workflow. For plotting, you're going to use a library called PyQtGraph, which was developed mainly to generate fast data visualizations. Exactly what you need when you're dealing with experiments. Usually, people a bit more familiar with Python get acquainted with matplotlib, which is an excellent tool for paper-ready plots, but a bit slow for real-time visualization. In any case, at this stage, you don't care about speed, therefore if you're more confident with another tool, feel free to adapt the code to use them. In any case, PyQtGraph comes back later, when you build the user interface.
+You've learned how to do several things with the device, but you're not doing anything with the data after you save it. It would be a great addition to your workflow to be able to see what you're doing through a visual plot. For this step, you're going to use a library called PyQtGraph, which was developed mainly to generate fast data visualizations. This is exactly what you would need when you're dealing with experiments. Usually, those a bit more familiar with Python would become acquainted with matplotlib, which is an excellent tool for paper-ready plots, though a bit slow for real-time visualization. In any case, at this stage, you don't care about speed, so if you're more confident with another tool, then feel free to adapt the code to use it. In any case, you'll see PyQtGraph again later, when you build the user interface.
 
 Making a simple plot with PyQtGraph is very easy. You can add the following after you perform the scan, in the \textbf{run\_experiment.py} script file:
 
@@ -80,7 +80,7 @@ The caveat with this solution is that you must run the program slightly differen
 python -i run_experiment.py
 \end{minted}
 
-You must append the \py{-i} or the plot will close right after it appears on screen. It's simple, but it works. PyQtGraph also gives us some mouse interactions out of the box. You can drag the image, you can zoom in and out with the mouse wheel, you can also transform the scale of the axes by right-clicking. You can make the plot a bit better looking by adding labels and a title:
+You must append the \py{-i} or the plot will close right after it appears on screen. It's simple, but it works. PyQtGraph also gives you some mouse interactions out of the box. You can drag the image, zoom in and out with the mouse wheel, and even transform the scale of the axes by right-clicking. You can make the plot more aesthetically pleasing by adding labels and a title:
 
 \begin{minted}{python}
 PlotWidget = pg.plot(title="Plotting I vs V")
@@ -89,7 +89,7 @@ PlotWidget.setLabel('left', f"Channel: {experiment.config['Scan']['channel_in']}
 PlotWidget.plot(experiment.scan_range, experiment.scan_data)
 \end{minted}
 
-Plotting with PyQtGraph is relatively simple. However, you can only plot data after the scan finishes. The \py{do_scan} method takes relatively long to complete. When a method, or a function, work in this way, they are called blocking functions. The program can't continue until they finish. If you would like to monitor the progress of the experiment while running, you need to find a way of making the scan in a non-blocking way.
+Plotting with PyQtGraph is relatively simple. However, you can only plot data after the scan finishes. The \py{.do_scan()} method takes a relatively long time to complete. When a method or function works in this way, they're called \textbf{blocking} functions. The program can't continue until they finish. If you would like to monitor the progress of the experiment while it's running, then you need to find a way of running the scan in a non-blocking manner.
 
 \section{Running the Scan in a Non-Blocking Manner}\label{sec:nonblocking}
 Methods or functions like \py{do_scan} take a long time to run. Imagine if you would like to acquire a movie for one hour, the function would take one hour to complete. If you would be running a very complex simulation or data analysis process, functions can also take very long to complete. However, both scenarios are different from each other. Sometimes functions take long to execute because they are computationally expensive. They need many cycles of the processor to finish. Sometimes they take longer to execute because the process is slow. When you do a scan, the program waits in a \py{python}{sleep} or waits for the device to read a signal. Waiting is not computationally expensive, which means that our computer can perform other tasks at the same time if you know how to do it.
