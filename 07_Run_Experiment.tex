@@ -254,9 +254,9 @@ The example is relatively straightforward. You start the scan, wait for two seco
 \questionInfo{Exercise}{Use the input from the keyboard to stop the scan. The best approach is to wait while the thread is alive, such as what you did for plotting. Then, you can use a try/except block, using the KeyboardInterrupt exception.}
 
 \section{Improving the Experiment Class}\label{sec:improving-experiment}
-Through the book, you've always come back to the \emph{Onion Principle}. Every time you find something that you believe can be useful in the future, you don't leave it as an example on a Python script, but you try to implement it in a robust way. It's what you did with threads. You've seen that you can run the scan without blocking the program. But to achieve it, you've to remember how to work with threads. A better idea would be to implement the threads directly in the Experiment class.
+Throughout the book, you've always come back to the \emph{Onion Principle}. Every time you find something that you believe can be useful in the future, you shouldn't leave it as an example in a Python script, but you should instead try to implement it in a robust way. This is exactly what you did with threads. You've seen that you can run the scan without blocking the program, but to achieve it, you have to remember how to work with threads. A better idea would be to implement the threads directly in the Experiment class.
 
-In this case, you can write a new method that takes care of starting the scan in a separate thread and another method just for stopping. Having specific methods is a perfect way of not having to remember what attributes do what. Let's create the methods for starting and stopping the scan, directly on the Experiment class:
+In this case, you can write a new method that takes care of starting the scan in a separate thread and another method just for stopping. Having specific methods is a perfect way to not have to remember which attributes do what. Let's create the methods for starting and stopping the scan, directly in the Experiment class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -271,7 +271,7 @@ In this case, you can write a new method that takes care of starting the scan in
         self.keep_running = False
 \end{minted}
 
-And now you can update the \textbf{run\_experiment.py} script to make it look much better:
+Now you can update the \textbf{run\_experiment.py} script to make it look much better:
 
 \begin{minted}{python}
 experiment.start_scan()
@@ -281,7 +281,7 @@ while experiment.is_running:
 experiment.finalize()
 \end{minted}
 
-This code is clean and easy to understand. One of the advantages is that it also gives us the freedom to decide whether you want to run the scan on its thread or not. There's only one more detail and is that if you finalize the experiment while the scan is running, then you may face some issues trying to read from a closed device. It's better to update the finalize method:
+This code is clean and easy to understand. One of the advantages is that it also gives you the freedom to decide whether you want to run the scan on its own thread or not. There's only one more detail, and that is that if you finalize the experiment while the scan is running, then you may face some issues trying to read from a closed device. It's better to update the finalize method:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -293,7 +293,7 @@ This code is clean and easy to understand. One of the advantages is that it also
         [...]
 \end{minted}
 
-You stop the scan, and then you wait until you're sure it has finished. It's important because the delay between data points may be significant, or because acquiring data takes long, such as what happens with long exposure times of cameras. Once you know the scan stopped, then you continue to close the communication.
+You stop the scan, and then you wait until you're sure it has finished. It's important because the delay between data points may be significant, or because acquiring data takes a long time, such as what happens with long exposure times for cameras. Once you know the scan stopped, then you continue to close the communication.
 
 \subsection{Threading and Jupyter notebooks}\label{subsec:jupyter}
 Running experiments on Jupyter Notebooks can be a perfect solution to combine the generation of data, its documentation, and its analysis in only one tool. If appropriately used, Jupyter notebooks can be an excellent resource for the experimentalist. However, real-time plotting of data within notebooks is virtually impossible. Building interactive tools on top of a notebook are very complicated, and that is why you chose to follow a different path for the last chapters.
