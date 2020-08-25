@@ -1,12 +1,12 @@
 \chapter{Running an Experiment}\label{ch:run-experiment}
 
 \section{Introduction}\label{sec:run-experiment-introduction}
-In the previous chapter, you've seen how to develop an experiment model and how to use it from a simple script. In this chapter, you're going to explore how to bring it to the next level. So far, you can run the experiment only with the parameters specified on the config file, but you're not limited to them. Moreover, once the scan starts, there's no way of stopping it unless you completely stop the program. That leads to missing data and is not particularly helpful.
+In the previous chapter, you've seen how to develop an experiment model and how to use it from a simple script. In this chapter, you're going to explore how to bring it to the next level. So far, you can only run the experiment with the parameters specified in the config file, but you're not limited to them. Moreover, once the scan starts, there's no way of stopping it unless you completely stop the program. That leads to missing data and is not particularly helpful.
 
 Following the \emph{Onion Principle}, it's now time to bring the experiment model to the next level.
 
 \section{Running an Experiment}\label{sec:running-experiment}
-In the previous chapter, you've seen how to run an experiment from a script. Each of the steps needed is triggered one after the other. You called that script \textbf{run\_experiment.py} and had the following code (skipping some less relevant lines):
+In the previous chapter, you've seen how to run an experiment from a script. Each of the steps needed is triggered one after the other. You called that script \textbf{run\_experiment.py} and it contained the following code (which skips some less relevant lines):
 
 \begin{minted}{python}
 from PythonForTheLab.Model import Experiment
@@ -21,14 +21,14 @@ experiment.save_data()
 experiment.finalize()
 \end{minted}
 
-It's relatively straightforward, but not the only thing that you can do with the experiment. You can access the attributes of the experiment class while you're performing a measurement. For example, you could show the data once the scan finishes:
+It's relatively straightforward, but this is not the only thing that you can do with the experiment. You can access the attributes of the experiment class while you're performing a measurement. For example, you could show the data once the scan finishes:
 
 \begin{minted}{python}
 experiment.do_scan()
 print(experiment.scan_data)
 \end{minted}
 
-But you could also change the parameters of the scan after loading the config file. Sharing information with classes in Python is always two ways: you can read from them, but you can also write to them. Let's see what happens when you change the \py{config} attribute of the experiment before triggering the scan. You can do something like the following:
+However, you could also change the parameters of the scan after loading the config file. Sharing information with classes in Python always occurs in one of two ways: you can read from them, but you can also write to them. Let's see what happens when you change the \py{config} attribute of the experiment before triggering the scan. You can do something like the following:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -43,17 +43,17 @@ experiment.save_data()
 experiment.finalize()
 \end{minted}
 
-You can change any of the values stored in the \py{config} of the experiment at any time. You can change them from the running script, for example. But you can also change them from the Python interpreter. For people familiar with Jupyter notebooks, for example, the experiments can be run directly from within them. There are some extra benefits of using notebooks, such as the possibility of documenting the work, but you leave the discussion for the Advanced Python for the Lab book.
+You can change any of the values stored in the \py{config} of the experiment at any time. You can change them from the running script, for example, but you can also change them from the Python interpreter. For people familiar with Jupyter notebooks, for instance, the experiments can be run directly from within them. There are some extra benefits of using notebooks, such as the possibility of documenting your work. You can learn more about them in the Advanced Python for the Lab book.
 
-\tipsInfo{BPython}{Running from the Python interpreter usually is cumbersome. There's another version of the interpreter called \textbf{bpython} which has auto-complete functions, as well as it allows you to edit code before running it. You don't encourage people to run experiments from the interpreter, but some times it's the handiest solution to change values when desired.}
+\tipsInfo{BPython}{Running Python from the interpreter usually is cumbersome. There's another version of the interpreter called \textbf{bpython} which has auto-complete functions and allows you to edit code before running it. It's not recommended for anyone to run experiments from the interpreter, but sometimes it's the handiest solution to change values when desired.}
 
-In the code above, you've changed the value of the number of steps before triggering a scan. First, you've set it to 5 steps and then to 10 steps. You can check the metadata, and see that this information was saved. If you open the data file, you would also see a different number of data points. This flow proposes exciting possibilities. For example, if you would like to see if there's any form of hysteresis on the measurements, you could vary the delay between data points.
+In the code above, you've changed the value of the number of steps before triggering a scan. First, you've set it to 5 steps, and then to 10 steps. You can check the metadata and see that this information was saved. If you open the data file, you would also see a different number of data points. This flow suggests some exciting possibilities. For example, if you would like to see if there's any form of hysteresis on the measurements, you could vary the delay between data points.
 
-\questionInfo{Exercise}{Write a for-loop that changes the delay between data points after each scan. Remember to save the data so you can explore the differences}
+\questionInfo{Exercise}{Write a for-loop that changes the delay between data points after each scan. Remember to save the data so you can explore the differences.}
 
-If you start developing complex logic in the running script, it's fair to wonder if it's better to put all that logic into the experiment class. As always, when you do things only once, knowing they'll be one-off tasks, then it's quicker to run from a script. If, however, that one-off becomes an essential part of our experiments, or you believe that others could benefit from doing the same measurement, then you should implement the code in the class. As always, common sense is the best ally for a scientific developer.
+When you start developing complex logic in the running script, it's fair to wonder if it's better to put all that logic into the experiment class. As always, when you perform a task only once, knowing it will be a one-off task, then it's quicker to run it from a script. If, however, that one-off task becomes an essential part of your experiments, or you believe that others could benefit from performing the same measurement, then you should implement the code in the class. As always, common sense is the best ally for a scientific developer.
 
-One of the important things to note is that when you work with units, you leave the values as a string, and only transform them into real quantities when you need them. If you explore the \py{do_scan} method, you would see that you start by running the parameters through the unit registry. It means that if you want to change the values of, for example, the start, stop, or delay, you only need to change a string:
+One of the important things to note is that when you work with units, you leave the values as a string, and only transform them into real quantities when you need them. If you explore the \py{.do_scan()} method, you'll see that you start by running the parameters through the unit registry. This means that if you want to change the values of, for instance, the start, stop, or delay, you only need to change a string:
 
 \begin{minted}{python}
     experiment.config['Scan']['start'] = '2.2V'
