@@ -2,19 +2,18 @@
 \chapter[Graphical User Interfaces]{Getting Started with Graphical User Interfaces}\label{ch:starting-gui}
 
 \section{Introduction}\label{sec:gui-introduction}
-Building a \textbf{Graphical User Interfaces} (or GUI) may seem more complicated than it actually is. Once you learn the fundamentals, you can see that it's possible to put something together very quickly, especially if you already have some code to which to relate. In the previous chapter, you saw that you can control an experiment from the command line. It's possible to ask ourselves why going through the trouble of a user interface. In some cases, it can be very not only handy to control the parameters of an experiment and to monitor the output in a window especially designed, but it can become necessary to monitor the progress in real-time to make decisions while the experiment runs.
+Building a \textbf{Graphical User Interfaces} (or GUI) may seem more complicated than it actually is. Once you learn the fundamentals, you'll see that it's possible for you to put something together very quickly, especially if you already have some code with which to work. In the previous chapter, you saw that you could control an experiment from the command line. It's possible to ask, then, why go through the trouble of creating a user interface? The truth is, Graphical User Interfaces can be very useful for performing such tasks as controlling the parameters of an experiment, monitoring the output in a specially designed window, or even for viewing process in real-time in order to make decisions while the experiment runs.
 
-There are several options for building GUIs with Python. And in the community, there's no clear consensus on what is the best path to follow. For scientific applications, however, the only library which is powerful enough to achieve what you want to achieve is called \textbf{Qt}. Qt was developed as an application framework that allows developers to build apps that look native in different systems without changes to the code. Qt itself is a Finnish company with a long trajectory. It was part of Nokia for a while, and now they are publicly traded in the Helsinki exchange. It means that Qt is going to be around for a long time.
+There are several options for building GUIs with Python, and the community has no clear consensus on which path is the best one to follow. For scientific applications, however, the only library that's powerful enough to achieve what you want to achieve is called \textbf{Qt}. Qt was developed as an application framework that allows developers to build native applications (programs that look like they ``belong'' to the operating system on which they're run), without having to change the code. Qt itself is a Finnish company with a long history. It was part of Nokia for a while, though now they're publicly traded in the Helsinki exchange. This means that Qt is going to be around for a long time!
 
-In this chapter, you're going to give the first steps for building a user interface using Qt, and the Python wrapper called \emph{PyQt}, that you installed in Chapter~\ref{ch:setting-up}. At Python, for the Lab, you've traditionally adopted PyQt, but in the past years, Qt itself took over the project called PySide, which is another wrapper for Qt. They are licensed under different open-source terms, and both are excellent. However, the structure of the PySide2 package is different from the PyQt package, and, for consistency, you keep using PyQt.
+In this chapter, you're going to see the first steps for building a user interface using Qt, as well as its Python wrapper \emph{PyQt}, which you installed in Chapter~\ref{ch:setting-up}. At Python for the Lab, we've traditionally adopted PyQt, but in the past few years, Qt itself took over a project called PySide, which is another wrapper for Qt. They are both licensed under different open-source terms, and both are excellent. However, the structure of the PySide2 package is different from the PyQt package, so for consistency, this book will keep using PyQt.
 
-\checkInfo{Qt, PyQt, and PySide licensing}{If you're planning to release commercial software, or if you're packaging Qt, PyQt or PySide2 into your application, you should explore the different licensing options available.}
-
+\checkInfo{Qt, PyQt, and PySide Licensing}{If you're planning to release commercial software, or if you're packaging Qt, PyQt, or PySide2 into your application, you should explore the different licensing options available.}
 
 \section{Creating a Simple Window and Buttons}\label{sec:simple-window-andbuttons}
-Now it's finally time to start using the empty folder from the M-\textbf{V}-C design pattern: the \textbf{View}. You start by learning how to create simple windows directly with Qt and proceed to a fully-featured user interface for our experiment. You start just with scripts, and you slowly grow in complexity.
+Now it's finally time to start using the empty folder from the MVC design pattern: the \textbf{View}. You'll start by learning how to create simple windows directly with Qt, and then proceed to a fully-featured user interface for your experiment. You'll start with scripts and slowly grow your program as it increases in complexity.
 
-The best way to get started with Qt is with a quick example. You can create a new file, \textbf{simple\_window.py} in the \emph{Examples} folder, with this code:
+The best way to get started with Qt is with a quick example. You can create a new file called \textbf{simple\_window.py} in the \emph{Examples} folder with this code:
 
 \begin{minted}{python}
     from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -25,25 +24,25 @@ The best way to get started with Qt is with a quick example. You can create a ne
     app.exec()
 \end{minted}
 
-You will come back to the code above over and over again. In the beginning, it's hard to remember, but once you do it often enough, it sticks. After importing, you create a \py{QApplication}, a \py{QMainWindow}, you show it, and you run the app. This code should produce a very simple window that looks like the image below:
+You will come back to the code above over and over again. In the beginning, it may seem hard to remember, but once you write it often enough, it will stick. After the import, you create a \py{QApplication} and a \py{QMainWindow}. Then, you show the window and run the app. This code should produce a very simple window that looks like the image below:
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/01_simple_window.png}
 \end{center}
 
-The style matches the operating system where it runs. It's a simple, empty window. However, you can already start understanding how Qt works. A user interface is a program that keeps running in a loop. When you click and drag to resize a window, for example, there's always a program responsible for knowing how to do it. In Qt, this never-ending loop is the \py{QApplication}. Whatever window you want to create needs to belong to an application, and that is why the first thing you did was defining \py{app}.
+The style will match the operating system of the machine your code is running on. It's a simple, empty window. However, you can already start understanding how Qt works. A user interface is a program that keeps running in a loop. When you click and drag to resize a window, for example, there's always a program responsible for knowing how to do this. In Qt, this never-ending loop is the \py{QApplication}. Whatever window you want to create needs to belong to an application, and that is why the first thing you did was define \py{app}.
 
-In the following line, you define a new object, called \py{win}, which is a \py{QMainWindow}. As the name suggests, the main windows are the core of the user interface. From the main window, you can open dialogs, other windows, but the main window is central to our program. After creating it, you show it. The last line is where the application loop starts. The \py{app.exec()} command is blocking. Therefore nothing that comes after is executed until you finish with the user interface.
+In the following line, you define a new object, called \py{win}, which is a \py{QMainWindow}. As the name suggests, the main windows are the core of the user interface. From the main window, you can open dialogs and other windows, but the main window is central to the program. After creating it, you show the window. The last line is where the application loop starts. The \py{app.exec()} command is \textbf{blocking}. This means that nothing that comes after will be executed until you're finished with the user interface.
 
-\questionInfo{Exercise}{To understand a bit better what is going on with the user interface, you're encouraged to try different things. For example, what happens if you don't show the window or add a few print statements to see when they get executed. You can also try to define the window before the application.}
+\questionInfo{Exercise}{To understand a bit better what is going on with the user interface, you're encouraged to try different things. For example, what happens if you don't show the window? If you were to add a few print statements, when would they get executed? You can also try to define the window before the application.}
 
-Having an empty window is not particularly useful, so you can start adding elements to it. First, you add a title to the window, like this:
+Having an empty window is not particularly useful, so you can start adding elements to it. First, add a title to the window, like this:
 
 \begin{minted}{python}
     win.setWindowTitle('My First Window')
 \end{minted}
 
-Very slowly, our program starts taking shape and looking more professional. You can also add an interactive element, such as a button. You can define one like this:
+Very slowly, the program starts taking shape and looking more professional. You can also add an interactive element, such as a button. You can define one like this:
 
 \begin{minted}{python}
     from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
@@ -56,31 +55,31 @@ Very slowly, our program starts taking shape and looking more professional. You 
     app.exec()
 \end{minted}
 
-Which will produce a small window, like this:
+This will produce a small window:
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/02_simple_window_and_button.png}
 \end{center}
 
-Notice that when you defined the button, you added a second argument, \py{win}. Qt has a hierarchical structure, where each element is called a \emph{widget}. You've imported three widgets so far: the application, the window, and the button. All widgets live inside the application loop, but you've to establish the relationship between them. By passing the window as the second argument, you're explicitly saying that the button belongs to the window.
+Notice that when you defined the button, you added a second argument, \py{win}. Qt has a hierarchical structure, where each element is called a \emph{widget}. You've imported three widgets so far: the application, the window, and the button. All widgets live inside the application loop, but you have to establish the relationship between them. By passing the window as the second argument, you're explicitly saying that the button belongs to the window.
 
-\questionInfo{Exercise}{Remove the \py{win} from the definition of the button, and see what happens}
-\questionInfo{Exercise}{Alter the order and make the button the parent of the main window, does this work?}
+\questionInfo{Exercise}{Remove the \py{win} from the definition of the button, and see what happens.}
+\questionInfo{Exercise}{Alter the order and make the button the parent of the main window. Does this work?}
 
-A big part of working with Qt is finding out how to relate different widgets to each other, how to position them. \py{QMainWindows} are special because they must hold widgets within them. That is why they specify a method to determine which Widget is the most important for the window, or in Qt jargon, which Widget is the central Widget. You can explicitly declare it:
+A big part of working with Qt is finding out how to relate different widgets to each other, or how to position them. \py{QMainWindows} are special because they must hold widgets within them. That's why they specify a method to determine which Widget is the most important for the window (or in Qt jargon, which Widget is the central Widget). You can explicitly declare this:
 
 \begin{minted}{python}
     button = QPushButton('Press Me')
     win.setCentralWidget(button)
 \end{minted}
 
-You removed the \py{win} from the declaration of the button, but if it's there it doesn't change the behavior. The window now looks somewhat different:
+Here, you removed the \py{win} from the declaration of the button, but if it's there it won't change the behavior. The window now looks somewhat different:
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/03_simple_window_and_central_widget.png}
 \end{center}
 
-You can try resizing the window, and you see that the button scales. By declaring the button as the central Widget of the window, you made the relationship even stronger. The last possibility which is worth mentioning before moving forward is that you can also show the button independently from the window, like this:
+You can try resizing the window, and you'll see that the button scales. By declaring the button as the central Widget of the window, you made the relationship even stronger. The last possibility worth mentioning before moving on is that you can also show the button independently from the window, like this:
 
 \begin{minted}{python}
     win.setWindowTitle('My First Window')
@@ -89,16 +88,15 @@ You can try resizing the window, and you see that the button scales. By declarin
     button.show()
 \end{minted}
 
-In this case, the window and the button are two independent components, like you show in the image below. For the program to finish, you must close both the button and the window.
+In this case, the window and the button are two independent components, as shown in the image below. For the program to finish, you must close both the button and the window.
 
 \begin{center}
     \includegraphics[width=.3\textwidth]{images/Chapter_08/04_window_button_separated.png}
 \end{center}
 
-Qt offers a great deal of flexibility, which doesn't mean you need actually to use it. Having buttons floating around the screen does not sound like a good idea, but it's a possibility in case you ever need it.
+Qt offers a great deal of flexibility, but you needn't take advantage of all of it. Having buttons floating around the screen does not sound like a good idea, but it's a possibility in case you ever do need it.
 
-Now that you've a button on a window, you're craving to do something with it.
-
+Now that you have a button on a window, it's time to do something with it.
 
 \section{Using Signals and Slots}\label{sec:signals-slots}
 Qt offers a programming pattern known as \emph{Signals} and \emph{Slots}. The core idea is that different actions on a user interface trigger a signal. For example, moving the mouse over an element triggers a signal. This signal is then caught by \emph{slots}, which do something with the information provided. When you move the mouse over a button (this is also knowns as hovering), its background changes color. It's a clear example of the signal/slot paradigm.
