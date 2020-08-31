@@ -99,9 +99,11 @@ Qt offers a great deal of flexibility, but you needn't take advantage of all of 
 Now that you have a button on a window, it's time to do something with it.
 
 \section{Using Signals and Slots}\label{sec:signals-slots}
-Qt offers a programming pattern known as \emph{Signals} and \emph{Slots}. The core idea is that different actions on a user interface trigger a signal. For example, moving the mouse over an element triggers a signal. This signal is then caught by \emph{slots}, which do something with the information provided. When you move the mouse over a button (this is also knowns as hovering), its background changes color. It's a clear example of the signal/slot paradigm.
+Qt offers a programming pattern known as \textbf{Signals and Slots}. The core idea is that different actions on a user interface trigger a \emph{signal}. For example, moving the mouse over an element triggers a signal. This signal is then caught by a \emph{slot}, which does something with the information provided. When you move the mouse over a button (also known as hovering), its background changes color. This is a clear example of the signal/slot paradigm.
 
-Every Widget that you can place on screen has a myriad of signals. From interactions with the mouse to changes in shape or size triggered by reshaping the window, to time-based signals. It does not mean you need to know them all, nor that you use them all. But once you understand the pattern, you know where to go and find what you're after. The button has one signal called, very eloquently, \py{clicked}. To use it, you must define a function that can be called every time the signal fires. This function is the \emph{slot}. You can expand our example code like this:
+Every Widget that you can place on the screen has a myriad of signals, from interactions with the mouse to changes in shape or size triggered by reshaping the window, and even to time-based functionality. This does not mean you need to know them all, or that you'll even use them all. However, once you understand the pattern, you'll know where to go to find what you're after.
+
+This button has one signal called, very eloquently, \py{clicked}. To use it, you must define a function that can be called every time the signal fires. This function is the \emph{slot}. You can expand your example code like this:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -114,10 +116,10 @@ button.clicked.connect(button_clicked)
 win.setCentralWidget(button)
 \end{minted}
 
-You can see that every time you click the button, the program prints a message to the screen. It's very important to note that you used \py{button_clicked} and not \py{button_clicked()}. It's the same that you discussed in Section~\ref{subsec:multithreading} when discussing multithreading. You must use the function itself as a slot, and not the outcome of the function.
+You can see that every time you click the button, the program prints a message to the screen. It's very important to note that you used \py{button_clicked} and not \py{button_clicked()}. It's the same as what was discussed in Section~\ref{subsec:multithreading} on multithreading. You must use the function itself as a slot, and not the outcome of the function.
 
 \subsection{Starting a scan}\label{subsec:start-scan-gui}
-With what you've done so far, triggering a scan from the user interface becomes almost trivial. For the time being, you can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. You only need that when you press the button, a scan starts. You need to mix what you already have in \textbf{run\_experiment.py} with what you've done above. It can look like this:
+With what you've done so far, triggering a scan from the user interface becomes almost trivial. For the time being, you can keep working in the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. The only functionality you'll need is that when you press the button, a scan starts. You need to mix what you already have in \textbf{run\_experiment.py} with what you've done above. It can look like this:
 
 \begin{minted}{python}
     from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
@@ -142,17 +144,17 @@ With what you've done so far, triggering a scan from the user interface becomes 
     experiment.finalize()
 \end{minted}
 
-The code above is a merge between what you did in the previous chapter and this one. You define the experiment as always, and the window and button as you've just learned. However, the line that does all the magic is this one:
+The code above is a merge between what you did in the previous chapter and this one. You define the experiment as always, and then you add in the code for the window and button, as you've just learned. However, the line that does all the magic is this one:
 
 \begin{minted}{python}
     button.clicked.connect(experiment.do_scan)
 \end{minted}
 
-You can try the program. When you click the button, a scan starts. However, there's something else happening. The window freezes, you're not able to reshape it, close it. In some cases, especially on Windows, the program crashes, and you get a message saying whether you want to report the issue.
+You can try to run the program. When you click the button, a scan starts. However, there's something else happening. The window freezes, and you're not able to reshape it or even close it. In some cases, especially on Windows, the program may even crash, and you get a message asking whether or not you want to report the issue.
 
 \questionInfo{Exercise}{Can you guess why the window freezes?}
 
-When you described the flow of a Qt program, you talked about a loop taking care of the interactions within the program. However, if you trigger a scan using \py{do_scan}, you're going to block that loop. Both Qt and Python are single-threaded applications by default, and when one blocks, the other blocks as well. And by talking about single-threaded applications, you gave a hint to how this can be solved.
+When you saw the description of the flow of a Qt program, you learned about a loop taking care of the interactions within the program. However, if you trigger a scan using \py{do_scan}, you're going to block that loop. Both Qt and Python are single-threaded applications by default, and when one blocks, the other blocks as well. Speaking of which, all this talk about single-threaded applications should give you a hint as to how this problem can be solved.
 
 At the end of the last chapter, you developed a different method called \py{start_scan} that creates a separate thread to hold the scanning, effectively releasing the main thread to do other tasks. You can change just one line of code and achieve a very different behavior:
 
@@ -160,10 +162,9 @@ At the end of the last chapter, you developed a different method called \py{star
     button.clicked.connect(experiment.start_scan)
 \end{minted}
 
-You've developed a somewhat functional program. You've a window with a button from which you can control our experiment. It's already quite an excellent achievement. You also got some extra features out of the box, such as preventing the user from triggering two scans at the same time.
+You've developed a somewhat functional program. You have a window with a button from which you can control the experiment. It's already quite an excellent achievement. You also have some extra features out of the box, such as preventing the user from triggering two scans at the same time.
 
-Sometimes, the easiness of developing this kind of solution misguides the readers. It was so easy to achieve what you achieved so far because you spent a lot of time and effort developing a proper \emph{experiment class}. The threading, the checks to prevent two scans, and some extra things that keep appearing in this and next chapter are thanks to a well-designed model.
-
+Sometimes, the simplicity of developing this kind of solution misguides readers. It was so easy to achieve what you achieved so far because you spent a lot of time and effort developing a proper \emph{experiment class}. The threading, which checks to prevent two scans from running at the same time, as well as some extra things that will keep appearing in this chapter and the next, are thanks to a well-designed model.
 
 \section{Extending the Main Window}\label{sec:extending-main-window}
 You've seen how to get started by creating the main window and adding a button to it. However, you can also start seeing that if you try to add more elements, the code is going to become more and more convoluted. It would be a nice addition if the window you design here could be used for different purposes as well. As you've already seen many times, a good idea when you want to make blocks of code reusable is to convert them into classes. Qt is ideally suited for this because every Widget they provide is an object with a special inheritance tree.
@@ -200,7 +201,7 @@ You should also remember to change the imports at the top of the file by these:
     from PythonForTheLab.View.main_window import MainWindow
 \end{minted}
 
-If you run the code, you see that it behaves as it was behaving previously. In our code, you create a new class called \py{MainWindow}, which in turn inherits from \py{QMainWindow}. It's always important to call \py{super()} because that runs the init method from the QMainWindow itself, setting up all the parameters, signals, properties that you need to generate a window. There is, however, a difference with a plan \py{QMainWindow}, you specify its title. Effectively, you've now extended the pure \py{QMainWindow} class to include a title by default.
+If you run the code, you see that it behaves as it was behaving previously. In the code, you create a new class called \py{MainWindow}, which in turn inherits from \py{QMainWindow}. It's always important to call \py{super()} because that runs the init method from the QMainWindow itself, setting up all the parameters, signals, properties that you need to generate a window. There is, however, a difference with a plan \py{QMainWindow}, you specify its title. Effectively, you've now extended the pure \py{QMainWindow} class to include a title by default.
 
 \checkInfo{Naming conventions}{It's a personal preference when I start developing a program that has only one main window to name it \py{MainWindow}, removing the preceding \py{Q}. It can lead to mistakes if you overlook the small difference in both names. Depending on taste, an alternative is to call the windows by what they are supposed to do, such as \py{ScanWindow}. It depends on the reader's preferences.}
 
@@ -260,7 +261,7 @@ experiment.finalize()
 You pass \py{experiment} directly to the window, and it takes care of the rest. You can now safely trigger a scan from the user interface. What is important to note is that once you reach this step, all the rest happens directly on the view. The script that you use to open the window stays unaltered. Even in much more complex programs, you use the same pattern\footnote{See, for example, how PyNTA starts its user interface: https://bit.ly/WindowExperiment}.
 
 \section{Adding Layouts}\label{sec:adding-layouts}
-So far, our window holds only one button, and you set that button to be the central Widget of the window. This makes it virtually impossible to add any other button or object. Therefore, it's time to start sophisticating our user interface\footnote{In this chapter you decided to go lower level, programming every feature, but in the next chapter you will see how to do it with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \py{QWidgets}, and Qt allows us to place widgets inside of widgets at our will. You also know that Main Windows require a central widget. Therefore, you can create a widget that holds two buttons: start and stop, and that Widget is the central Widget of the window. You use this opportunity to clean up the names you've used, to make them more descriptive as well, it's important to pay attention to all the changes made:
+So far, the window holds only one button, and you set that button to be the central Widget of the window. This makes it virtually impossible to add any other button or object. Therefore, it's time to start sophisticating the user interface\footnote{In this chapter you decided to go lower level, programming every feature, but in the next chapter you will see how to do it with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \py{QWidgets}, and Qt allows us to place widgets inside of widgets at our will. You also know that Main Windows require a central widget. Therefore, you can create a widget that holds two buttons: start and stop, and that Widget is the central Widget of the window. You use this opportunity to clean up the names you've used, to make them more descriptive as well, it's important to pay attention to all the changes made:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget
