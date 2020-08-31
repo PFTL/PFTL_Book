@@ -6,31 +6,31 @@ You started building a GUI by programming every aspect of the interface. You bui
 You could continue adding elements to the program as you did in the previous chapter, but that would be time-consuming. In this chapter, you're going to introduce a program called \textbf{Qt Designer} that is targeted precisely at speeding up the design of user interfaces. You'll see not only how to make the program look better, but you'll also see what happens when you let users enter data, what problems may arise, and how you can keep improving based on what you've achieved by the end of the chapter.
 
 \section{Getting Started with Qt Designer}\label{sec:getting-started-with-qt-designer}
-You explained how to install Qt Designer in Section~\ref{sec:install-qt-designer}. Different operating systems and different Python versions have a slightly different way of opening the program.
+You learned how to install Qt Designer in Section~\ref{sec:install-qt-designer}. Different operating systems and different Python versions have a slightly different way of opening the program.
 
-If you're using \textbf{Anaconda on Windows}, you only have to open the start menu and type \textit{Designer}, press \py{}enter once it finds it. \textbf{Anaconda on Linux} is similar, open a terminal, either from the base environment or the environment used for this book, type \py{designer}, press enter, and a window should open.
+If you're using \textbf{Anaconda on Windows}, you only have to open the start menu and type \textit{Designer}, then press \py{}enter once it's found. The process for opening \textbf{Anaconda on Linux} is similar: open a terminal, either from the base environment or the environment used for this book, then type \py{designer}. Press enter, and a window should open.
 
-If you're using \textbf{plain Python on Windows}, and you installed \py{pyqt5-tools}, you only need to start the \emph{Command Prompt}, activate the environment where you work, type \py{designer.exe}, and press enter. If you're using \textbf{plain Python on Linux}, you installed the Designer as part of the package \py{qttools5-dev-tools}. In this case, the Designer is an actual application that you can find within the installed apps in your distribution.
+If you're using \textbf{plain Python on Windows} and you installed \py{pyqt5-tools}, you only need to start the \emph{Command Prompt}, then activate the environment where you work, type \py{designer.exe}, and press enter. If you're using \textbf{plain Python on Linux}, you should have installed the Designer as part of the package \py{qttools5-dev-tools}. In this case, the Designer is an actual application that you can find within the installed apps in your distribution.
 
-The Designer welcomes us with a screen like the one below. In between the template/forms options, you can already see two familiar options: Widget and Main Window.
+The Designer welcomes you with a screen like the one below. In between the \textit{template/forms} options, you can already see two familiar options: Widget and Main Window.
 
 \begin{center}
     \includegraphics[width=.5\textwidth]{images/Chapter_09/01_Designer_Welcome.png}
 \end{center}
 
-You start by recreating the window you developed in the previous chapter. You start by selecting \textbf{Main Window}, and clicking create. The Designer opens the working area with an empty main window. That space is our canvas to start adding elements. In the previous chapter, you created a central widget explicitly. The Designer already did this for us. You can see it on the object inspector at the right sidebar:
+Let's recreate the window you developed in the previous chapter. You start by selecting \textbf{Main Window} and clicking \textit{Create}. The Designer opens in the working area with an empty main window. That space is your canvas on which you'll start to add elements. In the previous chapter, you created a central widget explicitly. Here, the Designer already does this for you. You can see it on the object inspector in the right sidebar:
 
 \begin{center}
     \includegraphics[width=.5\textwidth]{images/Chapter_09/02_central_widget.png}
 \end{center}
 
-Note that the Designer named the central widget \py{centralWidget} instead of \py{central_widget}. Naming classes, variables, methods, and functions is completely free in Python, but some conventions make code easier to understand at first sight. One is naming classes with the Camel Case convention, such as \py{MainWindow}, and attributes in lower-case with words separated by underscores. You can change the name of the central widget by clicking on it and changing the \py{objectName} name property:
+Note that the Designer named the central widget \py{centralWidget} instead of \py{central_widget}. How to name classes, variables, methods, and functions is completely up to you in Python, but some conventions make the code easier to understand at first glance. One convention is to name classes with the Camel Case convention, such as \py{MainWindow}, with attributes in lower-case and words separated by underscores. You can change the name of the central widget by clicking on it and changing the \py{objectName} name property:
 
 \begin{center}
     \includegraphics[width=.5\textwidth]{images/Chapter_09/03_central_widget_name.png}
 \end{center}
 
-Now you've the central widget with the same name you used in our Python class. You can add the buttons widget by dragging and dropping an empty widget to the window, that can be found in the containers group of elements. After you add the widget, you can also see it appears in the object inspector on the right sidebar. You can change its name to \py{button_widgets}.
+Now you have the central widget with the same name that you used in your Python class. You can add the buttons widget by dragging and dropping an empty widget to the window, which can be found in the containers group of elements. After you add the widget, you can also see it appear in the object inspector in the right sidebar. You can change its name to \py{button_widgets}.
 
 \begin{minipage}{0.45\linewidth}
     \centering
@@ -42,7 +42,7 @@ Now you've the central widget with the same name you used in our Python class. Y
     \includegraphics[width=\textwidth]{images/Chapter_09/04_empty_widget_structure.png}
 \end{minipage}
 
-To add the start and stop buttons, you can just drag and drop two \py{QPushButton}s to the window. You've to be sure you drop them inside the buttons widget you created earlier. To change the text that appears on the button, you can double click on it and edit the text. You can make one button with the text \emph{Start}, and the other with the text \emph{Stop}. The text on the button is not the name of it. You must change the name of the buttons, and to repeat the same structure of the previous chapter, you're going to call them \py{start_button} and \py{stop_button}. The window and the structure should look like this:
+To add the start and stop buttons, you can just drag and drop two \py{QPushButton} elements to the window. You need to be sure that you drop them inside the buttons widget you created earlier. To change the text that appears on the button, you can double click on it and edit the text. You can make one button with the text \emph{Start}, and the other with the text \emph{Stop}. The text on the button is not the name of it. You must change the name of the buttons, and to repeat the same structure of the previous chapter, you're going to call them \py{start_button} and \py{stop_button}. The window and the structure should look like this:
 
 \begin{minipage}{0.45\linewidth}
     \centering
@@ -54,21 +54,21 @@ To add the start and stop buttons, you can just drag and drop two \py{QPushButto
     \includegraphics[width=\textwidth]{images/Chapter_09/05_main_window_structure.png}
 \end{minipage}
 
-\infoInfo{Screenshots}{Explaining how to use a designing program through screen captures requires much patience from the reader. You try to highlight the checkpoints that allow comparing what the reader does with what you show here. Practice and a critical view is the best that can the reader can do at this stage.}
+\infoInfo{Screenshots}{Reading an explanation of how to use a designing program through screen captures requires much patience from the reader. We try to highlight the checkpoints that allow you to compare your own output to what you see here. Practice and critical viewing is the best thing that can the reader can do at this stage.}
 
-You've a window with the buttons, but you're missing the layout to make it look as good as you had in the previous chapter. The Designer has a toolbar dedicated exclusively to the layouts; you can find it at the top of the main window space; it looks like this:
+You now have a window with the buttons, but you're missing the layout to make it look as good, as you did in the previous chapter. Luckily, the Designer has a tool bar dedicated exclusively to the layouts. You can find it at the top of the main window space. It looks like this:
 
 \begin{center}
     \includegraphics[width=.4\textwidth]{images/Chapter_09/06_layouts.png}
 \end{center}
 
-To apply a layout to a widget, you can click first on the widget inside the Object Inspector and then click on the desired layout. You can apply a vertical layout to the \py{central_widget} and a horizontal layout to the \py{button_widgets}. When you apply a layout to widgets, it shows as a different icon on the Object Inspector.
+To apply a layout to a widget, you can first click on the widget inside the Object Inspector and then click on the desired layout. You can apply a vertical layout to the \py{central_widget} and a horizontal layout to the \py{button_widgets}. When you apply a layout to widgets, it shows as a different icon on the Object Inspector.
 
 \begin{center}
     \includegraphics[width=.4\textwidth]{images/Chapter_09/07_widgets_with_layouts.png}
 \end{center}
 
-You're ready to save the window. Let's create a new folder called \textbf{GUI} inside the \emph{View} folder, and you can call the file \py{main_window.ui}. Once you save the designer file, you're ready to go back to Python to use this window. You can go back to \textbf{main\_window.py}, and you can start editing the \py{MainWindow} class. Since some of the elements are now defined directly on the designer file, you remove them from the class:
+You're ready to save the window. Let's create a new folder called \textit{GUI} inside the \emph{View} folder, and you can call the file \py{main_window.ui}. Once you save the designer file, you're ready to go back to Python to use this window. Go back to \textbf{main\_window.py} and start editing the \py{MainWindow} class. Since some of the elements are now defined directly in the designer file, you can remove them from the class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -93,41 +93,41 @@ You're ready to save the window. Let's create a new folder called \textbf{GUI} i
     [...]
 \end{minted}
 
-Besides the new imports, the fundamental change to the \py{MainWindow} class is that you load the file using \py{uic.loadUi}. When you try to import files in Python, you always have to be careful with determining the path from which you're importing. You already encountered the syntax of \py{dirname} when you were adding the root folder to the path in Section~\ref{sec:appending-path}. The idea is the same, but you're interested in the folder where the current Python file is located.
+Besides the new imports, the fundamental change to the \py{MainWindow} class is that you load the file using \py{uic.loadUi}. When you try to import files in Python, you always have to be careful with determining the path from which you're importing. You already encountered the syntax of \py{dirname} when you were adding the root folder to the path in Section~\ref{sec:appending-path}. The idea is the same here, but now you're interested in the folder where the current Python file is located.
 
-The command \py{uic.loadUi} takes two arguments; the first is the file you want to load, and the second is the object to which it's applied. You use the \py{self} to indicate that you want to apply the layout to the entire \py{MainWindow}. If you develop a more modular program, such as defining individual widgets, you could apply the Designer file just to the widget in which you're interested.
+The command \py{uic.loadUi} takes two arguments: the first is the file you want to load, and the second is the object you want to apply it to. You use \py{self} to indicate that you want to apply the layout to the entire \py{MainWindow}. If you develop a more modular program, such as defining individual widgets, you could apply the Designer file just to the widget that you're interested in.
 
-The rest of the window stays the same. You only removed the definition of \py{central_widget} and the buttons. Since you've the layout of the central widget specified in the Designer, you need to access it to be able to append the plot widget. It's what this line is doing:
+The rest of the window stays the same. You only remove the definition of \py{central_widget} and the buttons. Since the layout of the central widget is specified in the Designer, you need to access it to be able to append the plot widget. That's what this line is doing:
 
 \mint{python}{layout = self.central_widget.layout()}
 
-You can go ahead and run the program, and you see that the window appears as it did before, without changes, even though you're now pulling the elements from the Designer file.
+You can go ahead and run the program, and you'll see that the window appears as it did before, without changes, even though you're now pulling the elements from the Designer file.
 
 \subsection{Deciding whether or not to compile UI files}\label{subsec:compiling-or-not-compiling-ui-files}
-Most tutorials online add one step after creating the Designer's file. They normally suggest transforming the \py{.ui} files into a \py{.py} file. There's a program able to do it for us, that can be triggered from the command line:
+Most online tutorials add one step after creating the Designer file. They normally suggest transforming the \py{.ui} files into a \py{.py} file. There's a program that can do this for you, which can be triggered from the command line:
 
 \begin{minted}{bash}
     pyuic5 main_window.ui -o compiled_window.py
 \end{minted}
 
-You can explore both files and see the differences. If you open the \emph{ui} file with a text editor, you find out it's plain text and formatted following a standard called \emph{XML}, or extended markup language. This format is very similar to how websites are built, \emph{HTML} stands for hypertext markup language. Going through the file, you find the place where you defined the buttons, surrounded by some more information, such as the layout, and the text of the button.
+You can explore both files and see the differences. If you open the \emph{ui} file with a text editor, you'll find that it's in plain text and formatted following a standard called \emph{XML}, or eXtended Markup Language. This format is very similar to how websites are built with \emph{HTML}, which stands for HyperText Markup Language. Going through the file, you'll find the place where you defined the buttons, surrounded by some more information, such as the layout and the text of the button.
 
-If you open the generated Python file, you find the same information but formatted in the same way you've done it in the previous chapter. You can go to the declaration of the start button, and you find a line almost identical to the one you used in the previous chapter
+If you open the generated Python file, you'll find the same information but formatted in the way you did in the previous chapter. Go to the declaration of the start button, and you find a line almost identical to the one you used in the previous chapter:
 
 \mint{python}{self.start_button = QtWidgets.QPushButton(self.button_widget)}
 
-The question is whether you \textbf{need} to compile the \emph{ui} files to Python files or not. Qt was developed with C++ programmers in mind, and for a C++ program, it's essential to have each variable defined with a specific type before compiling the code. Qt offers a program, \py{uic} to transform \emph{ui} files to \emph{C++} compatible files. Most Python tutorials built on that experience and kept the recommendation. But for Python, this step is not necessary at all.
+The question is whether you \emph{need} to compile the \textit{ui} files to Python files or not. Qt was developed with C++ programmers in mind, and for a C++ program, it's essential to have each variable defined with a specific type before compiling the code. Qt offers a program called \py{uic} to transform \textit{ui} files into \textit{C++} compatible files. Most Python tutorials have built on that experience and kept the recommendation; but for Python, this step is not necessary at all.
 
-There's one caveat, however. If you don't transform the file to a Python file, editors won't be able to know which attributes are available on the windows and widgets. The editor won't have any idea whether there's a \py{start_button} or not defined. It means that to be sure, you should keep opening the designer program and see how you named the buttons and elements. But this is the only drawback that non-compiling has.
+There's one caveat, however. If you don't transform the file to a Python file, then text editors won't be able to know which attributes are available on the windows and widgets. The editor won't have any idea whether there's a \py{start_button} or not defined. This means that, to be sure, you'll need to keep opening the designer program to see how you named the buttons and elements. Still, this is the only drawback for choosing not to compile.
 
-In our experience, modifying the designer files and seeing the changes as soon as you restart the program outweighs the problems of not being able to auto-complete. If you're systematic with the naming conventions, you won't face many issues. And if you do encounter issues with attributes not defined, you know that the root of the problem is that you used one name in the Designer and a different one in Python.
+In our experience, modifying the designer files and seeing the changes as soon as you restart the program outweighs the problems of not being able to auto-complete. If you're systematic with the naming conventions, you won't face many issues. If you do encounter issues with attributes not defined, you'll know that the root of the problem is that you used one name in the Designer and a different one in Python.
 
 \section{Adding User Input}\label{sec:adding-user-input}
 \begin{center}
     \includegraphics[width=.5\textwidth]{images/Chapter_09/08_final_window_example.png}
 \end{center}
 
-It's time to bring our program to the next level by adding the possibility of entering the values of the scan before triggering it. The goal is to have a window that looks like the image above. You structured the window in three rows, one for selecting the range of the scan and the channel, one for the input and delay between points and finally the buttons. Below it, you append the plot, as you've done before.
+It's time to bring your program to the next level by adding the possibility of entering the values of the scan before triggering it. The goal is to have a window that looks like the image above. You structured the window in three rows, one for selecting the range of the scan and the channel, one for the input and delay between points and finally the buttons. Below it, you append the plot, as you've done before.
 
 First, you start by designing the window. You do not cover every single detail as you did in the previous section, because it would become too cumbersome to follow. Therefore you leave to the discretion of the reader whether they want to try it by themselves or get the designer file from the online repository. The easiest way to reproduce the window is by looking at the structure you should obtain after placing all the elements:
 
@@ -155,7 +155,7 @@ The \py{QLineEdit} objects have a method called \py{setText} that allows us to c
 
 \questionInfo{Exercise}{You've shown how to add the values of start, stop, and number of steps, but you're still missing the input and output channels, and the delay between points. Add them following the example above.}
 
-You know how to set the values to the lines, you can change them, but the you still use the ones defined in the config file. You already saw in Section~\ref{sec:running-experiment} that thanks to our strategy of having a robust experiment class, you can change the values of the parameters after the experiment was defined. You can do the same within the user interface. Let's improve the \py{start_scan} method of the \py{MainWindow}:
+You know how to set the values to the lines, you can change them, but the you still use the ones defined in the config file. You already saw in Section~\ref{sec:running-experiment} that thanks to your strategy of having a robust experiment class, you can change the values of the parameters after the experiment was defined. You can do the same within the user interface. Let's improve the \py{start_scan} method of the \py{MainWindow}:
 
 \begin{minted}{python}
     def start_scan(self):
@@ -185,16 +185,16 @@ It's important to remember that in the experiment, when you trigger the \py{star
 
 \questionInfo{Exercise}{Following the example above, add the same behavior for the delay, channel in and channel out values.}
 
-You're now at a stage where you can control our experiment from the user interface. You can change the parameters for the scan, start, and stop at will. At this stage, you should feel very proud of ourselves. It's also an excellent time to reflect because things change very quickly, new elements appear on the window, but you put minimal effort into making everything work together.
+You're now at a stage where you can control your experiment from the user interface. You can change the parameters for the scan, start, and stop at will. At this stage, you should feel very proud of ourselves. It's also an excellent time to reflect because things change very quickly, new elements appear on the window, but you put minimal effort into making everything work together.
 
-One of the values of separating in Model/View/Controller is that, usually, most of our work should go in the models. And models are the most pure-python modules in our program. Once you overcome the initial shock of working with more complex patterns, such as classes and threads, the rest is very straightforward. You loop through values; you save data. Most likely, it's the kind of things you were already doing when analyzing data.
+One of the values of separating in Model/View/Controller is that, usually, most of your work should go in the models. And models are the most pure-python modules in your program. Once you overcome the initial shock of working with more complex patterns, such as classes and threads, the rest is very straightforward. You loop through values; you save data. Most likely, it's the kind of things you were already doing when analyzing data.
 
 Once the experiment model is ready, plugging the view on top of it does not require too much effort. How to design the experiment model in such a way that allows us such a degree of independence, is a skill that you can acquire over time, with critical thinking, and patience. For most programs, when developing the \emph{View}, you would face the problem of something missing in the experiment model. Perhaps a threshold value, or a variable that lets us know something is running. You should always refrain from the temptation of complicating the view, and you should always favor putting all that effort into the models.
 
 It's only the long run experience the one that congratulates us on a job well done in the past.
 
 \section{Validating User Input}\label{sec:validating-user-input}
-We, as consumers of computer software, are used to a lot of interactions and visual cues when working with a user interface. It makes us expect the same kind of behavior in the programs you develop ourselves. One of the things you can notice in our program is that if you try to trigger a scan while the first one is running, the program prints a message to the terminal, but if you're not paying attention to it, you can miss it and wonder why the scan is not triggering.
+We, as consumers of computer software, are used to a lot of interactions and visual cues when working with a user interface. It makes us expect the same kind of behavior in the programs you develop ourselves. One of the things you can notice in your program is that if you try to trigger a scan while the first one is running, the program prints a message to the terminal, but if you're not paying attention to it, you can miss it and wonder why the scan is not triggering.
 
 One possible solution would be to gray out the \emph{Start} button, to prevent the user from triggering a second scan. The question is, how can you achieve that behavior. If you look in the Designer, every widget that you add has a list of properties that you can change, including shape, color, text. In the case of the buttons, there's an option called \py{enabled}:
 
@@ -202,7 +202,7 @@ One possible solution would be to gray out the \emph{Start} button, to prevent t
     \includegraphics[width=.4\linewidth]{images/Chapter_09/10_enabled_button.png}
 \end{center}
 
-If you remove the tick mark from the option, the button gets grayed out, and you won't be able to click it. You must learn how to change the enabled status of our program, not from the Designer. For this, you must read the documentation provided by Qt. If you search online for \py{QPushButton}, usually, the first result would be the one available at \py{doc.qt.io}, the official documentation. You only need to be sure you're looking at the Qt5 documentation and not at the Qt4. The page is long, and if you look for \py{enabled}, you won't find anything. It's not a very auspicious start.
+If you remove the tick mark from the option, the button gets grayed out, and you won't be able to click it. You must learn how to change the enabled status of your program, not from the Designer. For this, you must read the documentation provided by Qt. If you search online for \py{QPushButton}, usually, the first result would be the one available at \py{doc.qt.io}, the official documentation. You only need to be sure you're looking at the Qt5 documentation and not at the Qt4. The page is long, and if you look for \py{enabled}, you won't find anything. It's not a very auspicious start.
 
 If you scroll to the top of the page, you see that Qt informs us of the parent class of QPushButton: QAbstractButton. Remember that when working with objects, there's always a possibility that methods and attributes are defined in the parent class, not in the class you're using. You can follow the link, but there won't be any information on enabling or not, but if you go one level above, to the \py{QWidget} documentation, you find what you were looking for:
 
@@ -248,14 +248,14 @@ The method \py{update_gui} is easy to follow. If the scan is running, you gray o
         self.timer.timeout.connect(self.update_gui)
 \end{minted}
 
-With this simple approach, you check every few milliseconds whether the scan is running or not, and you set the buttons accordingly. There's also a risk with this approach. If you decide to show information on the Main Window that implies reading a value from the device, you end up polling it several times per second, regardless of whether the value changed or not. If you update values stored in an object, such as the Experiment model, there's nothing to lose, but if you stretch this pattern too far, you may encounter issues, and our program could become inefficient.
+With this simple approach, you check every few milliseconds whether the scan is running or not, and you set the buttons accordingly. There's also a risk with this approach. If you decide to show information on the Main Window that implies reading a value from the device, you end up polling it several times per second, regardless of whether the value changed or not. If you update values stored in an object, such as the Experiment model, there's nothing to lose, but if you stretch this pattern too far, you may encounter issues, and your program could become inefficient.
 
 You've generated the most basic of the possibilities, disabling a button to prevent the user from triggering a second scan if there's one already running. There are many more possibilities. What happens if the user enters a value outside the range. For example, as a start without volts, or negative, or beyond $3.3\,\textrm{V}$. You can use the \py{update_gui} to monitor the values entered and run them through some checks. If they pass, then you leave them as they are. If they don't, then you change the line to red and disable the start button.
 
-All these are possibilities that you start considering as soon as you start developing user interfaces. However, everything you do has ramifications, such as what you saw when you disabled the start button on our first attempt. Our general approach is not to complicate the user interface beyond what is needed. If you've proper drivers and proper models in place, at least our devices are safe. If you find ourselves or a user of our software, making the same mistakes over and over again, you can then optimize the flow to prevent it from happening again.
+All these are possibilities that you start considering as soon as you start developing user interfaces. However, everything you do has ramifications, such as what you saw when you disabled the start button on your first attempt. Our general approach is not to complicate the user interface beyond what is needed. If you've proper drivers and proper models in place, at least your devices are safe. If you find ourselves or a user of your software, making the same mistakes over and over again, you can then optimize the flow to prevent it from happening again.
 
 \subsection{Saving data with a shortcut}\label{subsec:saving-data-with-a-shortcut}
-The only missing important feature of our user interface is the ability to save data. You could implement a button for this, but you can also look into another important feature of Qt: \textbf{actions}. You saw that a convenient tool when developing with Qt are signals, such as the ones emitted by a button or a timer. Signals are associated with widgets of some sort. Another range is not associated with widgets, but the user can trigger them at any moment.
+The only missing important feature of your user interface is the ability to save data. You could implement a button for this, but you can also look into another important feature of Qt: \textbf{actions}. You saw that a convenient tool when developing with Qt are signals, such as the ones emitted by a button or a timer. Signals are associated with widgets of some sort. Another range is not associated with widgets, but the user can trigger them at any moment.
 
 In the Designer, you can add a \py{File} menu, by double-clicking the top bar of the main window, where it says \py{Type Here}, and inside the File menu, you can create a \py{Save} option. As soon as you create the Save, the Designer also shows an \emph{Action} defined. You can find the action listed at the bottom of the right sidebar, as you show on the image below. Note that the name assigned by default is \py{actionSave}.
 
@@ -271,7 +271,7 @@ In the Designer, you can add a \py{File} menu, by double-clicking the top bar of
 
 If you pay attention to what appears on that square, you see that there's also the possibility of defining a shortcut. You can go ahead, double-clicking on it opens a small configuration window in which you can add a shortcut, such as Ctrl+S. Just clicking on the shortcut edit line and then pressing a combination of keys register them. After saving, you can rerun the program, and you've a File menu with a Save option, and the shortcut written next to it, so there are no possible confusions.
 
-You need to connect the \py{actionSave} to the method in our experiment for saving data. Because of how you structured the code, this now becomes almost trivial, in the \py{__init__} of the \py{MainWindow} you just add the following:
+You need to connect the \py{actionSave} to the method in your experiment for saving data. Because of how you structured the code, this now becomes almost trivial, in the \py{__init__} of the \py{MainWindow} you just add the following:
 
 \mint{python}{self.actionSave.triggered.connect(self.experiment.save_data)}
 
@@ -295,7 +295,7 @@ This chapter focused on learning how to use the Qt Designer, a great tool to spe
 You've merely scratched the surface of what Qt offers. For scientific applications, however, you don't need to go much deeper. You're generally okay with the simple styling of the objects and a simple menu structure. You can change font-sizes, colors, the roundness of edges. You can make floating menus that open by right-clicking on an image, and many more things. But you always have to draw a line between how much effort and time you're dedicating to making a program look better and how much time you're dedicating to running an experiment.
 
 \section{Where to Next}\label{sec:where-to-next}
-If you reached this point, it means that you've kickstarted your career as a Scientific Python Developer, hurrah!. What you've covered in this book is only the beginning. Devices can be much more sophisticated than a simple DAQ, you may need to analyze the data before you display it, or the memory on our computer may not be enough to hold one complete measurement.
+If you reached this point, it means that you've kickstarted your career as a Scientific Python Developer, hurrah!. What you've covered in this book is only the beginning. Devices can be much more sophisticated than a simple DAQ, you may need to analyze the data before you display it, or the memory on your computer may not be enough to hold one complete measurement.
 
 Our advice during the workshops is that you should work on what you've learned for at least 6 months—trying to develop solutions for the tools you already have at hand, such as an Oscilloscope, or your own data acquisition card. In this book, you've guided you; you've prevented you from falling in some errors. The reality is that you won't master any technique until you try by yourself, fail by yourself, and solve a problem by yourself.
 
