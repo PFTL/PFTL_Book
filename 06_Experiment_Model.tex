@@ -1,18 +1,18 @@
 \chapter{Writing The Experiment Model}\label{ch:experiment-model}
 
 \section{Introduction}\label{sec:experiment-model-introduction}
-In the \textbf{MVCs} design pattern, the \emph{Model} is where we should place the logic and the decisions we make to perform a measurement. In the previous chapter, we started specifying the logic of how we are going to use the DAQ device. We decided, for example, that the device should start and finish with the outputs set to $0\,\textrm{V}$, and that it should handle Pint units for setting and reading values. Even though it was a great start, there are still steps missing to perform a real experiment.
+In the \textbf{MVCs} design pattern, the \emph{Model} is where you should place the logic and the decisions you make to perform a measurement. In the previous chapter, you started specifying the logic of how you're going to use the DAQ device. You decided, for example, that the device should start and finish with the outputs set to $0\,\textrm{V}$, and that it should handle Pint units for setting and reading values. Even though it was a great start, there are still steps missing to perform a real experiment.
 
-We are still missing, for example, the possibility to perform a scan in a given range of voltages, there is no way of saving data nor the parameters used to generate it. We can develop these tools in a script, and that is fine to get started. At some point, however, we want to be systematic, and we don't want to keep editing a script every time we must perform a measurement. We want to save data consistently, or we want to enable other people to run their experiments based on our routines.
+You're still missing, for example, the possibility to perform a scan in a given range of voltages, as there's no way of saving data or the parameters used to generate it. You can develop these tools in a script, which is fine for getting started. At some point, however, you'll want to be systematic, and you won't want to keep editing a script every time you must perform a measurement. You'll want to save data consistently, or you'll want to enable other people to run their experiments based on your routines.
 
-At this moment is when the \emph{onion principle} starts making sense. We are slowly building in complexity, one layer at a time. We started with the driver, built some logic on top of it through a device model, and now we can keep growing the complexity by defining an Experiment model. There are many different steps needed to perform a reproducible measurement, and we cover them one by one in this chapter. One important aspect we are missing, on top of the ones mentioned earlier is, for example, transforming the voltages we measure to a current, so we can give sense to the \textbf{I} on the I-V curve we are trying to measure.
+At this moment, the \emph{onion principle} starts making sense. You're slowly building in complexity, one layer at a time. You started with the driver, built some logic on top of it through a device model, and now you can keep growing the complexity by defining an Experiment model. There are many different steps needed to perform a reproducible measurement, and you'll cover them one by one in this chapter. For example, one important aspect you're missing, on top of the ones mentioned earlier, is transforming the voltages you measure to a current, so you can give sense to the \textbf{I} on the I-V curve you're trying to measure.
 
-\tipsInfo{Splitting into Modules}{With a simple device and experiment such as the one we use in this book, sometimes it is hard to put a limit on what should go in the device model and what into the experiment model. There are no strict rules. We should always reflect on what we believe is useful in the long run. Once we are comfortable working with classes in Python, splitting the code into reusable, smaller modules does not lead to much more typing.}
+\tipsInfo{Splitting into Modules}{With a simple device and experiment such as the one you use in this book, sometimes it's hard to put a limit on what should go in the device model and what should go into the experiment model. There are no strict rules. You should always reflect on what you believe is useful in the long run. Once you're comfortable working with classes in Python, splitting the code into reusable, smaller modules does not lead to much more typing.}
 
-There are two extra advantages of developing an experiment model, which become apparent only after working on these topics long enough. On the one hand, the models are going to lead to reproducible experiments. If we keep track of the parameters, we can go back precisely to the same conditions in which we have performed a specific measurement. On the other hand, having a well-structured model is going to make it very straightforward to build a Graphical User Interface ({GUI}) on top of it, but let's not get ahead of ourselves.
+There are two extra advantages of developing an experiment model, which become apparent only after working on these topics for a long enough tim. On the one hand, the models are going to lead to reproducible experiments. If you keep track of the parameters, you can go back to precisely the same conditions in which you've performed a specific measurement. On the other hand, having a well-structured model is going to make it very straightforward for you to build a Graphical User Interface ({GUI}) on top of it, though you won't delve further into that subject here.
 
-\section{The Skeleton of an Experiment Model}\label{sec:skeleton-experiment-model}
-Every time we want to start developing a model, it is handy to start from an empty skeleton. It helps us know what parts of the code we need to develop, what things we don't know how to do yet and need to learn. It also allows us to have a quick glimpse of how we expect our program to be used. We did it for the device model in the previous chapter, and we can do the same for the experiment in this chapter. First, we create a file called \textbf{experiment.py} inside the \emph{Model} folder, and then we think about the steps needed to perform a measurement:
+\section{Writing the Skeleton of an Experiment Model}\label{sec:skeleton-experiment-model}
+Every time you want to start developing a model, it's handy to start from an empty skeleton. It helps you to know what parts of the code you need to develop, what things you don't know how to do yet, and what things you still need to learn. It also allows you to have a quick glimpse of how you expect your program to be used. You did this for the device model in the previous chapter, and you can do the same for the experiment model in this chapter. First, create a file called \textbf{experiment.py} inside the \emph{Model} folder, and then think about the steps needed to perform a measurement:
 
 \begin{minted}{python}
 class Experiment:
@@ -36,17 +36,17 @@ class Experiment:
 
 \end{minted}
 
-Most of the code should be self-explanatory, but some steps are worth mentioning. First, we include a \py{load_config} method, which will rely on the \py{config_file} we specify at the \py{__init__}. Having a separate config file is useful not only to change parameters between measurements, but it helps us with our code. Especially when the number of things we need to remember grows, it is always handy to have a file where to look at how we named things.
+Most of the code should be self-explanatory, but some steps are worth mentioning. First, you include a \py{.load_config()} method, which will rely on the \py{config_file} you specify at the \py{.__init__()}. Having a separate config file is useful not only to change parameters between measurements, but it helps you with your code. Especially when the number of things you need to remember grows, it's always handy to have a file where you can see how you named things.
 
-We have also included a \py{load_daq} method. So far, we have only one DAQ to use, but we go a bit ahead of time and assume that at some point, there may be more than one, and therefore we should have a way of loading one or the other. It can also be a case of premature optimization, in which we anticipate a future that never comes. Nevertheless, it is pedagogically useful to define it there.
+You've also included a \py{.load_daq()} method. So far, you only have one DAQ to use, but you can assume that at some point, there may be more than one, so you should have a way of loading one or the other. This can also be a case of premature optimization, in which you anticipate a future that never comes. Nevertheless, it's pedagogically useful to define it here.
 
-The rest of the methods may seem intuitive enough. If we are missing extra pieces, we can always come back and add them. Now it is time to start developing each one of the building blocks.
+The rest of the methods may seem intuitive enough. If you're missing extra pieces, you can always come back and add them. Now it's time to start developing each one of the building blocks.
 
-\section{The Configuration File}\label{sec:configuration-file}
+\section{Writing the Configuration File}\label{sec:configuration-file}
 \subsection{Working with YAML files}\label{subsec:yaml-files}
-Before we keep developing code, we need to stop for a second to think about what do we want our program to do. We need to think about what inputs we need for our program. For example, we need to know the port to which the device is connected. We also know that we need to define an output and input channel, a range for the scan, a delay between data points. Before going into the details, let's see how to store all these parameters into a text file easily.
+Before you keep developing code, you need to stop for a second to think about what you want your program to do. You need to think about what inputs you need for your program. For example, you need to know the port to which the device is connected. You also know that you need to define an output and input channel, a range for the scan, a delay between data points. Before going into the details, let's see how you can easily store all these parameters into a text file.
 
-In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. We can create the file with any text editor, including the one we are using for editing Python files. The only difference is the extension \emph{yml}. We are going to use this file to hold all the parameters of the experiment. The format fo the file is called {YAML}, which has a straightforward structure; it looks like this:
+In the \emph{Examples} folder, create a file called \textbf{experiment.yml}. You can create the file with any text editor, including the one you're using for editing Python files. The only difference is the extension \emph{yml}. You're going to use this file to hold all the parameters of the experiment. The format of the file is called {YAML}, which has a straightforward structure. It looks like this:
 
 \begin{minted}{yaml}
 Experiment:
@@ -57,7 +57,7 @@ Experiment:
    - second Element
 \end{minted}
 
-{YAML} is very simple to read both by a person and by the computer. It has just a few rules. The most important one is that the indentation is \textbf{2} spaces. In the example above, there is a main element called \textbf{Experiment}; everything that is indented compared to that element belongs to it. To read the file, we are going to use a package called PyYAML, which we installed in Chapter~\ref{ch:setting-up}. We can create a file called \textbf{test\_yaml.py} also in the Examples folder to understand how to use these files:
+{YAML} is very simple to read for both a person and a computer. It has just a few rules. The most important one is that the indentation is \textbf{2} spaces. In the example above, there's a main element called \textbf{Experiment}. Everything that is indented relative to that element belongs to it. To read the file, you're going to use a package called PyYAML, which you installed in Chapter~\ref{ch:setting-up}. You can create a file called \textbf{test\_yaml.py} (also in the Examples folder) to understand how to use these files:
 
 \begin{minted}{python}
 import yaml
@@ -72,15 +72,15 @@ for k in e['Experiment']:
     print(10*'-')
 \end{minted}
 
-We begin by opening the file using \mintinline{python}{open}. We use the \mintinline{python}{with} command because it is convenient for working with files and other resources that have the same pattern of opening/doing/closing. Yaml is then responsible for interpreting the information contained in the file. We store this information in a variable \py{e}, which turns out to be a dictionary.
+You begin by opening the file using \mintinline{python}{open()}. You use the \mintinline{python}{with} command because it's convenient for working with files and other resources that have the same pattern of "open, do, close." YAML is then responsible for interpreting the information contained in the file. You store this information in a variable \py{e}, which turns out to be a dictionary.
 
-To get the elements stored in dictionaries, we use keys. In the example above, there is a main key called \py{'Experiment'}, and the sub-keys \py{'name'}, \py{'range'} and \py{'list'}. If we want to use one of those elements, we can type \py{e['Experiment']['name']}, for example. The code prints out each element, separated by a horizontal line. Yaml imported the file directly as a dictionary, but some of the elements are special. We can see that \py{'name'} is a string, but \py{'range'} and \py{'list'} are not. {YAML} automatically detects what kind of information we are storing, making our job easier if we already know what we want to store.
+To get the elements stored in dictionaries, you use keys. In the example above, there's a main key called \py{'Experiment'} with sub-keys \py{'name'}, \py{'range'}, and \py{'list'}. If you want to use one of those elements, you can type \py{e['Experiment']['name']}, for instance. The code prints out each element separated by a horizontal line. YAML imported the file directly as a dictionary, but some of the elements are special. You can see that \py{'name'} is a string, but \py{'range'} and \py{'list'} are not. {YAML} automatically detects what kind of information you're storing, making your job easier if you already know what you want to store.
 
-\questionInfo{Exercise}{What type of variables has yaml generated for \py{'range'} and the \py{'list'}? (Remember that you can use \py{type(var)} to know the type of the variable.}
+\questionInfo{Exercise}{What type of variables has YAML generated for \py{'range'} and the \py{'list'}? Remember that you can use \py{type(var)} to know the type of the variable.}
 
 \questionInfo{Exercise}{YAML also supports numeric information. Create a new element and assign it a value of \py{1} or \py{3.14}. What kind of variable has YAML created in such cases?}
 
-Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, we can use \py{yaml.dump} method to save it. For example, we can define a dictionary with the following information:
+Of course, YAML can be used not only to read properties but also to save information generated in a program. Instead of loading data, you can use \py{yaml.dump()} to save it. For example, you can define a dictionary with the following information:
 
 \begin{minted}{python}
 d = {'Experiment': {
@@ -90,31 +90,31 @@ d = {'Experiment': {
 }
 \end{minted}
 
-If we want to save it to a file, we can do the following:
+If you want to save it to a file, you can do the following:
 
 \begin{minted}{python}
 with open('data.yml', 'w') as f:
     f.write(yaml.dump(d, default_flow_style=False))
 \end{minted}
 
-We are using the \py{'w'} option to open the file, which means that every time we run the code, it overwrites the file, and we lose the previous contents. After running the code, we can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one we created ourselves earlier. One of the advantages of the YAML format is that files are straightforward to read, and don't require much typing.
+You're using the \py{'w'} option to open the file, which means that every time you run the code, it overwrites the file, and you lose the previous contents. After running the code, you can open the file \textbf{data.yml} with any text editor and see that the contents are very similar to the one you created earlier. One of the advantages of the YAML format is that files are straightforward to read and don't require much typing.
 
-\questionInfo{Exercise}{Read back the contents of \textbf{data.yml} and check that they are the same you saved.}
+\questionInfo{Exercise}{Read back the contents of \textbf{data.yml} and check that they are the same as the file you saved.}
 
 \questionInfo{Exercise}{Modify some values in \textbf{data.yml} directly with your text editor and see that those changes are reflected when you reread the file.}
 
-\questionInfo{Exercise}{Create a numpy array and store it using yaml. How does it look like in the file? What happens if you read it back?}
+\questionInfo{Exercise}{Create a NumPy array and store it using YAML. What does it look like in the file? What happens if you read it back?}
 
-\questionInfo{Exercise: Advanced}{Save a numpy array using yaml. Then activate a virtual environment in which PyYAML is available but not numpy. Try to load the contents of the file. What happens?}
+\questionInfo{Exercise: Advanced}{Save a NumPy array using YAML. Then, activate a virtual environment in which PyYAML is available but not NumPy. Try to load the contents of the file. What happens?}
 
-Now that we know how to work with YAML files, it is time to start thinking about the experiment again. We need to stop and think about what do we need to know to perform an experiment.
+Now that you know how to work with YAML files, it's time to start thinking about the experiment again. You need to stop and think about what you need to know to perform an experiment.
 
-\questionInfo{Exercise}{Create a new experiment.yml file in the \emph{Examples} folder. Use what you have learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
+\questionInfo{Exercise}{Create a new experiment.yml file in the \emph{Examples} folder. Use what you've learned about YAML files to write a file that contains all the information that you need to perform an experiment and interpret its data. For example, knowing \emph{who} performed an experiment may be important.}
 
-\subsection{Loading the Config file}\label{subsec:loading-the-config}
-We have decided to use YAML files because of their simplicity, and because it is easy to map them to dictionaries in Python. The main advantage of having a separated config file is not only that it allows us to run different measurements changing parameters as we desire, but that it also helps us keep our code well organized. We always know how to get the information we need, just by looking at the config file.
+\subsection{Loading the config file}\label{subsec:loading-the-config}
+You're using YAML files because of their simplicity, and because it's easy to map them to dictionaries in Python. The main advantage of having a separated config file is not only that it allows you to run different measurements while changing parameters as you desire, but also because it helps you keep your code well organized. You always know how to get the information you need, just by looking at the config file.
 
-First, we need to decide what we are going to include in the configuration file. The information is not static, and it may happen that after working for a while, we realize there is some important parameter missing or that something we thought was important is not necessary anymore. Every time we find ourselves deciding a value, that information should go to the config file. For example, if we need to decide in which port the DAQ is connected, that goes to the config file. We are going to use the \textbf{experiment.yml} file in the \emph{Examples} folder to store all this information. Below, we show how the config file could look like. We have included extra options that we haven't discussed yet, such as the user performing the experiment, which can be relevant for bookkeeping:
+First, you need to decide what you're going to include in the configuration file. The information is not static, and it may happen that after working for a while, you realize there's some important parameter missing, or you realize something that you thought was important is not necessary anymore. Every time you find yourself deciding a value, that information should go into the config file. For example, if you need to decide which port the DAQ is connected to, that information should go into the config file. You're going to use the \textbf{experiment.yml} file in the \emph{Examples} folder to store all this information. Below, you can see what the config file might look like. There are extra options included that you haven't seen yet, such as the name of the user performing the experiment, which can be relevant for bookkeeping:
 
 \begin{minted}{text}
 User:
@@ -136,9 +136,9 @@ Saving:
   filename: data.dat # Files won't be overwritten, but renamed as data_001.dat, etc.
 \end{minted}
 
-We haven't used a primary key such as \emph{experiment} because it does not add anything, and forces us to type more. If for some reason, we needed to store parameters for two different experiments on the same file, then we could add two top-level keys such as \py{Experiment_1}, \py{Experiment_2}. The parameters above are enough to get started and then slowly keep adding or modifying when we need it. There are some glaring omissions, meant to trigger discussions further down the road. If you have already spotted them, you have done an excellent job, but don't stress yourself if you haven't.
+You haven't used a primary key such as \emph{experiment} because it does not add anything, and forces you to type more. If, for some reason, you needed to store parameters for two different experiments in the same file, then you could add two top-level keys such as \py{Experiment_1} and \py{Experiment_2}. The parameters above are enough to get you started. Then, you can slowly keep adding or modifying when you need it. There are some glaring omissions which are meant to trigger discussions further down the road. If you've already spotted them, then you've done an excellent job! But don't stress yourself out if you haven't.
 
-We have to update the \py{Experiment} class to load the file. We are storing the filename within the class, so all our methods can be triggered without arguments. But this is just a choice we've made:
+You have to update the \py{Experiment} class to load the file. You're storing the filename within the class, so all your methods can be triggered without arguments, but this is just a stylistic choice:
 
 \begin{minted}{python}
 import yaml
@@ -153,7 +153,7 @@ class Experiment:
         self.config = data
 \end{minted}
 
-We have used the same code we showed in the previous Section but as part of a method. When we load the configuration file, it is stored as an attribute of the Experiment class, called \py{self.config}. Now that the experiment is starting to have shape, we can create a file to show how to use it and check whether we are doing things properly. In the \emph{Examples} folder, we can create a file called \textbf{run\_experiment.py}, and add the following:
+You've used the same code you saw in the previous Section, but this time as part of a method. When you load the configuration file, it's stored as an attribute of the Experiment class, called \py{self.config}. Now that the experiment is starting to have shape, you can create a file to show how to use it and check whether you're doing things properly. In the \emph{Examples} folder, you can create a file called \textbf{run\_experiment.py} and add the following:
 
 \begin{minted}{python}
 import sys
@@ -169,14 +169,14 @@ experiment.load_config()
 print(experiment.config)
 \end{minted}
 
-We use the strategy explained in Section~\ref{sec:path} to let Python know where to find our program. The rest is easy to understand; we start an experiment, load the config file, and print the parameters that we have loaded. So far, we are not doing much, but it is a good start.
+You use the strategy explained in Section~\ref{sec:path} to let Python know where to find your program. The rest is easy to understand: you start an experiment, load the config file, and print the parameters that you've loaded. So far, you're not doing much, but it's a good start!
 
-Now we have a consistent interface for loading the configuration file into our programs. It gives us a great deal of flexibility and makes the code nicely reusable and extendable.
+Now you have a consistent interface for loading the configuration file into your programs. This gives you a great deal of flexibility and makes the code nicely reusable and extensible.
 
-\questionInfo{Exercise}{When the function \py{load_config} loads the configuration from a file, verify that some essential parameters are defined. For example, verify that there is a user associated with an experiment. If something is missing, print an error message or raise an Exception.}
+\questionInfo{Exercise}{When \py{.load_config()} loads the configuration from a file, verify that some essential parameters are defined. For example, verify that there's a user associated with an experiment. If something is missing, print an error message or raise an Exception.}
 
 \section{Loading the DAQ}\label{sec:loading-daq}
-To load the DAQ into our experiment, we can start with the simplest approach. We import the model for the daq, and we initialize it using the \py{load_daq} method. We can update the experiment model (we omitted some parts of the code for brevity):
+To load the DAQ into your experiment, you can start with the simplest approach. You import the model for the DAQ, and then you initialize it using the \py{.load_daq()} method. You can update the experiment model like so (noting that some parts of the code have been omitted for brevity):
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -189,16 +189,16 @@ def load_daq(self):
     self.daq.initialize()
 \end{minted}
 
-The \py{load_daq} method uses the information stored in the configuration file to instantiate and initialize the daq model. Having a config file in YAML format makes it very easy to navigate and find where is located the information of the port for the daq. The main key is \py{DAQ}, and the sub-key is \py{port}. In this way, there are many fewer things we need to keep in our heads. We can always go back to the file and read what we need to know. We have also decided that we initialize the device right after loading it. We could have developed a separate method, but at this stage and for this experiment, there is no real need.
+The \py{.load_daq()} method uses the information stored in the configuration file to instantiate and initialize the DAQ model. Having a config file in YAML format makes it very easy to navigate and locate the information for the DAQ port. The main key is \py{DAQ}, and the sub-key is \py{port}. In this way, there are much fewer things you need to keep in your head. You can always go back to the file and read what you need to know. You've also decided to initialize the device right after loading it. You could have developed a separate method, but at this stage and for this experiment, there's no real need.
 
-Since we are taking care of loading and initializing the DAQ, we can also develop the finalize method, which takes just one line:
+Since you've taken care of loading and initializing the DAQ, you can also develop the finalize method, which takes just one line:
 
 \begin{minted}{python}
 def finalize(self):
     self.daq.finalize()
 \end{minted}
 
-We can update the \textbf{run\_experiment.py} file to reflect the additions we have just made to the Experiment:
+You can update the \textbf{run\_experiment.py} file to reflect the additions you've just made to the Experiment:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -208,7 +208,7 @@ print(experiment.daq)
 experiment.finalize()
 \end{minted}
 
-When we run the code above, we see that the output of \py{print(experiment.daq)} is not pretty, and it is hard to understand. We can update the device model to make the string that appears on screen nicer. We edit the \textbf{analog\_daq.py} file to include the following method in the \py{AnalogDaq} class:
+When you run the code above, you see that the output of \py{print(experiment.daq)} is not pretty, and it's hard to understand. You can update the device model to make the string that appears on screen nicer. You edit the \textbf{analog\_daq.py} file to include the following method in the \py{AnalogDaq} class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -221,12 +221,12 @@ class AnalogDaq:
         return "Analog Daq"
 \end{minted}
 
-The method \py{__str__} is called a \emph{dunder} method, because it has the double underscore before and after its name. These are magic methods in classes that allow us to change the behavior at a much lower level. The \emph{str} method is responsible for letting Python know how to transform an object to a string. It happens, for example, when we use the \py{print} function. If we rerun the experiment, we see that the output is clearer than before.
+The method \py{__str__} is called a \emph{dunder} method, because it has the double underscore before and after its name. These are magic methods in classes that allow you to change the behavior at a much lower level. The \emph{str} method is responsible for letting Python know how to transform an object to a string. This happens, for example, when you use the \py{print()} function. If you rerun the experiment, you see that the output is clearer than before.
 
-\infoInfo{String Representation}{Adding a string representation to the classes we build is an excellent addition but not mandatory. We should be careful not to derail on details that don't bring us close to the goal of performing a measurement.}
+\infoInfo{String Representation}{Adding a string representation to the classes you build is an excellent addition to the code, though it's not mandatory. You should be careful not to get sidetracked on details that don't bring you close to the goal of performing a measurement.}
 
-\subsection{The Dummy DAQ}\label{subsec:loading-dummy-daq}
-In the previous chapter, we took a small detour when we discussed the creation of a base class for the device models. In Section~\ref{sec:base-model}, we also discussed creating a dummy device, a fake model that outputs random numbers when requested. It means that we have two different DAQ devices we can use, one real and one fake. Therefore, we can improve the Experiment model to accommodate the possibility of using one or the other. We are going to follow a non-standard approach, which does not comply with the general principles of Python, but that it is nevertheless convenient. In the config file, we included the name of the DAQ, and it is time to use this information. There will be two possibilities, either \py{AnalogDaq}, or \py{DummyDaq}:
+\subsection{Including the dummy DAQ}\label{subsec:loading-dummy-daq}
+In the previous chapter, you took a small detour to create a base class for the device models. In Section~\ref{sec:base-model}, you also created a dummy device, which is a fake model that outputs random numbers when requested. This means that you have two different DAQ devices that you can use, one real and one fake. Therefore, you can improve the Experiment model to accommodate the possibility of using one or the other. You're going to follow a non-standard approach here, one which does not comply with the general principles of Python, but that's convenient nevertheless. In the config file, you included the name of the DAQ, and it's time to use this information. There will be two possibilities, either \py{AnalogDaq}, or \py{DummyDaq}:
 
 \begin{minted}{python}
 def load_daq(self):
@@ -246,20 +246,20 @@ def load_daq(self):
     self.daq.initialize()
 \end{minted}
 
-The \py{load_daq} method is now much more powerful than before, and we are doing something that may seem strange at first sight. We are importing Python modules not at the top of the file, but deep inside a method. It is not standard, and in some contexts, it is discouraged, but it is crucial to understand why we have decided to follow this approach. When working with real devices, the models may depend on drivers that are not installed on the computer. If we import the device model at the top of the experiment file, we may get an error because of a device we do not intend to use.
+The \py{.load_daq()} method is now much more powerful than before, and you're doing something that may seem strange at first sight. You're not importing Python modules at the top of the file, but deep inside a method. This is not standard, and in some contexts it's discouraged, but it's crucial to understand why you're following this approach. When working with real devices, the models may depend on drivers that are not installed on the computer. If you import the device model at the top of the experiment file, you may get an error because of a device you do not intend to use.
 
-On the other hand, this behavior is discouraged because if there is a problem in one of the modules, we won't notice it until we are running the program, and that can be a waste of our time and, more importantly, of data. For example, \py{AnalogDaq} depends on having a proper controller available. If we make the import at the top of the class, and the controller is not in place, we get an error even before we instantiate the experiment class. If we plan to use only the dummy model, then we don't care about this. The balance between safety, best practices, and ease of development is sometimes hard to choose. What is important to remember is that Python is an incredibly flexible language.
+On the other hand, this behavior is discouraged because if there's a problem in one of the modules, you won't notice it until you're running the program. That can be a waste of your time and, more importantly, your data. For example, \py{AnalogDaq} depends on having a proper controller available. If you make the import at the top of the class, and the controller is not in place, you get an error even before you instantiate the experiment class. If you plan to use only the dummy model, then you don't care about this. The balance between safety, best practices, and ease of development is sometimes hard to choose. What is important to remember is that Python is an incredibly flexible language.
 
-We have also included a final clause in our if-statement to raise an exception if the specified model is not one of the two with which we know how to work. The advantage of having models that specify the same API is that after we load and instantiate them, they both work in the same way. Therefore the rest of our code is completely independent of which model we are using.
+You've also included a final clause in your if-statement to raise an exception if the specified model is not one of the two with which you know how to work. The advantage of having models that specify the same API is that after you load and instantiate them, they both work in the same way. Therefore, the rest of your code is completely independent of which model you're using.
 
-\questionInfo{Exercise}{In Section~\ref{sec:pint} we included units for the \py{AnalaogDaq} class, but we didn't add units for the \py{DummyDaq}. It is an inconsistency since both models are going to generate different types of output. Update the dummy model to generate random values including units of volts.}
+\questionInfo{Exercise}{In Section~\ref{sec:pint} you included units for the \py{AnalaogDaq} class, but you didn't add units for the \py{DummyDaq}. This is an inconsistency, since both models are going to generate different types of output. Update the dummy model to generate random values including units of volts.}
 
-\section{Doing a Scan}\label{sec:doing-scan}
-The core of the experiment model is being able to perform a scan, changing the voltages on the output, and reading the voltages in the input. This kind of measurement is widespread in a lot of different experiments, not only in electronics. That is the reason we decided to call it \py{scan}, which is a fairly generic name.
+\section{Performing a Scan}\label{sec:doing-scan}
+The core of the experiment model is being able to perform a scan, change the voltages on the output, and read the voltages in the input. This kind of measurement is widespread in a lot of different experiments, not only in electronics. That is the reason you're calling this \py{scan}, which is a fairly generic name.
 
-\questionInfo{Exercise}{Think at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
+\questionInfo{Exercise}{Think of at least three different examples of experiments that you can perform by changing an analog output and recording an analog input.}
 
-To perform a scan, we use the parameters that we have defined in the \py{Scan} Section of the config file. Since we already performed this type of measurement either from the command line or from example files, it is easy to adapt to what we did to the method in the Experiment class:
+To perform a scan, you use the parameters that you've defined in the \py{Scan} Section of the config file. Since you already performed this type of measurement either from the command line or from example files, it's easy to adapt what you did to the method in the Experiment class:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -272,34 +272,34 @@ def do_scan(self):
     step = ur(self.config['Scan']['step'])
 \end{minted}
 
-After the first few lines, we need to stop and think. After we introduced units to our model, we didn't try to perform a scan, and therefore we need to see how Pint works. We know that \py{start}, \py{stop}, and \py{step} all have units of volts or related. However, if we try to use the start, stop, and step values as they are, we will fail. Nore the Python \py{range} function, nor Numpy's \py{arange} know how to deal with quantities. However, Pint allows us to transform a quantity to a plain number in given units, by using the \py{m_as} method. Therefore, if we want to have a range of values over which to perform the scan, we can do this:
+After the first few lines, you need to stop and think. After you introduced units to your model, you didn't try to perform a scan, and so you need to see how Pint works. You know that \py{start}, \py{stop}, and \py{step} all have units of volts or related. However, if you try to use the start, stop, and step values as they are, you will fail. Neither the Python \py{range} function nor NumPy's \py{arange} function know how to deal with quantities. However, Pint allows you to transform a quantity to a plain number in given units by using the \py{.m_as()} method. Therefore, if you want to have a range of values over which to perform the scan, you can do this:
 
 \begin{minted}{python}
 scan_range = np.arange(start.m_as('V'), stop.m_as('V'), step.m_as('V'))
 \end{minted}
 
-If we explore the \py{scan_range} variable, we will see that it includes the numbers starting with \py{start}, going in increments of \py{step}, but it does not include the \py{stop} value. This is not a bug, but just how \py{arange} works. The documentation clearly states that arange generates values in the semi-open interval $[\textrm{start}, \textrm{stop})$. If we want to include the last point or not, is debatable. On possible strategy would be to do this:
+If you explore the \py{scan_range} variable, you will see that it includes the numbers starting with \py{start}, going in increments of \py{step}, but it does not include the \py{stop} value. This is not a bug; it's just how \py{arange} works. The documentation clearly states that \py{arange} generates values in the semi-open interval $[\textrm{start}, \textrm{stop})$. If you want to include the last point or not, it's debatable. One possible strategy would be to do this:
 
 \begin{minted}{python}
 scan_range = np.arange(start.m_as('V'), stop.m_as('V')+step.m_as('V'), step.m_as('V'))
 \end{minted}
 
-But this has an associated risk. What happens if start is $0\,\textrm{V}$, stop is $3.3\,\textrm{V}$ and step is $0.5\,\textrm{V}$? The last value in the range would be higher than $3.3\,\textrm{V}$. It means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals.
+However, this has an associated risk. What happens if start is $0\,\textrm{V}$, stop is $3.3\,\textrm{V}$ and step is $0.5\,\textrm{V}$? The last value in the range would be higher than $3.3\,\textrm{V}$. This means that forcing the stop to be larger only works if the step divides the range in an integer number of intervals.
 
-We could use numpy's \py{linspace}, which allows us to generate equally spaced values if we provide a start, stop and the number of points we want. This seems like a viable solution. We can do the following:
+You could use numpy's \py{linspace}, which allows you to generate equally-spaced values if you provide a start, stop, and the number of points you want. This seems like a viable solution. You can do the following:
 
 \begin{minted}{python}
 num_points = int((stop.m_as('V')-start.m_as('V'))/step.m_as('V'))+1
 scan_range = np.linspace(start.m_as('V'), stop.m_as('V'), num_points)
 \end{minted}
 
-We added a \py{+1} to the number of points to accommodate the last value. For example, if we wanted all the integer numbers from 0 to 10, we should use 11 data points. Again, this works fine if the number of points is an integer value, but as soon as the step we specified does not divide the interval in an integer number of points, we would have a problem. With the same values used before, we would get a scan range like this:
+You added a \py{+1} to the number of points to accommodate the last value. For example, if you wanted all the integer numbers from 0 to 10, you should use 11 data points. Again, this works fine if the number of points is an integer value, but as soon as the step you specified does not divide the interval in an integer number of points, you would have a problem. With the same values used before, you would get a scan range like this:
 
 \begin{minted}{python}
 array([0.  , 0.55, 1.1 , 1.65, 2.2 , 2.75, 3.3 ])
 \end{minted}
 
-Which is not spaced by $0.5\,\textrm{V}$, but it respects the start and stop values. The last option to which we can resource is to change the config file. We thought that defining the step was a good idea, but perhaps it is a better idea to use the number of steps we want in our scan instead of the step size. Therefore, we have to update \textbf{experiment.yml} to include the number of steps and not the step size:
+This is not spaced by $0.5\,\textrm{V}$, but it respects the start and stop values. The last option to which you can resort is to change the config file. You may have thought that defining the step was a good idea, but perhaps it's better to use the number of steps you want in your scan instead of the step size. Therefore, you have to update \textbf{experiment.yml} to include the number of steps and not the step size:
 
 \begin{minted}{text}
 Scan:
@@ -311,7 +311,7 @@ Scan:
   delay: 100ms
 \end{minted}
 
-Before we proceed with the experiment class, we see that the array that numpy generates has no units, and this makes sense because we stripped the units from the parameters of the scan. But this can be easily solved by multiplying the array with the proper units, like the code below shows:
+Before you proceed with the experiment class, you see that the array that NumPy generates has no units, and this makes sense because you stripped the units from the parameters of the scan. But this can be easily solved by multiplying the array with the proper units, like the code below shows:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -335,7 +335,7 @@ def do_scan(self):
         sleep(delay.m_as('s'))
 \end{minted}
 
-The \py{do_scan} method is very complete now. We use the number of steps specified in the config file, we are also using the delay, and therefore we import \py{sleep} at the top of the file. Then we go through all the voltages. We also defined a variable called \py{scan_data} to hold the values as we measure them. It is a big achievement, and we need to reflect it the file we were using for testing the Experiment class. We can update \textbf{run\_experiment.py}:
+The \py{.do_scan()} method is quite complete now. You use the number of steps specified in the config file. You're also using the delay, and so you import \py{sleep} at the top of the file. Then, you go through all the voltages. You also defined a variable called \py{scan_data} to hold the values as you measure them. It's a big achievement, and you need to reflect this in the file you were using for testing the Experiment class. You can update \textbf{run\_experiment.py}:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -344,7 +344,7 @@ experiment.do_scan()
 experiment.finalize()
 \end{minted}
 
-When we run the experiment, we encounter a problem:
+When you run the experiment, you encounter a problem:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -355,13 +355,13 @@ Traceback (most recent call last):
 ValueError: setting an array element with a sequence.
 \end{minted}
 
-It is because of how Pint and numpy work together. We can't simply put into a numpy array a quantity. However, solving this problem is very straightforward. In the same way we defined the \py{scan_range} as an array with units, we can define \py{scan_data} to also include units:
+This is because of how Pint and NumPy work together. You can't simply put a quantity into a NumPy array. However, solving this problem is very straightforward. In the same way that you defined the \py{scan_range} as an array with units, you can define \py{scan_data} to also include units:
 
 \begin{minted}{python}
 scan_data = np.zeros(num_steps) * ur('V')
 \end{minted}
 
-And we can go ahead now and run the experiment without errors. After we do the scan we can finalize the experiment, but there is no way for us to actually look at the data that we acquired. To make the data available to the outside world, or to other methods in the same class, we can define attributes instead of just variables that get destroyed when the method finishes. The \py{do_scan} method can then look like this:
+Now you can go ahead and run the experiment without errors. After you do the scan you can finalize the experiment, but there's no way for you to actually look at the data that you acquired. To make the data available to the outside world, or to other methods in the same class, you can define attributes instead of just variables that get destroyed when the method finishes. The \py{do_scan} method can then look like this:
 
 \begin{minted}{python}
 def do_scan(self):
@@ -380,7 +380,7 @@ def do_scan(self):
         sleep(delay.m_as('s'))
 \end{minted}
 
-We altered both \py{scan_range} and \py{scan_data}, so we can now go back to the \textbf{run\_experiment.py} file and print the values we acquired:
+You altered both \py{scan_range} and \py{scan_data}, so you can now go back to the \textbf{run\_experiment.py} file and print the values you acquired:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -392,12 +392,12 @@ print(experiment.scan_data)
 experiment.finalize()
 \end{minted}
 
-Finally, we can see the data we acquired after the scan runs. It would allow us to do plenty of things like saving, plotting, analyzing. But we should not go ahead of ourselves at this stage. We had laid out a plan for the Experiment class, and we should follow it as much as we can. The strategy of adding \py{self.} before a variable is beneficial, and this is the real power of objects. The idea is that we should use objects when we need to maintain \emph{state}. It is not just a function that runs and returns a value, but it is updating the \emph{state} of the experiment, or the device.
+Finally, you can see the data you acquired after the scan runs. This would allow you to do plenty of things like saving, plotting, and analyzing. However, you should not get too far ahead of yourself at this stage. You had laid out a plan for the Experiment class, and you should follow it as much as you can. The strategy of adding \py{self.} before a variable is beneficial, and this is the real power of objects. The idea is that you should use objects when you need to maintain \emph{state}. It's not just running a function and returning a value, but it's updating the \emph{state} of the experiment, or the device.
 
-Now we can proceed further to the last missing step: saving data.
+Now you can proceed further to the last missing step: saving data.
 
 \section{Saving Data to a File}\label{sec:saving-data}
-After we perform a scan, we must save both the data and the \emph{metadata}. With metadata we mean information on the parameters used to perform an experiment and that would allow us or anybody else to repeat the measurement. Let's start by the beginning, just saving data to a file, we are going to use the built-in functions of numpy for this, because we have to save two arrays: \py{scan_data} and \py{scan_range}. And since we already know that Pint and Numpy interact in special ways, we anticipate the errors that may appear:
+After you perform a scan, you must save both the data and the \emph{metadata}. The metadata is the information on the parameters used to perform an experiment that would allow you or anybody else to repeat the measurement. Let's start at the beginning, with simply saving data to a file. You're going to use the built-in functions of NumPy for this, because you have to save two arrays: \py{scan_data} and \py{scan_range}. Since you already know that Pint and NumPy interact in special ways, you can anticipate the errors that may appear:
 
 \begin{minted}{python}
 def save_data(self):
@@ -407,7 +407,7 @@ def save_data(self):
     np.savetxt(filename, data.m_as('V'), header=header)
 \end{minted}
 
-The method above works. We can go ahead and run the experiment, and it generates a file with two columns (that is the reason for the \py{vstack} and the \py{.T}) and a header specifying that the data is in units of Volts. However, if we run the experiment for a second time, the data gets overwritten. Moreover, we are saving the data to the same folder where we run the experiment, and this is a terrible idea, we would like to save the data in a dedicated place. Therefore, we need to update the config file first, and then the saving method. The folder we are using for saving data is only an example, and one should change it according to their needs:
+The method above works. You can go ahead and run the experiment, and it generates a file with two columns (which is the reason for the \py{vstack} and the \py{.T}) as well as a header specifying that the data is in units of Volts. However, if you run the experiment for a second time, the data gets overwritten. Moreover, you're saving the data to the same folder where you run the experiment, and this is a terrible idea. It would be better to save the data in a dedicated place. Therefore, you need to update the config file first, and then the saving method. The folder you're using for saving data here is only an example, and you should change it according to your needs:
 
 \begin{minted}{text}
 Saving:
@@ -415,7 +415,7 @@ Saving:
   folder: /home/aquiles/Data
 \end{minted}
 
-Something handy when saving data is to organize it by dates. We can create a folder with the date of the measurement inside the \emph{Data} folder. First, we see snippets to understand what we need, and then we add the modifications to the method itself. To get the date of today as a string, we can combine the \py{datetime} package and the formatting of strings:
+One best practice to consider when saving data is to organize it by dates. You can create a folder with the date of the measurement inside the \emph{Data} folder. First, you'll see snippets to understand what you need, and then you can add the modifications to the method itself. To get the date of today as a string, you can combine the \py{datetime} package with the formatting of strings:
 
 \begin{minted}{pycon}
 >>> from datetime import datetime
@@ -425,7 +425,7 @@ Something handy when saving data is to organize it by dates. We can create a fol
 2020-04-13
 \end{minted}
 
-The first part is there, we know how to get the folder name based on todays date. Now we have to create the folder if it does not exist:
+The first part is there, and you know how to get the folder name based on today's date. Now you have to create the folder if it does not exist:
 
 \begin{minted}{pycon}
 >>> import os
@@ -439,9 +439,9 @@ False
 True
 \end{minted}
 
-Using the package \py{os} allows us to take care of the common problems that appear when dealing with directories. For example, Linux uses \texttt{/} to separate the structure, while Windows uses \texttt{\\}. Also, we may define the folder with a trailing \texttt{/} or not. \py{os} takes care of all this complexity for us. We join the data folder and today's folder and check if it exists, if it doesn't, we create it. The \py{makedirs} also creates the missing parent directories. For example, if the \emph{Data} folder does not exist, the program creates it.
+Using the \py{os} module allows you to take care of common problems that can appear when dealing with directories. For example, Linux uses the forward slash to separate the folder structure, while Windows uses the backslash. Also, you may define the folder with a trailing \texttt{/} or not. \py{os} takes care of all of this complexity for you. In the code block above, you join the data folder and today's folder and check if it exists; if it doesn't, you create it. The \py{makedirs} also creates the missing parent directories. For example, if the \emph{Data} folder does not exist, the program creates it.
 
-Next, we have to be sure we will not overwrite the files when we save new scans. Ideally, we would like the files to look like \py{data_001.dat}, \py{data_002.dat}, etc. Using what we specified in the config file, we can achieve something like it:
+Next, you have to be sure you will not overwrite the files when you save new scans. Ideally, you would like the files to have a naming structure like \py{data_001.dat}, \py{data_002.dat}, and so on. Using what you specified in the config file, you can achieve something like it:
 
 \begin{minted}{python}
 >>> filename = 'data.dat'
@@ -453,7 +453,7 @@ Next, we have to be sure we will not overwrite the files when we save new scans.
 data_0001.dat
 \end{minted}
 
-It seems like much work just to format the name, but once we have it, we can use it in all our experiments. We only need to know which is the first available name and save data there. We are now ready to save the data, and also the metadata:
+This seems like too much work just to format the name, but once you've done it, you can use it in all your experiments. You only need to know what the first available name is and then save the data there. You're now ready to save the data, as well as the metadata:
 
 %! Suppress = Ellipsis
 \begin{minted}{python}
@@ -484,11 +484,11 @@ def save_data(self):
         f.write(yaml.dump(self.config, default_flow_style=False))
 \end{minted}
 
-The \py{save_data} method may be the most complex in the program, but it is also powerful. We start with a base folder and create a folder with the current date, with the format Year-Month-Day. We format the data to make it easy to store as two columns on a text file, and we also add a header to explain what we are storing. We extract the base part of the filename and the extension as two separate variables, and we format the filename in such a way that it can have a number appended to it. The syntax \py{i:04d} is the secret to formating numbers with an appropriate number of $0$ in front. We use a while loop to increase the counter until the first file is available, and use that value to store the data. We also create another file with the same number and a similar name, to store the metadata. In our case, the metadata is nothing more than the \py{config} dictionary.
+The \py{.save_data()} method may be the most complex in the program, but it's also powerful. You start with a base folder and create a folder based on the current date, with the format Year-Month-Day. You format the data to make it easy to store as two columns of a text file, and you also add a header to explain what you're storing. You extract the base part of the filename and the extension as two separate variables, and you format the filename in such a way that it can have a number appended to it. The syntax \py{i:04d} is the secret to formatting numbers with an appropriate number of zeros in front. You use a while loop to increase the counter until the first file is available, and then use that value to store the data. You also create another file with the same number and a similar name to store the metadata. In this case, the metadata is nothing more than the \py{config} dictionary.
 
-\checkInfo{Saving Metadata}{A convenient by-product of saving the config as a YAML file is that we can use it as the config file for the next experiment. If we want to repeat a measurement from the past, we just need to point the experiment to the config we saved from that date.}
+\checkInfo{Saving Metadata}{A convenient by-product of saving the config as a YAML file is that you can use it as the config file for the next experiment. If you want to repeat a measurement from the past, you just need to point the experiment to the config you saved from that date.}
 
-We can update the \textbf{run\_experiment.py} file, and perform a complete measurement:
+You can update the \textbf{run\_experiment.py} file and perform a complete measurement:
 
 \begin{minted}{python}
 import sys
@@ -509,15 +509,15 @@ experiment.save_data()
 experiment.finalize()
 \end{minted}
 
-Except for the part of appending the folder to the system path, we can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. Being able to reduce a complex problem to a relatively simple flow is thanks to the effort we put into defining the proper methods in the experiment and device models.
+Save for the part where you append the folder to the system path, you can run a relatively complex experiment in less than 10 lines of code, including saving data and metadata. This ability to reduce a complex problem into a relatively simple flow is thanks to the effort you put into defining the proper methods in the experiment and device models.
 
 \section{Conclusions}\label{sec:experiment-model-conclusions}
-With this chapter, we have finished the core code for a functioning experiment. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code, such as doing a scan or saving data are in place, our running script just needs one line of code. The model takes care of rest automatically. If you share the code with a colleague and you show them the \py{run_experiment} script, they will be able to perform their measurements in no time.
+With this chapter, you've finished writing the core code for a functioning experiment. Defining an Experiment model is one of the best strategies to simplify the work needed to perform a measurement. Once the complicated bits of code are in place, parts like performing a scan or saving data to a file, you just need one line of code to run your script. The model takes care of rest automatically. If you share the code with a colleague and you show them the \py{run_experiment} script, they will be able to perform their measurements in no time.
 
-We still left some more things that we should do in our experiment. For example, we are still acquiring voltages instead of currents. We are not going to explicitly solve this problem because it is an excellent exercise to start thinking by yourself.
+There are still a few more things that you should do for your experiment. For example, you're still acquiring voltages instead of currents. You're not going to explicitly solve this problem in this book, because it's an excellent exercise for you to start thinking for yourself.
 
-\questionInfo{Exercise}{Update the config file to include information on the resistance that we are using. With that value, update the \py{do_scan} method to acquire amperes (or milliamperes) instead of volts. Finally, you need to update the save method to accommodate for the changes, not only in the header but also in how we transform the arrays to unitless before saving them.}
+\questionInfo{Exercise}{Update the config file to include information on the resistance that you're using. With that value, update the \py{.do_scan()} method to acquire amperes (or milliamperes) instead of volts. Finally, you need to update the save method to accommodate for the changes, not only in the header but also in how you transform the arrays to being unit-less before saving them.}
 
-Some other topics which are still relevant and that we are going to cover on the next chapter include how to change the parameters of the scan directly from within the running script. It would allow us to, for example, scan the voltages with varying delays to understand if there is some form of hysteresis or scans with an increased resolution around specific features. We have also neglected what would happen if someone forgets to load the config file or the daq before starting a scan, for example.
+Some other topics that are still relevant include how to change the parameters of the scan directly from within the running script, which you'll cover in the next chapter. This would allow you to, for instance, scan the voltages with varying delays to understand if there's some form of hysteresis, or scans with an increased resolution around specific features. You've also neglected what would happen if someone were to forget to load the config file or the DAQ before starting a scan, for example.
 
-The final missing bit is how to stop the experiment while it is running. If we see something is going wrong, there is no way of deciding to stop it without losing data. There are a lot of different approaches to solving this. The one we are going to explore is based on \emph{Threads}, a handy tool for developing acquisition software, but that may have a somewhat high entry barrier for newcomers to Python.
+The final missing piece is to see how to stop the experiment while it's running. At the moment, if you see something is going wrong, there's no way of stopping it without losing data. There are a lot of different approaches to solving this. The one you're going to explore is based on \emph{Threads}, a handy tool for developing acquisition software, but that may have a somewhat high barrier to entry for newcomers to Python.
