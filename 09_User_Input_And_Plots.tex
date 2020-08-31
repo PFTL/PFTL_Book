@@ -1,6 +1,6 @@
 \chapter{User Input and Designing}\label{ch:user-input-designer}
 
-\section{Introducion}\label{sec:user-input-introduction}
+\section{Introduction}\label{sec:user-input-introduction}
 We started building a GUI by programming every aspect of the interface. We built a \py{MainWindow} class, added some buttons and a plot. A logical next step would be to add a way to change the parameters that build up the scan. We would like to be able to change the \py{start}, \py{stop}, and \py{num_points} values directly from the user interface and not from a config file that gets read-only at the beginning.
 
 We could continue adding elements to the program as we did in the previous chapter, but that is time-consuming. In this chapter, we are going to introduce a program called \textbf{Qt Designer} that is targeted precisely at speeding up the design of user interfaces. We see not only how to make the program better looking, but we are also going to see what happens when we let users input data, what problems may arise, and we show the way to keep improving based on what we achieve by the end of the chapter.
@@ -103,7 +103,7 @@ The rest of the window stays the same. We only removed the definition of \py{cen
 
 We can go ahead and run the program, and we see that the window appears as it did before, without changes, even though we are now pulling the elements from the Designer file.
 
-\subsection{Compiling or not Compiling ui files}\label{subsec:compiling-or-not-compiling-ui-files}
+\subsection{Deciding whether or not to compile UI files}\label{subsec:compiling-or-not-compiling-ui-files}
 Most tutorials online add one step after creating the Designer's file. They normally suggest transforming the \py{.ui} files into a \py{.py} file. There is a program able to do it for us, that can be triggered from the command line:
 
 \begin{minted}{bash}
@@ -254,7 +254,7 @@ We have generated the most basic of the possibilities, disabling a button to pre
 
 All these are possibilities that we start considering as soon as we start developing user interfaces. However, everything we do has ramifications, such as what we saw when we disabled the start button on our first attempt. Our general approach is not to complicate the user interface beyond what is needed. If we have proper drivers and proper models in place, at least our devices are safe. If we find ourselves or a user of our software, making the same mistakes over and over again, we can then optimize the flow to prevent it from happening again.
 
-\subsection{Saving Data with a Shortcut}\label{subsec:saving-data-with-a-shortcut}
+\subsection{Saving data with a shortcut}\label{subsec:saving-data-with-a-shortcut}
 The only missing important feature of our user interface is the ability to save data. We could implement a button for this, but we can also look into another important feature of Qt: \textbf{actions}. We saw that a convenient tool when developing with Qt are signals, such as the ones emitted by a button or a timer. Signals are associated with widgets of some sort. Another range is not associated with widgets, but the user can trigger them at any moment.
 
 In the Designer, we can add a \py{File} menu, by double-clicking the top bar of the main window, where it says \py{Type Here}, and inside the File menu, we can create a \py{Save} option. As soon as we create the Save, the Designer also shows an \emph{Action} defined. We can find the action listed at the bottom of the right sidebar, as we show on the image below. Note that the name assigned by default is \py{actionSave}.

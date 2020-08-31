@@ -78,7 +78,7 @@ measurement.timetrace = np.array([...])
 
 What you have so far is a vague idea of how classes behave, and maybe you are starting to imagine some places where you can use a class to make your daily life easier and your code more reusable. However, this is just the tip of the iceberg. Classes are potent tools.
 
-\section{Initializing classes}\label{sec:initializing-classes}
+\section{Initializing Classes}\label{sec:initializing-classes}
 Instantiating a class is the moment in which we call the class and pass it to a variable. In the previous example, the instantiation of the class happened at the line reading \mintinline{python}{me = Person()}. You may have noticed that the property \mintinline{python}{stored_name} does not exist in the object until we assign a value to it. It can give severe headaches if someone calls the method \mintinline{python}{get_name} before actually having a name stored (you can give it a try to see what happens!). Therefore it is handy to run a default method when the class is first called. This method is called \mintinline{python}{__init__}, and you can use it like this:
 
 %! Suppress = Ellipsis
@@ -124,7 +124,7 @@ With this modification, if you don't explicitly specify a name when instantiatin
 
 \questionInfo{Exercise}{Improve the \mintinline{python}{get_name} method to print a warning message in case the name was not set}
 
-\section{Defining class properties}\label{sec:defining-class-properties}
+\section{Defining Class Properties}\label{sec:defining-class-properties}
 So far, if you wanted to have properties available right after the instantiation of a class, you had to include them in the \py{__init__} method. However, this is not the only possibility. You can define properties that belong to the class itself. Doing it is as simple as declaring them before the \py{__init__} method. For example, we could do this:
 
 %! Suppress = Ellipsis
@@ -158,7 +158,7 @@ What you see above is that it doesn't matter if you define the birthday within t
 
 What you can see in the code above is that you can access class properties before you instantiate anything. That is why they are class and not object properties. Subtleties apart, once you change the class property, in the example above the birthday, next time we create an object with that class, it receives the new property. In the beginning, it is hard to understand why it is useful, but one day you need it, and it saves you plenty of time.
 
-\section{Inheritance}\label{sec:inheritance}
+\section{Understanding Inheritance}\label{sec:inheritance}
 One of the advantages of working with classes in PythonPython is that it allows you to use the code from other developers and expand or change its behavior without modifying the original code. The best would be to see it in action. So far, we have a class called \py{Person}, which is generally but not too useful. Let's assume we want to define a new class, called \py{Teacher}, that has the same properties as a \py{Person} (i.e., name and birthday) plus it can teach a class. You can add the following code to the file \textbf{person.py}:
 
 \begin{minted}{python}
@@ -221,7 +221,7 @@ When you use \py{super()}, you are going to have access directly to the class fr
 
 \questionInfo{Exercise}{Improve the \py{Teacher} class to be able to specify a name to it when instantiating, for example, you would like to do this: \mintinline{pycon}{Teacher('Red Sparrow', 'Math')}}
 
-\section{Finer details of classes}\label{sec:finer-details-of-classes}
+\section{Looking into the Finer Details of Classes}\label{sec:finer-details-of-classes}
 With what you have learned up to here, you can achieve many things. It is just a matter of thinking about how to connect different methods when it is useful to inherit. Without a doubt, it helps you to understand the code developed by others. There are, however, some details that are worth mentioning, because you can improve how your classes look and behave.
 
 \subsection{Printing objects}\label{subsec:printing-objects}

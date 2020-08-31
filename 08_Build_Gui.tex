@@ -11,7 +11,7 @@ In this chapter, we are going to give the first steps for building a user interf
 \checkInfo{Qt, PyQt, and PySide licensing}{If you are planning to release commercial software, or if you are packaging Qt, PyQt or PySide2 into your application, you should explore the different licensing options available.}
 
 
-\section{Simple Window and Buttons}\label{sec:simple-window-andbuttons}
+\section{Creating a Simple Window and Buttons}\label{sec:simple-window-andbuttons}
 Now it is finally time to start using the empty folder from the M-\textbf{V}-C design pattern: the \textbf{View}. We start by learning how to create simple windows directly with Qt and proceed to a fully-featured user interface for our experiment. We start just with scripts, and we slowly grow in complexity.
 
 The best way to get started with Qt is with a quick example. We can create a new file, \textbf{simple\_window.py} in the \emph{Examples} folder, with this code:
@@ -100,7 +100,7 @@ Qt offers a great deal of flexibility, which doesn't mean we need actually to us
 Now that we have a button on a window, we are craving to do something with it.
 
 
-\section{Signals and Slots}\label{sec:signals-slots}
+\section{Using Signals and Slots}\label{sec:signals-slots}
 Qt offers a programming pattern known as \emph{Signals} and \emph{Slots}. The core idea is that different actions on a user interface trigger a signal. For example, moving the mouse over an element triggers a signal. This signal is then caught by \emph{slots}, which do something with the information provided. When we move the mouse over a button (this is also knowns as hovering), its background changes color. It is a clear example of the signal/slot paradigm.
 
 Every Widget that we can place on screen has a myriad of signals. From interactions with the mouse to changes in shape or size triggered by reshaping the window, to time-based signals. It does not mean we need to know them all, nor that we use them all. But once we understand the pattern, we know where to go and find what we are after. The button has one signal called, very eloquently, \py{clicked}. To use it, we must define a function that can be called every time the signal fires. This function is the \emph{slot}. We can expand our example code like this:
@@ -118,7 +118,7 @@ win.setCentralWidget(button)
 
 We can see that every time we click the button, the program prints a message to the screen. It is very important to note that we used \py{button_clicked} and not \py{button_clicked()}. It is the same that we discussed in Section~\ref{subsec:multithreading} when discussing multithreading. We must use the function itself as a slot, and not the outcome of the function.
 
-\subsection{Start a Scan}\label{subsec:start-scan-gui}
+\subsection{Starting a scan}\label{subsec:start-scan-gui}
 With what we have done so far, triggering a scan from the user interface becomes almost trivial. For the time being, we can keep working on the \emph{Examples} folder, but this time let's create a new file called \textbf{start\_gui.py}. We only need that when we press the button, a scan starts. We need to mix what we already have in \textbf{run\_experiment.py} with what we have done above. It can look like this:
 
 \begin{minted}{python}
@@ -412,7 +412,7 @@ We decided to define both attributes as numpy arrays holding only one value: $0\
 
 \questionInfo{Exercise}{Every attribute in any class should be defined in the init of that class. Go through all the models, and see whether there are attributes used but not defined at instantiation.}
 
-\subsection{Refresh Rate and Number of Data Points}\label{subsec:refresh-rate-and-number-of-data-points}
+\subsection{Increasing the refresh rate and number of data points}\label{subsec:refresh-rate-and-number-of-data-points}
 When we follow the strategy of using a timer for refreshing the plot, we can be tempted to increase the refresh rate to make the animations more appealing, but we have to be careful with this. On the one hand, if we are generating data at, let's say, $1\,\textrm{Hz}$, doesn't matter how fast we refresh the plot, it won't change faster than once per second.
 
 Let's assume we are acquiring data much faster than once per second, perhaps at hundreds or thousands of new points per second. We have to consider how fast the screen of the computer can redraw the elements on it. Most screens work at $30\,\textrm{Hz}$, some may go to $60\,\textrm{Hz}$. Therefore, if we try to update the plot faster than that, we just waste computer power on something that the screen never can show us.
