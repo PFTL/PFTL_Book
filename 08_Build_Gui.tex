@@ -261,7 +261,7 @@ experiment.finalize()
 You pass \py{experiment} directly to the window and it takes care of the rest. You can now safely trigger a scan from the user interface. What's important to note here is that once you reach this step, all the rest happens directly on the view. The script that you use to open the window stays unaltered. Even in much more complex programs, you'll use the same pattern\footnote{See, for example, how PyNTA starts its user interface: https://bit.ly/WindowExperiment}.
 
 \section{Adding Layouts}\label{sec:adding-layouts}
-So far, the window holds only one button, and you set that button to be the central Widget of the window. This makes it virtually impossible to add any other button or object. Therefore, it's time to start sophisticating the user interface\footnote{In this chapter you decided to go lower level, programming every feature, but in the next chapter you will see how to do it with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \py{QWidgets}, and Qt allows us to place widgets inside of widgets at our will. You also know that Main Windows require a central widget. Therefore, you can create a widget that holds two buttons: start and stop, and that Widget is the central Widget of the window. You use this opportunity to clean up the names you've used, to make them more descriptive as well, it's important to pay attention to all the changes made:
+So far, the window holds only one button, and you've set that button to be the central Widget of the window. This makes it virtually impossible for you to add any other button or object. Therefore, it's time to start making the user interface more sophisticated\footnote{In this chapter, we decided to go for a lower level, programming every feature; but in the next chapter you will see how to do this with the QtDesigner software, which will speed up the process}. The basic building blocks in Qt are \py{QWidgets}, and Qt allows you to place widgets inside of widgets at will. Recall that Main Windows require a central widget, so you can create a widget that holds two buttons, start and stop, where that Widget is the central Widget of the window. Use this opportunity to clean up the names you've used, and to make them more descriptive as well. It's important that you pay attention to all the changes made:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget
@@ -292,11 +292,11 @@ If you run the program again, you will see a Window like the one below:
     \includegraphics[width=.3\textwidth]{images/Chapter_08/05_window_without_layout.png}
 \end{center}
 
-The stop button is visible, but not the start button. It happens because Qt has no way of knowing where you want to add the buttons and place them in the same position. The one that gets added later is on top.
+The stop button is visible, but the start button is not. This happens because Qt has no way of knowing where you want to add the buttons and place them in the same position. The one that gets added later is on top.
 
-\questionInfo{Exercise}{Change the order in which you define the buttons and see that one or the other gets on top. If the button that is below has a much longer text, you can see it beneath the top one.}
+\questionInfo{Exercise}{Change the order in which you define the buttons and see that one or the other goes on top. If the button that is below has much longer text, you'll see it beneath the top one.}
 
-You could specify explicit coordinates for the positions of the buttons, but there's a much simpler approach using layouts. In Qt, there are 4 basic layout types: Horizontal, Vertical, Grid, and Form. With the first two, each time you add a widget, it's added either below or to the right. With the grid layout, you can control the position, width, and height based on a grid you define. The form defines two columns, ideally to hold some labels and inputs. You see more about layouts in the following chapter. For the time being, if you want to add two buttons, you can choose a horizontal layout. The code of the \py{MainWindow} takes a few extra lines to set everything up properly:
+You could specify explicit coordinates for the positions of the buttons, but there's a much simpler approach, and that's by using layouts. In Qt, there are 4 basic layout types: Horizontal, Vertical, Grid, and Form. With the first two, each time you add a widget, it's added either below or to the right of the previous one. With the grid layout, you can control the position, width, and height based on a grid you define. The form layout defines two columns, ideally to hold some labels and inputs. You'll see more about layouts in the following chapter. For the time being, if you want to add two buttons, you can choose a horizontal layout. The code of the \py{MainWindow} needs a few extra lines to set everything up properly:
 
 \begin{minted}{python}
 from PyQt5.QtWidgets import QHBoxLayout
@@ -317,11 +317,11 @@ In Qt, the horizontal layout is called \py{QHBoxLayout}, and you apply it to the
     \includegraphics[width=.3\textwidth]{images/Chapter_08/06_window_with_layout.png}
 \end{center}
 
-If you resize it, you see that the buttons take the entire width, and they are always centered. It's already a good improvement compared to the simple window with which you started. Before you finish this section, these two exercises are a good way of practicing the skills acquired so far:
+If you resize it, you see that the buttons take up the entire width, and that they are always centered. It's already a good improvement compared to the simple window you started with. Before you finish this section, these two exercises are a good way of practicing the skills you've acquired so far:
 
-\questionInfo{Exercise}{Change \py{QHBoxLayout} by \py{QVBoxLayout} to see the buttons stacked vertically.}
+\questionInfo{Exercise}{Change \py{QHBoxLayout} to \py{QVBoxLayout} to see the buttons stacked vertically.}
 
-\questionInfo{Exercise}{Connect the stop button to a method that stops the scan}
+\questionInfo{Exercise}{Connect the stop button to a method that stops the scan.}
 
 \section{Plotting Data}\label{sec:plotting-data}
 You finish this section by adding a plot of the data in real-time. You already did something similar in Section~\ref{sec:basic-plotting}. Parts of the code are very similar. Our window slowly starts getting more complex, with more elements. So far, you've two buttons stacked horizontally, but you would like to show the plot beneath the buttons, not next to them. One of the most natural solutions is to start stacking widgets, instead of making the \py{buttons_widget} the central Widget, you can make another one that contains the buttons and the plot.
