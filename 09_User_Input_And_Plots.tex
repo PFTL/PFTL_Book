@@ -112,7 +112,7 @@ Most online tutorials add one step after creating the Designer file. They normal
 
 You can explore both files and see the differences. If you open the \emph{ui} file with a text editor, you'll find that it's in plain text and formatted following a standard called \emph{XML}, or eXtended Markup Language. This format is very similar to how websites are built with \emph{HTML}, which stands for HyperText Markup Language. Going through the file, you'll find the place where you defined the buttons, surrounded by some more information, such as the layout and the text of the button.
 
-If you open the generated Python file, you'll find the same information but formatted in the way you did in the previous chapter. Go to the declaration of the start button, and you find a line almost identical to the one you used in the previous chapter:
+If you open the generated Python file, you'll find the same information but formatted in the manner you did previously. Go to the declaration of the start button, and you find a line almost identical to the one you used in the previous chapter:
 
 \mint{python}{self.start_button = QtWidgets.QPushButton(self.button_widget)}
 
@@ -127,23 +127,23 @@ In our experience, modifying the designer files and seeing the changes as soon a
     \includegraphics[width=.5\textwidth]{images/Chapter_09/08_final_window_example.png}
 \end{center}
 
-It's time to bring your program to the next level by adding the possibility of entering the values of the scan before triggering it. The goal is to have a window that looks like the image above. You structured the window in three rows, one for selecting the range of the scan and the channel, one for the input and delay between points and finally the buttons. Below it, you append the plot, as you've done before.
+It's time to take your program to the next level by adding the possibility of entering the scan values before triggering it. The goal is to have a window that looks like the image above. The window is structured in three rows: one for selecting the range of the scan and the channel, one for the input and delay between points, and one for the buttons. Below this, you'll append the plot, as you've done before.
 
-First, you start by designing the window. You do not cover every single detail as you did in the previous section, because it would become too cumbersome to follow. Therefore you leave to the discretion of the reader whether they want to try it by themselves or get the designer file from the online repository. The easiest way to reproduce the window is by looking at the structure you should obtain after placing all the elements:
+First, you'll start by designing the window. You won't see covered every single detail as you did in the previous section, because it would become too cumbersome for you to follow. Therefore, it's left up to the discretion of the reader whether or not to try this by themselves or to get the designer file from the online repository. The easiest way to reproduce the window is by looking at the structure you'd want to obtain after putting all the elements in place:
 
 \begin{center}
     \includegraphics[width=.5\textwidth]{images/Chapter_09/09_final_window_structure.png}
 \end{center}
 
-The central widget and the buttons are there, as always, but you added two more widgets now, they are of a particular type called \py{QGroupBox}, meant for grouping elements together. They also have a title that appears at the top left, and become quite handy to understand what you need to edit before starting a scan To handle input from the user, you chose \py{QLineEdit} widgets. These widgets allow the user to input any type of text, precisely as you need.
+The central widget and the buttons are there, as always, but there are two more widgets added now. These are of a particular type called \py{QGroupBox}, meant for grouping elements together. They also have a title that appears at the top left, which becomes quite handy for understanding what you need to edit before starting a scan. To handle input from the user, you use \py{QLineEdit} widgets. These widgets allow the user to input any type of text, which is precisely what you need.
 
-The rest of the elements are to give consistency to the user experience. Before each line edit, you included a label to show what information is supposed to go in each box. In the bottom group, you also used a \py{Spacer}, to push the elements to the left. If you don't do this, the boxes for editing would take the entire space and wouldn't look cute. It is, however, a purely aesthetic decision.
+The rest of the elements are to give consistency to the user experience. Before each line edit, you include a label to show what information is supposed to go in each box. In the bottom group, you also used a \py{Spacer} to push the elements to the left. If you don't do this, the boxes for editing will take up the entire space and become visually unappealing. It is, however, a purely aesthetic decision.
 
-The most important thing to pay attention to is the names of each input line because they are going to be fundamental for the Python code. What you normally use is a distinctive name followed by the type of element with which you're dealing. That is why have the \py{start_button}, but also the \py{stop_line}, \py{delay_label}, etc. In this way, you can avoid confusion between the starting value of the scan and the button that is supposed to trigger it.
+The most important things for you to pay attention to are the names of each input line, because they're going to be fundamental for the Python code. What you'd normally use is a distinctive name followed by the type of element you're dealing with. That is why you have the \py{start_button}, but also the \py{stop_line}, \py{delay_label}, and so on. In this way, you can avoid confusion between the starting value of the scan and the button that is supposed to trigger it.
 
-\criticalInfo{Naming Consistency}{Consistency with the names is very important. An incredibly common bug is to change the names and then use the wrong value for the experiment. If you were to swap the in and out channels, the error might go unnoticed until you use two different values. By that point, it's tough to understand if the problem is within the program or within the experiment.}
+\criticalInfo{Naming Consistency}{Consistency with the names is very important. An incredibly common bug is to change the names and then use the wrong value for the experiment. If you were to swap the in and out channels, the error might go unnoticed until you used two different values. By that point, it would be tough to understand if the problem exists within the program or within the experiment.}
 
-After improving the window design, you can run again the program and you will see that the window has a different aspect, with inputs, labels and groups. However, they can't do much yet. If you trigger a scan, the plot will update, but it will always be with the values set in the config file. First, let's learn how to populate the different elements with the values you start when you load the config file. You must edit the \py{__init__} of the \py{MainWindow} class to take care of the values:
+After improving the window design, you can run the program again and you will see that the window has a different aspect, with inputs, labels, and groups. However, they can't do much yet. If you trigger a scan, the plot will update, but it will always be with the values set in the config file. First, let's learn how to populate the different elements with the values that are started when you load the config file. You must edit the \py{__init__} of the \py{MainWindow} class to take care of the values:
 
 \begin{minted}{python}
     self.start_line.setText(self.experiment.config['Scan']['start'])
@@ -151,11 +151,11 @@ After improving the window design, you can run again the program and you will se
     self.num_steps_line.setText(str(self.experiment.config['Scan'] ['num_steps']))
 \end{minted}
 
-The \py{QLineEdit} objects have a method called \py{setText} that allows us to change what is displayed. For the start and stop values, there are no problems, because their values are already strings (remember they include the units), but the number of steps is an integer. PyQt is a very thin wrapper and won't try to convert a number to a string. You need to force it ourselves, adding the \py{str} function.
+The \py{QLineEdit} objects have a method called \py{setText} that allows you to change what's displayed. For the start and stop values, there are no problems because their values are already strings (remember, they include the units), but the number of steps is an integer. PyQt is a very thin wrapper and won't try to convert a number to a string. You need to force it to do so by adding the \py{str} function.
 
-\questionInfo{Exercise}{You've shown how to add the values of start, stop, and number of steps, but you're still missing the input and output channels, and the delay between points. Add them following the example above.}
+\questionInfo{Exercise}{You've seen how to add the values of start, stop, and the number of steps, but you're still missing the input and output channels, as well as the delay between points. Add them by following the example above.}
 
-You know how to set the values to the lines, you can change them, but the you still use the ones defined in the config file. You already saw in Section~\ref{sec:running-experiment} that thanks to your strategy of having a robust experiment class, you can change the values of the parameters after the experiment was defined. You can do the same within the user interface. Let's improve the \py{start_scan} method of the \py{MainWindow}:
+You know how to set the values to the lines, and you can even change them, but you're still using the ones defined in the config file. You already saw in Section~\ref{sec:running-experiment} that, thanks to your strategy of having a robust experiment class, you can change the values of the parameters after the experiment is defined. You can do the same within the user interface. Let's improve the \py{start_scan} method of the \py{MainWindow}:
 
 \begin{minted}{python}
     def start_scan(self):
@@ -171,7 +171,7 @@ You know how to set the values to the lines, you can change them, but the you st
         self.experiment.start_scan()
 \end{minted}
 
-In exactly the same way you used \py{setText} to set the text on the QLineEdit objects, you can use \py{text()} to retrieve what is written. For start and stop there are no problems, but for the number of steps you need to have an integer, not a string. Once you got the values, you update the \py{experiment.config}, specifically the group of properties that belong to \py{Scan}. Using \py{update} on a dictionary is a shorter way of doing:
+In exactly the same way in which you used \py{setText} to set the text on the \py{QLineEdit} objects, you can use \py{text()} to retrieve what is written. For the start and stop there are no problems, but for the number of steps you need to have an integer, not a string. Once you have the values, you update the \py{experiment.config}, specifically the group of properties that belong to \py{Scan}. Using \py{update} on a dictionary is a shorter way of doing this:
 
 \begin{minted}{python}
     self.experiment.config['Scan']['start'] = start
@@ -179,19 +179,19 @@ In exactly the same way you used \py{setText} to set the text on the QLineEdit o
     self.experiment.config['Scan']['num_steps'] = num_steps
 \end{minted}
 
-It's important to remember that in the experiment, when you trigger the \py{start_scan}, the model takes care of creating the scan range directly from the values stored in the config dictionary. If you supply values without units, the experiment complains.
+It's important for you to remember that in the experiment, when you trigger the \py{start_scan}, the model takes care of creating the scan range directly from the values stored in the config dictionary. If you supply values without units, the experiment complains.
 
-\questionInfo{Exercise}{Test the limits of the user interface. What happens if you use a number of steps that is not an integer? What happens if you submit a start or stop value in units other than Volts? What happens if you leave one of the options empty?}
+\questionInfo{Exercise}{Test the limits of the user interface. What happens if you use a value for the number of steps that is not an integer? What happens if you submit a start or stop value in units other than Volts? What happens if you leave one of the options empty?}
 
-\questionInfo{Exercise}{Following the example above, add the same behavior for the delay, channel in and channel out values.}
+\questionInfo{Exercise}{Following the example above, add the same behavior for the delay, channel in, and channel out values.}
 
-You're now at a stage where you can control your experiment from the user interface. You can change the parameters for the scan, start, and stop at will. At this stage, you should feel very proud of ourselves. It's also an excellent time to reflect because things change very quickly, new elements appear on the window, but you put minimal effort into making everything work together.
+You're now at a stage where you can control your experiment from the user interface. You can change the parameters for the scan, as well as start and stop it at will. At this stage, you should feel very proud of yourself! It's also an excellent time for you to reflect, because things can change very quickly. New elements may appear on the window, but you've put minimal effort into making everything work together.
 
-One of the values of separating in Model/View/Controller is that, usually, most of your work should go in the models. And models are the most pure-python modules in your program. Once you overcome the initial shock of working with more complex patterns, such as classes and threads, the rest is very straightforward. You loop through values; you save data. Most likely, it's the kind of things you were already doing when analyzing data.
+One of the benefits of separating the Model, View, and Controller is that, usually, most of your work should go in the Model. The good news is that Models are the most pure-Python modules in your program. Once you overcome the initial shock of working with more complex patterns, such as classes and threads, the rest is very straightforward. You loop through values; you save data. Most likely, it's the kind of thing you were already doing when analyzing data.
 
-Once the experiment model is ready, plugging the view on top of it does not require too much effort. How to design the experiment model in such a way that allows us such a degree of independence, is a skill that you can acquire over time, with critical thinking, and patience. For most programs, when developing the \emph{View}, you would face the problem of something missing in the experiment model. Perhaps a threshold value, or a variable that lets us know something is running. You should always refrain from the temptation of complicating the view, and you should always favor putting all that effort into the models.
+Once the experiment model is ready, plugging the view on top of it does not require too much effort. Figuring out how to design the experiment model in such a way that it allows you such a degree of independence, on the other hand, is a skill that you can acquire over time, with critical thinking and patience. For most programs, when developing the \emph{View}, you would face the problem of something being missing in the experiment model (perhaps a threshold value, or a variable that lets you know something is running). You should always refrain from the temptation of complicating the View, and you should always favor putting all that effort into the Model.
 
-It's only the long run experience the one that congratulates us on a job well done in the past.
+In the long run, it's your future experience that will congratulate you for a job well done in the past.
 
 \section{Validating User Input}\label{sec:validating-user-input}
 We, as consumers of computer software, are used to a lot of interactions and visual cues when working with a user interface. It makes us expect the same kind of behavior in the programs you develop ourselves. One of the things you can notice in your program is that if you try to trigger a scan while the first one is running, the program prints a message to the terminal, but if you're not paying attention to it, you can miss it and wonder why the scan is not triggering.
