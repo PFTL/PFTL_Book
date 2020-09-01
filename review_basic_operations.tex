@@ -2,12 +2,12 @@
 
 \section{Chapter Objectives}\label{sec:chapterobjectives}
 
-The objective of \textbf{Python in the Lab} is to bring a developer from knowing the basics of programming to be able to develop software for controlling a complicated setup. However, not all programmers have the same background, and it is essential to establish a common ground from which to start.
+The objective of \textbf{Python for the Lab} is to bring a developer from knowing the basics of programming to being able to develop software for controlling a complicated setup. However, not all programmers have the same background, and it is essential to establish a common ground from which to start.
 
-This chapter quickly reviews how to start Python and how to interact with it directly from the command line. It also reviews some common data structures, such as lists and dictionaries. It quickly goes through for loops and conditionals. If you are already familiar with these concepts, you can safely skip this chapter.
+This chapter quickly reviews how to get started with Python and how to interact with it directly from the command line. It also reviews some common data structures, such as lists and dictionaries. It quickly goes through for loops and conditionals. If you are already familiar with these concepts, you can safely skip this chapter.
 
 \section{The Interpreter}\label{sec:theinterpreter}
-You can start Python from the command line by typing Python and pressing Enter. It should start the Python interpreter, and you should see something like this:
+You can start Python from the command line by typing Python and pressing Enter. This should start the Python interpreter, and you should see something like this:
 
 %! Suppress = EnDash
 \begin{minted}{pycon}
@@ -17,17 +17,17 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{minted}
 
-You can type whatever you like into the interpreter. If it makes sense to Python, it gives you an appropriate answer. For example, you can do:
+You can type whatever you like into the interpreter. If it makes sense to Python, it gives you an appropriate answer. For example, you can do the following:
 
 \begin{minted}{pycon}
 >>> 2+3
 5
 \end{minted}
 
-The first line is what you type (therefore it has the \mintinline{pycon}{<<<} at the beginning), while the second line is the output Python gives you (in this case, as expected, \mintinline{pycon}{5}). You can go ahead and play with different operations. You can multiply, subtract, divide. Power of numbers can be achieved using \mintinline{pycon}{**}, for example, \mintinline{pycon}{2**.5} means the square root of 2.
+The first line is what you type (therefore, it has the prompt symbol \mintinline{pycon}{<<<} at the beginning), while the second line is the output Python gives you (in this case, as expected, \mintinline{pycon}{5}). You can go ahead and play with different operations. You can multiply, subtract, divide, and more. Powers of numbers can be achieved using \mintinline{pycon}{**}; for example, \mintinline{pycon}{2**.5} means the square root of 2.
 
 \section{Lists}\label{sec:lists}
-From now on, the \mintinline{pycon}{<<<} is suppressed to make it easier for you to copy the code. Python can also be used to achieve much more complicated tasks and with many different types of variables. For example, you can have a list and iterate over every element of it:
+From now on, the prompt symbol \mintinline{pycon}{<<<} is suppressed to make it easier for you to copy the code. Python can also be used to achieve much more complicated tasks and with many different types of variables. For example, you can have a list and iterate over every element of it:
 
 \begin{minted}{python}
 a = [1, 2, 3, 4]
@@ -35,9 +35,7 @@ for i in range(4):
     print(a[i])
 \end{minted}
 
-As you can see, \mintinline{pycon}{a} is a list with 4 elements. You make a
-\mintinline{pycon}{for} loop over the four elements, and you print them to screen.
-You should see an output like this:
+As you can see, \mintinline{pycon}{a} is a list with 4 elements. You make a \mintinline{pycon}{for} loop over the four elements, and then you print them to screen. You should see output like this:
 
 \begin{minted}{pycon}
 1
@@ -46,14 +44,14 @@ You should see an output like this:
 4
 \end{minted}
 
-Of course, you can argue that this is not handy if you don't know beforehand how many elements your list has. We can improve the code by doing it like this:
+Of course, you can argue that this is not handy if you don't know beforehand how many elements your list has. You can improve the code by doing it like this:
 
 \begin{minted}{python}
 for i in range(len(a)):
     print(a[i])
 \end{minted}
 
-There is an important point to note, especially for those who come from a Matlab kind of background. If you print the variable i inside the loop, you'll notice it starts in 0 and goes all the way to N-1. It means that the first element in a list is accessed by the index 0. Lists have another interesting behavior. The elements in them do not need to be of the same type. It is completely valid to do this:
+There is an important point to note here, especially for those who come from a MATLAB kind of background. If you print the variable \py{i} inside the loop, you'll notice it starts at 0 and goes all the way to N-1. It means that the first element in a list is accessed by the index 0. Lists have another interesting behavior. The elements in them do not need to be of the same type. It is completely valid to do this:
 
 \begin{minted}{python}
 a = [1, 'a', 1.1]
@@ -65,11 +63,11 @@ for i in range(len(a)):
 <class 'float'>
 \end{minted}
 
-You can have lists with lists in them and many other combinations.
+In other words, you can have lists with lists in them, and many other combinations as well.
 
 \questionInfo{Exercise}{Make a list in which each element is a list. Nesting two \mintinline{pycon}{for} loops, display all the elements of all the lists.}
 
-Lists can also be iterated over with a much simpler syntax without the need for the index.
+Lists can also be iterated over with a much simpler syntax without the need for the index:
 
 \begin{minted}{python}
 a = [1, 'a', 1.1]
@@ -77,37 +75,37 @@ for element in a:
     print(element)
 \end{minted}
 
-There is also a very \emph{pythonic} way of declaring lists with a very concise syntax:
+There is also a very \emph{Pythonic} way of declaring lists with concise syntax:
 
 \begin{minted}{python}
 a = [i for i in range(100)]
 \end{minted}
 
-It generates a list of all the numbers from 0 to 99. You can also calculate all the squares of those numbers with a small modification:
+This generates a list of all the numbers from 0 to 99. You can also calculate all the squares of those numbers with a small modification:
 
 \begin{minted}{python}
 a = [i**2 for i in range(100)]
 \end{minted}
 
-And you can make it even more complex, for example, if you want to get only the even numbers you can type:
+You can even make it more complex. For example, if you want to get only the even numbers you can type this:
 
 \begin{minted}{python}
 a = [i for i in range(100) if i%2==0]
 \end{minted}
 
-\questionInfo{Exercise}{Given a list like: \mintinline{pycon}{b = [1, 2, 'a', 3, 4, 'b', 5, 'c', 'd']}, create another list with only the elements of type string.}
+\questionInfo{Exercise}{Given a list \mintinline{pycon}{b = [1, 2, 'a', 3, 4, 'b', 5, 'c', 'd']}, create another list with only the elements of type string.}
 
-Lists are a fundamental Python structure, and it is essential to keep them in mind to follow the syntax of some programs without getting lost.
+Lists are a fundamental Python structure, and it is essential for you to keep them in mind to be able to follow the syntax of some programs without getting lost.
 
 \section{Dictionaries}\label{sec:dictionaries}
-Dictionaries are one of the most useful data structures of Python. They are somehow like lists, but instead of accessing them via a numerical index, they are accessed via a string identifier. For example, you can generate a dictionary and access its values by doing:
+Dictionaries are one of the most useful data structures in Python. They are somewhat like lists, but instead of accessing them via a numerical index, you access them via an identifier. For example, you can generate a dictionary and access its values by doing the following:
 
 \begin{minted}{python}
 a = {'first': 1, 'second': 2}
 a['first']
 \end{minted}
 
-Dictionaries, like lists, can store different types of variables in them. Pay attention to the definition and call: lists are defined using square brackets \mintinline{pycon}{[} \mintinline{pycon}{]}, while dictionaries are defined with curly brackets \mintinline{pycon}{{}}. However, for accessing an element the square brackets are used. It is possible therefore to do:
+Dictionaries, like lists, can store different types of variables in them. Pay attention to the definition and call: lists are defined using square brackets \mintinline{pycon}{[} \mintinline{pycon}{]}, while dictionaries are defined with curly brackets \mintinline{pycon}{{}}. However, for accessing an element in a dictionary, the square brackets are used. It is possible therefore to do:
 
 \begin{minted}{python}
 b = [1, 2, 3, '4', 5.1]
@@ -115,20 +113,20 @@ a = {'first': 1, 'second': b}
 a['second']
 \end{minted}
 
-The first notable advantage of using dictionaries is that it makes much clearer what data you are storing. You are giving a title to a specific value. If you want to calculate the area of a triangle:
+The first notable advantage of using dictionaries is that it makes it much clearer what data you are storing. You are giving a title to a specific value. If you want to calculate the area of a triangle, then you can do the following:
 
 \begin{minted}{python}
 t = {'base': 2, 'height': 1}
 area = t['base']*t['height']/2
 \end{minted}
 
-And you immediately see that even if you don't have the definition of \mintinline{pycon}{t}, it is obvious what you are doing. It is clearer than the following code:
+Here you can immediately see that even if you don't have the definition of \mintinline{pycon}{t}, it is obvious what you are doing. It is clearer than the following code:
 
 \begin{minted}{python}
 area = t[0]*t[1]/2
 \end{minted}
 
-In the case of a triangle, it doesn't matter which element is the base and which one is the height. However, for more complex applications, altering the order can have severe consequences. In the same fashion than with lists, it is possible to access every element within a for loop:
+In the case of a triangle, it doesn't matter which element is the base and which one is the height. However, for more complex applications, altering the order can have severe consequences. In the same fashion as with lists, it is possible to access every element with a for loop:
 
 \begin{minted}{python}
 for key in a:
@@ -136,7 +134,7 @@ for key in a:
     print(a[key])
 \end{minted}
 
-Now the key has a value that can be printed and used. We can also check if a specific key is present in the dictionary:
+Now the key has a value that can be printed and used. You can also check if a specific key is present in the dictionary:
 
 \begin{minted}{python}
 if 'first' in a:
@@ -154,13 +152,13 @@ a['third']
 a['fourth']
 \end{minted}
 
-If you pay attention, you see that not only the already existent values were updated, but a new one was created.
+If you pay attention, you see that not only the already existent values were updated, but also that a new one was created.
 
 \questionInfo{Exercise}{Given two dictionaries,
 \mint{python}{a = {'first': 1, 'second': 2, 'third': 3}}
 and
 \mint{python}{b = {'fourth': 4, 'fifth': 5}}
-merge the second into the first one.}
+merge the second one into the first one.}
 
 Of course, it is also possible to delete an element from a dictionary:
 
@@ -170,14 +168,14 @@ del a['first']
 print(a['first'])
 \end{minted}
 
-You'll see an error letting you know that the key \mintinline{pycon}{first} is not in the dictionary. So far we have always used \mintinline{pycon}{strings} for the keys of the dictionary, but nothing prevents you from using numbers. The following lines are perfectly valid:
+You'll see an error letting you know that the key \mintinline{pycon}{first} is not in the dictionary. So far you have only used \mintinline{pycon}{strings} for the keys of the dictionary, but nothing prevents you from using numbers. The following lines are perfectly valid:
 
 \begin{minted}{python}
 a = {1: 2, 2:4, 3: 9}
 b = {0.1: 2, 'a': 3, 1:1}
 \end{minted}
 
-The syntax above, on the one hand, makes dictionaries very versatile; on the other, it may make the code slightly more confusing. For example, \mintinline{pycon}{a[1]} may be referring to the second element of a list or the element of a dictionary. At this point, you may wonder why you would use lists if dictionaries give you even more functionality. The short answer is memory usage; the code below outputs the memory being used by a dictionary and by a list with the same information in them. The first line of the code is just importing the function we need for calculating the size of a variable.
+On the one hand, the syntax above makes dictionaries very versatile; on the other, it may make the code slightly more confusing. For example, \mintinline{pycon}{a[1]} may be referring to the second element of a list or an element of a dictionary. At this point, you may wonder why you would use lists if dictionaries give you even more functionality. The short answer is memory usage; the code below outputs the memory being used by a dictionary and by a list with the same information in them. The first line of the code is just importing the function needed for calculating the size of a variable.
 
 \begin{minted}{python}
 from sys import getsizeof
@@ -189,6 +187,6 @@ print(getsizeof(a))
 print(getsizeof(b))
 \end{minted}
 
-You should see that the size of \mintinline{pycon}{a} is \mintinline{pycon}{912 bytes} while the size of the dictionary \mintinline{pycon}{b} is \mintinline{pycon}{4704 bytes}. Even if you consider that the dictionary is storing not only the value but also the key, the ratio of memory usage of a dictionary to a list is more than twice.
+You should see that the size of list \mintinline{pycon}{a} is \mintinline{pycon}{912 bytes} while the size of the dictionary \mintinline{pycon}{b} is \mintinline{pycon}{4704 bytes}. Even if you consider that the dictionary is storing not only the value but also the key, the ratio of memory usage of a dictionary to a list is more than double.
 
 \questionInfo{Exercise}{Write a simple for-loop that prints the ratio of the memory usage of a list and a dictionary as a function of the length of each.}
