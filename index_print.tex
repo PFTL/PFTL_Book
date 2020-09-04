@@ -12,6 +12,9 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{emptypage}
+\usepackage[dvips]{color}
+\usepackage[rigidchapters,explicit]{titlesec}
+\DeclareFixedFont{\chapterfont}{T1}{phv}{bx}{n}{11cm}
 
 \usepackage{infoBulle}
 
@@ -20,7 +23,21 @@ BoldFont = libertinussans-bold,
 ItalicFont = libertinussans-italic,
 ]{libertinussans-regular}
 
-\setmonofont[Scale=MatchLowercase, Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
+\setmonofont[Scale=MatchLowercase, 
+Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
+
+\titleformat{\chapter}[block]
+	{\begin{picture}(330,200)}
+	{\put(430,80){%
+	\makebox(0,0)[rb]{%
+		\chapterfont\textcolor[named]{SkyBlue}{\thechapter}}}
+	\put(0,230){%
+		\makebox(0,0)[lb]{%
+			\Huge\sffamily\underline{Chapter \thechapter}}}}
+	{0pt}{
+	\put(0,190){\parbox[t]{300pt}{%
+		\Huge\sffamily\filright#1}}}
+	[\end{picture}]
 
 \usepackage{pdfpages}
 \usepackage{polyglossia}
