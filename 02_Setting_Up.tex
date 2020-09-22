@@ -19,6 +19,7 @@ The first edition of this book included instructions for exclusively using pure 
 \section{Installing Anaconda}\label{sec:installing-anaconda}
 To install Anaconda, you just need to head to the official website: anaconda.com. Go to the download section and select the installer for the newest version of Python. The site usually auto-detects your operating system and offers you either a graphical installation (recommended) or a command-line one. If you're on Linux, you have to be careful whether you want the Anaconda Python to become your default Python installation. Typically, there won't be any issues; you'll just need to be aware that other programs that rely on Python will use the Anaconda version and not the stock version.
 
+\pagebreak[3]
 \tipsInfo{Note}{Similar to the different distributions of Python, Anaconda also comes in two primary flavors: Anaconda and Miniconda. The main difference is that the latter bundles fewer programs and is therefore lighter to download. Unless you're very low in space on your computer or have particular requirements, we strongly recommend downloading the full installation for Anaconda.}
 
 \subsection{Using Anaconda}\label{subsec:using-anaconda}
@@ -34,9 +35,7 @@ If you're on Linux, you only need to open a terminal. On Ubuntu, you can do this
 \includegraphics[width=.5\textwidth]{images/Chapter_02/AnacondaPrompt.png}
 \end{center}
 
-This is the best indication to know you're running the Anaconda installation.
-
-You can run the following command to see all the installed packages:
+This is the best indication to know you're running the Anaconda installation. You can run the following command to see all the installed packages:
 
 \begin{minted}{bash}
 conda list
@@ -451,7 +450,7 @@ pip install pyqt5-tools
 
 \sloppy The designer should be located in a folder called \mintinline{bash}{pyqt5-tools}. The folder's location depends on how you installed Python and whether you're using a virtual environment. If you aren't sure, then use the tool to find folders and files in your computer and search for \mintinline{bash}{designer.exe}.
 
-\tipsInfo{Info}{The package \mintinline{bash}{pyqt5-tools} is an independent package aimed at making the installation of the Qt Designer easier. However, it takes a bit of time for it to update to the latest version of Python. At the time of this writing, it's known to work with Python 3.7, but not with Python 3.8.}
+\tipsInfo{Info}{The package \mintinline{bash}{pyqt5-tools} is an independent package aimed at making the installation of the Qt Designer easier. However, it takes a bit of time for it to update to the latest version of Python. At the time of this writing, it's known to work with Python 3.8, but not with Python 3.9.}
 
 \subsection{Installing Qt Designer on Linux}\label{subsec:installing-on-linux}
 Linux users can install Qt Designer directly from within the terminal by running the following command:

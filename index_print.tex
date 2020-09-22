@@ -1,8 +1,8 @@
 \documentclass[a4paper, 12pt]{book}
 \usepackage[top=3cm,bottom=2cm,left=2cm,right=2cm,headsep=10pt]{geometry}
 \geometry{
-    papersize={155.57mm, 234.95mm},
-    layoutsize={152.4mm, 228.61mm},
+    papersize={206.37mm, 260.35mm},
+    layoutsize={203.2mm, 254.01mm},
     layoutoffset = {1.58mm,1.58mm},
     bindingoffset = -1.27mm,
     showcrop,
@@ -12,8 +12,9 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{emptypage}
-\usepackage[dvips]{color}
+%\usepackage[dvips]{color}
 \usepackage[rigidchapters,explicit]{titlesec}
+
 \DeclareFixedFont{\chapterfont}{T1}{phv}{bx}{n}{11cm}
 
 \usepackage{infoBulle}
@@ -23,12 +24,12 @@ BoldFont = libertinussans-bold,
 ItalicFont = libertinussans-italic,
 ]{libertinussans-regular}
 
-\setmonofont[Scale=MatchLowercase, 
+\setmonofont[Scale=MatchLowercase,
 Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
 
 \titleformat{\chapter}[block]
 	{\begin{picture}(330,200)}
-	{\put(430,80){%
+	{\put(590,80){%
 	\makebox(0,0)[rb]{%
 		\chapterfont\textcolor[named]{SkyBlue}{\thechapter}}}
 	\put(0,230){%
@@ -42,11 +43,10 @@ Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{Source
 \usepackage{pdfpages}
 \usepackage{polyglossia}
 \setmainlanguage{english}
-\hyphenpenalty=1000 % default 50
-\tolerance=500      % default 200
+\hyphenpenalty=50 % default 50
+\tolerance=200      % default 200
 
 \usepackage[titletoc]{appendix}
-\usepackage{titlesec} % Allows customization of titles
 \usepackage{tcolorbox}
 
 \usepackage[utf8]{inputenc}
@@ -62,8 +62,6 @@ Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{Source
 
 \begin{document}
     \frontmatter
-
-%    \includepdf[pages=-]{cover-pftl.pdf}
 
     \include{00_title}
 
