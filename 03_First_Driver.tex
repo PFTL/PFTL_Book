@@ -206,9 +206,9 @@ Before you move forward with programming, you first need to set up the measureme
 
 \textbf{Diodes} are elements that let current flow only in one direction, but their behavior is highly non-linear. The current flowing is not proportional to the voltage applied. We chose to use an LED for the experiments because it's easy to have visual feedback on what is going on. On the other hand, you can't measure current directly. First, you need to transform it into a voltage. If you're familiar with Ohm's law, then you remember this relationship:
 
-\begin{equation}
+\begin{equation*}
 V = I \cdot R
-\end{equation}
+\end{equation*}
 
 Voltage is current times resistance. In other words, if you want to transform a current to a voltage, you just need to add resistance to the circuit.
 
@@ -219,7 +219,6 @@ With the {PFTL DAQ} device, the connections that will allow you to apply a volta
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{images/Chapter_03/IV_scheme_bb.png}
-\caption{Schematic of the connections to perform the experiment}
 \end{figure}
 
 All you need to follow the rest of the book are three cables, an LED, and a resistance. You apply the voltage to the LED through \py{DAC0}. The current flows through the diode and the resistance. The voltage that you acquire at the \emph{Analog In} \py{A0} is proportional to the current flowing through the resistance.
@@ -536,7 +535,7 @@ With this simple code, you can switch the LED on and off 10 times, and print to 
 
 Before you can proceed, you must understand how to transform analog signals to digital values and vice versa.
 
-\subsection{Digitizing Signals}\label{subsec:adc-dca}
+\subsection{Digitizing signals}\label{subsec:adc-dca}
 Almost every device that you'll find in the lab transforms a continuous signal to a value that can be understood by the computer. The first step in doing this is to transform the quantity you're interested in into a voltage. Then, you need to transform the voltage (an analog signal) to something with which the computer can work. Going from the real world to the computer space is normally called \textbf{digitizing} a signal. The main limitation of this step is that the space of possible values is limited, and so you have discrete steps in your data.
 
 For example, the {PFTL DAQ} device establishes that when reading a value, it uses 10 bits to digitize the range of values between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the real world, the voltage is a real number that can take any value between $0\,\textrm{V}$ and $3.3\,\textrm{V}$. In the digital world, the values are going to be integers between $0$ and $1023$ (or $2^{10}-1$). This means that if the device gives you a value of $0$, you can transform it to $0\,\textrm{V}$. A value of $1023$ corresponds to $3.3\,\textrm{V}$. There's a linear relationship for the values in between.
@@ -549,9 +548,9 @@ The figure above shows what the digitization looks like for a range of voltages.
 
 In particular, the {PFTL DAQ} has different behavior for reading than for setting values. The output channels take on $4095$ (or $2^{12}-1$) different values. In other words, they work with 12 bits instead of 10. Knowing the number of bits also allows you to calculate the minimum difference between two output values:
 
-\begin{equation}
+\begin{equation*}
  \frac{3.3\,\textrm{V} - 0\,\textrm{V}}{4096} \approx 0.0008\,\textrm{V} = 0.8\,\textrm{mV}
-\end{equation}
+\end{equation*}
 
 The equation above shows how the resolution of the experiment is affected by the digitization of the signals. You can't create voltages with a difference between them that's below $0.8\,\textrm{mV}$, and you're not able to detect changes below $3\,\textrm{mV}$. Later in the book, you'll come back to this discussion when you need to decide some parameters for visualizing your data.
 
