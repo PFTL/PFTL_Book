@@ -1,35 +1,35 @@
 \documentclass[a4paper, 12pt]{book}
 \usepackage[top=3cm,bottom=2cm,left=2cm,right=2cm,headsep=10pt]{geometry}
 \geometry{
-    papersize={206.37mm, 260.35mm},
-    layoutsize={203.2mm, 254.01mm},
-    layoutoffset = {1.58mm,1.58mm},
-    bindingoffset = -1.27mm,
-    showcrop,
+    papersize={184mm, 260mm},
+    layoutsize={178mm, 254mm},
+    layoutoffset = {3.175mm, 3.175mm},
+    bindingoffset = 6mm,
+    showcrop
 }
+\usepackage{amsmath}
 \usepackage{fontspec}
-\usepackage{fontawesome}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{emptypage}
 %\usepackage[dvips]{color}
 \usepackage[rigidchapters,explicit]{titlesec}
 
-\DeclareFixedFont{\chapterfont}{T1}{phv}{bx}{n}{11cm}
+\DeclareFixedFont{\chapterfont}{T1}{phv}{bx}{n}{7cm}
 
 \usepackage{infoBulle}
 
-\setmainfont[Path = /usr/share/texlive/texmf-dist/fonts/opentype/public/libertinus/,
-BoldFont = libertinussans-bold,
-ItalicFont = libertinussans-italic,
-]{libertinussans-regular}
+\setmainfont[Path = /usr/share/texlive/texmf-dist/fonts/opentype/public/libertinus-fonts/,
+BoldFont = LibertinusSans-Bold,
+ItalicFont = LibertinusSans-Italic,
+]{LibertinusSans-Regular.otf}
 
 \setmonofont[Scale=MatchLowercase,
 Path = /usr/share/texlive/texmf-dist/fonts/opentype/adobe/sourcecodepro/]{SourceCodePro-Regular.otf}
 
 \titleformat{\chapter}[block]
-	{\begin{picture}(330,200)}
-	{\put(590,80){%
+	{\begin{picture}(450,200)}
+	{\put(420,150){%
 	\makebox(0,0)[rb]{%
 		\chapterfont\textcolor[named]{SkyBlue}{\thechapter}}}
 	\put(0,230){%
